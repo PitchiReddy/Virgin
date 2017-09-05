@@ -1,0 +1,922 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: Sailor API
+  description: Sailor API provides light weight orchestration services around Sailor and its associated relationships. 
+  
+host: virginvoyages.sailor.api
+basePath: /v1
+schemes:
+  - http
+  
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /sailors:
+    get:
+      description: Gets `Sailor` objects. Optional query param of **size** determines size of returned array
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Sailors'
+
+    post:
+      description: Add a new `Sailor` to the SORs.
+      operationId: addSailor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Sailor object that needs to be added to the SORs
+          required: false
+          schema:
+            $ref: "#/definitions/Sailor"
+      responses:
+        405:
+          description: Invalid input
+        200:
+          description: Successful response
+
+    put:
+      tags:
+        - Sailor
+      summary: Update an existing Sailor
+      description: ""
+      operationId: updateSailor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Sailor object that needs to be updated in the SOR
+          required: false
+          schema:
+            $ref: "#/definitions/Sailor"
+      responses:
+        "405":
+          description: Validation exception
+        "404":
+          description: Sailor not found
+        "400":
+          description: Invalid ID supplied
+
+    delete:
+      description: Remove the Sailor from the SORs
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Sailor object that needs to be removed from the SORs
+          required: false
+          schema:
+            $ref: "#/definitions/Sailor"
+      responses:
+        200:
+          description: Successful response
+
+  /sailors/find:
+    get:
+      description: Searches for one or more `Sailor` objects. Optional query param of **size** determines size of returned array
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: loyaltyID
+          in: query
+          description: Loyalty Identifier
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: Email of Sailor
+          required: false
+          type: string
+        - name: dateofBirth
+          in: query
+          description: DOB of Sailor
+          required: false
+          type: string
+          format: date
+        - name: firstName
+          in: query
+          description: First Name of Sailor
+          required: false
+          type: string
+        - name: lastName
+          in: query
+          description: Last Name of Sailor
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sailor'
+
+  /sailors/findOrCreate:
+    get:
+      description: Searches for one or more `Sailor` objects. If the sailor is not found, the Sailor is created in the SORs and returned.  If there are multiple matches this operation returns the first Sailor.
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: loyaltyID
+          in: query
+          description: Loyalty Identifier
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: Email of Sailor
+          required: false
+          type: string
+        - name: dateofBirth
+          in: query
+          description: DOB of Sailor
+          required: false
+          type: string
+          format: date
+        - name: firstName
+          in: query
+          description: First Name of Sailor
+          required: false
+          type: string
+        - name: lastName
+          in: query
+          description: Last Name of Sailor
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Sailor'
+
+  /sailors/{sailorID}:
+    get:
+      tags:
+        - Sailor
+      summary: Find sailor by ID
+      description: Returns a sailor for a specified sailor identity.  This identity is a univeral Sailor identity.
+      operationId: getSailorById
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: path
+          name: sailorID
+          description: ID of Sailor that needs to be fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Sailor'
+
+  /sailors/{sailorID}/bookings:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Booking
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+      responses:
+        200:
+          description: Gets all the current bookings associated with the Sailor
+          schema:
+            $ref: '#/definitions/Bookings'
+
+  /sailors/{sailorID}/sailingHistory:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - SailingHistory
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+      responses:
+        200:
+          description: Gets all the sailing history associated with the Sailor
+          schema:
+            $ref: '#/definitions/Bookings'
+
+  /sailors/{sailorID}/households:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Household
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+      responses:
+        200:
+          description: Gets all the Household members of this Sailor
+          schema:
+            $ref: '#/definitions/Households'
+
+  /sailors/{sailorID}/preferences:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Preferences
+      responses:
+        200:
+          description: Get the preferences for this Sailor
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Preference'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+
+  /sailors/{sailorID}/contactMethod:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Contact Method
+      responses:
+        200:
+          description: Get all the contact methods for this Sailor
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/ContactMethod'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+
+  /sailors/{sailorID}/loyalty:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Loyalty
+      responses:
+        200:
+          description: Gets the current Loyalty objects associated with this Sailor
+          schema:
+            $ref: '#/definitions/Loyalties'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+
+  /sailors/{sailorID}/visas:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Visa
+      responses:
+        200:
+          description: Gets the current Visa objects associated with this Sailor
+          schema:
+            $ref: '#/definitions/Visas'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+
+  /sailors/{sailorID}/identification:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Identification
+      responses:
+        200:
+          description: Gets the current Identification objects associated with this Sailor
+          schema:
+            $ref: '#/definitions/Identifications'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+          
+  /sailors/{sailorID}/wearables:
+    parameters:
+      - $ref: '#/parameters/sailorID'
+    get:
+      tags:
+        - Wearables
+      responses:
+        200:
+          description: Gets the wearables associated with this Sailor
+          schema:
+            $ref: '#/definitions/Wearables'
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  sailorID:
+    name: sailorID
+    in: path
+    description: The sailor identifier number
+    type: string
+    required: true
+  correlationID:
+    name: X-Correlation-ID
+    in: header
+    description: Correlation ID across the enterprise application components.
+    required: false
+    type: string
+  clientID:
+    name: X-VV-Client-ID
+    in: header
+    description: Application identifier of client.
+    required: false
+    type: string
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+
+  Sailors:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          sailors:
+            type: array
+            items:
+              $ref: '#/definitions/Sailor'
+
+  Sailor:
+    type: object
+    properties:
+      id:
+        type: integer
+      seawareClientID:
+        type: string
+      prefix:
+        type: string
+      firstName:
+        type: string
+      middleName:
+        type: string
+      lastName:
+        type: string
+      primaryEmail:
+        type: string
+      mobileNumber:
+        type: string
+      suffix:
+        type: string
+      preferredName:
+        type: string
+      nickname:
+        type: string
+      gender:
+        type: string
+      occupation:
+        type: string
+      citizenshipCountry:
+        type: string
+      preferredLanguage:
+        type: string
+      dateofBirth:
+        type: string
+        format: date
+      birthCountry:
+        type: string
+      ageGroup:
+        type: string
+      anniversaryDate:
+        type: string
+        format: date
+      retirementDate:
+        type: string
+        format: date
+      martialStatus:
+        type: string
+      numberofChildren:
+        type: integer
+      tribe:
+        type: string
+      status:
+        type: string
+      vIP:
+        type: string
+      averageNTRAmount:
+        type: string
+      averageOBSAmount:
+        type: string
+      totalLifetimeRevenuePerDiem:
+        type: string
+      totalLifetimePerDiem:
+        type: string
+      totalLifetimeCruiseNights:
+        type: string
+      salutation:
+        type: string
+      preferences:
+        type: array
+        items:
+          $ref: '#/definitions/Preference'
+      sailingHistory:
+        type: array
+        items:
+          $ref: '#/definitions/Booking'
+      _links:
+        $ref: '#/definitions/SailorLinks'
+
+  Bookings:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          bookings:
+            type: array
+            items:
+              $ref: '#/definitions/Booking'
+
+  Booking:
+    type: object
+    properties:
+      reservationNumber:
+        type: string
+      status:
+        type: string
+      sailingPackage:
+        type: string
+      ship:
+        type: string
+      daysonSailing:
+        type: integer
+      sailDate:
+        type: string
+        format: date
+      embarkationDate:
+        type: string
+        format: date
+      disembarkationDate:
+        type: string
+        format: date
+      prepaidGratuities:
+        type: string
+      vacationProtection:
+        type: string
+      preCruiseTransfer:
+        type: string
+      postCruiseTransfer:
+        type: string
+      flightPurchase:
+        type: string
+      brand:
+        type: string
+      onboardSpend:
+        type: string
+      currency:
+        type: string
+      bookedBySailor:
+        type: string
+      dateBooked:
+        type: string
+        format: date
+      numberofGuests:
+        type: integer
+      numberofStateroom:
+        type: integer
+      numberofAcessibleStaterooms:
+        type: integer
+
+  Households:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          households:
+            type: array
+            items:
+              $ref: '#/definitions/Household'
+
+  Household:
+    type: object
+    properties:
+      householdId:
+        type: string
+      primarySailor:
+        type: integer
+      status:
+        type: string
+      averageNTRAmount:
+        type: string
+      totalOBSAmount:
+        type: string
+      averageLifeSpendPerNight:
+        type: string
+      averageLifeSpendPerNightLastCruise:
+        type: string
+      totalLifeTimeSpend:
+        type: string
+      totalLifeTimeCruiseNights:
+        type: integer
+      vVValueScore:
+        type: string
+
+  Loyalties:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          loyalties:
+            type: array
+            items:
+              $ref: '#/definitions/Loyalty'
+
+  Loyalty:
+    type: object
+    properties:
+      brand:
+        type: string
+      enrollDate:
+        type: string
+        format: date
+      enrollSource:
+        type: string
+      individualCredits:
+        type: string
+      recurredCredits:
+        type: string
+      memberNumber:
+        type: string
+      program:
+        type: string
+      status:
+        type: string
+      referredBy:
+        type: string
+      tier:
+        type: string
+
+  ContactMethod:
+    type: object
+    discriminator: contactType
+    properties:
+      contactType:
+        type: string
+      contactSubType:
+        type: string
+      primary:
+        type: string
+      activeDateFrom:
+        type: string
+        format: date
+      activeDateTo:
+        type: string
+        format: date
+      deliverableStatus:
+        type: string
+      undeliverableStatus:
+        type: string
+      capturedDate:
+        type: string
+        format: date
+  
+  ContactPhone:
+    allOf:
+      - $ref: '#/definitions/ContactMethod'
+      - type: object
+        properties:
+          phoneNumber:
+            type: string
+          extenstion:
+            type: string
+  
+  ContactEmail:
+    allOf:
+      - $ref: '#/definitions/ContactMethod'
+      - type: object
+        properties:
+          email:
+            type: string
+  
+  ContactAddress:
+    allOf:
+      - $ref: '#/definitions/ContactMethod'
+      - type: object
+        properties:
+          addressLine1:
+            type: string
+          addressLine2:
+            type: string
+          addressLine3:
+            type: string
+          addressLine4:
+            type: string
+          city:
+            type: string
+          state:
+            type: string
+          province:
+            type: string
+          country:
+            type: string
+          postalCode:
+            type: string
+          countryCode:
+            type: string
+
+  Preference:
+    type: object
+    properties:
+      category:
+        type: string
+      subCategory:
+        type: string
+      option:
+        type: string
+
+  Visas:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          visas:
+            type: array
+            items:
+              $ref: '#/definitions/Visa'
+
+  Visa:
+    type: object
+    properties:
+      visaType:
+        type: string
+      issueCountry:
+        type: string
+      number:
+        type: string
+      issueDate:
+        type: string
+        format: date
+      expiryDate:
+        type: string
+        format: date
+      numberofEntries:
+        type: integer
+
+  Identifications:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          identifications:
+            type: array
+            items:
+              $ref: '#/definitions/Identification'
+
+  Identification:
+    type: object
+    properties:
+      documentType:
+        type: string
+      number:
+        type: string
+      issueCountry:
+        type: string
+      issueDate:
+        type: string
+        format: date
+      issueAuthority:
+        type: string
+      expiryDate:
+        type: string
+        format: date
+      motherMaidenName:
+        type: string
+      fatherName:
+        type: string
+      issueState:
+        type: string
+      gender:
+        type: string
+      issueCity:
+        type: string
+      birthDate:
+        type: string
+      birthCountryCode:
+        type: string
+      documentAddress:
+        type: string
+      documentSubType:
+        type: string
+
+  Wearables:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          wearables:
+            type: array
+            items:
+              $ref: '#/definitions/Wearable'
+
+  Wearable:
+    type: object
+    properties:
+      wearableType:
+        type: string
+      wearableID:
+        type: string
+      wearableName:
+        type: string
+      state:
+        type: string
+      activatedOn:
+        type: string
+        format: date
+      deactiveatedOn:
+        type: string
+        format: date
+
+  Page:
+    type: object
+    properties:
+      size:
+        type: integer
+      totalElements:
+        type: integer
+      totalPages:
+        type: integer
+      number:
+        type: integer
+
+  Link:
+    type: object
+    properties:
+      href:
+        type: string
+      rel:
+        type: string
+      templated:
+        type: boolean
+        
+  Links:
+    type: object
+    properties:
+      first:
+        $ref: '#/definitions/Link'
+      prev:
+        $ref: '#/definitions/Link'
+      self:
+        $ref: '#/definitions/Link'
+      next:
+        $ref: '#/definitions/Link'
+      last:
+        $ref: '#/definitions/Link'
+      profile:
+        $ref: '#/definitions/Link'
+
+  SailorLinks:
+    type: object
+    properties:
+      self:
+        $ref: '#/definitions/Link'
+      bookings:
+        $ref: '#/definitions/Link'
+      households:
+        $ref: '#/definitions/Link'
+      contactmethods:
+        $ref: '#/definitions/Link'
+      loyalties:
+        $ref: '#/definitions/Link'
+      visas:
+        $ref: '#/definitions/Link'
+      identifications:
+        $ref: '#/definitions/Link'
+      wearables:
+        $ref: '#/definitions/Link'
+
+x-suppress:
+  - $ref: '#/definitions/ContactPhone'
+  - $ref: '#/definitions/ContactEmail'
+  - $ref: '#/definitions/ContactAddress'

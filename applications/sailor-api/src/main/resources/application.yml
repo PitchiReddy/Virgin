@@ -1,0 +1,41 @@
+app:
+  name: sailor-api
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-docs
+
+spring:
+  jackson:
+    date-format: com.virginvoyages.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+management:
+  security:
+    enabled: false
+
+feign:
+  hystrix:
+    enabled: false
+
+security:
+  basic:
+    enabled: false
+  oauth2:
+    crm:
+      access-token-uri: ${crm.service.url}/services/oauth2/token
+      client-id: ${crm.client-id}
+      client-secret: ${crm.client-secret}
+      username: ${crm.username}
+      password: ${crm.password}
+
+log:
+  file: app.log
+
+logging:
+  level:
+    org.springframework.web.client: DEBUG
+    com.virginvoyages: DEBUG

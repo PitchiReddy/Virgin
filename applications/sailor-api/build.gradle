@@ -1,0 +1,118 @@
+
+apply from: "../../java.gradle"
+apply plugin: "org.springframework.boot"
+apply plugin: "docker"
+apply plugin: "com.gorylenko.gradle-git-properties"
+apply plugin: "jacoco"
+
+group = "com.virginvoyages"
+version = '0.0.1'
+description = "sailor-api"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-hateoas"
+    compile "org.springframework.cloud:spring-cloud-starter-feign"
+    compile "org.springframework.cloud:spring-cloud-starter-security"
+    compile "org.springframework.security.oauth:spring-security-oauth2"
+    compile "ch.qos.logback:logback-core:1.2.3"
+    compile "net.logstash.logback:logstash-logback-encoder:$logbackVersion"
+    compile "io.springfox:springfox-swagger2:$springFoxVersion"
+    compile "io.springfox:springfox-swagger-ui:$springFoxVersion"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.8"
+    compile "joda-time:joda-time:2.9.9"
+    compile "org.projectlombok:lombok:1.16.16"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "io.rest-assured:rest-assured:3.0.3"
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false // Change to true for remote push
+    //tag = "murtazacg/sailor-api"
+    dockerfile = file("src/main/docker/Dockerfile")
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+// The run task added by the application plugin
+// is also of type JavaExec.
+tasks.withType(JavaExec) {
+    // Assign all Java system properties from
+    // the command line to the JavaExec task.
+    systemProperties System.properties
+}
+
+springBoot  {
+    // This statement tells the Gradle Spring Boot plugin
+    // to generate a file
+    // build/resources/main/META-INF/build-info.properties
+    // that is picked up by Spring Boot to display
+    // via /info endpoint.
+    buildInfo()
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    //'**/*Data**',
+                    // TODO Refactor to use naming (package or class) and regular expression
+                    // Exclude Lombok generated code.
+                    'com/virginvoyages/booking/Booking.class',
+                    'com/virginvoyages/booking/Bookings.class',
+                    'com/virginvoyages/booking/BookingsEmbedded.class',
+                    'com/virginvoyages/contact/ContactAddress.class',
+                    'com/virginvoyages/contact/ContactEmail.class',
+                    'com/virginvoyages/contact/ContactMethod.class',
+                    'com/virginvoyages/contact/ContactMethods.class',
+                    'com/virginvoyages/contact/ContactMethodsEmbedded.class',
+                    'com/virginvoyages/contact/ContactPhone.class',
+                    'com/virginvoyages/crm/MetaData.class',
+                    'com/virginvoyages/crm/data/AccountCreateStatus.class',
+                    'com/virginvoyages/crm/data/AccountData.class',
+                    'com/virginvoyages/crm/data/Attributes.class',
+                    'com/virginvoyages/crm/data/QueryResultsData.class',
+                    'com/virginvoyages/crm/data/RecordTypeData.class',
+                    'com/virginvoyages/household/Household.class',
+                    'com/virginvoyages/household/Households.class',
+                    'com/virginvoyages/household/HouseholdsEmbedded.class',
+                    'com/virginvoyages/identification/Identification.class',
+                    'com/virginvoyages/identification/Identifications.class',
+                    'com/virginvoyages/identification/IdentificationsEmbedded.class',
+                    'com/virginvoyages/loyalty/Loyalties.class',
+                    'com/virginvoyages/loyalty/LoyaltiesEmbedded.class',
+                    'com/virginvoyages/loyalty/Loyalty.class',
+                    'com/virginvoyages/preference/Preference.class',
+                    'com/virginvoyages/preference/Preferences.class',
+                    'com/virginvoyages/preference/PreferencesEmbedded.class',
+                    'com/virginvoyages/sailor/Sailor.class',
+                    'com/virginvoyages/sailor/SailorLinks.class',
+                    'com/virginvoyages/sailor/Sailors.class',
+                    'com/virginvoyages/sailor/SailorsEmbedded.class',
+                    'com/virginvoyages/sailor/exceptions/ErrorDetail.class',
+                    'com/virginvoyages/visa/Visa.class',
+                    'com/virginvoyages/visa/Visas.class',
+                    'com/virginvoyages/visa/VisasEmbedded.class',
+                    'com/virginvoyages/wearable/Wearable.class',
+                    'com/virginvoyages/wearable/Wearables.class',
+                    'com/virginvoyages/wearable/WearablesEmbedded.class',
+                    // Exclude POJO
+                    'com/virginvoyages/model/Links.class',
+                    'com/virginvoyages/model/Page.class',
+                    // Exclude Stub code
+                    'com/virginvoyages/api/MockSailorAPI.class'
+            ])
+        })
+    }
+}
