@@ -16,7 +16,9 @@ dependencyManagement {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
+    
+	compile project(":components:hbase-starter")
+	compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
     compile "org.springframework.cloud:spring-cloud-starter-feign"

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.vv.hbase.starter.config.HbaseTemplateAutoConfiguration
