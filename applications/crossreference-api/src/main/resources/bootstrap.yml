@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: crossreference-api
+  
+server:
+  port: 8435
+  context-path: /v1

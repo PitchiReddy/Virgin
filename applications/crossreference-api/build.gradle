@@ -1,3 +1,25 @@
+buildscript {
+
+    ext {
+        springBootVersion = "1.5.3.RELEASE"
+        springFoxVersion = "2.7.0"
+        springCloudVersion = "Dalston.SR1"
+        logbackVersion = "4.11"
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+        classpath "se.transmode.gradle:gradle-docker:1.2"
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
+    }
+}
 
 apply from: "../../java.gradle"
 apply plugin: "org.springframework.boot"
@@ -6,8 +28,8 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
 
 group = "com.virginvoyages"
-version = '1.0'
-description = "sailor-api"
+version = '0.0.1'
+description = "crossreference-api"
 
 dependencyManagement {
     imports {
@@ -35,7 +57,7 @@ dependencies {
 
 task buildDocker(type: Docker, dependsOn: build) {
     push = false // Change to true for remote push
-    //tag = "murtazacg/sailor-api"
+    //tag = "murtazacg/crossreference-api"
     dockerfile = file("src/main/docker/Dockerfile")
     doFirst {
         copy {
@@ -62,9 +84,26 @@ springBoot  {
     buildInfo()
 }
 
-
 jacocoTestReport {
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports after running tests."
-    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    //'**/*Data**',
+                    // TODO Refactor to use naming (package or class) and regular expression
+                    // Exclude Lombok generated code.
+                    'com/virginvoyages/crossreference/model/Audited.class',
+                    'com/virginvoyages/crossreference/references/Reference.class',
+                    'com/virginvoyages/crossreference/references/References.class',
+                    'com/virginvoyages/crossreference/references/ReferencesEmbedded.class',
+                    'com/virginvoyages/crossreference/sources/ReferenceSource.class',
+                    'com/virginvoyages/crossreference/types/Type.class',
+                    // Exclude POJO
+                    'com/virginvoyages/model/Link.class',
+                    'com/virginvoyages/model/Links.class',
+                    'com/virginvoyages/model/Page.class',
+                    // Exclude Stub code
+                    'com/virginvoyages/api/MockCrossReferenceAPI.class'
+            ])
+        })
+    }
 }
