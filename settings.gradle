@@ -2,4 +2,5 @@
 rootProject.name = 'integration-api'
 include "applications:sailor-api"
 include "applications:crossreference-api"
+include "applications:recommendation-api"
 include "components:hbase-starter"
