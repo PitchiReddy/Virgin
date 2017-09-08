@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: recommendation-api
+  
+server:
+  port: 8438
+  context-path: /v1
