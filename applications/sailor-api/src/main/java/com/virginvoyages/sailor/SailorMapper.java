@@ -56,6 +56,7 @@ public class SailorMapper {
 		sailor.mobileNumber(accountData.mobileNumber());
 		sailor.primaryEmail(accountData.primaryEmail());
 		sailor.salutation(accountData.salutation());
+		sailor.recordTypeId(accountData.recordTypeId());
 	
 		return sailor;
 	}

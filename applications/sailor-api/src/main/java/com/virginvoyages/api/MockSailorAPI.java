@@ -260,7 +260,7 @@ public class MockSailorAPI {
     }
 
     private ContactPhone createContactPhone() {
-        ContactPhone cp = new ContactPhone().phoneNumber("999-888-7777").extenstion("x1243");
+        ContactPhone cp = new ContactPhone().phoneNumber("999-888-7777").extension("x1243");
         initContactMethod(cp);
         return cp;
     }

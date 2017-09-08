@@ -12,8 +12,8 @@ public class ContactPhone extends ContactMethod {
     @JsonProperty("phoneNumber")
     private String phoneNumber = null;
 
-    @JsonProperty("extenstion")
-    private String extenstion = null;
+    @JsonProperty("extension")
+    private String extension = null;
 
     public ContactPhone() {
         super();

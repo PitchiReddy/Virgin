@@ -51,20 +51,11 @@ task buildDocker(type: Docker, dependsOn: build) {
     }
 }
 
-// The run task added by the application plugin
-// is also of type JavaExec.
 tasks.withType(JavaExec) {
-    // Assign all Java system properties from
-    // the command line to the JavaExec task.
     systemProperties System.properties
 }
 
 springBoot  {
-    // This statement tells the Gradle Spring Boot plugin
-    // to generate a file
-    // build/resources/main/META-INF/build-info.properties
-    // that is picked up by Spring Boot to display
-    // via /info endpoint.
     buildInfo()
 }
 

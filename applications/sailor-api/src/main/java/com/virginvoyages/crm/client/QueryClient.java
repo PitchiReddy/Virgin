@@ -3,7 +3,6 @@ package com.virginvoyages.crm.client;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
@@ -27,12 +26,6 @@ public interface QueryClient {
     @GetMapping(value = QUERY)
     QueryResultsData<AccountData> findAccounts(@RequestParam("query") String query);
 
-    @GetMapping(value = QUERY)
-    QueryResultsData<RecordTypeData> findRecordTypes(@RequestParam("query") String query);
-
-    @GetMapping(value = "?q=SELECT id FROM RecordType WHERE developername = 'PersonAccount' LIMIT 1")
-    QueryResultsData<RecordTypeData> findPersonAccountRecordTypeID();
-    
     @GetMapping(value = "?q=SELECT Id from RecordType where Name = 'Sailor' LIMIT 1")
     QueryResultsData<RecordTypeData> findSailorAccountRecordTypeID();
     

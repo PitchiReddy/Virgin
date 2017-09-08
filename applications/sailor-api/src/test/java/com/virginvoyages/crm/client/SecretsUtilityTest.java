@@ -1,6 +1,8 @@
-package com.virginvoyages.crm;
+package com.virginvoyages.crm.client;
 
 import org.junit.Test;
+
+import com.virginvoyages.crm.SecretsUtility;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;

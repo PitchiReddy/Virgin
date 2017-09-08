@@ -1,0 +1,1301 @@
+{
+	"variables": [],
+	"info": {
+		"name": "sailor-api",
+		"_postman_id": "ca735dd9-24c0-068e-f621-3bef5b6c40bd",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "findOrCreate with all empty values",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/findOrCreate",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "findOrcreate sailor with firstname , dateofbirt and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/findOrCreate?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&firstName=sivaF1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"findOrCreate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "findOrCreate with lastname ,dateofbirth and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "findOrcreate sailor with firstname ,lastname dateofbirt and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/findOrCreate?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&firstName=sivaF2&lastName=sivaL2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"findOrCreate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF2",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "findOrcreate sailor with firstname ,lastname dateofbirt, email and mobilenumber",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/findOrCreate?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&firstName=sivaF1&lastName=sivaL1&mobileNumber=8884925768",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"findOrCreate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "mobileNumber",
+							"value": "8884925768",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get sailor by valid sailorId",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/0010n000003egNbAAI",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get sailor by noId(empty)",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get sailor by invalid(not exists in CRM) sailorId",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/1234",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete sailor by valid sailorId",
+			"request": {
+				"url": " http://localhost:8432/v1/sailors/0010n00000EpwZ5AAJ",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete sailor by invalid(not exists inCRM) sailorId",
+			"request": {
+				"url": " http://localhost:8432/v1/sailors/1234",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find by mobile number",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?mobileNumber=8884925768",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "mobileNumber",
+							"value": "8884925768",
+							"equals": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by firstname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?firstName=Murtaza",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Murtaza",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?lastName=Goga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "lastName",
+							"value": "Goga",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-03",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-03",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with email and dateofbirt",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-18",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with firstname and lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?firstName=Murtaza&lastName=Goga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Murtaza",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "Goga",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with firstname and dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-22&firstName=sivaF1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with firstname and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&firstName=sivaF1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with  lastname and dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-03&lastName=goga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-03",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "goga",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with lastname and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with dateofbirth and firstname and lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-03&firstName=Murtaza&lastName=Goga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-03",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "Murtaza",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "Goga",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with dateofbirt,firstanme and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&firstName=sivaF1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with dateofbirt,lastname and email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by email,firstname,lastname and dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors with firstname ,lastname,email ,dateofbirth and mobilenumber",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-22&firstName=sivaF1&lastName=sivaL1&mobileNumber=8884925768",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-22",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "mobileNumber",
+							"value": "8884925768",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailor with all empty values",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/find",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get preferences by valid sailorId",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/0010n000003egNbAAI/preferences",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get empty preferences with valid sailorId",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/a0B0n0000006tYLEAY/preferences",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get preferences by invalid(not exists in CRM) sailorId",
+			"request": {
+				"url": "http://localhost:8432/v1/sailors/0010n000003egNbAA/preferences",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) lastName",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?lastName=sivaL10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "lastName",
+							"value": "sivaL10",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) firstName",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?firstName=sivaF10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "sivaF10",
+							"equals": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-23",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-23",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) email",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shankar%40gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shankar%40gmail.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) email,firstname,lastname and  dateofbirth",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku91.java%40gmail.com&dateofBirth=2017-08-23&firstName=sivaF1&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku91.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-23",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) dateofbirth and lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-23&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-23",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) dateofbirth and firstName and lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-23&firstName=sivaF10&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-23",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF10",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) dateofbirth and firstname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?dateofBirth=2017-08-23&firstName=sivaF10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "dateofBirth",
+							"value": "2017-08-23",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF10",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) email and lastname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku.java%40gmail.com&firstName=sivaF1&lastName=sivaL1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "lastName",
+							"value": "sivaL1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "find sailors by invalid(not exists in CRM) email and firstname",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8432/v1/sailors/find?email=shanku.java%40gmail.com&firstName=sivaF1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8432",
+					"path": [
+						"v1",
+						"sailors",
+						"find"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "shanku.java%40gmail.com",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "firstName",
+							"value": "sivaF1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

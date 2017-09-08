@@ -1,7 +1,6 @@
 package com.virginvoyages.sailor;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -161,14 +160,14 @@ public class SailorController {
                                                 @ApiParam(value = "Last Name of Sailor") @RequestParam(value = "lastName", required = false) String lastName,
                                                 @ApiParam(value = "Mobile number of Sailor") @RequestParam(value = "mobileNumber", required = false) String mobileNumber) {
     
-    	List<Sailor> listOfSailors = new ArrayList<>();
-		
     	if (StringUtils.isEmpty(email) && dateofBirth == null && StringUtils.isEmpty(firstName)
 				&& StringUtils.isEmpty(lastName) && StringUtils.isEmpty(mobileNumber)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		
-		listOfSailors = sailorAssembly.findSailors(setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber));
+    	AccountData accountData = setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber);
+    	
+    	List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
 		
 		if(listOfSailors.size() == 0) {
 			throw new DataNotFoundException();

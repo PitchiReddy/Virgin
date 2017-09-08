@@ -1,15 +1,19 @@
 package com.virginvoyages.sailor;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.booking.Booking;
-import com.virginvoyages.preference.Preference;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.LocalDate;
 import org.springframework.hateoas.Identifiable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.virginvoyages.booking.Booking;
+import com.virginvoyages.booking.BookingsEmbedded;
+import com.virginvoyages.preference.Preference;
+import com.virginvoyages.preference.PreferencesEmbedded;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent = true, chain = true)
@@ -109,10 +113,13 @@ public class Sailor implements Identifiable<String> {
     private String salutation;
     
     @JsonProperty("email")
-    public String primaryEmail;
+    private String primaryEmail;
     
     @JsonProperty("mobileNumber")
-    public String mobileNumber;
+    private String mobileNumber;
+    
+    @JsonProperty("recordTypeId")
+    private String recordTypeId;
 
     @JsonProperty("preferences")
     private List<Preference> preferences = new ArrayList<Preference>();
@@ -126,6 +133,14 @@ public class Sailor implements Identifiable<String> {
     @Override
     public String getId() {
         return id();
+    }
+    
+    public Sailor associatePreferences(PreferencesEmbedded preferencesEmbedded) {    	
+    	return preferencesEmbedded == null ? this : this.preferences(preferencesEmbedded.preferences());
+    }
+    
+    public Sailor associateSailingHistory(BookingsEmbedded bookingsEmbedded) {
+    	return bookingsEmbedded == null ? this : this.sailingHistory(bookingsEmbedded.bookings());
     }
 }
 

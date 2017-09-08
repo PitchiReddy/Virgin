@@ -39,4 +39,3 @@ logging:
   level:
     org.springframework.web.client: DEBUG
     com.virginvoyages: DEBUG
-    

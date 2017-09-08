@@ -36,11 +36,11 @@ public class SailorMapperTest {
 		assertThat(sailor.salutation(), is(salutation));
 	}
 	
-	@Test
+	//TODO implement test
+	/*@Test
 	public void retrieveListOfSailorIDsShouldReturnAllSailorIDsInQueryResultsData() {
-		//TODO implement test
 		assert(true);
-	}
+	}*/
 	
 	
 }

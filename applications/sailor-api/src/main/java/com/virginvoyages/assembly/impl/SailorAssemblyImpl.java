@@ -8,17 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.assembly.SailorAssembly;
+import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
+import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.exceptions.DataNotFoundException;
+import com.virginvoyages.sailor.exceptions.UnknownException;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 import feign.FeignException;
@@ -44,6 +48,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	
 	@Autowired
 	private SailorMapper sailorMapper;
+	
+	@Autowired
+	private PreferenceAssembly preferenceAssembly;
     
 	@Override
 	public Sailor getSailorById(String sailorID) {
@@ -55,22 +62,22 @@ public class SailorAssemblyImpl implements SailorAssembly {
 				throw new DataNotFoundException();
 			}
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
+			throw new UnknownException();
 		}
-		return accountData.convertToSailorObject();
+		return convertAccountDataToSailor(accountData, loadPreferences(sailorID), null);
 
 	}
 
 	@Override
 	public void deleteSailorById(String sailorID) {
-		// TODO what is the error handling mechanism for errors at CRM end
-		log.debug("deleting sailor details - SaiorById");
 		try {
 			accountClient.deleteAccount(sailorID);
 		} catch (FeignException fe) {
 			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
 			}
-			log.error("FeignException encountered - to be handled",fe.getMessage());
+			log.error("FeignException encountered - to be handled ",fe.getMessage());
+			throw new UnknownException();
 		}
 		
 	}
@@ -78,16 +85,15 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	@Override
 	public List<Sailor> findSailors(AccountData accountData) {
 		
-		//TODO what is the error handling mechanism for errors at CRM end
 		String findQueryString = sailorQueryHelper.generateFindQueryString(accountData);
 		QueryResultsData<AccountData> queryResultsData = queryClient.findAccounts(findQueryString);
 		
 		List<String> listOfSailorIDs = sailorMapper.retrieveListOfSailorIDs(queryResultsData);
 		log.debug("Request to return list of sailor's with ID {}", listOfSailorIDs);
-				
+		
 		// TODO fix multi thread issue with oauth2ClientContext and change to parallelstream
 		return listOfSailorIDs.stream().map(sailorID  -> {
-            return accountClient.findAccount(sailorID).convertToSailorObject() ;
+            return convertAccountDataToSailor(accountClient.findAccount(sailorID),loadPreferences(sailorID),null) ;
 		}).collect(Collectors.toList());
 	}
 
@@ -112,8 +118,18 @@ public class SailorAssemblyImpl implements SailorAssembly {
 			throw new AccountCreationException();
 		}
 		
-		return accountClient.findAccount(sailorID).convertToSailorObject();
-		
+		return convertAccountDataToSailor(accountClient.findAccount(sailorID),loadPreferences(sailorID),null);
+				
  	}
+	
+	private PreferencesEmbedded loadPreferences(String sailorID) {
+		return preferenceAssembly.findSailorPreferences(sailorID);
+	}
+	
+	private Sailor convertAccountDataToSailor(AccountData accoundData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
+		return accoundData.convertToSailorObject()
+				.associatePreferences(preferencesEmbedded)
+				.associateSailingHistory(bookingsEmbedded);
+	}
 
 }
