@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 /**
  * ReferencesEmbedded
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-08-29T14:32:07.054+05:30")
 @Data
 @Accessors(fluent = true, chain = true)
 public class ReferencesEmbedded   {

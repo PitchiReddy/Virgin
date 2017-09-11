@@ -21,8 +21,6 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-09-05T12:00:17.466+05:30")
-
 @RestController
 @Api(value = "Recommendation", tags = "Recommendation", description = "Recommendation Response")
 @Slf4j
