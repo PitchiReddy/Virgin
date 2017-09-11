@@ -34,10 +34,9 @@ allprojects {
    || project.name.contains("recommendation-api") || */
    project.name.contains("sailor-api") ) {
 	task buildDocker(type: Docker, dependsOn: build) {
-		task -> 
 		 push = true
 		 tagVersion = version + "." + System.getenv("BUILD_NUMBER")
-		  	tag = "virginvoyages-cap-images.jfrog.io/$task.project.name"
+		  	tag = "virginvoyages-cap-images.jfrog.io/$project.name"
 		    dockerfile = file("$project.projectDir/src/main/docker/Dockerfile")
 		    doFirst {
         copy {
