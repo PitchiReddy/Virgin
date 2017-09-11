@@ -55,7 +55,7 @@ dependencies {
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
 
-task buildDocker(type: Docker, dependsOn: build) {
+/*task buildDocker(type: Docker, dependsOn: build) {
     push = false // Change to true for remote push
     //tag = "murtazacg/crossreference-api"
     dockerfile = file("src/main/docker/Dockerfile")
@@ -65,7 +65,7 @@ task buildDocker(type: Docker, dependsOn: build) {
             into stageDir
         }
     }
-}
+}*/
 
 // The run task added by the application plugin
 // is also of type JavaExec.

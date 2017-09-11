@@ -28,21 +28,30 @@ subprojects {
 }
 
 allprojects {
-apply plugin: "docker"
-task buildDocker_ALL{
-println "Project: ${rootProject.projectDir}/applications/${project.name}/src/main/docker"
-    push = false // Change to true for remote push
-    tagVersion = version + "." + System.getenv("BUILD_NUMBER")
-	tag = "virginvoyages-cap-images.jfrog.io/${project.name}"
-    dockerfile = file("${rootProject.projectDir}/applications/${project.name}/src/main/docker/Dockerfile")
-    doFirst {
+    apply plugin: "docker"
+    apply from: "D:\\virginvoyages\\integration-api\\java.gradle"
+   if (/*project.name.contains("crossreference-api") 
+   || project.name.contains("recommendation-api") || */
+   project.name.contains("sailor-api") ) {
+	task buildDocker(type: Docker, dependsOn: build) {
+		task -> 
+		println "I'm $task.project.projectDir"
+		println "Stage Directory ${stageDir}"
+		 push = true
+		 tagVersion = version + "." + System.getenv("BUILD_NUMBER")
+		  	tag = "virginvoyages-cap-images.jfrog.io/$task.project.name"
+		    dockerfile = file("$project.projectDir/src/main/docker/Dockerfile")
+		    doFirst {
         copy {
-            from jar
+            from "$project.projectDir/build/libs/${project.name + '-' + version}.jar"
             into stageDir
         }
     }
+		
+	}
+ }
 }
-}
+
 defaultTasks "clean", "build", "buildDocker"
 
 
