@@ -10,17 +10,24 @@ import java.util.UUID;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.crossreference.sources.helper.TestReferenceSourceDataHelper;
+
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class FunctionalTestSupport {
+	
+	@Autowired
+	private TestReferenceSourceDataHelper testReferenceSourceDataHelper;
+	
     protected RequestSpecification specification;
     @LocalServerPort
     int localPort;
@@ -33,26 +40,27 @@ public abstract class FunctionalTestSupport {
         //specification.log().everything();
     }
     
-    public String createTestReferenceSourceAndGetSourceID(ReferenceSource referenceSource) {
+    public ReferenceSource createTestReferenceSource() {
+    	
+    	ReferenceSource referenceSource = testReferenceSourceDataHelper.getDataForCreateReferenceSource();
+    	
     	Map<String, Object> parameters = new HashMap<String, Object>();
     	Audited audited = addAuditDataForCreateResource();
     	referenceSource.auditData(audited);
     	parameters.put("auditData", referenceSource.auditData(audited));
+    	parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
 		parameters.put("inActive", referenceSource.inActive());
 				
-		String referenceSourceID = 
 		given().
 		   		contentType("application/json").
 		   		body(parameters).
 		   		post("/v1/sources").
 		   		
 		then().
-		    statusCode(200).
-		    extract()
-		    .path("referenceSourceID");
-	
-		return referenceSourceID;
+		    statusCode(200);
+		 
+		return referenceSource;
     }
     
 

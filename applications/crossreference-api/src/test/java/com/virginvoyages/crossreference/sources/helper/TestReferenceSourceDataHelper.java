@@ -8,11 +8,11 @@ import com.virginvoyages.crossreference.sources.ReferenceSource;
 @Service
 public class TestReferenceSourceDataHelper {
 
-	public ReferenceSource createReferenceSource(){
+	public ReferenceSource getDataForCreateReferenceSource(){
 		ReferenceSource referenceSource = new ReferenceSource();
 		Audited Audited = createAuditDataForCreate();
 		referenceSource.auditData(Audited);
-		referenceSource.referenceSourceID("RS1");
+		referenceSource.referenceSourceID("RS30");
 		referenceSource.referenceSourceName("Seaware");
 		referenceSource.inActive(true);
 		
