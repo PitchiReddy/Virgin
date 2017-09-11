@@ -128,6 +128,11 @@ paths:
           description: Last Name of Sailor
           required: false
           type: string
+        - name: mobileNumber
+          in: query
+          description: Mobile Number of Sailor
+          required: false
+          type: string
       responses:
         200:
           description: Successful response
@@ -150,22 +155,27 @@ paths:
         - name: email
           in: query
           description: Email of Sailor
-          required: false
+          required: true
           type: string
         - name: dateofBirth
           in: query
           description: DOB of Sailor
-          required: false
+          required: true
           type: string
           format: date
         - name: firstName
           in: query
           description: First Name of Sailor
-          required: false
+          required: true
           type: string
         - name: lastName
           in: query
           description: Last Name of Sailor
+          required: true
+          type: string
+        - name: mobileNumber
+          in: query
+          description: Mobile Number of Sailor
           required: false
           type: string
       responses:
