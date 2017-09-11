@@ -193,10 +193,10 @@ public class SailorController {
     ResponseEntity<Resource<Sailor>> sailorsFindOrCreateGet(@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
                                                   @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
                                                   @ApiParam(value = "Loyalty Identifier") @RequestParam(value = "loyaltyID", required = false) String loyaltyID,
-                                                  @ApiParam(value = "Email of Sailor") @RequestParam(value = "email", required = false) String email,
-                                                  @ApiParam(value = "DOB of Sailor") @RequestParam(value = "dateofBirth", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateofBirth,
-                                                  @ApiParam(value = "First Name of Sailor") @RequestParam(value = "firstName", required = false) String firstName,
-                                                  @ApiParam(value = "Last Name of Sailor") @RequestParam(value = "lastName", required = false) String lastName,
+                                                  @ApiParam(value = "Email of Sailor") @RequestParam(value = "email", required = true) String email,
+                                                  @ApiParam(value = "DOB of Sailor") @RequestParam(value = "dateofBirth", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateofBirth,
+                                                  @ApiParam(value = "First Name of Sailor") @RequestParam(value = "firstName", required = true) String firstName,
+                                                  @ApiParam(value = "Last Name of Sailor") @RequestParam(value = "lastName", required = true) String lastName,
                                                   @ApiParam(value = "Mobile number of Sailor") @RequestParam(value = "mobileNumber", required = false) String mobileNumber) {
 
 		
