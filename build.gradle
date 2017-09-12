@@ -26,7 +26,27 @@ buildscript {
 subprojects {
     version = '1.0'
 }
+
+allprojects {
+    apply plugin: "docker"
+    apply from: "${rootProject.projectDir}/java.gradle"
+   if (/*project.name.contains("crossreference-api") 
+   || project.name.contains("recommendation-api") || */
+   project.name.contains("sailor-api") ) {
+	task buildDocker(type: Docker, dependsOn: build) {
+		 push = true
+		 tagVersion = version + "." + System.getenv("BUILD_NUMBER")
+		  	tag = "virginvoyages-cap-images.jfrog.io/$project.name"
+		    dockerfile = file("$project.projectDir/src/main/docker/Dockerfile")
+		    doFirst {
+        copy {
+            from "$project.projectDir/build/libs/${project.name + '-' + version}.jar"
+            into stageDir
+        }
+    }
+		
+	}
+ }
+}
+
 defaultTasks "clean", "build", "buildDocker"
-
-
-
