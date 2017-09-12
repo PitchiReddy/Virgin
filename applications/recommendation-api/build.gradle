@@ -6,7 +6,7 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
 
 group = "com.virginvoyages"
-version = '0.0.1'
+version = '1.0'
 description = "recommendation-api"
 
 dependencyManagement {
@@ -35,32 +35,12 @@ dependencies {
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
 
-/*task buildDocker(type: Docker, dependsOn: build) {
-    push = false // Change to true for remote push
-    //tag = "murtazacg/recommendation-api"
-    dockerfile = file("src/main/docker/Dockerfile")
-    doFirst {
-        copy {
-            from jar
-            into stageDir
-        }
-    }
-}
-*/
-// The run task added by the application plugin
-// is also of type JavaExec.
+
 tasks.withType(JavaExec) {
-    // Assign all Java system properties from
-    // the command line to the JavaExec task.
     systemProperties System.properties
 }
 
 springBoot  {
-    // This statement tells the Gradle Spring Boot plugin
-    // to generate a file
-    // build/resources/main/META-INF/build-info.properties
-    // that is picked up by Spring Boot to display
-    // via /info endpoint.
     buildInfo()
 }
 

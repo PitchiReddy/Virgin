@@ -19,7 +19,6 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
         classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
-        
     }
 }
 
@@ -30,8 +29,8 @@ subprojects {
 allprojects {
     apply plugin: "docker"
     apply from: "${rootProject.projectDir}/java.gradle"
-   if (/*project.name.contains("crossreference-api") 
-   || project.name.contains("recommendation-api") || */
+   if (project.name.contains("crossreference-api") 
+   || project.name.contains("recommendation-api") || 
    project.name.contains("sailor-api") ) {
 	task buildDocker(type: Docker, dependsOn: build) {
 		 push = true
@@ -48,5 +47,4 @@ allprojects {
 	}
  }
 }
-
 defaultTasks "clean", "build", "buildDocker"
