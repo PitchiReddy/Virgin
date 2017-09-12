@@ -1,19 +1,13 @@
-reco:
-  image: e2db4043fb16
-  ports:
-   - "8438:8438"
-  environment:
-   - application_properties_path=$APPLICATION_PROPERTIES_PATH
-   - service_properties_path=$SERVICE_PROPERTIES_PATH
-
 sailor:
   image: 85cbf24e3df1
   ports:
    - "8432:8432"
   environment:
-   - application_properties_path=$APPLICATION_PROPERTIES_PATH
-   - service_properties_path=$SERVICE_PROPERTIES_PATH
-   
+   - application_properties_path=/etc/prop/integration-api.yml
+   - service_properties_path=/etc/prop/dev/sailor-api.yml
+  volumes:
+    - d:/virginvoyages/sailor-api-config/src/main/resources/:/etc/prop 
+
 crossref:
   image: 342c388eeb75
   ports:
@@ -21,3 +15,13 @@ crossref:
   environment:
    - application_properties_path=$APPLICATION_PROPERTIES_PATH
    - service_properties_path=$SERVICE_PROPERTIES_PATH
+
+reco:
+  image: e2db4043fb16
+  ports:
+   - "8438:8438"
+  environment:
+   - application_properties_path=$APPLICATION_PROPERTIES_PATH
+   - service_properties_path=$SERVICE_PROPERTIES_PATH
+  
+
