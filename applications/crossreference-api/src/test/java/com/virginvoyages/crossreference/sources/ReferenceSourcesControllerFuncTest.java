@@ -3,10 +3,7 @@ package com.virginvoyages.crossreference.sources;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.mockito.Matchers.isNull;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.nullValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 import static io.restassured.RestAssured.given;
 import com.virginvoyages.FunctionalTestSupport;
-import com.virginvoyages.crossreference.sources.helper.TestReferenceSourceDataHelper;
+import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 import io.restassured.response.ValidatableResponse;
 
@@ -25,7 +22,7 @@ import io.restassured.response.ValidatableResponse;
 public class ReferenceSourcesControllerFuncTest extends FunctionalTestSupport {
 
 	@Autowired
-	private TestReferenceSourceDataHelper testReferenceSourceDataHelper;
+	private TestDataHelper testDataHelper;
 
 	@Test
 	public void givenValidReferenceSourceIDGetReferenceSourceByIdShouldReturnReferenceSource() {
@@ -96,7 +93,7 @@ public class ReferenceSourcesControllerFuncTest extends FunctionalTestSupport {
 	@Test
 	public void givenValidReferenceSourceAddReferenceSourceShouldCreateReferenceSource() {
 		
-		ReferenceSource referenceSource = testReferenceSourceDataHelper.getDataForCreateReferenceSource();
+		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSourceName", referenceSource.referenceSourceName());

@@ -208,6 +208,9 @@ public class MockCrossReferenceAPI {
 	
 	
 	private Audited updateAuditDataForUpdate(Audited audited) {
+		if(null == audited) {
+			audited = createAuditDataForCreate();
+		}
 		return audited
 			   .updateDate(LocalDate.now())
 		 	   .updateUser("mockXREFapi");
