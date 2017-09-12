@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.virginvoyages.FunctionalTestSupport;
+import com.virginvoyages.SailorFunctionalTestSupport;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
@@ -26,7 +26,7 @@ import io.restassured.response.ValidatableResponse;
 
 
 @RunWith(SpringRunner.class)
-public class SailorControllerFuncTest extends FunctionalTestSupport {
+public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 	
 	@Autowired
 	private TestDataHelper testDataHelper;

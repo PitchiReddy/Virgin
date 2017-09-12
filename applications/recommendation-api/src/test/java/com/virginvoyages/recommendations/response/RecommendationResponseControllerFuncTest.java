@@ -9,13 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.virginvoyages.FunctionalTestSupport;
+import com.virginvoyages.RecommendationFunctionalTestSupport;
 
 @RunWith(SpringRunner.class)
-public class RecommendationResponseControllerFuncTest extends FunctionalTestSupport{
-	
-	/*@Autowired
-	private MockRecommendationAPI mockAPI;*/
+public class RecommendationResponseControllerFuncTest extends RecommendationFunctionalTestSupport {
 	
 	@Test
 	public void givenValidRecommendationIdRecommendationResponsePutShouldAddRecommendationResponse() {
