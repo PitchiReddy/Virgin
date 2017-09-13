@@ -169,6 +169,9 @@ public class ReferencesControllerFuncTest extends FunctionalTestSupport {
 				.assertThat().statusCode(200)
 				.log()
 				.all();
+		
+		//cleanup
+		deleteTestReference(reference.referenceID());		
 			    
 	}
 	
@@ -191,6 +194,8 @@ public class ReferencesControllerFuncTest extends FunctionalTestSupport {
 				.assertThat().statusCode(200)
 				.log()
 				.all();
+		//cleanup
+		deleteTestReference(reference.referenceID());	
 			    
 	}
 	
@@ -213,6 +218,8 @@ public class ReferencesControllerFuncTest extends FunctionalTestSupport {
 				.log()
 				.all();
 		
+		//cleanup
+		deleteTestReference(reference.referenceID());	
 		
 	} 
 	
