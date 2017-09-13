@@ -5,6 +5,7 @@ import static io.restassured.RestAssured.given;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
@@ -17,6 +18,10 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	@Test
+    public void contextLoads() {
+    }
+
 	public ReferenceSource createTestReferenceSource() {
 
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
