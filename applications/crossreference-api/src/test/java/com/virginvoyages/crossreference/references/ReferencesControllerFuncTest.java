@@ -1,24 +1,25 @@
 package com.virginvoyages.crossreference.references;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringRunner;
-import com.virginvoyages.FunctionalTestSupport;
-import com.virginvoyages.crossreference.helper.TestDataHelper;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.joda.time.LocalDate;
-import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.hasSize;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.joda.time.LocalDate;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.virginvoyages.CrossReferenceFunctionalTestSupport;
+import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
-public class ReferencesControllerFuncTest extends FunctionalTestSupport {
+public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSupport {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
