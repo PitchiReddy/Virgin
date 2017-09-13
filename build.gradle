@@ -29,6 +29,7 @@ subprojects {
 allprojects {
     apply plugin: "docker"
     apply from: "${rootProject.projectDir}/java.gradle"
+    
    if (project.name.contains("crossreference-api") 
    || project.name.contains("recommendation-api") || 
    project.name.contains("sailor-api") ) {
@@ -45,6 +46,10 @@ allprojects {
     }
 		
 	}
+	test {
+    maxParallelForks = 4
+}
  }
 }
+
 defaultTasks "clean", "build", "buildDocker"
