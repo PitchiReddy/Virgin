@@ -28,5 +28,4 @@ public abstract class FunctionalTestSupport {
 		// specification.log().everything();
 	}
 
-	
 }
