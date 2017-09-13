@@ -16,7 +16,7 @@ import io.restassured.specification.RequestSpecification;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class FunctionalTestSupport {
-	
+
 	protected RequestSpecification specification;
 	@LocalServerPort
 	int localPort;
@@ -28,5 +28,4 @@ public abstract class FunctionalTestSupport {
 		// specification.log().everything();
 	}
 
-	
 }

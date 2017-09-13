@@ -1,5 +1,6 @@
 package com.virginvoyages.crossreference.types;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,14 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
-import static io.restassured.RestAssured.given;
-import com.virginvoyages.FunctionalTestSupport;
+
+import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 import io.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
-public class ReferenceTypesControllerFuncTest extends FunctionalTestSupport {
+public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTestSupport {
 
 	@Autowired
 	private TestDataHelper testDataHelper;

@@ -1,12 +1,31 @@
 package com.virginvoyages.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.virginvoyages.recommendations.model.RecommendationData;
+
 /**
- * Mock implementation of SailorAPI to return mock responses to validate deployment
+ * Mock implementation of Recommendation API to return mock responses to validate deployment
  */
 @Component
-public class MockRecommendationAPI {/*
+public class MockRecommendationAPI {
+	
+	private List<RecommendationData> recommendationResponses = new ArrayList<RecommendationData>();
+
+    public void addRecommendationResponse(Integer nbxUniqueKey, String recommendation, String selectionSentiment) {
+    	recommendationResponses
+    		.add(new RecommendationData()
+    				.nbxUniqueKey(nbxUniqueKey)
+    				.recommedation(recommendation)
+    				.selectionSentiment(selectionSentiment));
+    	
+    }
+ 
+	
+	/*
 
     private Map<String, Sailor> sailors = new ConcurrentHashMap<>();
 

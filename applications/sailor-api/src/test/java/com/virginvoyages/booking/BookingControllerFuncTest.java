@@ -12,12 +12,12 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.virginvoyages.FunctionalTestSupport;
+import com.virginvoyages.SailorFunctionalTestSupport;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
 @ImportAutoConfiguration({ FeignAutoConfiguration.class })
-public class BookingControllerFuncTest extends FunctionalTestSupport  {
+public class BookingControllerFuncTest extends SailorFunctionalTestSupport  {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
