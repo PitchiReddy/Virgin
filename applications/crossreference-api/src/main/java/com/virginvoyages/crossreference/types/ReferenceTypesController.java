@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+import com.virginvoyages.assembly.IReferenceTypesAssembly;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,11 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller class to handle API requests for operations related to ReferenceTypes.
+ * @author snarthu
+ *
+ */
 @RestController
 @Api(value = "ReferenceType", tags = "ReferenceType", description = "Reference Type operations")
 @Slf4j
@@ -33,7 +39,17 @@ public class ReferenceTypesController {
 	
 	@Autowired
 	private MockCrossReferenceAPI mockAPI;
+	
+	@Autowired
+	private IReferenceTypesAssembly referenceTypesAssembly;
 
+	/**
+	 * it is creating new ReferenceType Record
+	 * @param body
+	 * @param xCorrelationID
+	 * @param xVVClientID
+	 * @return
+	 */
 	@ApiOperation(value = "", notes = "Add a new `ReferenceType`.", response = Void.class, tags={ "ReferenceType", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created", response = Void.class),
@@ -47,8 +63,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		log.debug("Adding Reference Type");
-		mockAPI.addReferenceType(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		//mockAPI.addReferenceType(body);
+		referenceTypesAssembly.addReferenceTypeToReferenceTypes(body);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "", notes = "Remove the ReferenceType", response = Void.class, tags={ "ReferenceType", })
