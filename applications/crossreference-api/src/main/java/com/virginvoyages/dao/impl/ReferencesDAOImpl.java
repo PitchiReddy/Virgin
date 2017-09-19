@@ -57,35 +57,5 @@ public class ReferencesDAOImpl implements ReferencesDAO {
 		return reference;
 	}
 
-	/**
-	 * @return referenceType
-	 *//*
-	private ReferenceType getDataForCreateReferenceType() {
-		ReferenceType referenceType = new ReferenceType();
-		referenceType.auditData(createAuditDataForCreate()).referenceName("RN1").referenceType("RTYPE1")
-				.referenceTypeID("RT1");
-		return referenceType;
-	}
-
-	*//**
-	 * @return referenceSource
-	 *//*
-	private ReferenceSource getDataForCreateReferenceSource() {
-		ReferenceSource referenceSource = new ReferenceSource();
-		referenceSource.auditData(createAuditDataForCreate()).referenceSourceID("RS30").referenceSourceName("Seaware");
-		return referenceSource;
-	}
-
-	*//**
-	 * @return audited
-	 *//*
-	public Audited createAuditDataForCreate() {
-		Audited audited = new Audited();
-		audited.createDate(LocalDate.now()).createUser("sivashankar1").updateDate(LocalDate.now())
-				.updateUser("sivashankar2");
-
-		return audited;
-
-	}*/
-
+	
 }
