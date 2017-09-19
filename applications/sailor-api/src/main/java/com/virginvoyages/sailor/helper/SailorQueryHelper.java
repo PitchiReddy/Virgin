@@ -42,7 +42,7 @@ public class SailorQueryHelper {
 		if (accountData.dateofBirth() != null) {
 			queryString = (accountData.lastName() != null || accountData.firstName() != null) ? queryString.append(" and ")
 					: queryString.append(" ");
-			queryString.append(" DOB__pc =  ");
+			queryString.append(" PersonBirthdate =  ");
 			queryString.append(accountData.dateofBirth());
 		}
 		if (accountData.primaryEmail() != null) {

@@ -348,7 +348,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 	}
 	
 	@Test
-	public void givenOneOfMandatoryParamsMissingSailorsFindOrCreateGetShouldThrowMandatoryFieldsMissingException() {
+	public void givenOneOfMandatoryParamsMissingSailorsFindOrCreateGetShouldThrowBadRequestException() {
 		
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("email", "John");
@@ -360,9 +360,9 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		   		get("v1/sailors/findOrCreate").
 		   		
 		then().
-				statusCode(405).
+				statusCode(400).
 				assertThat().
-				body("exception",equalTo("com.virginvoyages.sailor.exceptions.MandatoryFieldsMissingException")).
+				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
 				log().
 				all();
 		
