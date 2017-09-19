@@ -1,11 +1,12 @@
 package com.virginvoyages.dao.impl;
 
-import org.joda.time.LocalDate;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.stereotype.Repository;
 
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.dao.IReferenceTypesDAO;
+import com.virginvoyages.dao.ReferenceTypesDAO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,14 +18,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository
 @Slf4j
-public class ReferenceTypeDAOImpl implements IReferenceTypesDAO {
+public class ReferenceTypeDAOImpl implements ReferenceTypesDAO {
 
+	private Map<Object, ReferenceType> parameters = new ConcurrentHashMap<>();
 	/* (non-Javadoc)
 	 * @see com.virginvoyages.dao.IReferenceTypesDAO#addReferenceTypeToReferenceTypes(com.virginvoyages.crossreference.types.ReferenceType)
 	 * @param referenceType
 	 */
 	@Override
-	public void addReferenceTypeToReferenceTypes(ReferenceType referenceType) {
+	public void addReferenceType(ReferenceType referenceType) {
 
 		log.debug("adding referenceType to ReferenceTypes ");
 		createReferenceType(referenceType);
@@ -36,25 +38,19 @@ public class ReferenceTypeDAOImpl implements IReferenceTypesDAO {
 	 */
 	private void createReferenceType(ReferenceType referenceType) {
 
-		referenceType.auditData(createAuditDataForCreate());
-		referenceType.referenceName("RN1");
-		referenceType.referenceTypeID("RT1");
-		referenceType.referenceType("Rtype1");
-
+		parameters.put(referenceType.referenceTypeID(),referenceType);
+		parameters.put(referenceType.referenceName(),referenceType);
+		parameters.put(referenceType.referenceType(),referenceType);
+		parameters.put(referenceType.auditData(),referenceType);
+		
 	}
 
-	/**
-	 * @return
-	 */
-	private Audited createAuditDataForCreate() {
-		Audited audited = new Audited();
-		audited.createDate(LocalDate.now());
-		audited.createUser("siva1");
-		audited.updateDate(LocalDate.now());
-		audited.updateUser("siva2");
-
-		return audited;
-
+	@Override
+	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
+		ReferenceType referenceType =parameters.get(referenceTypeID);
+		return referenceType;
 	}
+
+	
 
 }

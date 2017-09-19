@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
-import com.virginvoyages.assembly.IReferenceTypesAssembly;
+import com.virginvoyages.assembly.ReferenceTypesAssembly;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,7 +41,7 @@ public class ReferenceTypesController {
 	private MockCrossReferenceAPI mockAPI;
 	
 	@Autowired
-	private IReferenceTypesAssembly referenceTypesAssembly;
+	private ReferenceTypesAssembly referenceTypesAssembly;
 
 	/**
 	 * it is creating new ReferenceType Record
@@ -64,7 +64,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		log.debug("Adding Reference Type");
 		//mockAPI.addReferenceType(body);
-		referenceTypesAssembly.addReferenceTypeToReferenceTypes(body);
+		referenceTypesAssembly.addReferenceType(body);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
@@ -94,7 +94,8 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		return new ResponseEntity<ReferenceType>(mockAPI.findReferenceTypeByID(referenceTypeID),HttpStatus.OK);
+		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByID(referenceTypeID),HttpStatus.OK);
+	//	return new ResponseEntity<ReferenceType>(mockAPI.findReferenceTypeByID(referenceTypeID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Gets `ReferenceType` objects.", response = ReferenceType.class, responseContainer = "List", tags={ "ReferenceType", })
