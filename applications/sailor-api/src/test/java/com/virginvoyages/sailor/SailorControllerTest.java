@@ -279,7 +279,7 @@ public class SailorControllerTest {
 	}*/
 	
 	@Test
-	public void givenOneOfMandatoryParamsMissingSailorsFindOrCreateGetShouldThrowMandatoryFieldsMissingException() throws Exception {
+	public void givenOneOfMandatoryParamsMissingSailorsFindOrCreateGetShouldThrowBadRequestException() throws Exception {
 		
 		//Test
 		mvc.perform(
@@ -288,7 +288,7 @@ public class SailorControllerTest {
 			.param("email","email")
 			.param("lastName", "lastName")
 			.contentType("application/json"))
-			.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+			.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
 	
 	//TODO TBD unit tests for SailorController
