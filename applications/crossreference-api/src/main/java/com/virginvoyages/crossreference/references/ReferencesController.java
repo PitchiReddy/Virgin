@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
 
 import io.swagger.annotations.Api;
@@ -37,6 +38,9 @@ public class ReferencesController {
 	@Autowired
 	private MockCrossReferenceAPI mockAPI;
 	
+	@Autowired
+	private ReferencesAssembly referencesAssembly;
+	
 	@ApiOperation(value = "", notes = "Add a new `Reference`.", response = Void.class, tags={ "Reference", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created", response = Void.class),
@@ -51,8 +55,9 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
-		mockAPI.addReference(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		referencesAssembly.addReference(body);
+	//	mockAPI.addReference(body);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "", notes = "Remove the Reference", response = Void.class, tags={ "Reference", })
@@ -82,7 +87,8 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		return new ResponseEntity<Reference>(mockAPI.findReferenceByID(referenceID),HttpStatus.OK);
+		return new ResponseEntity<Reference>(referencesAssembly.findReferenceID(referenceID),HttpStatus.OK);
+	//	return new ResponseEntity<Reference>(mockAPI.findReferenceByID(referenceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags={ "Reference", })
