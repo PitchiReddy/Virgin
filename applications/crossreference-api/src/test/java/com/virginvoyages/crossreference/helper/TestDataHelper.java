@@ -46,4 +46,10 @@ public class TestDataHelper {
 		return audited;
 
 	}
+	
+	public String createReferenceSourceInJson (String referenceSourceID, String referenceSourceName, boolean inActive) {
+        return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " +
+                            "\"referenceSourceName\":\"" + referenceSourceName + "\", "+
+        					 "\"inActive\":\"" + inActive + "\"}";
+	}
 }
