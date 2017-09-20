@@ -62,7 +62,7 @@ public class AccountData {
 	@JsonProperty("PreferredLanguage")
 	private String preferredLanguage;
 	
-	@JsonProperty("DOB__pc")
+	@JsonProperty("PersonBirthdate")
     private LocalDate dateofBirth;
 
     @JsonProperty("Birth_Country__c")

@@ -17,7 +17,11 @@ dependencyManagement {
 
 dependencies {
 
-	compile project(":components:hbase-starter")
+	compile(project(':components:hbase-starter')){
+	 exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	 exclude group: 'log4j', module: "log4j"
+	 
+	}
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
