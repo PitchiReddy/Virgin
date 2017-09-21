@@ -21,7 +21,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	
 	 /**
      * Create reference source based on referenceSource. Dummy data being used as of now - as data source not finalized
-     * @param referenceSource - input sailor id.
+     * @param referenceSource - input referenceSource.
      * @return 
     */
 	@Override
@@ -30,6 +30,19 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
 		referenceSourcesDAO.addReferenceSource(referenceSource);
 		
+	}
+	
+	 /**
+     * Find reference source by ID. Dummy data being used as of now - as data source not finalized
+     * @param referenceSourceID - input referenceSourceID.
+     * @return ReferenceSource - returns a ReferenceSource
+    */
+	@Override
+	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
+		// TODO Auto-generated method stub
+		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
+		ReferenceSource getReferenceSource = referenceSourcesDAO.findReferenceSourceByID(referenceSourceID);
+		return getReferenceSource;
 	}
 
 }

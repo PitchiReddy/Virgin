@@ -10,4 +10,6 @@ import com.virginvoyages.crossreference.sources.ReferenceSource;
 public interface ReferenceSourcesDAO {
 
 	public void addReferenceSource(ReferenceSource referenceSource);
+	
+	public ReferenceSource findReferenceSourceByID(String referenceSourceID);
 }

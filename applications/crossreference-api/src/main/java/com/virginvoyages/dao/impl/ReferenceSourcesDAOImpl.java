@@ -1,8 +1,7 @@
 package com.virginvoyages.dao.impl;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.dao.ReferenceSourcesDAO;
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReferenceSourcesDAOImpl implements ReferenceSourcesDAO {
 
-	private Map<Object, ReferenceSource> parameters = new ConcurrentHashMap<>();
+	private Map<Object, ReferenceSource> parameters = new HashMap<>();
 	/**
 	* Mock implementation.
 	*/
@@ -39,6 +38,14 @@ public class ReferenceSourcesDAOImpl implements ReferenceSourcesDAO {
 		parameters.put(referenceSource.referenceSourceName(),referenceSource);
 		parameters.put(referenceSource.inActive(),referenceSource);
 		parameters.put(referenceSource.auditData(),referenceSource);
+		
+	}
+	
+	@Override
+	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
+		// TODO Auto-generated method stub
+		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesDAOImpl");
+		return parameters.get(referenceSourceID);
 		
 	}
 }

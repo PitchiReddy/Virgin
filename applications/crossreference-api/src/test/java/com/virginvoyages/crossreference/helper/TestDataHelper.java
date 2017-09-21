@@ -18,7 +18,7 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().auditData(createAuditDataForCreate()).referenceSourceID("RS30")
+		return new ReferenceSource().auditData(createAuditDataForCreate()).referenceSourceID("RS1")
 				.referenceSourceName("Seaware");
 	}
 

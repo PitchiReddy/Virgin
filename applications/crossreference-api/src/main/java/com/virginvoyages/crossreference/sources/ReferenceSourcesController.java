@@ -96,6 +96,12 @@ public class ReferenceSourcesController {
 		return new ResponseEntity<List<ReferenceSource>>(mockAPI.findSources(),HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceSourceID - Find reference source by ID
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return ReferenceSource - returns a reference source
+	 */
 	@ApiOperation(value = "Find reference source by ID", notes = "Returns a reference source for a specified reference source identity.  This identity is a univeral reference identity.", response = ReferenceSource.class, tags={ "ReferenceSource", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
@@ -107,7 +113,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		return new ResponseEntity<ReferenceSource>(mockAPI.findReferenceSourceByID(referenceSourceID),HttpStatus.OK);
+		return new ResponseEntity<ReferenceSource>(referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Update a `ReferenceSource` object.", response = Void.class, tags={ "ReferenceSource", })
