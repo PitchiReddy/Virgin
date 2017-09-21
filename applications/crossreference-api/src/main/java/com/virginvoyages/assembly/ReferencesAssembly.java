@@ -3,6 +3,8 @@ package com.virginvoyages.assembly;
 import com.virginvoyages.crossreference.references.Reference;
 
 /**
+ * {@code Interface} for assembly tasks for References
+ * 
  * @author snarthu
  *
  */

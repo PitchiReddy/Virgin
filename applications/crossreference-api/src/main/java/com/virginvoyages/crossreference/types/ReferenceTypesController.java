@@ -66,7 +66,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		log.debug("Adding Reference Type");
 		referenceTypesAssembly.addReferenceType(body);
-		return new ResponseEntity<Void>(HttpStatus.CREATED);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Remove the ReferenceType", response = Void.class, tags = { "ReferenceType", })

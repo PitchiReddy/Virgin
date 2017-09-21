@@ -100,7 +100,7 @@ public class ReferenceTypesControllerTest {
 		mvc.perform(post("/types/")
 				.contentType("application/json")
 				.content(mockDataHelper.createReferenceTypeInJson("RT30", "Activity", "Reservation")))
-				.andExpect(status().isCreated());
+				.andExpect(status().isOk());
 		
 	}
 	
