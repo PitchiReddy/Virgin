@@ -26,7 +26,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
     */
 	@Override
 	public void addReferenceSource(ReferenceSource referenceSource) {
-		// TODO Auto-generated method stub
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
 		referenceSourcesDAO.addReferenceSource(referenceSource);
 		
@@ -39,10 +38,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
     */
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
-		// TODO Auto-generated method stub
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
 		ReferenceSource getReferenceSource = referenceSourcesDAO.findReferenceSourceByID(referenceSourceID);
 		return getReferenceSource;
 	}
-
+	
 }

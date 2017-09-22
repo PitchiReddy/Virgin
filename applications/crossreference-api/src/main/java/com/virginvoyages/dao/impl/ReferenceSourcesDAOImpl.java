@@ -41,9 +41,11 @@ public class ReferenceSourcesDAOImpl implements ReferenceSourcesDAO {
 		
 	}
 	
+	/**
+	* Mock implementation.
+	*/
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
-		// TODO Auto-generated method stub
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesDAOImpl");
 		return parameters.get(referenceSourceID);
 		
