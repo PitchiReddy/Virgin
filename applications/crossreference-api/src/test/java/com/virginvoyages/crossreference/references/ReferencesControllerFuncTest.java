@@ -216,7 +216,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			    .assertThat().body("_embedded.references.masterID", hasItems(reference.masterID()))
 			    .assertThat().body("_embedded.references.nativeSourceID", hasItems(reference.nativeSourceID()))
 			    .assertThat().body("_embedded.references.referenceID", hasItems(reference.referenceID()))
-				.log()
+			    .log()
 				.all();
 		
 		//cleanup
