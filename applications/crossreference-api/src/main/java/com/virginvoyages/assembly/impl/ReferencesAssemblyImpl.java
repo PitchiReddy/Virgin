@@ -47,7 +47,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return Reference - returns a reference
 	 */
 	public Reference findReferenceByID(String referenceID) {
-		return	referencesDao.findReferenceID(referenceID);
+		return	referencesDao.findReferenceByID(referenceID);
 	}
 
 }
