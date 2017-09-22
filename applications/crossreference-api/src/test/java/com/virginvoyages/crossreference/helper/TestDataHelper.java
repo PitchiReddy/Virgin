@@ -18,7 +18,7 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().auditData(createAuditDataForCreate()).referenceSourceID("RS30")
+		return new ReferenceSource().auditData(createAuditDataForCreate()).referenceSourceID("RS1")
 				.referenceSourceName("Seaware");
 	}
 
@@ -45,5 +45,11 @@ public class TestDataHelper {
 
 		return audited;
 
+	}
+	
+	public String createReferenceSourceInJson (String referenceSourceID, String referenceSourceName, boolean inActive) {
+        return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " +
+                            "\"referenceSourceName\":\"" + referenceSourceName + "\", "+
+        					 "\"inActive\":\"" + inActive + "\"}";
 	}
 }

@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.virginvoyages.api.MockCrossReferenceAPI;
-
+import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,6 +23,11 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller class to handle API requests for reference source methods.
+ * @author pbovilla
+ *
+ */
 @RestController
 @Api(value = "ReferenceSource", tags = "ReferenceSource", description = "Reference Source operations")
 @Slf4j
@@ -34,6 +38,15 @@ public class ReferenceSourcesController {
 	@Autowired
 	private MockCrossReferenceAPI mockAPI;
 	
+	@Autowired
+	private ReferenceSourcesAssembly referenceSourcesAssembly;
+	
+	/**
+	 * @param ReferenceSource
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return
+	 */
 	@ApiOperation(value = "", notes = "Add a new `ReferenceSource`.", response = Void.class, tags={ "ReferenceSource", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created", response = Void.class),
@@ -48,7 +61,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
         
 		log.debug("Adding Reference Source");
-		mockAPI.addReferenceSource(body);
+		referenceSourcesAssembly.addReferenceSource(body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -83,6 +96,12 @@ public class ReferenceSourcesController {
 		return new ResponseEntity<List<ReferenceSource>>(mockAPI.findSources(),HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceSourceID - Find reference source by ID
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return ReferenceSource - returns a reference source
+	 */
 	@ApiOperation(value = "Find reference source by ID", notes = "Returns a reference source for a specified reference source identity.  This identity is a univeral reference identity.", response = ReferenceSource.class, tags={ "ReferenceSource", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
@@ -94,7 +113,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		return new ResponseEntity<ReferenceSource>(mockAPI.findReferenceSourceByID(referenceSourceID),HttpStatus.OK);
+		return new ResponseEntity<ReferenceSource>(referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Update a `ReferenceSource` object.", response = Void.class, tags={ "ReferenceSource", })
