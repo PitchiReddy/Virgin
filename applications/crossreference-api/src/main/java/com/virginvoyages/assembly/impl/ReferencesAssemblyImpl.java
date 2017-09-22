@@ -24,15 +24,30 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Autowired
 	private ReferencesDAO referencesDao;
 
+	/**
+	 * Create reference based on reference. Dummy data being used as of now
+	 * - as data source not finalized
+	 * 
+	 * @param reference
+	 *            - input reference.
+	 * @return
+	 */
 	@Override
 	public void addReference(Reference reference) {
 		log.debug("adding references");
 		referencesDao.addReference(reference);
 	}
 
-	@Override
-	public Reference findReferenceID(String referenceID) {
-		return	referencesDao.findReferenceID(referenceID);
+	/**
+	 * Find reference by ID. Dummy data being used as of now - as data source
+	 * not finalized
+	 * 
+	 * @param referenceID
+	 *            - input reference.
+	 * @return Reference - returns a reference
+	 */
+	public Reference findReferenceByID(String referenceID) {
+		return	referencesDao.findReferenceByID(referenceID);
 	}
 
 }

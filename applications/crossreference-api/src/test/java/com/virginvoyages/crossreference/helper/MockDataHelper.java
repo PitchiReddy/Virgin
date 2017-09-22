@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.crossreference.types.ReferenceType;
 
 
 @Component
@@ -47,4 +48,31 @@ public class MockDataHelper {
                             "\"referenceSourceName\":\"" + referenceSourceName + "\", "+
         					 "\"inActive\":\"" + inActive + "\"}";
 	}
+	
+	public ReferenceType getReferenceTypeByID() {
+		return mockAPI.findReferenceTypeByID("RT1");
+	}
+	public ReferenceType getDataForCreateReferenceType() {
+
+		return new ReferenceType().auditData(createAuditDataForCreate()).referenceTypeID("RT5")
+				.referenceType("Reservation").referenceName("Activity");
+
+	}
+	
+	
+	public String getInvalidReferenceTypeByID() {
+		return "123";
+	}
+	
+		
+	public String createReferenceTypeInJson (String referenceTypeID, String referenceName, String referenceType) {
+        return "{ \"referenceTypeID\": \"" + referenceTypeID + "\", " +
+                            "\"referenceName\":\"" + referenceName + "\", "+
+        					 "\"referenceType\":\"" + referenceType + "\"}";
+        					   
+	}
+	public String getValidReferenceTypeByID() {
+		// TODO Auto-generated method stub
+		return "RT5";
+	} 
 }

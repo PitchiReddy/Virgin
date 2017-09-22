@@ -24,7 +24,7 @@ public class TestDataHelper {
 
 	public ReferenceType getDataForCreateReferenceType() {
 
-		return new ReferenceType().auditData(createAuditDataForCreate()).referenceTypeID("RT30")
+		return new ReferenceType().auditData(createAuditDataForCreate()).referenceTypeID("RT5")
 				.referenceType("Reservation").referenceName("Activity");
 
 	}
