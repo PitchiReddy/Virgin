@@ -46,8 +46,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 *            - input reference.
 	 * @return Reference - returns a reference
 	 */
-	@Override
-	public Reference findReferenceID(String referenceID) {
+	public Reference findReferenceByID(String referenceID) {
 		return	referencesDao.findReferenceID(referenceID);
 	}
 

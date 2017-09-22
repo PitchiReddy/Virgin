@@ -12,5 +12,5 @@ public interface ReferencesAssembly {
 
 	public void addReference(Reference reference);
 
-	public Reference findReferenceID(String referenceID);
+	public Reference findReferenceByID(String referenceID);
 }
