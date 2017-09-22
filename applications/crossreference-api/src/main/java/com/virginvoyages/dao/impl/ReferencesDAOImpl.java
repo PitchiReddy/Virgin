@@ -23,21 +23,37 @@ import lombok.extern.slf4j.Slf4j;
  * @author snarthu
  *
  */
+/**
+ * @author snarthu
+ *
+ */
 @Repository
 @Slf4j
 public class ReferencesDAOImpl implements ReferencesDAO {
 
 	private Map<Object, Reference> parameters = new ConcurrentHashMap<>();
 	
+	/**
+	 * Create reference based on reference. Dummy data being used as of now
+	 * - as data source not finalized
+	 * 
+	 * @param reference
+	 *            - input reference.
+	 * @return 
+	 */
 	@Override
 	public void addReference(Reference reference) {
 		log.debug("adding referenceType to References ");
 		getDataForCreateReference(reference);
 	}
 
-	/**
-	 * @param reference
-	 */
+	 //TODO remove once data source finalized
+		/**
+		 * Temporary method - will be removed
+		 * @param referenceID
+		 *            - input reference.
+		 * @return Reference - returns a reference
+		 */
 	private void getDataForCreateReference(Reference reference) {
 
 		parameters.put(reference.referenceID(),reference);
@@ -51,11 +67,10 @@ public class ReferencesDAOImpl implements ReferencesDAO {
 		
 	}
 
+	
 	@Override
-	public Reference findReferenceID(String referenceID) {
-		Reference reference = parameters.get(referenceID);
-		return reference;
+	public Reference findReferenceByID(String referenceID) {
+		return parameters.get(referenceID);
 	}
-
 	
 }
