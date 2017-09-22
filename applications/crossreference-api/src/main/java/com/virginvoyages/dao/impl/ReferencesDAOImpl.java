@@ -69,7 +69,7 @@ public class ReferencesDAOImpl implements ReferencesDAO {
 
 	
 	@Override
-	public Reference findReferenceID(String referenceID) {
+	public Reference findReferenceByID(String referenceID) {
 		return parameters.get(referenceID);
 	}
 	

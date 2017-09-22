@@ -112,7 +112,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		return new ResponseEntity<Reference>(referencesAssembly.findReferenceID(referenceID),HttpStatus.OK);
+		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags={ "Reference", })
