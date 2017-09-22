@@ -76,8 +76,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public List<ReferenceSource> findSources() {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		List<ReferenceSource> listOfReferenceSources = referenceSourcesDAO.findSources();
-		return listOfReferenceSources;
+		return referenceSourcesDAO.findSources();
 	}
 	
 }
