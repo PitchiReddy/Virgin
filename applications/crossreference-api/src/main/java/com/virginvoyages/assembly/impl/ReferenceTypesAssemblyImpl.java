@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.dao.ReferenceTypesDAO;
+import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
+	//@Autowired
+	//private ReferenceTypesDAO referenceTypeDao;
+	
 	@Autowired
-	private ReferenceTypesDAO referenceTypeDao;
+	private ReferenceTypeRepository referenceTypeRepository;
 
 	/**
 	 * Create reference Type based on referenceType. Dummy data being used as of now
@@ -35,7 +39,10 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	public void addReferenceType(ReferenceType referenceType) {
 
 		log.debug("adding referenceTypes");
-		referenceTypeDao.addReferenceType(referenceType);
+		//referenceTypeDao.addReferenceType(referenceType);
+		if(!referenceTypeRepository.exists(Long.valueOf(referenceType.referenceTypeID()))) {
+			referenceTypeRepository.save(referenceType.convertToDataEntity());
+		}
 
 	}
 
@@ -50,8 +57,11 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
-
-		return referenceTypeDao.findReferenceTypeByID(referenceTypeID);
+		
+		ReferenceTypeData referenceTypeData = referenceTypeRepository
+				.findOne(Long.valueOf(referenceTypeID));
+		return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+		
 
 	}
 
