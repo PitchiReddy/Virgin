@@ -29,33 +29,46 @@ public class ReferenceTypeAssemblyImplTest {
 
 	@Autowired
 	private MockDataHelper mockDataHelper;
-	
-	 @InjectMocks
+
+	@InjectMocks
 	private ReferenceTypesAssemblyImpl referenceTypesAssemblyImpl;
-	
+
 	@Mock
 	private ReferenceTypeDAOImpl referenceTypeDAOImpl;
-	
+
 	@Before
-    public void setUp() throws Exception {
-         MockitoAnnotations.initMocks(this);
-    }
-	
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+	}
+
 	@Test
 	public void givenValidReferenceTypeAddReferenceTypeShouldReturnReferenceType() {
 		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
 		referenceTypesAssemblyImpl.addReferenceType(referenceType);
-		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class))).thenReturn(mockDataHelper.getReferenceTypeByID());
-		ReferenceType getReferenceType = referenceTypesAssemblyImpl.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
+		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
+				.thenReturn(mockDataHelper.getReferenceTypeByID());
+		ReferenceType getReferenceType = referenceTypesAssemblyImpl
+				.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
 		assertThat(getReferenceType.referenceTypeID(), is(notNullValue()));
 		assertThat(getReferenceType.referenceType(), equalTo("Reservation"));
 	}
-	
+
 	@Test
 	public void givenValidReferenceTypeFindReferenceTypeShouldReturnReferenceType() {
-		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class))).thenReturn(mockDataHelper.getReferenceTypeByID());
-		ReferenceType referenceType = referenceTypesAssemblyImpl.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
+		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
+				.thenReturn(mockDataHelper.getReferenceTypeByID());
+		ReferenceType referenceType = referenceTypesAssemblyImpl
+				.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
 		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
 		assertThat(referenceType.referenceType(), equalTo("Reservation"));
+	}
+	
+	@Test
+	public void givenValidReferenceSourcesUpdateReferenceSourcesShouldReturnUpdatedReferenceSources() {
+		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
+		referenceType.referenceName("Updated_referenceName");
+		referenceTypesAssemblyImpl.updateReferenceType(referenceType.referenceTypeID(), referenceType);
+		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
+		assertThat(referenceType.referenceName(), equalTo("Updated_referenceName"));
 	}
 }

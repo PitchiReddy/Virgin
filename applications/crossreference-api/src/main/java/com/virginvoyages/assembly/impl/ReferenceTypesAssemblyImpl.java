@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author snarthu
  *
  */
-/**
- * @author snarthu
- *
- */
+
 @Service
 @Slf4j
 public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
@@ -60,22 +57,24 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 		return referenceTypeDao.findReferenceTypeByID(referenceTypeID);
 
 	}
-	
+
 	/**
 	 * Delete reference Type by ID. Dummy data being used as of now - as data source
 	 * not finalized
 	 * 
 	 * @param referenceTypeID
 	 *            - input referenceType.
-	 * @return 
+	 * @return
 	 */
 	public void deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
 		referenceTypeDao.deleteReferenceTypeByID(referenceTypeID);
 	}
-	
+
 	/**
-	 * Update reference Type by ID. Dummy data being used as of now - as data source not finalized
+	 * Update reference Type by ID. Dummy data being used as of now - as data source
+	 * not finalized
+	 * 
 	 * @param referenceType
 	 * @param referenceTypeID
 	 * @return ReferenceType - returns a referenceType
@@ -83,12 +82,13 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeDao.updateReferenceType(referenceTypeID,referenceType);
+		referenceTypeDao.updateReferenceType(referenceTypeID, referenceType);
 	}
 
 	/**
-	 * Finding reference Type. Dummy data being used as of now
-	 * - as data source not finalized
+	 * Finding reference Type. Dummy data being used as of now - as data source not
+	 * finalized
+	 * 
 	 * @return
 	 */
 	@Override
