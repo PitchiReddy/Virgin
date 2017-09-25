@@ -78,13 +78,6 @@ public class MockDataHelper {
 				.details("Dummy Reference Entry 30").expiry(LocalDate.now()).masterID("M30").nativeSourceID("NSID30");
 	}
 	
-	public Reference getDataForCreateReferences() {
-
-		return new Reference().auditData(createAuditDataForCreate()).referenceType(getDataForCreateReferenceType())
-				.referenceSource(getDataForCreateReferenceSource()).referenceID("R31")
-				.details("Dummy Reference Entry 31").expiry(LocalDate.now()).masterID("M30").nativeSourceID("NSID31");
-	}
-
 	public String createReferencesInJson(String referenceID, String masterID, String nativeSourceID) {
 		return "{ \"referenceID\": \"" + referenceID + "\", " + "\"masterID\":\"" + masterID + "\", "
 				+ "\"nativeSourceID\":\"" + nativeSourceID + "\"}";
