@@ -86,9 +86,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return List Of Reference
 	 */
 	@Override
-	public List<Reference> findReferencesByMaster(String masterID, String targetSourceID) {
+	public List<Reference> findReferencesByMaster(String masterID) {
 		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
-		return referencesDao.findReferencesByMaster(masterID,targetSourceID);
+		return referencesDao.findReferencesByMaster(masterID);
 	}
 	
 	/**

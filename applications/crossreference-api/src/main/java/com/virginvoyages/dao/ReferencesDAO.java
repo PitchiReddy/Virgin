@@ -23,7 +23,7 @@ void deleteReferenceByID(String referenceID);
 
 public void updateReference(String referenceID, Reference reference);
 
-public List<Reference> findReferencesByMaster(String masterID, String targetSourceID);
+public List<Reference> findReferencesByMaster(String masterID);
 
 public References findReferences(Integer page, Integer size);
 

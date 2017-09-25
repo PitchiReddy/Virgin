@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -138,6 +137,7 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = false) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = false) Integer size) {
 
+		
 		return new ResponseEntity<References>(referencesAssembly.findReferences(page, size), HttpStatus.OK);
 	}
 
@@ -161,8 +161,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target source identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetSourceID", required = false) String targetSourceID) {
 
-		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferencesByMaster(masterID, targetSourceID),
-				HttpStatus.OK);
+		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferencesByMaster(masterID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {

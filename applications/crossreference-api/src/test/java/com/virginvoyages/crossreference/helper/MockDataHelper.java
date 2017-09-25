@@ -77,6 +77,13 @@ public class MockDataHelper {
 				.referenceSource(getDataForCreateReferenceSource()).referenceID("R30")
 				.details("Dummy Reference Entry 30").expiry(LocalDate.now()).masterID("M30").nativeSourceID("NSID30");
 	}
+	
+	public Reference getDataForCreateReferences() {
+
+		return new Reference().auditData(createAuditDataForCreate()).referenceType(getDataForCreateReferenceType())
+				.referenceSource(getDataForCreateReferenceSource()).referenceID("R31")
+				.details("Dummy Reference Entry 31").expiry(LocalDate.now()).masterID("M30").nativeSourceID("NSID31");
+	}
 
 	public String createReferencesInJson(String referenceID, String masterID, String nativeSourceID) {
 		return "{ \"referenceID\": \"" + referenceID + "\", " + "\"masterID\":\"" + masterID + "\", "
@@ -91,5 +98,10 @@ public class MockDataHelper {
 	public String getValidReferenceByID() {
 		// TODO Auto-generated method stub
 		return "R30";
+	}
+
+	public String getValidMasterID() {
+		// TODO Auto-generated method stub
+		return "M30";
 	}
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,6 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.dao.impl.ReferenceTypeDAOImpl;
@@ -64,7 +62,7 @@ public class ReferenceTypeAssemblyImplTest {
 	}
 	
 	@Test
-	public void givenValidReferenceSourcesUpdateReferenceSourcesShouldReturnUpdatedReferenceSources() {
+	public void givenValidReferenceTypeUpdateReferenceTypeShouldReturnUpdatedReferenceType() {
 		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
 		referenceType.referenceName("Updated_referenceName");
 		referenceTypesAssemblyImpl.updateReferenceType(referenceType.referenceTypeID(), referenceType);

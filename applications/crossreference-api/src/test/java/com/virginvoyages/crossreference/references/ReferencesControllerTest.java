@@ -18,11 +18,8 @@ import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
-import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.crossreference.types.ReferenceTypesController;
 
 @RunWith(SpringRunner.class)
@@ -90,6 +87,21 @@ public class ReferencesControllerTest {
 				.content(mockDataHelper.createReferencesInJson("R30", "M30", "NSID30")))
 				.andExpect(status().isOk());
 		
+	}
+	
+	@Test
+	public void givenValidMasterIdExistWithMatchingParamsFindReferencesMasterShouldReturnListOFReferences() {
+		//TO DO
+	}
+	
+	@Test
+	public void givenValidReferenceUpdateReferenceShouldReturnUpdatedReferences() {
+		// TO DO
+	}
+	
+	@Test
+	public void givenValidReferencesExistFindReferencesShouldReturnListOFReferences() {
+		// TO DO
 	}
 	
 }

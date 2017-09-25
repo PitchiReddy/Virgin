@@ -22,6 +22,7 @@ import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.dao.impl.ReferencesDAOImpl;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ReferencesAssemblyImplTest {
@@ -52,10 +53,31 @@ public class ReferencesAssemblyImplTest {
 
 	@Test
 	public void givenValidReferenceFindReferenceShouldReturnReference() {
-		Reference geteference = mockDataHelper.getDataForCreateReference();
-		when(referencesDAOImpl.findReferenceByID(any(String.class))).thenReturn(geteference);
+		Reference getReference = mockDataHelper.getDataForCreateReference();
+		when(referencesDAOImpl.findReferenceByID(any(String.class))).thenReturn(getReference);
 		Reference reference = referencesAssemblyImpl.findReferenceByID(mockDataHelper.getValidReferenceByID());
 		assertThat(reference.referenceID(), is(notNullValue()));
 		assertThat(reference.masterID(), equalTo("M30"));
 	}
+
+	@Test
+	public void givenValidReferenceUpdateReferenceShouldReturnUpdatedReferences() {
+		Reference reference = mockDataHelper.getDataForCreateReference();
+		reference.masterID("Updated_MasterId");
+		referencesAssemblyImpl.updateReference(reference.referenceID(), reference);
+		assertThat(reference.referenceID(), is(notNullValue()));
+		assertThat(reference.masterID(), equalTo("Updated_MasterId"));
+		
+	}
+	
+	@Test
+	public void givenValidMasterIdExistWithMatchingParamsFindReferencesMasterShouldReturnListOFReferences() {
+		//TO DO
+	}
+	
+	@Test
+	public void givenValidReferencesExistFindReferencesShouldReturnListOfReferences() {
+		//TO DO
+	}
+	
 }

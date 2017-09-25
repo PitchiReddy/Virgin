@@ -21,7 +21,7 @@ public interface ReferencesAssembly {
 
 	public References findReferences(Integer page, Integer size);
 
-	public List<Reference> findReferencesByMaster(String masterID, String targetSourceID);
+	public List<Reference> findReferencesByMaster(String masterID);
 
 	public void updateReference(String referenceID, Reference body);
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +15,6 @@ import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.crossreference.references.ReferencesEmbedded;
-import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.dao.ReferencesDAO;
 import com.virginvoyages.model.Page;
 
@@ -141,18 +139,11 @@ public class ReferencesDAOImpl implements ReferencesDAO {
 	 * @return List of Reference
 	 */
 	@Override
-	public List<Reference> findReferencesByMaster(String masterID, String targetSourceID) {
+	public List<Reference> findReferencesByMaster(String masterID) {
 		log.debug("Entering findReferencesByMaster method in ReferencesDAOImpl");
-		if (StringUtils.isNotEmpty(targetSourceID)) {
-			return findReferencesByMasterAndTargetSourceID(masterID, targetSourceID);
-		}
-		return parameters.values().stream().filter(e -> e.masterID().equals(masterID)).collect(Collectors.toList());
-	}
 
-	private List<Reference> findReferencesByMasterAndTargetSourceID(String masterID, String targetSourceID) {
-		return parameters.values().stream().filter(
-				e -> e.masterID().equals(masterID) && e.referenceSource().referenceSourceID().equals(targetSourceID))
-				.collect(Collectors.toList());
+		return parameters.values().stream().filter(e -> e.masterID().equals(masterID)).collect(Collectors.toList());
+
 	}
 
 	// TODO remove once data source finalized
