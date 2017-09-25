@@ -48,7 +48,7 @@ public class ReferenceTypeDAOImpl implements ReferenceTypesDAO {
 	 * Temporary method - will be removed
 	 * @param referenceType
 	 *            - input referenceType.
-	 * @return ReferenceType - returns a referenceType
+	 * @return 
 	 */
 	private void createReferenceType(ReferenceType referenceType) {
 

@@ -77,7 +77,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 * 
 	 * @param referenceType
 	 * @param referenceTypeID
-	 * @return ReferenceType - returns a referenceType
+	 * @return 
 	 */
 	@Override
 	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
