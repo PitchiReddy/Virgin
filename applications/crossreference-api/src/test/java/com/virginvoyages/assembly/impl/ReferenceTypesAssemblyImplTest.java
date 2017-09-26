@@ -23,7 +23,7 @@ import com.virginvoyages.dao.impl.ReferenceTypeDAOImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ReferenceTypeAssemblyImplTest {
+public class ReferenceTypesAssemblyImplTest {
 
 	@Autowired
 	private MockDataHelper mockDataHelper;

@@ -7,6 +7,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import static org.hamcrest.Matchers.hasSize;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.dao.impl.ReferencesDAOImpl;
@@ -71,8 +73,13 @@ public class ReferencesAssemblyImplTest {
 	}
 	
 	@Test
-	public void givenValidMasterIdExistWithMatchingParamsFindReferencesMasterShouldReturnListOFReferences() {
-		//TO DO
+	public void givenValidMasterIdExistWithMatchingParamsFindReferencesMasterShouldReturnListOfReference() {
+		List<Reference> referenceList = (List<Reference>) referencesAssemblyImpl.findReferencesByMaster(mockDataHelper.getValidMasterID());
+		when(referencesDAOImpl.findReferencesByMaster(any(String.class))).thenReturn(referenceList);
+		for (Reference reference : referenceList) {
+			assertThat(referenceList, hasSize(5));
+			assertThat(reference.referenceID(), equalTo("R30"));
+		}
 	}
 	
 	@Test
