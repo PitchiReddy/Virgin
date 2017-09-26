@@ -68,7 +68,15 @@ public class ReferenceTypesController {
 		referenceTypesAssembly.addReferenceType(body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-
+	/**
+	 * @param referenceTypeID
+	 *            - delete reference type by ID
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return 
+	 */
 	@ApiOperation(value = "", notes = "Remove the ReferenceType", response = Void.class, tags = { "ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Void.class),
 			@ApiResponse(code = 404, message = "ReferenceType not found", response = Void.class) })
@@ -78,7 +86,8 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		mockAPI.deleteReferenceTypeByID(referenceTypeID);
+		log.debug("deleting Reference Type");
+		referenceTypesAssembly.deleteReferenceTypeByID(referenceTypeID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -99,11 +108,21 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-
+		log.debug("finding Reference Type By referenceTypeID");
 		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByID(referenceTypeID),
 				HttpStatus.OK);
 	}
-
+	
+	/**
+	 * find types by using below parameters
+	 * @param page         
+	 * @param size        
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return List of referenceType
+	 */
 	@ApiOperation(value = "", notes = "Gets `ReferenceType` objects.", response = ReferenceType.class, responseContainer = "List", tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = ReferenceType.class) })
@@ -114,9 +133,19 @@ public class ReferenceTypesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = false) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = false) Integer size) {
 
-		return new ResponseEntity<List<ReferenceType>>(mockAPI.findTypes(), HttpStatus.OK);
+		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(), HttpStatus.OK);
 	}
-
+	
+	/**
+	 * @param referenceTypeID         
+	 * @param  body
+	 *         - Update reference type by ID and body
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return 
+	 */
 	@ApiOperation(value = "", notes = "Update a `ReferenceType` object.", response = Void.class, tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
@@ -129,7 +158,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Reference object that needs to be updated", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		mockAPI.updateReferenceType(referenceTypeID, body);
+		referenceTypesAssembly.updateReferenceType(referenceTypeID, body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

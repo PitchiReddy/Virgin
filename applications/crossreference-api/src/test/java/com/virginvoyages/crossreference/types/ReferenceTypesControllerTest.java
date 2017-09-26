@@ -15,6 +15,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,6 +104,21 @@ public class ReferenceTypesControllerTest {
 				.andExpect(status().isOk());
 		
 	}
+	
+	@Test 
+		public void givenValidReferenceTypeUpdateReferenceTypeByIDShouldUpdateReferenceType() throws Exception {
+			
+		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
+			
+			//Test
+			mvc.perform(
+					put("/types/"+ referenceType.referenceTypeID())
+	  			    .param("auditData", referenceType.referenceTypeID())
+					.param("referenceName", "siva")
+					.contentType("application/json")
+			        .content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+"\"}"))
+			        .andExpect(status().isOk());
+		}
 	
 	
 	}
