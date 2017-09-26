@@ -57,5 +57,14 @@ public class ReferenceSourcesAssemblyImplTest {
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
 	        assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
 		}
+		
+		@Test
+		public void givenValidReferenceSourcesUpdateReferenceSourcesShouldReturnUpdatedReferenceSources() {
+			ReferenceSource referenceSource = mockDataHelper.getDataForCreateReferenceSource();
+			referenceSource.referenceSourceName("Updated Seaware");
+			referenceSourcesAssemblyImpl.updateReferenceSource(referenceSource.referenceSourceID(), referenceSource);
+			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
+	        assertThat(referenceSource.referenceSourceName(), equalTo("Updated Seaware"));
+		}
 
 }

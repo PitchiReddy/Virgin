@@ -4,6 +4,7 @@ package com.virginvoyages.crossreference.sources;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -75,6 +76,21 @@ public class ReferenceSourcesControllerTest {
 				.contentType("application/json")
 		        .content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
 		        .andExpect(status().isOk());
-	}		
+	}
+	
+	@Test 
+	public void givenValidReferenceSourceUpdateReferenceSourceByIDShouldUpdateReferenceSources() throws Exception {
+		
+		ReferenceSource referenceSource = mockdataHelper.getDataForCreateReferenceSource();
+		
+		//Test
+		mvc.perform(
+				put("/sources/"+ referenceSource.referenceSourceID())
+				.param("auditData", referenceSource.referenceSourceID())
+				.param("referenceSourceName", "Updated Source Name")
+				.contentType("application/json")
+		        .content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
+		        .andExpect(status().isOk());
+	}
 	
 }

@@ -45,4 +45,20 @@ public class ReferenceTypeAssemblyImplIT {
 		assertThat(referenceType.referenceType(),is(notNullValue()));
 	
 	}
+	
+	@Test
+	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
+		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
+		referenceTypesAssembly.deleteReferenceTypeByID(referenceType.referenceTypeID());
+	//	assertThat(referenceType.referenceTypeID(), is(nullValue()));
+	}
+	
+	@Test
+	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
+		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
+		referenceType.referenceName("siva_shankar");
+		referenceTypesAssembly.updateReferenceType(referenceType.referenceTypeID(), referenceType);
+		assertThat(referenceType.referenceName(), equalTo("siva_shankar"));
+	}
+	
 }
