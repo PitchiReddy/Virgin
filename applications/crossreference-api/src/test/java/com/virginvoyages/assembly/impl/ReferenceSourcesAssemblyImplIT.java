@@ -3,7 +3,11 @@ package com.virginvoyages.assembly.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +45,32 @@ public class ReferenceSourcesAssemblyImplIT {
 		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(referenceSource.referenceSourceID());
 		assertThat(findReferenceSource.referenceSourceID(), is(notNullValue()));
 		assertThat(findReferenceSource.referenceSourceName(), equalTo("Seaware"));
+	}
+	
+	@Test
+	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
+		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
+		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
+		//assertThat(referenceSource.referenceSourceID(), is(nullValue()));
+	}
+	
+	@Test
+	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
+		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
+		referenceSource.referenceSourceName("Updated Seaware");
+		referenceSourcesAssembly.updateReferenceSource(referenceSource.referenceSourceID(), referenceSource);
+		assertThat(referenceSource.referenceSourceName(), equalTo("Updated Seaware"));
+	}
+	
+	@Test
+	public void givenValidReferenceSourceFindSourcesShouldRetunsReferenceSources() {
+		testDataHelper.getDataForCreateReferenceSource();
+		List<ReferenceSource> referenceSourceList =referenceSourcesAssembly.findSources();
+		assertThat(referenceSourceList, hasSize(5));
+		for(ReferenceSource referenceSource: referenceSourceList) {
+			assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+			referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
+		}
+		
 	}
 }
