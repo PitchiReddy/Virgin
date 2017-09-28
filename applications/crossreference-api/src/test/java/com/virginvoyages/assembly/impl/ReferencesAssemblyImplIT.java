@@ -3,7 +3,10 @@ package com.virginvoyages.assembly.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,13 +61,18 @@ public class ReferencesAssemblyImplIT {
 	
 	@Test
 	public void givenValidMasterIdExistWithMatchingParamsFindReferencesMasterShouldReturnListOfReferences() {
-		Reference reference = testDataHelper.getDataForCreateReference();
-		referencesAssemblyImpl.findReferencesByMaster(reference.masterID());
+		Reference createReference = testDataHelper.getDataForCreateReference();
+		List<Reference> referenceList = referencesAssemblyImpl.findReferencesByMaster(createReference.masterID());
+		assertThat(referenceList, hasSize(8));
+		for(Reference reference: referenceList) {
 		assertThat(reference.masterID(), equalTo("M30"));
 		assertThat(reference.referenceID(), equalTo("R30"));
 		assertThat(reference.nativeSourceID(), equalTo("NSID30"));
+		}
 		
 	}
 	
+}	
 	
-}
+	
+

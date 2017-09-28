@@ -13,17 +13,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
+import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.dao.impl.ReferenceTypeDAOImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ReferenceTypeAssemblyImplTest {
+public class ReferenceTypesAssemblyImplTest {
 
 	@Autowired
 	private MockDataHelper mockDataHelper;
@@ -69,4 +73,15 @@ public class ReferenceTypeAssemblyImplTest {
 		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
 		assertThat(referenceType.referenceName(), equalTo("Updated_referenceName"));
 	}
+	@Test
+	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
+		List<ReferenceType> referenceTypeList = referenceTypesAssemblyImpl.findTypes();
+		when(referenceTypeDAOImpl.findTypes()).thenReturn(referenceTypeList);
+		assertThat(referenceTypeList, hasSize(0));
+		for(ReferenceType referenceType: referenceTypeList) {
+			assertThat(referenceType.referenceName(), equalTo("Activity"));
+		}
+		
+	}
+		
 }
