@@ -45,9 +45,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	public void addReferenceType(ReferenceType referenceType) {
 		log.debug("adding referenceTypes");
 		//referenceTypeDao.addReferenceType(referenceType);
-		if(!referenceTypeRepository.exists(Long.valueOf(referenceType.referenceTypeID()))) {
+		//if(!referenceTypeRepository.exists(Long.valueOf(referenceType.referenceTypeID()))) {
 			referenceTypeRepository.save(referenceType.convertToDataEntity());
-		}
+		//}
 	}
 
 	/**

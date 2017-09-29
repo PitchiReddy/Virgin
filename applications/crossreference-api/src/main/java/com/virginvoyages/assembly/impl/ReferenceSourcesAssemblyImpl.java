@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.dao.ReferenceSourcesDAO;
-
+import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,8 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 
+/*	@Autowired
+	private ReferenceSourcesDAO referenceSourcesDAO;*/
+	
 	@Autowired
-	private ReferenceSourcesDAO referenceSourcesDAO;
+	private ReferenceSourceRepository referenceSourceRepository;
 	
 	 /**
      * Create reference source based on referenceSource. Dummy data being used as of now - as data source not finalized
@@ -29,7 +32,11 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourcesDAO.addReferenceSource(referenceSource);
+		//referenceSourcesDAO.addReferenceSource(referenceSource);
+		
+		//if(!referenceSourceRepository.exists(Long.valueOf(referenceSource.referenceSourceID()))) {
+			referenceSourceRepository.save(referenceSource.convertToDataEntity());
+		//}
 		
 	}
 	
@@ -41,8 +48,10 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		ReferenceSource getReferenceSource = referenceSourcesDAO.findReferenceSourceByID(referenceSourceID);
-		return getReferenceSource;
+		//ReferenceSource getReferenceSource = referenceSourcesDAO.findReferenceSourceByID(referenceSourceID);
+		ReferenceSourceData referenceSourceData = referenceSourceRepository
+				.findOne(Long.valueOf(referenceSourceID));
+		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
 	}
 	
 	 /**
@@ -53,7 +62,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		referenceSourcesDAO.deleteReferenceSourceByID(referenceSourceID);
+		//referenceSourcesDAO.deleteReferenceSourceByID(referenceSourceID);
 	}
 
 	 /**
@@ -65,7 +74,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourcesDAO.updateReferenceSource(referenceSourceID,referenceSource);
+		//referenceSourcesDAO.updateReferenceSource(referenceSourceID,referenceSource);
 		
 	}
 
@@ -76,7 +85,8 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public List<ReferenceSource> findSources() {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		return referenceSourcesDAO.findSources();
+		//return referenceSourcesDAO.findSources();
+		return null;
 	}
 	
 }

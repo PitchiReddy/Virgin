@@ -12,7 +12,7 @@ import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.dao.ReferencesDAO;
-
+import com.virginvoyages.data.repositories.ReferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,6 +26,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 
 	@Autowired
 	private ReferencesDAO referencesDao;
+	
+	
+	@Autowired
+	private ReferenceRepository referenceRepository;
+	
 
 	/**
 	 * Create reference based on reference. Dummy data being used as of now
@@ -38,7 +43,8 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void addReference(Reference reference) {
 		log.debug("adding references");
-		referencesDao.addReference(reference);
+		//referencesDao.addReference(reference);
+		referenceRepository.save(reference.convertToDataEntity());
 	}
 
 	/**

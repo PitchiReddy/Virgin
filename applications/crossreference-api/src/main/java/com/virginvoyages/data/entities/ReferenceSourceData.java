@@ -6,11 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.joda.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.virginvoyages.crossreference.model.Audited;
+import com.virginvoyages.crossreference.sources.ReferenceSource;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,24 +21,37 @@ public class ReferenceSourceData {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="REFERENCE_SOURCE_ID")
-	private String referenceSourceID = null;
+	private Long referenceSourceID = null;
 
 	@Column(name="NAME")
 	private String referenceSourceName = null;
 
-	@JsonProperty("IS_INACTIVE")
+	@Column(name="IS_INACTIVE")
 	private Boolean inActive = null;
 	
 	@Column(name="CREATE_DATE")
-	private LocalDate createDate;
+	private String createDate;
 
 	@Column(name="CREATE_USER")
 	private String createUser;
 
 	@Column(name="UPDATE_DATE")
-	private LocalDate updateDate;
+	private String updateDate;
 
 	@Column(name="UPDATE_USER")
 	private String updateUser;	
+	
+	public ReferenceSource convertToBusinessEntity() {
+		return new ReferenceSource()
+				.referenceSourceName(this.referenceSourceName())
+				.referenceSourceID(String.valueOf(this.referenceSourceID()))
+				.inActive(this.inActive())
+				.auditData(new Audited()
+						.createDate(LocalDate.parse(this.createDate()))
+						.createUser(this.createUser())
+						.updateDate(LocalDate.parse(this.updateDate()))
+						.updateUser(this.updateUser())
+				);
+	}
 
 }
