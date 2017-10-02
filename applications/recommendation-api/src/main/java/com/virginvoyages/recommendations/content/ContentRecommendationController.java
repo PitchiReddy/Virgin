@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.virginvoyages.api.MockRecommendationAPI;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +30,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @ExposesResourceFor(ContentRecommendation.class)
 public class ContentRecommendationController {
+	
+	@Autowired
+	private MockRecommendationAPI mockAPI;
+	
+	
 	@ApiOperation(value = "", notes = "To obtain a content recommendation", response = ContentRecommendations.class, tags = {
 			"Content Recommendation", })
 	@ApiResponses(value = {
@@ -43,7 +51,7 @@ public class ContentRecommendationController {
 			@ApiParam(value = "A variable tuple envelop of additional meta-data that is not used at this stage but may be of use in future (e.g. cookies, URIs, etc) this is used for machine learning in the future, not the individual request. The format of meta-data tuple would be pipe separated key value pair.  e.g [\"URL\"| \"www.example.com\", ...]") @RequestParam(value = "metaData", required = false) List<String> metaData) {
 		
 		log.debug("Entering contentRecommendationPost");
-		return new ResponseEntity<ContentRecommendations>(HttpStatus.OK);
+		return new ResponseEntity<ContentRecommendations>(mockAPI.getContentRecommendations(requestSource, sailorID, channel, place),HttpStatus.OK);
 	}
 
 }

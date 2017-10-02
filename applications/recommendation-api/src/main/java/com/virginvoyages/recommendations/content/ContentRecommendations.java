@@ -15,5 +15,10 @@ public class ContentRecommendations   {
   @JsonProperty("contentReco")
   private List<ContentRecommendation> contentReco = new ArrayList<ContentRecommendation>();
   
+  public ContentRecommendations addContentRecommendation(ContentRecommendation contentRecommendaton) {
+	  contentReco.add(contentRecommendaton);
+	  return this;
+  }
+  
 }
 
