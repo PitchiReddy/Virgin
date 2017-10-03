@@ -51,7 +51,6 @@ public class RecommendationResponseController {
 
 		log.debug("Entering recommendationResponsePut");
 		recommendationsResponseAssembly.addRecommendationResponse(nbxUniqueKey, sailorSelection, selectionSentiment);
-		//mockAPI.addRecommendationResponse(nbxUniqueKey, sailorSelection, selectionSentiment);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

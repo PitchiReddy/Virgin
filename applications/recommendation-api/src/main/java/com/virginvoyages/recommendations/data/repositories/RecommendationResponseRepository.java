@@ -19,11 +19,11 @@ public class RecommendationResponseRepository {
 	
 	private String tableName = "RECOMMENDATION_RESPONSE";
 	
-	public static byte[] CF_INFO = Bytes.toBytes("cfInfo");
+	public static byte[] cfRecoFeedback = Bytes.toBytes("0");
 	
-	private byte[] qNbxUniqueKey = Bytes.toBytes("nbxUniqueKey");
-	private byte[] qSailorSelection = Bytes.toBytes("sailorSelection");
-	private byte[] qSelectionSentiment = Bytes.toBytes("selectionSentiment");
+	private byte[] cqNbxUniqueKey = Bytes.toBytes("nbxUniqueKey");
+	private byte[] cqSailorSelection = Bytes.toBytes("sailorSelection");
+	private byte[] cqSelectionSentiment = Bytes.toBytes("selectionSentiment");
 	
 	public RecommendationResponse save(final Integer nbxUniqueKey, final String sailorSelection,
 			final String selectionSentiment) {
@@ -38,9 +38,9 @@ public class RecommendationResponseRepository {
 				String rowKey = String.valueOf(nbxUniqueKey.intValue())+"+"+System.currentTimeMillis();
 				Put p = new Put(Bytes.toBytes(rowKey));
 				
-				p.addColumn(CF_INFO, qNbxUniqueKey, Bytes.toBytes(recommendationResponse.nbxUniqueKey().toString()));
-				p.addColumn(CF_INFO, qSailorSelection, Bytes.toBytes(recommendationResponse.recommedation()));
-				p.addColumn(CF_INFO, qSelectionSentiment, Bytes.toBytes(recommendationResponse.selectionSentiment()));
+				p.addColumn(cfRecoFeedback, cqNbxUniqueKey, Bytes.toBytes(recommendationResponse.nbxUniqueKey().toString()));
+				p.addColumn(cfRecoFeedback, cqSailorSelection, Bytes.toBytes(recommendationResponse.recommedation()));
+				p.addColumn(cfRecoFeedback, cqSelectionSentiment, Bytes.toBytes(recommendationResponse.selectionSentiment()));
 				table.put(p);
 				
 				return recommendationResponse;
