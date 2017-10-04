@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.virginvoyages.recommendations.content.ContentRecommendation;
 import com.virginvoyages.recommendations.content.ContentRecommendations;
-import com.virginvoyages.recommendations.model.RecommendationData;
+import com.virginvoyages.recommendations.model.RecommendationResponse;
 
 /**
  * Mock implementation of Recommendation API to return mock responses to validate deployment
@@ -17,7 +17,7 @@ import com.virginvoyages.recommendations.model.RecommendationData;
 @Component
 public class MockRecommendationAPI {
 	
-	private List<RecommendationData> recommendationResponses = new ArrayList<RecommendationData>();
+	private List<RecommendationResponse> recommendationResponses = new ArrayList<RecommendationResponse>();
 
 	private List<ContentRecommendation> contentRecommendationsData = new ArrayList<ContentRecommendation>();
 	
@@ -36,7 +36,7 @@ public class MockRecommendationAPI {
 	
 	public void addRecommendationResponse(Integer nbxUniqueKey, String recommendation, String selectionSentiment) {
     	recommendationResponses
-    		.add(new RecommendationData()
+    		.add(new RecommendationResponse()
     				.nbxUniqueKey(nbxUniqueKey)
     				.recommedation(recommendation)
     				.selectionSentiment(selectionSentiment));
