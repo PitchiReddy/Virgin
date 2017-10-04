@@ -5,11 +5,19 @@
         <file>${log.file}</file>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"componentName":"${build.name}","componentVersion":"${build.version}"}</customFields>
+            <fieldNames>
+               <timestamp key="timestamp" datePattern="yyyy-MM-dd'_'HH-mm-ss.SSS">timestamp</timestamp>
+                <version>version</version>
+            </fieldNames>
         </encoder>
     </appender>
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"componentName":"${build.name}","componentVersion":"${build.version}"}</customFields>
+            <fieldNames>
+                 <timestamp key="timestamp" datePattern="yyyy-MM-dd'_'HH-mm-ss.SSS">timestamp</timestamp>
+                <version>version</version>
+            </fieldNames>
         </encoder>
     </appender>
     <logger name="jsonLogger" additivity="false" level="DEBUG">
