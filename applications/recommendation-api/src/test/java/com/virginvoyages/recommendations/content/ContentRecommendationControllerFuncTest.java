@@ -37,7 +37,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			params(parameters).
-			post("/v1/contentRecommendation").
+			post("/recommendation-api/v1/contentRecommendation").
 			
 			
 		then().
@@ -64,7 +64,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
-			post("/v1/contentRecommendation").
+			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
    			assertThat().statusCode(400).
@@ -86,7 +86,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
-			post("/v1/contentRecommendation").
+			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
    			assertThat().statusCode(400).
@@ -108,7 +108,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
-			post("/v1/contentRecommendation").
+			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
    			assertThat().statusCode(400).
@@ -129,7 +129,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 			
 		given().
 			body(parameters).
-			post("/v1/contentRecommendation").
+			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
    			assertThat().statusCode(400).
