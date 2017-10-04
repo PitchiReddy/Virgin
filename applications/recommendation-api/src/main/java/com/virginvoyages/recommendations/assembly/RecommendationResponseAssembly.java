@@ -6,8 +6,8 @@ package com.virginvoyages.recommendations.assembly;
  * @author rpraveen
  *
  */
-public interface RecommendationsResponseAssembly {
+public interface RecommendationResponseAssembly {
 	
-	public void addRecommendationResponse(Integer nbxUniqueKey, String sailorSelection, String selectionSentiment);
+	public boolean addRecommendationResponse(Integer nbxUniqueKey, String sailorSelection, String selectionSentiment);
 
 }

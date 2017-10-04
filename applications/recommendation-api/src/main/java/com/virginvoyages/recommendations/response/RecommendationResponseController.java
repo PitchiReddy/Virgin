@@ -3,7 +3,6 @@ package com.virginvoyages.recommendations.response;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockRecommendationAPI;
-import com.virginvoyages.recommendations.assembly.RecommendationsResponseAssembly;
-import com.virginvoyages.recommendations.model.Recommendation;
+import com.virginvoyages.recommendations.assembly.RecommendationResponseAssembly;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,14 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Api(value = "Recommendation", tags = "Recommendation", description = "Recommendation Response")
 @Slf4j
 @RequiredArgsConstructor
-@ExposesResourceFor(Recommendation.class)
 public class RecommendationResponseController {
 	
 	@Autowired
-	private MockRecommendationAPI mockAPI;
-	
-	@Autowired
-	private RecommendationsResponseAssembly recommendationsResponseAssembly;
+	private RecommendationResponseAssembly recommendationsResponseAssembly;
 
 	@ApiOperation(value = "", notes = "To update the exising recommendation with feedback based on the customer's selected option", response = Void.class, tags = {
 			"Recommendation Response", })
