@@ -4,4 +4,4 @@ spring:
   
 server:
   port: 8435
-  context-path: /v1
+  context-path: /xref-api/v1
