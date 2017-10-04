@@ -1,7 +1,7 @@
 package com.virginvoyages.assembly.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
@@ -32,8 +32,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		//referenceSourcesDAO.addReferenceSource(referenceSource);
-		
+	
 		//if(!referenceSourceRepository.exists(Long.valueOf(referenceSource.referenceSourceID()))) {
 			referenceSourceRepository.save(referenceSource.convertToDataEntity());
 		//}
@@ -48,7 +47,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		//ReferenceSource getReferenceSource = referenceSourcesDAO.findReferenceSourceByID(referenceSourceID);
 		ReferenceSourceData referenceSourceData = referenceSourceRepository
 				.findOne(Long.valueOf(referenceSourceID));
 		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
@@ -62,7 +60,8 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		//referenceSourcesDAO.deleteReferenceSourceByID(referenceSourceID);
+		long convertReferenceSourceID = Long.parseLong(referenceSourceID);
+		referenceSourceRepository.delete(convertReferenceSourceID);
 	}
 
 	 /**
@@ -74,19 +73,23 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		//referenceSourcesDAO.updateReferenceSource(referenceSourceID,referenceSource);
-		
+		referenceSourceRepository.save(referenceSource.convertToDataEntity());
 	}
 
 	/**
      * Gets `Source` objects. . Dummy data being used as of now - as data source not finalized
+	 * @param <T>
      * @return List<ReferenceSource>
     */
 	@Override
-	public List<ReferenceSource> findSources() {
+	public  List<ReferenceSource> findSources() {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		//return referenceSourcesDAO.findSources();
-		return null;
+		Iterable<ReferenceSourceData> referenceSourceDataIterable = referenceSourceRepository.findAll();
+		List<ReferenceSource>  listOfReferenceSource = new ArrayList<>();
+		for(ReferenceSourceData referenceSourceData: referenceSourceDataIterable) {
+			listOfReferenceSource.add(referenceSourceData.convertToBusinessEntity());	
+		}
+		return null == referenceSourceDataIterable ? null : listOfReferenceSource;
 	}
 	
 }
