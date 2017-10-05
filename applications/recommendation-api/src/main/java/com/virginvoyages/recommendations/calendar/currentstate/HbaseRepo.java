@@ -256,6 +256,8 @@ public class HbaseRepo {
 
 			CalendarBean hBasebean = new CalendarBean() ;
 			
+			hBasebean.setNbxUniqueKey(Bytes.toString(res.getRow()));
+			
 			hBasebean.setReservation_id(Bytes.toString(res.getValue("reservation".getBytes(), "reservation_id".getBytes())));
 			hBasebean.setSailor_id(Bytes.toString(res.getValue("reservation".getBytes(), "sailor_id".getBytes())));
 
