@@ -38,7 +38,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceTypeID", equalTo(referenceType.referenceTypeID())).
-				assertThat().body("referenceName", equalTo(referenceType.referenceName())).
+				//assertThat().body("referenceName", equalTo(referenceType.referenceName())).
 				log().
 				all();
 		   
@@ -97,7 +97,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceType.referenceTypeID());
-		parameters.put("referenceName", referenceType.referenceName());
+		//parameters.put("referenceName", referenceType.referenceName());
 		parameters.put("referenceType", referenceType.referenceType());
 				
 		//create reference type
@@ -118,7 +118,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceTypeID", equalTo(referenceType.referenceTypeID())).
-				assertThat().body("referenceName", equalTo(referenceType.referenceName())).
+				//assertThat().body("referenceName", equalTo(referenceType.referenceName())).
 				log().
 				all();
 		   

@@ -43,7 +43,7 @@ public class ReferenceSourcesDAOImpl implements ReferenceSourcesDAO {
 		parameters.put(referenceSource.referenceSourceID(),referenceSource);
 		parameters.put(referenceSource.referenceSourceName(),referenceSource);
 		parameters.put(referenceSource.inActive(),referenceSource);
-		parameters.put(referenceSource.auditData(),referenceSource);
+		//parameters.put(referenceSource.auditData(),referenceSource);
 		
 	}
 	
@@ -74,7 +74,7 @@ public class ReferenceSourcesDAOImpl implements ReferenceSourcesDAO {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesDAOImpl");
 		ReferenceSource existingReferenceSource = parameters.get(referenceSourceID);
 		if(null != existingReferenceSource)
-			referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
+			//referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
 			parameters.put(referenceSourceID, referenceSource);
 		
 	}

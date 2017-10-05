@@ -134,7 +134,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 		//update source name
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("auditData", referenceSource.auditData());
+		//parameters.put("auditData", referenceSource.auditData());
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSourceName", "Updated Source Name");
 		parameters.put("inActive", referenceSource.inActive());

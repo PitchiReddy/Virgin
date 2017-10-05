@@ -18,14 +18,14 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().auditData(createAuditDataForCreate()).referenceSourceID("RS1")
+		return new ReferenceSource().referenceSourceID("RS1")
 				.referenceSourceName("Seaware");
 	}
 
 	public ReferenceType getDataForCreateReferenceType() {
 
-		return new ReferenceType().auditData(createAuditDataForCreate()).referenceTypeID("RT5")
-				.referenceType("Reservation").referenceName("Activity");
+		return new ReferenceType().referenceTypeID("RT5")
+				.referenceType("Reservation");
 
 	}
 

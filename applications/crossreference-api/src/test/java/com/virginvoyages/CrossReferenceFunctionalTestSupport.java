@@ -30,8 +30,8 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		Audited audited = testDataHelper.createAuditDataForCreate();
-		referenceSource.auditData(audited);
-		parameters.put("auditData", referenceSource.auditData(audited));
+		//referenceSource.auditData(audited);
+		//parameters.put("auditData", referenceSource.auditData(audited));
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
 		parameters.put("inActive", referenceSource.inActive());
@@ -62,7 +62,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceType.referenceTypeID());
-		parameters.put("referenceName", referenceType.referenceName());
+		//parameters.put("referenceName", referenceType.referenceName());
 		parameters.put("referenceType", referenceType.referenceType());
 
 		// create reference type

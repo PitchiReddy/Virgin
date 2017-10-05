@@ -53,9 +53,9 @@ public class ReferenceTypeDAOImpl implements ReferenceTypesDAO {
 	private void createReferenceType(ReferenceType referenceType) {
 
 		parameters.put(referenceType.referenceTypeID(), referenceType);
-		parameters.put(referenceType.referenceName(), referenceType);
+		//parameters.put(referenceType.referenceName(), referenceType);
 		parameters.put(referenceType.referenceType(), referenceType);
-		parameters.put(referenceType.auditData(), referenceType);
+		//parameters.put(referenceType.auditData(), referenceType);
 
 	}
 	 //TODO remove once data source finalized
@@ -98,7 +98,7 @@ public class ReferenceTypeDAOImpl implements ReferenceTypesDAO {
 		log.debug("Entering updateReferenceType method in ReferenceTypeDAOImpl");
 		ReferenceType existingReferenceType = parameters.get(referenceTypeID);
 		if(null != existingReferenceType)
-			referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
+			//referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
 			parameters.put(referenceTypeID, referenceType);
 	}
 

@@ -128,7 +128,7 @@ public class MockCrossReferenceAPI {
 	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
 		ReferenceType existingReferenceType = referenceTypes.get(referenceTypeID);
 		if(null != existingReferenceType)
-			referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
+			//referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
 			referenceTypes.put(referenceTypeID, referenceType);
 	}
 	
@@ -157,7 +157,7 @@ public class MockCrossReferenceAPI {
 	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
 		ReferenceSource existingReferenceSource = referenceSources.get(referenceSourceID);
 		if(null != existingReferenceSource)
-			referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
+			//referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
 			referenceSources.put(referenceSourceID, referenceSource);
 	}
 	
@@ -175,17 +175,17 @@ public class MockCrossReferenceAPI {
 	
 	private ReferenceSource createReferenceSource() {
 		return new ReferenceSource()
-				.auditData(createAuditDataForCreate())
+				//.auditData(createAuditDataForCreate())
 				.referenceSourceID("RS1")
 				.referenceSourceName("Seaware");
 	}
 	
 	private ReferenceType createReferenceType() {
 		return new ReferenceType()
-				.auditData(createAuditDataForCreate())
+				//.auditData(createAuditDataForCreate())
 				.referenceTypeID("RT1")
-				.referenceType("Reservation")
-				.referenceName("DiningOption");
+				.referenceType("Reservation");
+				//.referenceName("DiningOption");
 	}
 	
 	private Reference createReference() {

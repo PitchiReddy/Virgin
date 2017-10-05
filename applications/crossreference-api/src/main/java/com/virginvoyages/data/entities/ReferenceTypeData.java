@@ -1,17 +1,15 @@
 package com.virginvoyages.data.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.joda.time.LocalDate;
-
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.types.ReferenceType;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -26,35 +24,27 @@ public class ReferenceTypeData {
 	@Column(name="REFERENCE_TYPE_ID")
 	private Long referenceTypeID;
 
-	@Column(name="NAME")
-	private String referenceName = null;
-
-	@Column(name="TYPE")
+	@Column(name="REFERENCE_TYPE")
 	private String referenceType = null;
 	
-	@Column(name="CREATE_DATE")
-	private String createDate;
-
-	@Column(name="CREATE_USER")
-	private String createUser;
-
-	@Column(name="UPDATE_DATE")
-	private String updateDate;
-
-	@Column(name="UPDATE_USER")
-	private String updateUser;	
-	
+	@OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "REFERENCE_SOURCE_ID", referencedColumnName = "REFERENCE_SOURCE_ID")
+	private ReferenceSourceData referenceSourceData;
+		
 	public ReferenceType convertToBusinessEntity() {
 		return new ReferenceType()
-				.referenceName(this.referenceName())
 				.referenceType(this.referenceType())
-				.referenceTypeID(String.valueOf(this.referenceTypeID()))
-				.auditData(new Audited()
-						.createDate(LocalDate.parse(this.createDate()))
-						.createUser(this.createUser())
-						.updateDate(LocalDate.parse(this.updateDate()))
-						.updateUser(this.updateUser())
-				);
+				.referenceSourceID(String.valueOf(this.referenceSourceData().referenceSourceID()))
+				.referenceTypeID(String.valueOf(this.referenceTypeID().longValue()));
+				
+	}
+
+	public ReferenceSourceData getReferenceSourceData() {
+		return referenceSourceData;
+	}
+
+	public void setReferenceSourceData(ReferenceSourceData referenceSourceData) {
+		this.referenceSourceData = referenceSourceData;
 	}
 
 }
