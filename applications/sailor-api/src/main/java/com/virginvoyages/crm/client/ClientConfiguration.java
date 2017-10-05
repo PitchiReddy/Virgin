@@ -53,18 +53,11 @@ public class ClientConfiguration {
         return new OAuth2FeignRequestInterceptor(oAuth2ClientContext, resourceOwnerPasswordResourceDetails);
     }
 
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.BASIC;
-    }
+    
     
     @Bean
     public Encoder encoder(){
         return new JacksonEncoder();
     }
-    
-    /*@Bean
-    public RequestInterceptor requestInterceptor() {
-    	return(System.out::println);
-    }*/
+   
 }
