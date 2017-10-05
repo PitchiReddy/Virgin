@@ -13,8 +13,15 @@ public class CalendarBean {
 	String description;
 	String type;
 	String ranking;
+	String nbxUniqueKey;
 
 
+	public String getNbxUniqueKey() {
+		return nbxUniqueKey;
+	}
+	public void setNbxUniqueKey(String nbxUniqueKey) {
+		this.nbxUniqueKey = nbxUniqueKey;
+	}
 	public String getReservation_id() {
 		return reservation_id;
 	}
