@@ -2,12 +2,9 @@ package com.virginvoyages.assembly.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Iterables;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceTypeData;
@@ -26,9 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
-	//@Autowired
-	//private ReferenceTypesDAO referenceTypeDao;
-	
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
 
@@ -44,15 +38,12 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public void addReferenceType(ReferenceType referenceType) {
 		log.debug("adding referenceTypes");
-		//referenceTypeDao.addReferenceType(referenceType);
-		//if(!referenceTypeRepository.exists(Long.valueOf(referenceType.referenceTypeID()))) {
-			referenceTypeRepository.save(referenceType.convertToDataEntity());
-		//}
+		referenceTypeRepository.save(referenceType.convertToDataEntity());
+
 	}
 
 	/**
-	 * Find reference Type by ID. Dummy data being used as of now - as data source
-	 * not finalized
+	 * Find reference Type by ID. not finalized
 	 * 
 	 * @param referenceTypeID
 	 *            - input referenceType.
@@ -61,16 +52,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
-	
-		ReferenceTypeData referenceTypeData = referenceTypeRepository
-				.findOne(Long.valueOf(referenceTypeID));
+
+		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(Long.valueOf(referenceTypeID));
 		return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
 
 	}
 
 	/**
-	 * Delete reference Type by ID. Dummy data being used as of now - as data source
-	 * not finalized
+	 * Delete reference Type by ID. not finalized
 	 * 
 	 * @param referenceTypeID
 	 *            - input referenceType.
@@ -78,40 +67,39 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	public void deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		//referenceTypeDao.deleteReferenceTypeByID(referenceTypeID);
+		long convertReferenceTypeID = Long.parseLong(referenceTypeID);
+		referenceTypeRepository.delete(convertReferenceTypeID);
+
 	}
 
 	/**
-	 * Update reference Type by ID. Dummy data being used as of now - as data source
-	 * not finalized
+	 * Update reference Type by ID. not finalized
 	 * 
 	 * @param referenceType
 	 * @param referenceTypeID
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		//referenceTypeDao.updateReferenceType(referenceTypeID, referenceType);
+
 	}
 
 	/**
-	 * Finding reference Type. Dummy data being used as of now - as data source not
-	 * finalized
+	 * Finding reference Type. finalized
 	 * 
 	 * @return
 	 */
 	@Override
 	public List<ReferenceType> findTypes() {
 		log.debug("Entering findTypes method in ReferenceTypesAssemblyImpl");
-		//return referenceTypeDao.findTypes();
-		//return referenceTypeRepository.findAll();
-		//Iterables.addAll(addTo, referenceTypeRepository.findAll().
-		//return referenceTypeRepository.findAll().stream().map(sailorID  -> {
-          //  return convertAccountDataToSailor(accountClient.findAccount(sailorID),loadPreferences(sailorID),null) ;
-		//}).collect(Collectors.toList());
-		return new ArrayList<ReferenceType>();
-		
+		Iterable<ReferenceTypeData> referenceTypeDataIterable = referenceTypeRepository.findAll();
+		List<ReferenceType> listOfReferenceType = new ArrayList<>();
+		for (ReferenceTypeData referenceTypeData : referenceTypeDataIterable) {
+			listOfReferenceType.add(referenceTypeData.convertToBusinessEntity());
+		}
+		return null == referenceTypeDataIterable ? null : listOfReferenceType;
+
 	}
 
 }
