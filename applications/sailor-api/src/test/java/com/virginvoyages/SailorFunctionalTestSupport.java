@@ -18,7 +18,7 @@ public class SailorFunctionalTestSupport extends FunctionalTestSupport {
 		parameters.put("dateofBirth", accountData.dateofBirth().toString());
 		parameters.put("mobileNumber", accountData.mobileNumber());
 
-		String sailorId = given().contentType("application/json").params(parameters).get("v1/sailors/findOrCreate").
+		String sailorId = given().contentType("application/json").params(parameters).get("/sailor-api/v1/sailors/findOrCreate").
 
 				then().statusCode(200).extract().path("id");
 
@@ -27,7 +27,7 @@ public class SailorFunctionalTestSupport extends FunctionalTestSupport {
 
 	public void deleteTestSailor(String sailorId) {
 		// Cleanup
-		given().contentType("application/json").delete("v1/sailors/" + sailorId).
+		given().contentType("application/json").delete("/sailor-api/v1/sailors/" + sailorId).
 
 				then().statusCode(200);
 	}

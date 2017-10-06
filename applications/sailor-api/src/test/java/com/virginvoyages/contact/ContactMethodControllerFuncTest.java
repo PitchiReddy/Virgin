@@ -27,7 +27,7 @@ public class ContactMethodControllerFuncTest extends SailorFunctionalTestSupport
 		
 		String sailorID = testDataHelper.getSailorIDWithContactMethods();
 		
-		given().get("/v1/sailors/" + sailorID + "/contactMethod")
+		given().get("/sailor-api/v1/sailors/" + sailorID + "/contactMethod")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.contactMethods", hasSize(greaterThan(0)))

@@ -46,9 +46,7 @@ allprojects {
     }
 		
 	}
-	test {
-    maxParallelForks = 6
-}
+	
  }
 }
 

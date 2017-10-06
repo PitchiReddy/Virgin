@@ -34,7 +34,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		//Test
 		given().
 				contentType("application/json").
-				get("/v1/types/" + referenceType.referenceTypeID()).
+				get("/xref-api/v1/types/" + referenceType.referenceTypeID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceTypeID", equalTo(referenceType.referenceTypeID())).
@@ -67,7 +67,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	    //Test Delete
 		given().
 				contentType("application/json").
-				delete("/v1/types/" + referenceType.referenceTypeID()).
+				delete("/xref-api/v1/types/" + referenceType.referenceTypeID()).
 		then().
 				assertThat().statusCode(200).
 				log().
@@ -76,7 +76,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		//Test that deleted ID does not exist.
 		given().
 				contentType("application/json").
-				get("/v1/types/" + referenceType.referenceTypeID()).
+				get("/xref-api/v1/types/" + referenceType.referenceTypeID()).
 		then().
 				assertThat().statusCode(200).
 				//TODO test that relevant excpetion in response when reference Type not found
@@ -104,7 +104,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.post("/v1/types/")
+				.post("/xref-api/v1/types/")
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -114,7 +114,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
         //find with ID and test
 		given().
 				contentType("application/json").
-				get("/v1/types/" + referenceType.referenceTypeID()).
+				get("/xref-api/v1/types/" + referenceType.referenceTypeID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceTypeID", equalTo(referenceType.referenceTypeID())).
@@ -141,7 +141,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.put("/v1/types/"+referenceType.referenceTypeID())
+				.put("/xref-api/v1/types/"+referenceType.referenceTypeID())
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -151,7 +151,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		//Test that updated name is reflecting
 		given().
 				contentType("application/json").
-		        get("/v1/types/" + referenceType.referenceTypeID()).
+		        get("/xref-api/v1/types/" + referenceType.referenceTypeID()).
         then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceTypeID", equalTo(referenceType.referenceTypeID())).
@@ -174,7 +174,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	    ValidatableResponse response = 
 	    given()
 				.contentType("application/json")
-				.get("/v1/types/")
+				.get("/xref-api/v1/types/")
 		
 	    .then()
 				.assertThat().statusCode(200)

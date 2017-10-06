@@ -39,7 +39,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		given()
 			.contentType("application/json")
 			.body(parameters)
-			.post("/v1/sources").
+			.post("/xref-api/v1/sources").
 
 		then()
 			.statusCode(200);
@@ -51,7 +51,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		given()
 			.contentType("application/json")
-			.delete("/v1/sources/" + referenceSourceID).
+			.delete("/xref-api/v1/sources/" + referenceSourceID).
 
 		then()
 			.statusCode(200);
@@ -69,7 +69,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		given()
 			.contentType("application/json")
 			.body(parameters)
-			.post("/v1/types/").
+			.post("/xref-api/v1/types/").
 
 		then()
 			.assertThat()
@@ -84,7 +84,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		given()
 			.contentType("application/json")
-			.delete("/v1/types/" + referenceTypeID).
+			.delete("/xref-api/v1/types/" + referenceTypeID).
 
 		then()
 			.statusCode(200);
@@ -108,7 +108,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		given()
 		     .contentType("application/json") 
 		     .body(parameters)
-		     .post("/v1/references/").
+		     .post("/xref-api/v1/references/").
 
 		then()
 		 	.assertThat()
@@ -123,7 +123,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		
 		given()
 			.contentType("application/json")
-			.delete("/v1/references/" + referenceID).
+			.delete("/xref-api/v1/references/" + referenceID).
 
 		then()
 			.statusCode(200);
