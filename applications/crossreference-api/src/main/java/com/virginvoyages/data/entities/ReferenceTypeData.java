@@ -3,6 +3,7 @@ package com.virginvoyages.data.entities;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,8 +28,8 @@ public class ReferenceTypeData {
 	@Column(name="REFERENCE_TYPE")
 	private String referenceType = null;
 	
-	@OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "REFERENCE_SOURCE_ID", referencedColumnName = "REFERENCE_SOURCE_ID")
+	@OneToOne(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER)
+    @JoinColumn(name = "REFERENCE_SOURCE_ID")
 	private ReferenceSourceData referenceSourceData;
 		
 	public ReferenceType convertToBusinessEntity() {
@@ -37,14 +38,6 @@ public class ReferenceTypeData {
 				.referenceSourceID(String.valueOf(this.referenceSourceData().referenceSourceID()))
 				.referenceTypeID(String.valueOf(this.referenceTypeID().longValue()));
 				
-	}
-
-	public ReferenceSourceData getReferenceSourceData() {
-		return referenceSourceData;
-	}
-
-	public void setReferenceSourceData(ReferenceSourceData referenceSourceData) {
-		this.referenceSourceData = referenceSourceData;
 	}
 
 }

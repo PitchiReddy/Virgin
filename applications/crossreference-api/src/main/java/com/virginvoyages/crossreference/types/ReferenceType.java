@@ -24,9 +24,9 @@ public class ReferenceType   {
   
   public ReferenceTypeData convertToDataEntity() {
 	  return new ReferenceTypeData()
-			  .referenceType(this.referenceType());
+			  .referenceType(this.referenceType())
 			  //.referenceTypeID(Long.parseLong(this.referenceTypeID()))
-			  //.referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())));
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())));
 			  
   }
 
