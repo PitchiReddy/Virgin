@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.hasSize;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				assertThat().body("referenceID", equalTo(reference.referenceID())).
 				assertThat().body("masterID", equalTo(reference.masterID())).
 				assertThat().body("nativeSourceID", equalTo(reference.nativeSourceID())).
-				assertThat().body("details", equalTo(reference.details())).
 				log().
 				all();
 
@@ -79,10 +77,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		Reference reference = testDataHelper.getDataForCreateReference();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceSource",reference.referenceSource());
-		parameters.put("referenceType", reference.referenceType());
 		parameters.put("masterID", reference.masterID());
-		parameters.put("details", reference.details());
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("nativeSourceID", reference.nativeSourceID());
 	
@@ -117,11 +112,6 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		//Update nativeSourceID&masterID
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("auditData",reference.auditData());
-		parameters.put("referenceSource",reference.referenceSource());
-		parameters.put("referenceType", reference.referenceType());
-		parameters.put("details", reference.details());
-		parameters.put("expiry", LocalDate.now());
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("nativeSourceID", "Updated native Source ID");
 		parameters.put("masterID", "M31");
@@ -158,7 +148,6 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Create test reference
 		Reference reference = createTestReferences();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("auditData", reference.auditData());
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		given()
@@ -182,7 +171,6 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Create test reference
 		Reference reference = createTestReferences();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("auditData", reference.auditData());
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceID", reference.nativeSourceID());

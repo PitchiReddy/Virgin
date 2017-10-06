@@ -31,9 +31,9 @@ public class TestDataHelper {
 
 	public Reference getDataForCreateReference() {
 
-		return new Reference().auditData(createAuditDataForCreate()).referenceType(getDataForCreateReferenceType())
-				.referenceSource(getDataForCreateReferenceSource()).referenceID("R30")
-				.details("Dummy Reference Entry 30").expiry(LocalDate.now()).masterID("M30").nativeSourceID("NSID30");
+		return new Reference()
+				.referenceID("R30")
+				.masterID("M30").nativeSourceID("NSID30");
 	}
 
 	public Audited createAuditDataForCreate() {

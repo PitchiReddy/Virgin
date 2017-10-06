@@ -138,7 +138,7 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "size", required = false) Integer size) {
 
 		
-		return new ResponseEntity<References>(referencesAssembly.findReferences(page, size), HttpStatus.OK);
+		return new ResponseEntity<References>(referencesAssembly.findReferences(), HttpStatus.OK);
 	}
 
 	/**

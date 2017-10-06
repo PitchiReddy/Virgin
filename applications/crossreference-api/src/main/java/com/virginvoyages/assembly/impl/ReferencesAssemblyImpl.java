@@ -3,14 +3,15 @@
  */
 package com.virginvoyages.assembly.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
+import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,8 +30,6 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 
 	/**
 	 * Create reference based on reference. 
-	 * - as data source not finalized
-	 * 
 	 * @param reference
 	 *            - input reference.
 	 * @return
@@ -48,14 +47,14 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return Reference - returns a reference
 	 */
 	public Reference findReferenceByID(String referenceID) {
-		return null;
+		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl");
+		ReferenceData referenceData = referenceRepository.findOne(Long.valueOf(referenceID));
+		return null == referenceData ? null : referenceData.convertToBusinessEntity();
 		
 	}
 
 	/**
 	 * Find reference by ID. 
-	 * not finalized
-	 * 
 	 * @param referenceID
 	 *            - input reference.
 	 * @return 
@@ -63,19 +62,20 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void deleteReferenceByID(String referenceID) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
+		long convertReferenceID = Long.parseLong(referenceID);
+		referenceRepository.delete(convertReferenceID);
 		
 		
 	}
 	/**
 	 * Finding reference Type.
-	 * finalized
-	 * 
 	 * @return List Of References
 	 */
 	@Override
-	public References findReferences(Integer page, Integer size) {
-		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
+	public References findReferences() {
+		log.debug("Entering findReferences method in ReferencesAssemblyImpl");
 		return null;
+		
 	}
 	
 	/**
@@ -87,8 +87,12 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public List<Reference> findReferencesByMaster(String masterID) {
 		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
-		return null;
-	}
+		Iterable<ReferenceData> referenceDataIterable = referenceRepository.findAll();
+		List<Reference> listOfReference = new ArrayList<>();
+		for (ReferenceData referenceData : referenceDataIterable) {
+			listOfReference.add(referenceData.convertToBusinessEntity());
+		}
+		return null == referenceDataIterable ? null : listOfReference;	}
 	
 	/**
 	 * Update reference Type by ID. 

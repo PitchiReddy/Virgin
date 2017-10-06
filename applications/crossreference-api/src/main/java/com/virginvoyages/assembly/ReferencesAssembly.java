@@ -19,7 +19,7 @@ public interface ReferencesAssembly {
 
 	public void deleteReferenceByID(String referenceID);
 
-	public References findReferences(Integer page, Integer size);
+	public References findReferences();
 
 	public List<Reference> findReferencesByMaster(String masterID);
 

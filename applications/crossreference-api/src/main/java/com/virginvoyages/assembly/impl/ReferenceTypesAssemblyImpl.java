@@ -27,9 +27,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	private ReferenceTypeRepository referenceTypeRepository;
 
 	/**
-	 * Create reference Type based on referenceType. Dummy data being used as of now
-	 * - as data source not finalized
-	 * 
+	 * Create reference Type based on referenceType.
 	 * @param referenceType
 	 *            - input referenceType.
 	 * @return
@@ -37,14 +35,13 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public void addReferenceType(ReferenceType referenceType) {
-		log.debug("adding referenceTypes");
+		log.debug("Entering addReferenceType method in ReferenceTypesAssemblyImpl");
 		referenceTypeRepository.save(referenceType.convertToDataEntity());
 
 	}
 
 	/**
-	 * Find reference Type by ID. not finalized
-	 * 
+	 * Find reference Type by ID. 
 	 * @param referenceTypeID
 	 *            - input referenceType.
 	 * @return ReferenceType - returns a referenceType
@@ -52,15 +49,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
-
+		log.debug("Entering findReferenceTypeByID method in ReferenceTypesAssemblyImpl");
 		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(Long.valueOf(referenceTypeID));
 		return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
 
 	}
 
 	/**
-	 * Delete reference Type by ID. not finalized
-	 * 
+	 * Delete reference Type by ID. 
 	 * @param referenceTypeID
 	 *            - input referenceType.
 	 * @return
@@ -73,8 +69,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	}
 
 	/**
-	 * Update reference Type by ID. not finalized
-	 * 
+	 * Update reference Type by ID. 
 	 * @param referenceType
 	 * @param referenceTypeID
 	 * @return
@@ -86,8 +81,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	}
 
 	/**
-	 * Finding reference Type. finalized
-	 * 
+	 * Finding reference Type.  
 	 * @return
 	 */
 	@Override

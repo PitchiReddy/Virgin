@@ -5,12 +5,10 @@ import static io.restassured.RestAssured.given;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
@@ -29,9 +27,6 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		Audited audited = testDataHelper.createAuditDataForCreate();
-		//referenceSource.auditData(audited);
-		//parameters.put("auditData", referenceSource.auditData(audited));
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
 		parameters.put("inActive", referenceSource.inActive());
@@ -62,7 +57,6 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceType.referenceTypeID());
-		//parameters.put("referenceName", referenceType.referenceName());
 		parameters.put("referenceType", referenceType.referenceType());
 
 		// create reference type
@@ -94,13 +88,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		Reference reference = testDataHelper.getDataForCreateReference();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		Audited audited = testDataHelper.createAuditDataForCreate();
-		parameters.put("auditData", reference.auditData(audited));
-		parameters.put("referenceType", reference.referenceType());
-		parameters.put("referenceSource",reference.referenceSource());
 		parameters.put("referenceID", reference.referenceID());
-		parameters.put("details", reference.details());
-		parameters.put("expiry", LocalDate.now());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceID", reference.nativeSourceID());
 		
