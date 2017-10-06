@@ -32,7 +32,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given().
 		         contentType("application/json")
-		         .get("/v1/references/" + reference.referenceID()).
+		         .get("/xref-api/v1/references/" + reference.referenceID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceID", equalTo(reference.referenceID())).
@@ -55,7 +55,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test Delete
 		given().
 				contentType("application/json").
-				delete("/v1/references/" + reference.referenceID())
+				delete("/xref-api/v1/references/" + reference.referenceID())
 		.then().
 				assertThat().
 				statusCode(200).
@@ -66,7 +66,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test that referenceID does not exist.
 		given().
 				contentType("application/json").
-				get("/v1/references/" + reference.referenceID()).
+				get("/xref-api/v1/references/" + reference.referenceID()).
 		then().
 				assertThat().statusCode(200).
 				//TODO test that relevant exception in response when reference ID not found
@@ -89,7 +89,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.post("/v1/references/")
+				.post("/xref-api/v1/references/")
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -99,7 +99,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
         //find with referenceID and test
 		given().
 				contentType("application/json").
-				get("/v1/references/" + reference.referenceID()).
+				get("/xref-api/v1/references/" + reference.referenceID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceID", equalTo( reference.referenceID())).
@@ -129,7 +129,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.put("/v1/references/"+reference.referenceID())
+				.put("/xref-api/v1/references/"+reference.referenceID())
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -139,7 +139,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test that updated nativeSourceID&masterID is reflecting
 		given().
 				contentType("application/json").
-				get("/v1/references/" + reference.referenceID()).
+				get("/xref-api/v1/references/" + reference.referenceID()).
         then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceID", equalTo(reference.referenceID())).
@@ -164,7 +164,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		given()
 				.contentType("application/json")
 				.params(parameters)
-				.get("/v1/references/search/findByMaster?"+"masterID="+reference.masterID())
+				.get("/xref-api/v1/references/search/findByMaster?"+"masterID="+reference.masterID())
 				
 		.then()
 				.assertThat().statusCode(200)
@@ -189,7 +189,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		given()
 				.contentType("application/json")
 				.params(parameters)
-				.get("/v1/references/search/findBySource?"+"nativeSourceID="+reference.nativeSourceID()+"&"+"sourceID="+"123")
+				.get("/xref-api/v1/references/search/findBySource?"+"nativeSourceID="+reference.nativeSourceID()+"&"+"sourceID="+"123")
 				
 		.then()
 				.assertThat().statusCode(200)
@@ -208,7 +208,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		given()
 				.contentType("application/json")
-				.get("/v1/references/")
+				.get("/xref-api/v1/references/")
 		
 	    .then()
 			    .assertThat().statusCode(200)

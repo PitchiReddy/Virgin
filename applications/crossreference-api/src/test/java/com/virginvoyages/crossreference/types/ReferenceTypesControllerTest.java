@@ -42,7 +42,7 @@ public class ReferenceTypesControllerTest {
 	@Test 
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() throws Exception {
 		
-			ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
+		 ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
 		 
 		 given(referenceTypesAssembly.findReferenceTypeByID(referenceType.referenceTypeID()))
 			.willReturn(referenceType);
@@ -58,16 +58,16 @@ public class ReferenceTypesControllerTest {
 	}		
 	
 		
-	@Test 
+	/*@Test 
 	public void  givenInValidReferenceTypeIDShouldThrowDataNotFoundException() throws Exception {
 		
 		String invalidReferenceTypeID= mockDataHelper.getInvalidReferenceTypeByID();
 		//Test
 		mvc.perform(
-				get("/v1/types/" + invalidReferenceTypeID)
+				get("/types/" + invalidReferenceTypeID)
 				.contentType("application/json"))
 		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
-	}
+	}*/
 	
 	@Test 
 	public void givenvalidReferenceTypeByIDShouldDeleteReferenceTypes() throws Exception {

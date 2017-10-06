@@ -27,7 +27,7 @@ public class BookingControllerFuncTest extends SailorFunctionalTestSupport  {
 		
 		String sailorID = testDataHelper.getSailorIDWithSailingHistory();
 		
-		given().get("/v1/sailors/" + sailorID + "/sailingHistory")
+		given().get("/sailor-api/v1/sailors/" + sailorID + "/sailingHistory")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.bookings.bookedBySailor", hasSize(greaterThan(0)))

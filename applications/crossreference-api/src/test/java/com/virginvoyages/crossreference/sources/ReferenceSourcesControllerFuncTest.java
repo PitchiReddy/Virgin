@@ -34,7 +34,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//Test
 		given().
 				contentType("application/json").
-				get("/v1/sources/" + referenceSource.referenceSourceID()).
+				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
@@ -67,7 +67,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	    //Test Delete
 		given().
 				contentType("application/json").
-				delete("/v1/sources/" + referenceSource.referenceSourceID()).
+				delete("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
 		then().
 				assertThat().statusCode(200).
 				log().
@@ -76,7 +76,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//Test that deleted ID does not exist.
 		given().
 				contentType("application/json").
-				get("/v1/sources/" + referenceSource.referenceSourceID()).
+				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
 		then().
 				assertThat().statusCode(200).
 				//TODO test that relevant excpetion in response when reference source not found
@@ -104,7 +104,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.post("/v1/sources/")
+				.post("/xref-api/v1/sources/")
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -114,7 +114,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
         //find with ID and test
 		given().
 				contentType("application/json").
-				get("/v1/sources/" + referenceSource.referenceSourceID()).
+				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
@@ -142,7 +142,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.put("/v1/sources/"+referenceSource.referenceSourceID())
+				.put("/xref-api/v1/sources/"+referenceSource.referenceSourceID())
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -152,7 +152,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//Test that updated resource name is reflecting
 		given().
 				contentType("application/json").
-		        get("/v1/sources/" + referenceSource.referenceSourceID()).
+		        get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
         then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
@@ -174,7 +174,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	    ValidatableResponse response = 
 	    given()
 				.contentType("application/json")
-				.get("/v1/sources/")
+				.get("/xref-api/v1/sources/")
 		
 	    .then()
 				.assertThat().statusCode(200)
