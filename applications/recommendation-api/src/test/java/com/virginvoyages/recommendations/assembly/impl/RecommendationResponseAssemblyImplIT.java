@@ -31,11 +31,11 @@ public class RecommendationResponseAssemblyImplIT {
 	@Test
 	public void givenValidValuesArePassedAddRecommendationResponseShouldAddResponseToDatabase() {
 		
-       Map<String, Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+       Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
        
-       boolean saved = recommendationResponseAssembly.addRecommendationResponse((Integer)responseData.get("nbxUniqueKey"), 
-    		   (String)responseData.get("sailorSelection"), 
-    		   (String)responseData.get("selectionSentiment"));
+       boolean saved = recommendationResponseAssembly.addRecommendationResponse(responseData.get("nbxUniqueKey"), 
+    		   responseData.get("sailorSelection"), 
+    		   responseData.get("selectionSentiment"));
 		
        assert(saved);
 	}

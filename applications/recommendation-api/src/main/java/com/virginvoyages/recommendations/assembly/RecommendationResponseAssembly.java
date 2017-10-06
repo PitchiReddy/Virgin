@@ -8,6 +8,6 @@ package com.virginvoyages.recommendations.assembly;
  */
 public interface RecommendationResponseAssembly {
 	
-	public boolean addRecommendationResponse(Integer nbxUniqueKey, String sailorSelection, String selectionSentiment);
+	public boolean addRecommendationResponse(String nbxUniqueKey, String sailorSelection, String selectionSentiment);
 
 }
