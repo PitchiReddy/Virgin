@@ -41,7 +41,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		//Test
         given().
         		contentType("application/json").    
-        		get("/v1/sailors/"+sailorId).
+        		get("/sailor-api/v1/sailors/"+sailorId).
 	    then().
 	       		assertThat().statusCode(200).
 	       		assertThat().body("id",equalTo(sailorId)).
@@ -68,7 +68,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		String sailorId = testDataHelper.getSailorIDWithPreferences();
 		given().
         		contentType("application/json").    
-        		get("/v1/sailors/"+sailorId).
+        		get("/sailor-api/v1/sailors/"+sailorId).
 	    then().
 	       		assertThat().statusCode(200).
 	       		assertThat().body("id",equalTo(sailorId)).
@@ -84,7 +84,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		
 		given().
 			contentType("application/json").
-			get("v1/sailors/"+invalidID).
+			get("/sailor-api/v1/sailors/"+invalidID).
 	
 	    then().
 			statusCode(404).
@@ -109,7 +109,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
 		   		contentType("application/json").
 		   		params(parameters).
-		   		get("v1/sailors/findOrCreate").
+		   		get("/sailor-api/v1/sailors/findOrCreate").
 		   		
 		then().
 				statusCode(200).
@@ -120,7 +120,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 				
 		given().
    				contentType("application/json").
-   				delete("v1/sailors/"+sailorId).
+   				delete("/sailor-api/v1/sailors/"+sailorId).
    		
    		then().
    				statusCode(200);
@@ -134,7 +134,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		
 		given().
 			contentType("application/json").
-			delete("v1/sailors/"+invalidID).
+			delete("/sailor-api/v1/sailors/"+invalidID).
 	
 	    then().
 			statusCode(404).
@@ -154,7 +154,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
         		contentType("application/json").  
         		body("{ \"id\" : \""+sailorId+"\"}").
         when().
-        		delete("/v1/sailors/").
+        		delete("/sailor-api/v1/sailors/").
         
 	    then().
 	       		assertThat().statusCode(200).
@@ -172,7 +172,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
         		contentType("application/json").  
         		body("{ \"id\" : \""+invalidID+"\"}").
         when().
-        		delete("/v1/sailors/").
+        		delete("/sailor-api/v1/sailors/").
         
 	    then().
 	       		assertThat().statusCode(404).
@@ -188,7 +188,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
         		contentType("application/json").  
         		body("{ \"firstName\" : \"firstname\"}").
         when().
-        		delete("/v1/sailors/").
+        		delete("/sailor-api/v1/sailors/").
         
 	    then().
 	       		assertThat().statusCode(405).
@@ -208,7 +208,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
  			contentType("application/json"). 
  			param("firstName", accountData.firstName()).
- 			get("v1/sailors/find").
+ 			get("/sailor-api/v1/sailors/find").
  		then().
  		    assertThat().body("firstName", hasItems(accountData.firstName()));
 		
@@ -218,7 +218,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
 			contentType("application/json"). 
 			param("email", accountData.primaryEmail()).
-			get("v1/sailors/find").
+			get("/sailor-api/v1/sailors/find").
 		then().
 		    assertThat().body("email", hasItems(accountData.primaryEmail()));
 	
@@ -245,7 +245,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
  			param("lastName", accountData.lastName()).
  			param("email",accountData.primaryEmail()).
  			param("mobileNumber",accountData.mobileNumber()).
- 			get("v1/sailors/find").
+ 			get("/sailor-api/v1/sailors/find").
  		then().
  		    assertThat().body("lastName", hasItems(accountData.lastName())).
  		    assertThat().body("email", hasItems(accountData.primaryEmail())).
@@ -264,7 +264,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		
 		given().
    				contentType("application/json").
-   		   		get("v1/sailors/find").
+   		   		get("/sailor-api/v1/sailors/find").
    		
    		then().
    				statusCode(405).
@@ -293,7 +293,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
    				contentType("application/json").
    				params(parameters).
-   				get("v1/sailors/findOrCreate").
+   				get("/sailor-api/v1/sailors/findOrCreate").
    		
    		then().
    				statusCode(200).
@@ -325,7 +325,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
 		   		contentType("application/json").
 		   		params(parameters).
-		   		get("v1/sailors/findOrCreate").
+		   		get("/sailor-api/v1/sailors/findOrCreate").
 		   		
 		then().
 				statusCode(200).
@@ -357,7 +357,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		given().
 		   		contentType("application/json").
 		   		params(parameters).
-		   		get("v1/sailors/findOrCreate").
+		   		get("/sailor-api/v1/sailors/findOrCreate").
 		   		
 		then().
 				statusCode(400).

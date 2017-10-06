@@ -28,7 +28,7 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 		
 		String sailorID = testDataHelper.getSailorIDWithPreferences();
 		
-		given().get("/v1/sailors/" + sailorID + "/preferences")
+		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.preferences", not(hasSize(0)))
@@ -44,7 +44,7 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 		
         String sailorID = testDataHelper.getSailorIDWithoutPreferences();
 		
-		given().get("/v1/sailors/" + sailorID + "/preferences")
+		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.preferences",hasSize(0))
@@ -58,7 +58,7 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 		
         String sailorID = testDataHelper.getInvalidSailorID();
 		
-		given().get("/v1/sailors/" + sailorID + "/preferences")
+		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(400)
 	       .assertThat().body("status",equalTo(400))
