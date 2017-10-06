@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.dao.impl.ReferenceSourcesDAOImpl;
 
 
 @RunWith(SpringRunner.class)
@@ -26,8 +25,7 @@ import com.virginvoyages.dao.impl.ReferenceSourcesDAOImpl;
 public class ReferenceSourcesAssemblyImplTest {
 
 
-		@Mock
-	    private ReferenceSourcesDAOImpl referenceSourcesDAOImpl;
+		
 		
 	    @InjectMocks
 	    private ReferenceSourcesAssemblyImpl referenceSourcesAssemblyImpl;
@@ -42,7 +40,7 @@ public class ReferenceSourcesAssemblyImplTest {
 		
 		@Test
 		public void givenValidReferenceSourcesFindReferenceSourcesShouldReturnReferenceSources() {
-			when(referenceSourcesDAOImpl.findReferenceSourceByID(any(String.class))).thenReturn(mockDataHelper.getReferenceSourceByID());
+	//		when(referenceSourcesDAOImpl.findReferenceSourceByID(any(String.class))).thenReturn(mockDataHelper.getReferenceSourceByID());
 			ReferenceSource referenceSource = referenceSourcesAssemblyImpl.findReferenceSourceByID(mockDataHelper.getValidReferenceSourceByID());
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
 	        assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
@@ -51,7 +49,7 @@ public class ReferenceSourcesAssemblyImplTest {
 		
 		@Test
 		public void givenValidReferenceSourcesAddReferenceSourcesShouldReturnReferenceSources() {
-			Mockito.mock(ReferenceSourcesDAOImpl.class);
+	//		Mockito.mock(ReferenceSourcesDAOImpl.class);
 			ReferenceSource referenceSource = mockDataHelper.getDataForCreateReferenceSource();
 			referenceSourcesAssemblyImpl.addReferenceSource(referenceSource);
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));

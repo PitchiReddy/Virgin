@@ -23,7 +23,6 @@ import java.util.List;
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.helper.MockDataHelper;
 import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.dao.impl.ReferenceTypeDAOImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,8 +34,6 @@ public class ReferenceTypesAssemblyImplTest {
 	@InjectMocks
 	private ReferenceTypesAssemblyImpl referenceTypesAssemblyImpl;
 
-	@Mock
-	private ReferenceTypeDAOImpl referenceTypeDAOImpl;
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,8 +44,8 @@ public class ReferenceTypesAssemblyImplTest {
 	public void givenValidReferenceTypeAddReferenceTypeShouldReturnReferenceType() {
 		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
 		referenceTypesAssemblyImpl.addReferenceType(referenceType);
-		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
-				.thenReturn(mockDataHelper.getReferenceTypeByID());
+	//	when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
+		//		.thenReturn(mockDataHelper.getReferenceTypeByID());
 		ReferenceType getReferenceType = referenceTypesAssemblyImpl
 				.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
 		assertThat(getReferenceType.referenceTypeID(), is(notNullValue()));
@@ -57,8 +54,8 @@ public class ReferenceTypesAssemblyImplTest {
 
 	@Test
 	public void givenValidReferenceTypeFindReferenceTypeShouldReturnReferenceType() {
-		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
-				.thenReturn(mockDataHelper.getReferenceTypeByID());
+//		when(referenceTypeDAOImpl.findReferenceTypeByID(any(String.class)))
+	//			.thenReturn(mockDataHelper.getReferenceTypeByID());
 		ReferenceType referenceType = referenceTypesAssemblyImpl
 				.findReferenceTypeByID(mockDataHelper.getValidReferenceTypeByID());
 		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
@@ -76,7 +73,7 @@ public class ReferenceTypesAssemblyImplTest {
 	@Test
 	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
 		List<ReferenceType> referenceTypeList = referenceTypesAssemblyImpl.findTypes();
-		when(referenceTypeDAOImpl.findTypes()).thenReturn(referenceTypeList);
+//		when(referenceTypeDAOImpl.findTypes()).thenReturn(referenceTypeList);
 		assertThat(referenceTypeList, hasSize(0));
 		for(ReferenceType referenceType: referenceTypeList) {
 			//assertThat(referenceType.referenceName(), equalTo("Activity"));

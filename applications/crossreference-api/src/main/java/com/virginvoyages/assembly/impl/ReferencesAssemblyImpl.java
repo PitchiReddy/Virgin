@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
-import com.virginvoyages.dao.ReferencesDAO;
 import com.virginvoyages.data.repositories.ReferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,15 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ReferencesAssemblyImpl implements ReferencesAssembly {
 
 	@Autowired
-	private ReferencesDAO referencesDao;
-	
-	
-	@Autowired
 	private ReferenceRepository referenceRepository;
 	
 
 	/**
-	 * Create reference based on reference. Dummy data being used as of now
+	 * Create reference based on reference. 
 	 * - as data source not finalized
 	 * 
 	 * @param reference
@@ -43,24 +38,22 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void addReference(Reference reference) {
 		log.debug("adding references");
-		//referencesDao.addReference(reference);
 		referenceRepository.save(reference.convertToDataEntity());
 	}
 
 	/**
-	 * Find reference by ID. Dummy data being used as of now - as data source
-	 * not finalized
-	 * 
+	 * Find reference by ID. 
 	 * @param referenceID
 	 *            - input reference.
 	 * @return Reference - returns a reference
 	 */
 	public Reference findReferenceByID(String referenceID) {
-		return	referencesDao.findReferenceByID(referenceID);
+		return null;
+		
 	}
 
 	/**
-	 * Find reference by ID. Dummy data being used as of now - as data source
+	 * Find reference by ID. 
 	 * not finalized
 	 * 
 	 * @param referenceID
@@ -70,11 +63,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void deleteReferenceByID(String referenceID) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		referencesDao.deleteReferenceByID(referenceID);
+		
 		
 	}
 	/**
-	 * Finding reference Type. Dummy data being used as of now - as data source not
+	 * Finding reference Type.
 	 * finalized
 	 * 
 	 * @return List Of References
@@ -82,11 +75,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public References findReferences(Integer page, Integer size) {
 		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
-		return referencesDao.findReferences(page,size);
+		return null;
 	}
 	
 	/**
-	 * Finding reference. Dummy data being used as of now - as data source not
+	 * Finding reference. 
 	 * finalized
 	 * 
 	 * @return List Of Reference
@@ -94,11 +87,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public List<Reference> findReferencesByMaster(String masterID) {
 		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
-		return referencesDao.findReferencesByMaster(masterID);
+		return null;
 	}
 	
 	/**
-	 * Update reference Type by ID. Dummy data being used as of now - as data source
+	 * Update reference Type by ID. 
 	 * not finalized
 	 * 
 	 * @param referenceID
@@ -108,7 +101,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void updateReference(String referenceID, Reference reference) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		referencesDao.updateReference(referenceID, reference);
+		
 	}
 
 }
