@@ -33,7 +33,7 @@ public class RecommendationRequestController {
 			@ApiResponse(code = 200, message = "Successful response", response = Recommendation.class) })
 	@RequestMapping(value = "/recommendationRequest", method = RequestMethod.GET)
 	public ResponseEntity<Recommendation> recommendationRequestGet(
-			@NotNull @ApiParam(value = "the unique key associated with each recommendation when it is issued", required = true) @RequestParam(value = "nbxUniqueKey", required = true) Integer nbxUniqueKey) {
+			@NotNull @ApiParam(value = "the unique key associated with each recommendation when it is issued", required = true) @RequestParam(value = "nbxUniqueKey", required = true) String nbxUniqueKey) {
 		log.debug("Entering recommendationRequestGet");
 		return new ResponseEntity<Recommendation>(HttpStatus.OK);
 	}

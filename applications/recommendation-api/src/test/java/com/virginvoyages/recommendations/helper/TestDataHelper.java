@@ -25,10 +25,10 @@ public class TestDataHelper {
 		return parameters;
 	}
 	
-	public Map<String,Object> getRecommendationResponseDataToSubmit() {
+	public Map<String,String> getRecommendationResponseDataToSubmit() {
 		
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("nbxUniqueKey", 890);
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("nbxUniqueKey", "890");
 		parameters.put("sailorSelection", "991");
 		parameters.put("selectionSentiment", "SELECTED");
 	

@@ -10,13 +10,13 @@ import lombok.experimental.Accessors;
 public class CalenderRecommendation   {
 	
   @JsonProperty("nbxUniqueKey")
-  private Integer nbxUniqueKey = null;
+  private String nbxUniqueKey = null;
 
   @JsonProperty("calenderRecoItem")
   private String calenderRecoItem = null;
 
   @JsonProperty("calenderRecoID")
-  private Integer calenderRecoID = null;
+  private String calenderRecoID = null;
   
 }
 
