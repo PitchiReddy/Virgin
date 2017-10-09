@@ -42,15 +42,15 @@ public class RecommendationResponseAssemblyImplTest {
 	@Test
 	public void givenRecommendationSuccesfullyAddedAddRecommendationResponseShouldReturnBooleanTrue() {
 		
-       Map<String, Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+       Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
        
-       when(recommendationResponseRepository.save((Integer)responseData.get("nbxUniqueKey"), 
-    		   (String)responseData.get("sailorSelection"), 
-    		   (String)responseData.get("selectionSentiment"))).thenReturn(new RecommendationResponse());
+       when(recommendationResponseRepository.save(responseData.get("nbxUniqueKey"), 
+    		   responseData.get("sailorSelection"), 
+    		   responseData.get("selectionSentiment"))).thenReturn(new RecommendationResponse());
        
-       boolean saved = recommendationResponseAssemblyImpl.addRecommendationResponse((Integer)responseData.get("nbxUniqueKey"), 
-    		   (String)responseData.get("sailorSelection"), 
-    		   (String)responseData.get("selectionSentiment"));
+       boolean saved = recommendationResponseAssemblyImpl.addRecommendationResponse(responseData.get("nbxUniqueKey"), 
+    		   responseData.get("sailorSelection"), 
+    		   responseData.get("selectionSentiment"));
 		
        assertThat(saved);
 	}
@@ -58,15 +58,15 @@ public class RecommendationResponseAssemblyImplTest {
 	@Test(expected=DataInsertionException.class)
 	public void givenRecommendationNOTSuccesfullyAddedAddRecommendationResponseShouldThrowDataInsertException() {
 		
-       Map<String, Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+       Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
        
-       when(recommendationResponseRepository.save((Integer)responseData.get("nbxUniqueKey"), 
-    		   (String)responseData.get("sailorSelection"), 
-    		   (String)responseData.get("selectionSentiment"))).thenThrow(new RuntimeException());
+       when(recommendationResponseRepository.save(responseData.get("nbxUniqueKey"), 
+    		   responseData.get("sailorSelection"), 
+    		   responseData.get("selectionSentiment"))).thenThrow(new RuntimeException());
        
-      recommendationResponseAssemblyImpl.addRecommendationResponse((Integer)responseData.get("nbxUniqueKey"), 
-    		   (String)responseData.get("sailorSelection"), 
-    		   (String)responseData.get("selectionSentiment"));
+      recommendationResponseAssemblyImpl.addRecommendationResponse(responseData.get("nbxUniqueKey"), 
+    		   responseData.get("sailorSelection"), 
+    		   responseData.get("selectionSentiment"));
 		
        
 	}

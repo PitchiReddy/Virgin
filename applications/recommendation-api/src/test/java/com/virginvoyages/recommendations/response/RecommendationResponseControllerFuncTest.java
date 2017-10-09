@@ -23,7 +23,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	@Test
 	public void givenValidRecommendationIdRecommendationResponsePutShouldAddRecommendationResponse() {
 		
-		Map<String, Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+		Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("nbxUniqueKey", responseData.get("nbxUniqueKey"));
@@ -44,9 +44,9 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	@Test
 	public void givenSelectionSentimentNotPresentNotPresentInParamShouldThrowException () {
 		
-		Map<String,Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+		Map<String,String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
-		Map<String, Object> parameters = new HashMap<String, Object>();
+		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("nbxUniqueKey", responseData.get("nbxUniqueKey"));
 		parameters.put("sailorSelection", responseData.get("sailorSelection"));
 		
@@ -64,9 +64,9 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	@Test
 	public void givenNbxUniqueKeyNotPresentInParamShouldThrowException () {
 		
-		Map<String,Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+		Map<String,String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
-		Map<String, Object> parameters = new HashMap<String, Object>();
+		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("sailorSelection", responseData.get("sailorSelection"));
 		parameters.put("selectionSentiment", responseData.get("selectionSentiment"));
 		
@@ -86,7 +86,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	@Test
 	public void givenSailorSelectionNotPresentInParamShouldThrowException () {
 		
-		Map<String,Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+		Map<String,String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("nbxUniqueKey", responseData.get("nbxUniqueKey"));
