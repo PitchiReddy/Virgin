@@ -21,7 +21,7 @@ public class ReferenceSourceData {
 	@Column(name="REFERENCE_SOURCE_ID")
 	private Long referenceSourceID = null;
 
-	@Column(name="REFERENCE_SOURCE", nullable=false)
+	@Column(name="REFERENCE_SOURCE",nullable = false)
 	private String referenceSourceName = null;
 
 	@Column(name="IS_INACTIVE")
@@ -35,5 +35,5 @@ public class ReferenceSourceData {
 				.inActive(this.inActive());
 			
 	}
-
+	
 }

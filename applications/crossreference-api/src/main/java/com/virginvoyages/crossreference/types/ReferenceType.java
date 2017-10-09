@@ -25,10 +25,18 @@ public class ReferenceType   {
   public ReferenceTypeData convertToDataEntity() {
 	  return new ReferenceTypeData()
 			  .referenceType(this.referenceType())
-			  //.referenceTypeID(Long.parseLong(this.referenceTypeID()))
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())));
+			  .referenceTypeID(Long.parseLong(this.referenceTypeID()))
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())).referenceSourceName(this.referenceType()));
 			  
   }
+
+  public ReferenceTypeData convertToUpdateDataEntity(String referenceTypeID) {
+	  return new ReferenceTypeData()
+			  .referenceTypeID(Long.parseLong(referenceTypeID))
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())).referenceSourceName(this.referenceType()))
+			  .referenceType(this.referenceType());
+			  
+}
 
 }
 

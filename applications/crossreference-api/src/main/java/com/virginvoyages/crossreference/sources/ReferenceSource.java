@@ -26,6 +26,13 @@ public class ReferenceSource   {
 			  .referenceSourceName(this.referenceSourceName())
 			  .inActive(this.inActive());
   }
+  
+	public ReferenceSourceData convertToUpdateDataEntity(String referenceSourceID) {
+		  return new ReferenceSourceData()
+				  .referenceSourceID(Long.parseLong(referenceSourceID))
+				  .referenceSourceName(this.referenceSourceName())
+				  .inActive(this.inActive());
+	  } 
 
  }
 

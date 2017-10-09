@@ -76,7 +76,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourceRepository.save(referenceSource.convertToDataEntity());
+		referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSourceID));
 	}
 
 	/**

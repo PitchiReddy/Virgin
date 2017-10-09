@@ -1,15 +1,14 @@
 package com.virginvoyages.crossreference.helper;
 
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
 
 /**
  * Helper class for testcases
+ * 
  * @author rpraveen
  *
  */
@@ -18,39 +17,23 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().referenceSourceID("RS1")
-				.referenceSourceName("Seaware");
+		return new ReferenceSource().referenceSourceID("RS1").referenceSourceName("Seaware");
 	}
 
 	public ReferenceType getDataForCreateReferenceType() {
 
-		return new ReferenceType().referenceTypeID("RT5")
-				.referenceType("Reservation");
+		return new ReferenceType().referenceTypeID("RT5").referenceType("Reservation");
 
 	}
 
 	public Reference getDataForCreateReference() {
 
-		return new Reference()
-				.referenceID("R30")
-				.masterID("M30").nativeSourceID("NSID30");
+		return new Reference().referenceID("R30").masterID("M30").nativeSourceID("NSID30");
 	}
 
-	public Audited createAuditDataForCreate() {
-		Audited audited = new Audited();
-		audited.createDate(LocalDate.now());
-		audited.createUser("siva1");
-		audited.updateDate(LocalDate.now());
-		audited.updateUser("siva2");
-
-		return audited;
-
-	}
-	
-	public String createReferenceSourceInJson (String referenceSourceID, String referenceSourceName, boolean inActive) {
-        return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " +
-                            "\"referenceSourceName\":\"" + referenceSourceName + "\", "+
-        					 "\"inActive\":\"" + inActive + "\"}";
+	public String createReferenceSourceInJson(String referenceSourceID, String referenceSourceName, boolean inActive) {
+		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSourceName\":\""
+				+ referenceSourceName + "\", " + "\"inActive\":\"" + inActive + "\"}";
 	}
 
 }
