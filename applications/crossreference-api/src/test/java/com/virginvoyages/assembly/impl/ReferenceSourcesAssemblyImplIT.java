@@ -35,7 +35,7 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.addReferenceSource(referenceSource);
 		assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
 		assertThat(referenceSource.referenceSourceID(), equalTo("RS1"));
-		assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+		assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.addReferenceSource(referenceSource);
 		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(referenceSource.referenceSourceID());
 		assertThat(findReferenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(findReferenceSource.referenceSourceName(), equalTo("Seaware"));
+		assertThat(findReferenceSource.referenceSource(), equalTo("Seaware"));
 	}
 	
 	@Test
@@ -57,9 +57,9 @@ public class ReferenceSourcesAssemblyImplIT {
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSource.referenceSourceName("Updated Seaware");
-		referenceSourcesAssembly.updateReferenceSource(referenceSource.referenceSourceID(), referenceSource);
-		assertThat(referenceSource.referenceSourceName(), equalTo("Updated Seaware"));
+		referenceSource.referenceSource("Updated Seaware");
+		referenceSourcesAssembly.updateReferenceSource(referenceSource);
+		assertThat(referenceSource.referenceSource(), equalTo("Updated Seaware"));
 	}
 	
 	@Test
@@ -68,7 +68,7 @@ public class ReferenceSourcesAssemblyImplIT {
 		List<ReferenceSource> referenceSourceList =referenceSourcesAssembly.findSources();
 		assertThat(referenceSourceList, hasSize(5));
 		for(ReferenceSource referenceSource: referenceSourceList) {
-			assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+			assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
 			referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
 		}
 		

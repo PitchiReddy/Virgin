@@ -22,7 +22,7 @@ public class MockDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 		return new ReferenceSource().referenceSourceID("RS1")
-				.referenceSourceName("Seaware");
+				.referenceSource("Seaware");
 	}
 
 	public Audited createAuditDataForCreate() {
@@ -40,9 +40,9 @@ public class MockDataHelper {
 		return "RS1";
 	}
 
-	public String createReferenceSourceInJson(String referenceSourceID, String referenceSourceName, boolean inActive) {
-		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSourceName\":\""
-				+ referenceSourceName + "\", " + "\"inActive\":\"" + inActive + "\"}";
+	public String createReferenceSourceInJson(String referenceSourceID, String referenceSource, boolean inActive) {
+		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSource\":\""
+				+ referenceSource + "\", " + "\"inActive\":\"" + inActive + "\"}";
 	}
 
 	public ReferenceType getReferenceTypeByID() {
@@ -74,12 +74,12 @@ public class MockDataHelper {
 
 		return new Reference()
 				.referenceID("R30")
-				.masterID("M30").nativeSourceID("NSID30");
+				.masterID("M30").nativeSourceIDValue("NSID30");
 	}
 	
-	public String createReferencesInJson(String referenceID, String masterID, String nativeSourceID) {
+	public String createReferencesInJson(String referenceID, String masterID, String nativeSourceIDValue) {
 		return "{ \"referenceID\": \"" + referenceID + "\", " + "\"masterID\":\"" + masterID + "\", "
-				+ "\"nativeSourceID\":\"" + nativeSourceID + "\"}";
+				+ "\"nativeSourceIDValue\":\"" + nativeSourceIDValue + "\"}";
 
 	}
 

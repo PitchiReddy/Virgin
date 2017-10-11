@@ -25,8 +25,8 @@ public class ReferenceData {
 	@Column(name="REFERENCE_ID")
 	private Long referenceID;
 
-	@Column(name="NATIVE_SOURCE_ID")
-	private String nativeSourceID;
+	@Column(name="NATIVE_SOURCE_ID_VALUE")
+	private String nativeSourceIDValue;
 	
 	@Column(name="MASTER_ID")
 	private String masterID;
@@ -38,7 +38,7 @@ public class ReferenceData {
 	public Reference convertToBusinessEntity() {
 		return new Reference()
 				.referenceID(String.valueOf(this.referenceID()))
-				.nativeSourceID(String.valueOf(this.nativeSourceID()))
+				.nativeSourceIDValue(String.valueOf(this.nativeSourceIDValue()))
 				.masterID(String.valueOf(this.masterID()))
 				.referenceTypeID(String.valueOf(this.referenceTypeData()));
 				

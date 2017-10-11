@@ -59,7 +59,7 @@ public class ReferenceSourcesControllerTest {
 				 get("/sources/" + referenceSource.referenceSourceID())
 				.contentType("application/json"))
 				.andExpect(jsonPath("referenceSourceID",equalTo(referenceSource.referenceSourceID())))
-				.andExpect(jsonPath("referenceSourceName",equalTo(referenceSource.referenceSourceName())))
+				.andExpect(jsonPath("referenceSource",equalTo(referenceSource.referenceSource())))
 				.andExpect(jsonPath("inActive",equalTo(referenceSource.inActive())))
 		 		.andExpect(status().isOk());
 	}		
@@ -87,7 +87,7 @@ public class ReferenceSourcesControllerTest {
 		mvc.perform(
 				put("/sources/"+ referenceSource.referenceSourceID())
 				.param("auditData", referenceSource.referenceSourceID())
-				.param("referenceSourceName", "Updated Source Name")
+				.param("referenceSource", "Updated Source Name")
 				.contentType("application/json")
 		        .content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
 		        .andExpect(status().isOk());

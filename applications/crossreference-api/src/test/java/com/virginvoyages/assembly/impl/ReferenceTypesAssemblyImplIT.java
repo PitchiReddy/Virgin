@@ -60,7 +60,7 @@ public class ReferenceTypesAssemblyImplIT {
 	public void givenValidReferenceTypeUpdateReferenceTypeShouldUpdateReferenceType() {
 		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
 		//referenceType.referenceName("siva_shankar");
-		referenceTypesAssembly.updateReferenceType(referenceType.referenceTypeID(), referenceType);
+		referenceTypesAssembly.updateReferenceType(referenceType);
 		//assertThat(referenceType.referenceName(), equalTo("siva_shankar"));
 	}
 	

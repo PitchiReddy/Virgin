@@ -46,7 +46,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(Long.valueOf(referenceSourceID));
+		ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
 		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
 	}
 
@@ -60,8 +60,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		long convertReferenceSourceID = Long.parseLong(referenceSourceID);
-		referenceSourceRepository.delete(convertReferenceSourceID);
+		referenceSourceRepository.delete(referenceSourceID);
 	}
 
 	/**
@@ -74,9 +73,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	 * @return
 	 */
 	@Override
-	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
+	public void updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSourceID));
+		referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
 	}
 
 	/**

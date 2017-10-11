@@ -38,7 +38,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo(referenceSource.referenceSourceName())).
+				assertThat().body("referenceSource", equalTo(referenceSource.referenceSource())).
 				log().
 				all();
 		   
@@ -97,7 +97,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
-		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
+		parameters.put("referenceSource", referenceSource.referenceSource());
 		parameters.put("inActive", referenceSource.inActive());
 		
 		//create reference
@@ -118,7 +118,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo(referenceSource.referenceSourceName())).
+				assertThat().body("referenceSource", equalTo(referenceSource.referenceSource())).
 				log().
 				all();
 		   
@@ -136,7 +136,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		//parameters.put("auditData", referenceSource.auditData());
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
-		parameters.put("referenceSourceName", "Updated Source Name");
+		parameters.put("referenceSource", "Updated Source Name");
 		parameters.put("inActive", referenceSource.inActive());
 		
 		given()
@@ -156,7 +156,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
         then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo("Updated Source Name")).
+				assertThat().body("referenceSource", equalTo("Updated Source Name")).
 				log().
 				all();
 			

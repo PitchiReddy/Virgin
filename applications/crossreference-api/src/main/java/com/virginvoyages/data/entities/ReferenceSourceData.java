@@ -1,12 +1,17 @@
 package com.virginvoyages.data.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import com.virginvoyages.crossreference.sources.ReferenceSource;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,26 +19,47 @@ import lombok.experimental.Accessors;
 @Table(name = "REFERENCE_SOURCE")
 @Data
 @Accessors(fluent = true, chain = true)
-public class ReferenceSourceData {
+public class ReferenceSourceData implements Serializable {
 
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="REFERENCE_SOURCE_ID")
-	private Long referenceSourceID = null;
+	private static final long serialVersionUID = 1L;
+	
+	@Id 
+	@GeneratedValue(generator="system-uuid")
+	@GenericGenerator(name="system-uuid",strategy = "uuid")
+    @Column(name="REFERENCE_SOURCE_ID")
+	private String referenceSourceID = null;
 
 	@Column(name="REFERENCE_SOURCE",nullable = false)
-	private String referenceSourceName = null;
+	private String referenceSource = null;
 
-	@Column(name="IS_INACTIVE")
-	private Boolean inActive = null;
+	@Column(name="INACTIVE")
+	private Boolean inActive = false;
 
 	
 	public ReferenceSource convertToBusinessEntity() {
 		return new ReferenceSource()
-				.referenceSourceName(this.referenceSourceName())
+				.referenceSource(this.referenceSource())
 				.referenceSourceID(String.valueOf(this.referenceSourceID()))
 				.inActive(this.inActive());
 			
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ReferenceSourceData)) {
+			return false;
+		}
+		ReferenceSourceData other = (ReferenceSourceData) obj;
+		return referenceSourceID().equals(other.referenceSourceID());
+	}
+	
+	@Override
+	public int hashCode() {
+		return referenceSourceID().hashCode();
 	}
 	
 }

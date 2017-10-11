@@ -48,7 +48,7 @@ public class ReferencesControllerTest {
 				get("/references/" + reference.referenceID())
 				)
 				.andExpect(jsonPath("referenceID",equalTo(reference.referenceID())))
-				.andExpect(jsonPath("nativeSourceID",equalTo(reference.nativeSourceID())))
+				.andExpect(jsonPath("nativeSourceIDValue",equalTo(reference.nativeSourceIDValue())))
 				.andExpect(jsonPath("masterID",equalTo(reference.masterID())))
 		 		.andExpect(status().isOk())
 		 		.andReturn();

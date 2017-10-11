@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.data.entities.ReferenceSourceData;
 
 /**
  * Helper class for testcases
@@ -17,7 +18,7 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().referenceSourceID("RS1").referenceSourceName("Seaware");
+		return new ReferenceSource().referenceSourceID("RS1").referenceSource("Seaware");
 	}
 
 	public ReferenceType getDataForCreateReferenceType() {
@@ -28,12 +29,20 @@ public class TestDataHelper {
 
 	public Reference getDataForCreateReference() {
 
-		return new Reference().referenceID("R30").masterID("M30").nativeSourceID("NSID30");
+		return new Reference().referenceID("R30").masterID("M30").nativeSourceIDValue("NSID30");
 	}
 
-	public String createReferenceSourceInJson(String referenceSourceID, String referenceSourceName, boolean inActive) {
-		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSourceName\":\""
-				+ referenceSourceName + "\", " + "\"inActive\":\"" + inActive + "\"}";
+	public String createReferenceSourceInJson(String referenceSourceID, String referenceSource, boolean inActive) {
+		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSource\":\""
+				+ referenceSource + "\", " + "\"inActive\":\"" + inActive + "\"}";
+	}
+	
+	public ReferenceSourceData getReferenceSourceDataEntityForCreate() {
+		return new ReferenceSourceData().referenceSource("Seaware_4_ID").referenceSourceID("ignore").inActive(false);
+	}
+	
+	public ReferenceSourceData getReferenceSourceDataEntityForUpdate() {
+		return new ReferenceSourceData().referenceSource("Seaware_ID_Updated").referenceSourceID("ignore").inActive(false);
 	}
 
 }

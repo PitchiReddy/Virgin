@@ -17,8 +17,8 @@ public class Reference   {
   @JsonProperty("referenceID")
   private String referenceID = null;
 
-  @JsonProperty("nativeSourceID")
-  private String nativeSourceID = null;
+  @JsonProperty("nativeSourceIDValue")
+  private String nativeSourceIDValue = null;
 
   @JsonProperty("masterID")
   private String masterID;
@@ -28,9 +28,9 @@ public class Reference   {
   
   public ReferenceData convertToDataEntity() {
 	  return new ReferenceData()
-			  .nativeSourceID(this.nativeSourceID())
+			  .nativeSourceIDValue(this.nativeSourceIDValue())
 			  .masterID(this.masterID())
-			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(Long.parseLong(this.referenceTypeID())));
+			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
 			  
   }
 

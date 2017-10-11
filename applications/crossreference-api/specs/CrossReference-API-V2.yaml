@@ -1,0 +1,653 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: Cross Reference API
+  description: Cross reference is a service that manages the relationships between SORs for known and unknown Sailors.  Each SOR has its own view of the Sailor (Known or Unknown).  The cross reference service will host these relationships and expose them to SORs.
+  
+host: virginvoyages.crossreference.api
+basePath: /v1
+schemes:
+  - http
+  
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /references:
+    get:
+      tags:
+        - Reference
+      description: Gets `Reference` objects.
+      operationId: findReferences
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+          required: true
+        - name: size
+          in: query
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/References'
+
+    post:
+      tags:
+        - Reference
+      description: Add a new `Reference`.
+      operationId: addReference
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Reference object that needs to be created
+          required: true
+          schema:
+            $ref: "#/definitions/Reference"
+      responses:
+        405:
+          description: Invalid input
+        201:
+          description: Created
+          
+    put:
+      tags:
+        - Reference
+      description: Update a `Reference` object.
+      operationId: updateReference
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Reference object that needs to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/Reference"
+      responses:
+        "405":
+          description: Validation exception
+        "404":
+          description: Reference not found
+        "400":
+          description: Invalid ID supplied
+
+  /references/{referenceID}:
+    parameters:
+      - $ref: '#/parameters/referenceID'
+    
+    delete:
+      tags:
+        - Reference
+      description: Remove the Reference
+      operationId: deleteReferenceByID
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Reference not found
+
+    get:
+      tags:
+        - Reference
+      summary: Find reference by ID
+      description: Returns a reference for a specified reference identity.  This identity is a univeral reference identity.
+      operationId: findReferenceByID
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: path
+          name: referenceID
+          description: ID of Reference that needs to be fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Reference'
+
+  /sources:
+    get:
+      tags:
+        - ReferenceSource
+      description: Gets `Reference Source` objects.
+      operationId: findSources
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+          required: true
+        - name: size
+          in: query
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ReferenceSource'
+
+    post:
+      tags:
+        - ReferenceSource
+      description: Add a new `ReferenceSource`.
+      operationId: addReferenceSource
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: ReferenceSource object that needs to be created
+          required: true
+          schema:
+            $ref: "#/definitions/ReferenceSource"
+      responses:
+        405:
+          description: Invalid input
+        201:
+          description: Created
+    
+    put:
+      tags:
+        - ReferenceSource
+      description: Update a `ReferenceSource` object.
+      operationId: updateReferenceSource
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: ReferenceSource object that needs to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/ReferenceSource"
+      responses:
+        405:
+          description: Invalid input
+        201:
+          description: Created
+
+  /sources/{referenceSourceID}:
+    parameters:
+      - $ref: '#/parameters/referenceSourceID'
+    delete:
+      tags:
+        - ReferenceSource
+      description: Remove the ReferenceSource
+      operationId: deleteReferenceSourceByID
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Reference not found
+
+    get:
+      tags:
+        - ReferenceSource
+      summary: Find reference source by ID
+      description: Returns a reference source for a specified reference source identity.  This identity is a univeral reference identity.
+      operationId: getReferenceSourceByID
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReferenceSource'
+
+  /types:
+    get:
+      tags:
+        - ReferenceType
+      description: Gets `ReferenceType` objects.
+      operationId: findTypes
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: page
+          in: query
+          type: integer
+          required: true
+        - name: size
+          in: query
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ReferenceType'
+
+    post:
+      tags:
+        - ReferenceType
+      description: Add a new `ReferenceType`.
+      operationId: addReferenceType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: Reference Type object that needs to be created
+          required: true
+          schema:
+            $ref: "#/definitions/ReferenceType"
+      responses:
+        405:
+          description: Invalid input
+        201:
+          description: Created
+    
+    put:
+      tags:
+        - ReferenceType
+      description: Update a `ReferenceType` object.
+      operationId: updateReferenceType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: body
+          description: ReferenceType object that needs to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/ReferenceType"
+      responses:
+        "405":
+          description: Validation exception
+        "404":
+          description: ReferenceType not found
+        "400":
+          description: Invalid ID supplied
+
+  /types/{referenceTypeID}:
+    parameters:
+      - $ref: '#/parameters/referenceTypeID'
+    
+    delete:
+      tags:
+        - ReferenceType
+      description: Remove the ReferenceType
+      operationId: deleteReferenceTypeByID
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: ReferenceType not found
+
+    get:
+      tags:
+        - ReferenceType
+      summary: Find reference type by ID
+      description: Returns a reference type for a specified reference type identity.  This identity is a univeral reference identity.
+      operationId: findReferenceTypeByID
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReferenceType'
+
+  /references/search/findBySource:
+    post:
+      tags:
+        - Reference
+      description: Returns one or more references
+      operationId: findReferencesSource
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: reference
+          description: Parameters to find reference by source.
+          schema:
+            type: object
+            required:
+              - nativeSourceIDValue
+              - sourceID
+              - typeID
+            properties:
+              nativeSourceIDValue:
+                type: string
+              sourceID:
+                type: string
+              typeID:
+                type: string
+              targetSourceID:
+                type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+              
+  /references/search/findBySourceAndTargetSource:
+    post:
+      tags:
+        - Reference
+      description: Returns one or more references
+      operationId: findReferencesSourceAndTargetSource
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - in: body
+          name: reference
+          description: Parameters to find reference by source.
+          schema:
+            type: object
+            required:
+              - nativeSourceIDValue
+              - sourceID
+              - typeID
+              - targetSourceID
+            properties:
+              nativeSourceIDValue:
+                type: string
+              sourceID:
+                type: string
+              typeID:
+                type: string
+              targetSourceID:
+                type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+
+  /references/search/findByMaster:
+    get:
+      tags:
+        - Reference
+      description: Returns one or more references
+      operationId: findReferencesMaster
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: masterID
+          in: query
+          description: The master ID to search with.
+          required: true
+          type: string
+        - name: targetSourceID
+          in: query
+          description: The optional target source identifier.  Supplying this narrows the results to return only the matching target type.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+
+  /references/merge/mergeBySource:
+    post:
+      tags:
+        - Reference
+      description: Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.
+      operationId: mergeReferencesSource
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: sourceID
+          in: query
+          description: The source ID of the source.
+          required: true
+          type: string
+        - name: fromNativeID
+          in: query
+          description: The native source ID to merge from.
+          required: true
+          type: string
+        - name: toNativeID
+          in: query
+          description: The native source ID to merge towards.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+
+  /references/merge/mergeByMaster:
+    post:
+      tags:
+        - Reference
+      description: Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.
+      operationId: mergeReferencesMaster
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+        - name: fromMasterID
+          in: query
+          description: The master ID to merge from.
+          required: true
+          type: string
+        - name: toMasterID
+          in: query
+          description: The master ID to merge towards.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  referenceID:
+    name: referenceID
+    in: path
+    description: The reference identifier
+    type: string
+    required: true
+  referenceSourceID:
+    name: referenceSourceID
+    in: path
+    description: The reference source identifier
+    type: string
+    required: true
+  referenceTypeID:
+    name: referenceTypeID
+    in: path
+    description: The reference type identifier
+    type: string
+    required: true
+  correlationID:
+    name: X-Correlation-ID
+    in: header
+    description: Correlation ID across the enterprise application components.
+    required: false
+    type: string
+  clientID:
+    name: X-VV-Client-ID
+    in: header
+    description: Application identifier of client.
+    required: false
+    type: string
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+
+  References:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      page:
+        $ref: '#/definitions/Page'
+      _embedded:
+        type: object
+        properties:
+          references:
+            type: array
+            items:
+              $ref: '#/definitions/Reference'
+
+  ReferenceSource:
+    description: Entity that represents the System of Record (SOR)
+    allOf:
+      - type: object
+        properties:
+          referenceSourceID:
+            type: string
+          referenceSource:
+            type: string
+            description: Name of the SOR
+          inActive:
+            type: boolean
+            description: Whether this SOR is active or not. Find operations will not bring back data for inactive relationships.
+
+  ReferenceType:
+    description: Entity that represents the type and name of the entity for the referenced SOR
+    allOf:
+      - type: object
+        properties:
+          referenceTypeID:
+            type: string
+          referenceType:
+            type: string
+            description: Type of the Entity. For example TravelWith, Group etc.
+          referenceSourceID:
+            type: string
+            description: Reference source associate with this EntityType.
+
+  Reference:
+    description: Core entity to store the cross references for the enterprise.
+    allOf:
+      - type: object
+        properties:
+          referenceType:
+            $ref: '#/definitions/ReferenceType'
+          referenceID:
+            type: string
+          nativeSourceIDValue:
+            type: string
+            description: Native SOR identifier that is associated with the reference source.
+          masterID:
+            type: string
+            description: The identifier that binds the cross references together for the known or unknown Sailor. Not all relationships will be known at first so this is not a required attribute. Business events AND/OR SORs that are aware that relationships need to referenced together will update the MasterID and link the records together.
+          
+
+  Page:
+    type: object
+    properties:
+      size:
+        type: integer
+      totalElements:
+        type: integer
+      totalPages:
+        type: integer
+      number:
+        type: integer
+
+  Link:
+    type: object
+    properties:
+      href:
+        type: string
+      rel:
+        type: string
+      templated:
+        type: boolean
+        
+  Links:
+    type: object
+    properties:
+      first:
+        $ref: '#/definitions/Link'
+      prev:
+        $ref: '#/definitions/Link'
+      self:
+        $ref: '#/definitions/Link'
+      next:
+        $ref: '#/definitions/Link'
+      last:
+        $ref: '#/definitions/Link'
+      profile:
+        $ref: '#/definitions/Link'

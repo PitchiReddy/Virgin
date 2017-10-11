@@ -75,9 +75,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 * @return
 	 */
 	@Override
-	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
+	public void updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceTypeID));
+		referenceTypeRepository.save(referenceType.convertToDataEntity());
 	}
 
 	/**

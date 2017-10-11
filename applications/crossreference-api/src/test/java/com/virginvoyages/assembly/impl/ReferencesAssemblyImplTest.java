@@ -59,7 +59,7 @@ public class ReferencesAssemblyImplTest {
 	public void givenValidReferenceUpdateReferenceShouldReturnUpdatedReferences() {
 		Reference reference = mockDataHelper.getDataForCreateReference();
 		reference.masterID("Updated_MasterId");
-		referencesAssemblyImpl.updateReference(reference.referenceID(), reference);
+		referencesAssemblyImpl.updateReference(reference);
 		assertThat(reference.referenceID(), is(notNullValue()));
 		assertThat(reference.masterID(), equalTo("Updated_MasterId"));
 		

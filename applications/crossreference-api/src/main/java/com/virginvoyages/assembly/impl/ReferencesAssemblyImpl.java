@@ -103,7 +103,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return 
 	 */
 	@Override
-	public void updateReference(String referenceID, Reference reference) {
+	public void updateReference(Reference reference) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
 		
 	}

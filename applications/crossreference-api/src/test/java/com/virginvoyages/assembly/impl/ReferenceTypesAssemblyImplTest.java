@@ -66,7 +66,7 @@ public class ReferenceTypesAssemblyImplTest {
 	public void givenValidReferenceTypeUpdateReferenceTypeShouldReturnUpdatedReferenceType() {
 		ReferenceType referenceType = mockDataHelper.getDataForCreateReferenceType();
 		//referenceType.referenceName("Updated_referenceName");
-		referenceTypesAssemblyImpl.updateReferenceType(referenceType.referenceTypeID(), referenceType);
+		referenceTypesAssemblyImpl.updateReferenceType(referenceType);
 		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
 		//assertThat(referenceType.referenceName(), equalTo("Updated_referenceName"));
 	}

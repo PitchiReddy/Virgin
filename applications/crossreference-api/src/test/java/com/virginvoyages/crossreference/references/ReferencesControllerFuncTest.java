@@ -36,7 +36,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				assertThat().statusCode(200).
 				assertThat().body("referenceID", equalTo(reference.referenceID())).
 				assertThat().body("masterID", equalTo(reference.masterID())).
-				assertThat().body("nativeSourceID", equalTo(reference.nativeSourceID())).
+				assertThat().body("nativeSourceIDValue", equalTo(reference.nativeSourceIDValue())).
 				log().
 				all();
 
@@ -79,7 +79,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("masterID", reference.masterID());
 		parameters.put("referenceID", reference.referenceID());
-		parameters.put("nativeSourceID", reference.nativeSourceID());
+		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 	
 		given()
 				.contentType("application/json")
@@ -113,7 +113,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Update nativeSourceID&masterID
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceID", reference.referenceID());
-		parameters.put("nativeSourceID", "Updated native Source ID");
+		parameters.put("nativeSourceIDValue", "Updated native Source ID");
 		parameters.put("masterID", "M31");
 		
 		given()
@@ -133,7 +133,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
         then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceID", equalTo(reference.referenceID())).
-				assertThat().body("nativeSourceID", equalTo("Updated native Source ID")).
+				assertThat().body("nativeSourceIDValue", equalTo("Updated native Source ID")).
 				assertThat().body("masterID", equalTo("M31")).
 				log().
 				all();
@@ -165,7 +165,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			    
 	}
 	
-	@Test
+	/*@Test
 	public void givenValidNativeSourceIDAndsourceIDExistWithMatchingParamsFindReferencesShouldReturnAllMatchingListOFReferences() {
 		
 		//Create test reference
@@ -173,11 +173,11 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
-		parameters.put("nativeSourceID", reference.nativeSourceID());
+		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		given()
 				.contentType("application/json")
 				.params(parameters)
-				.get("/xref-api/v1/references/search/findBySource?"+"nativeSourceID="+reference.nativeSourceID()+"&"+"sourceID="+"123")
+				.get("/xref-api/v1/references/search/findBySource?"+"nativeSourceID="+reference.nativeSourceIDValue()+"&"+"sourceID="+"123")
 				
 		.then()
 				.assertThat().statusCode(200)
@@ -186,7 +186,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//cleanup
 		deleteTestReference(reference.referenceID());	
 			    
-	}
+	}*/
 	
 	@Test
 	public void givenValidReferencesExistFindReferencesShouldReturnListOFReferences() {
@@ -202,7 +202,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			    .assertThat().statusCode(200)
 			    .assertThat().body("_embedded.references", not(hasSize(0)))
 			    .assertThat().body("_embedded.references.masterID", hasItems(reference.masterID()))
-			    .assertThat().body("_embedded.references.nativeSourceID", hasItems(reference.nativeSourceID()))
+			    .assertThat().body("_embedded.references.nativeSourceIDValue", hasItems(reference.nativeSourceIDValue()))
 			    .assertThat().body("_embedded.references.referenceID", hasItems(reference.referenceID()))
 			    .log()
 				.all();

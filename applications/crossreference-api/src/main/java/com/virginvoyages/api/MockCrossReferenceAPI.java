@@ -99,7 +99,7 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceID().equals(nativeSourceID))
+                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
                 .collect(Collectors.toList());
 	}
 	
@@ -107,7 +107,7 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceID().equals(nativeSourceID))
+                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
                              .collect(Collectors.toList());
 	}
 	
@@ -172,7 +172,7 @@ public class MockCrossReferenceAPI {
 	private ReferenceSource createReferenceSource() {
 		return new ReferenceSource()
 				.referenceSourceID("RS1")
-				.referenceSourceName("Seaware");
+				.referenceSource("Seaware");
 	}
 	
 	private ReferenceType createReferenceType() {
@@ -184,11 +184,9 @@ public class MockCrossReferenceAPI {
 	
 	private Reference createReference() {
 		return new Reference()
-				
-				
 				.referenceID("R1")
 				.masterID("M1")
-				.nativeSourceID("NSID1");
+				.nativeSourceIDValue("NSID1");
 	}
 	
 	private Audited createAuditDataForCreate() {

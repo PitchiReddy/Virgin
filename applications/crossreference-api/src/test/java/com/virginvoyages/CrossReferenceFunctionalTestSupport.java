@@ -28,7 +28,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
-		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
+		parameters.put("referenceSource", referenceSource.referenceSource());
 		parameters.put("inActive", referenceSource.inActive());
 
 		given()
@@ -90,7 +90,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
-		parameters.put("nativeSourceID", reference.nativeSourceID());
+		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		
 		// create references 
 		given()

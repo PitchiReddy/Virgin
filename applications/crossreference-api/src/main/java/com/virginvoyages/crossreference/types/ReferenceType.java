@@ -23,20 +23,22 @@ public class ReferenceType   {
   private String referenceSourceID = null;
   
   public ReferenceTypeData convertToDataEntity() {
+	  
 	  return new ReferenceTypeData()
 			  .referenceType(this.referenceType())
-			  .referenceTypeID(Long.parseLong(this.referenceTypeID()))
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())).referenceSourceName(this.referenceType()));
-			  
+			  .referenceTypeID(this.referenceTypeID())
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()));
+					 			  
   }
 
-  public ReferenceTypeData convertToUpdateDataEntity(String referenceTypeID) {
+ /* public ReferenceTypeData convertToUpdateDataEntity(String referenceTypeID) {
 	  return new ReferenceTypeData()
 			  .referenceTypeID(Long.parseLong(referenceTypeID))
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(Long.parseLong(this.referenceSourceID())).referenceSourceName(this.referenceType()))
-			  .referenceType(this.referenceType());
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()));
+	  				//.referenceSourceName(this.referenceType()))
+			  //.referenceType(this.referenceType());
 			  
-}
-
+  }
+*/
 }
 

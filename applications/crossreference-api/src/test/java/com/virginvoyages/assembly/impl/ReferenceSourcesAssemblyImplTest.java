@@ -39,7 +39,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	//		when(referenceSourcesDAOImpl.findReferenceSourceByID(any(String.class))).thenReturn(mockDataHelper.getReferenceSourceByID());
 			ReferenceSource referenceSource = referenceSourcesAssemblyImpl.findReferenceSourceByID(mockDataHelper.getValidReferenceSourceByID());
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-	        assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+	        assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
 		}
 
 		
@@ -49,16 +49,16 @@ public class ReferenceSourcesAssemblyImplTest {
 			ReferenceSource referenceSource = mockDataHelper.getDataForCreateReferenceSource();
 			referenceSourcesAssemblyImpl.addReferenceSource(referenceSource);
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-	        assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+	        assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
 		}
 		
 		@Test
 		public void givenValidReferenceSourcesUpdateReferenceSourcesShouldReturnUpdatedReferenceSources() {
 			ReferenceSource referenceSource = mockDataHelper.getDataForCreateReferenceSource();
-			referenceSource.referenceSourceName("Updated Seaware");
-			referenceSourcesAssemblyImpl.updateReferenceSource(referenceSource.referenceSourceID(), referenceSource);
+			referenceSource.referenceSource("Updated Seaware");
+			referenceSourcesAssemblyImpl.updateReferenceSource(referenceSource);
 			assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-	        assertThat(referenceSource.referenceSourceName(), equalTo("Updated Seaware"));
+	        assertThat(referenceSource.referenceSource(), equalTo("Updated Seaware"));
 		}
 
 }

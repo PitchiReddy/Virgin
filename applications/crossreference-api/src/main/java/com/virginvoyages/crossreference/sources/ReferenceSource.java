@@ -15,22 +15,23 @@ public class ReferenceSource   {
   @JsonProperty("referenceSourceID")
   private String referenceSourceID = null;
 
-  @JsonProperty("referenceSourceName")
-  private String referenceSourceName = null;
+  @JsonProperty("referenceSource")
+  private String referenceSource = null;
 
   @JsonProperty("inActive")
   private Boolean inActive = null;
   
   public ReferenceSourceData convertToDataEntity() {
 	  return new ReferenceSourceData()
-			  .referenceSourceName(this.referenceSourceName())
+			  .referenceSource(this.referenceSource())
+			  .referenceSourceID(this.referenceSourceID())
 			  .inActive(this.inActive());
   }
   
 	public ReferenceSourceData convertToUpdateDataEntity(String referenceSourceID) {
 		  return new ReferenceSourceData()
-				  .referenceSourceID(Long.parseLong(referenceSourceID))
-				  .referenceSourceName(this.referenceSourceName())
+				  .referenceSourceID(referenceSourceID)
+				  .referenceSource(this.referenceSource())
 				  .inActive(this.inActive());
 	  } 
 
