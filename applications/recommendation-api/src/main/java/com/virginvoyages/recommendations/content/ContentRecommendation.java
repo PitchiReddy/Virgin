@@ -10,13 +10,13 @@ import lombok.experimental.Accessors;
 public class ContentRecommendation   {
 	
   @JsonProperty("nbxUniqueKey")
-  private Integer nbxUniqueKey = null;
+  private String nbxUniqueKey = null;
 
   @JsonProperty("contentTag")
   private String contentTag = null;
 
   @JsonProperty("contentTagID")
-  private Integer contentTagID = null;
+  private String contentTagID = null;
   
 }
 

@@ -10,13 +10,13 @@ import lombok.experimental.Accessors;
 public class MarketingRecommendation   {
 	
   @JsonProperty("nbxUniqueKey")
-  private Integer nbxUniqueKey = null;
+  private String nbxUniqueKey = null;
 
   @JsonProperty("marketingTag")
   private String marketingTag = null;
 
   @JsonProperty("marketingTagID")
-  private Integer marketingTagID = null;
+  private String marketingTagID = null;
   
 }
 

@@ -25,7 +25,7 @@ public class RecommendationResponseRepository {
 	private byte[] cqSailorSelection = Bytes.toBytes("sailorSelection");
 	private byte[] cqSelectionSentiment = Bytes.toBytes("selectionSentiment");
 	
-	public RecommendationResponse save(final Integer nbxUniqueKey, final String sailorSelection,
+	public RecommendationResponse save(final String nbxUniqueKey, final String sailorSelection,
 			final String selectionSentiment) {
 		return hbaseTemplate.execute(tableName, new TableCallback<RecommendationResponse>() {
 			public RecommendationResponse doInTable(HTableInterface table) throws Throwable {
@@ -35,7 +35,7 @@ public class RecommendationResponseRepository {
 							.recommedation(sailorSelection)
 							.selectionSentiment(selectionSentiment);
 				
-				String rowKey = String.valueOf(nbxUniqueKey.intValue())+"+"+System.currentTimeMillis();
+				String rowKey = nbxUniqueKey+"+"+System.currentTimeMillis();
 				Put p = new Put(Bytes.toBytes(rowKey));
 				
 				p.addColumn(cfRecoFeedback, cqNbxUniqueKey, Bytes.toBytes(recommendationResponse.nbxUniqueKey().toString()));

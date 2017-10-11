@@ -10,13 +10,13 @@ import lombok.experimental.Accessors;
 public class HereNowRecommendation   {
   	
   @JsonProperty("nbxUniqueKey")
-  private Integer nbxUniqueKey = null;
+  private String nbxUniqueKey = null;
 
   @JsonProperty("hereNowItem")
   private String hereNowItem = null;
 
   @JsonProperty("hereNowItemID")
-  private Integer hereNowItemID = null;
+  private String hereNowItemID = null;
   
 }
 
