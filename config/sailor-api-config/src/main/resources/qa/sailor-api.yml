@@ -1,0 +1,9 @@
+#**PLACEHOLDERS** need to update with QA configuration.
+crm:
+  service:
+    url: https://virginvoyages--qa.cs67.my.salesforce.com
+    version: v40.0
+  username: ednZfc2FpbG9yX2FwaUB2aXJnaW52b3lhZ2VzLmNvbS5xYQ==
+  password: 8VmlyZ2luMTIzampBMDVERkxOb0VqdG1tUk5xWEYzOWta
+  client-id: 3MVG99E3Ry5mh4zp6SqQPRH4bTr4uZmiKRagoBIZeRyJ55Df0TNBRNq7w_RrX6O9wLcqUP4YHj6m.5PFB3vr6
+  client-secret: 2739124206139488478
