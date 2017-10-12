@@ -36,4 +36,11 @@ public class TestDataHelper {
 		return parameters;
 	}
 
+	public Map<String, String> getTribeRequestParameters(){
+		final Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("requestSource", "TestSource");
+        parameters.put("sailorId", "1234");
+        
+        return parameters;
+	}
 }
