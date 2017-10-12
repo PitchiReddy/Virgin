@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
+	
+	@Autowired
+	ReferenceSourceRepository referenceSourceRepository;
 
 	/**
 	 * Create reference Type based on referenceType.
@@ -35,8 +40,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public void addReferenceType(ReferenceType referenceType) {
+		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
 		log.debug("Entering addReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToDataEntity());
+		referenceTypeRepository.save(referenceType.convertToDataEntity(listOfreferenceSourceData));
 
 	}
 
@@ -50,7 +56,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering findReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(Long.valueOf(referenceTypeID));
+		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
 		return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
 
 	}
@@ -63,8 +69,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	public void deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		long convertReferenceTypeID = Long.parseLong(referenceTypeID);
-		referenceTypeRepository.delete(convertReferenceTypeID);
+		referenceTypeRepository.delete(referenceTypeID);
 
 	}
 
@@ -76,8 +81,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	@Override
 	public void updateReferenceType(ReferenceType referenceType) {
+		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToDataEntity());
+		referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(listOfreferenceSourceData));
 	}
 
 	/**

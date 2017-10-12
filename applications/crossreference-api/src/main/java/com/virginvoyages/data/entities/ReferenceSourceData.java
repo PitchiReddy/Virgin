@@ -26,6 +26,7 @@ public class ReferenceSourceData implements Serializable {
 	@Id 
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid",strategy = "uuid")
+//	@GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="REFERENCE_SOURCE_ID")
 	private String referenceSourceID = null;
 

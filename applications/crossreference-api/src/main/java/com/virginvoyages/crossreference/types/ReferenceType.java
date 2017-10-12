@@ -1,6 +1,8 @@
 package com.virginvoyages.crossreference.types;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
 import lombok.Data;
@@ -22,23 +24,33 @@ public class ReferenceType   {
   @JsonProperty("referenceSourceID")
   private String referenceSourceID = null;
   
-  public ReferenceTypeData convertToDataEntity() {
-	  
-	  return new ReferenceTypeData()
+  
+  
+  public ReferenceTypeData convertToDataEntity(List<ReferenceSourceData> listOfreferenceSourceData) {
+	 
+	  ReferenceTypeData referenceTypeData = null;
+	  try {
+	  referenceTypeData =  new ReferenceTypeData()
 			  .referenceType(this.referenceType())
 			  .referenceTypeID(this.referenceTypeID())
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()));
+			  .referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(this.referenceSourceID())).map(source -> source).findAny().get());
+	  
+	  }
+	  catch (Exception e) {
+		throw new DataInsertionException("Reference Source Data not available");
+	}
+	return referenceTypeData;
 					 			  
   }
 
- /* public ReferenceTypeData convertToUpdateDataEntity(String referenceTypeID) {
+  public ReferenceTypeData convertToUpdateDataEntity(List<ReferenceSourceData> listOfreferenceSourceData) {
 	  return new ReferenceTypeData()
-			  .referenceTypeID(Long.parseLong(referenceTypeID))
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()));
-	  				//.referenceSourceName(this.referenceType()))
-			  //.referenceType(this.referenceType());
+			  .referenceTypeID(referenceTypeID)
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()))
+			  .referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(this.referenceSourceID())).map(source -> source).findAny().get())
+			  .referenceType(this.referenceType());
 			  
   }
-*/
+
 }
 

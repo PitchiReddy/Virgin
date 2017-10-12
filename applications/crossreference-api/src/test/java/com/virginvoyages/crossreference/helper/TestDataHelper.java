@@ -6,6 +6,7 @@ import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.data.entities.ReferenceTypeData;
 
 /**
  * Helper class for testcases
@@ -45,4 +46,17 @@ public class TestDataHelper {
 		return new ReferenceSourceData().referenceSource("Seaware_ID_Updated").referenceSourceID("ignore").inActive(false);
 	}
 
+	public ReferenceTypeData getReferenceTypeDataEntityForCreate() {
+		return new ReferenceTypeData()
+				.referenceType("Reservation")
+				.referenceTypeID("RT1")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
+	}
+	
+	public ReferenceTypeData getReferenceTypeDataEntityForUpdate() {
+		return new ReferenceTypeData()
+				.referenceType("Reservation_updated")
+				.referenceTypeID("RT1")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
+	}
 }
