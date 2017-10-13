@@ -1,13 +1,16 @@
 package com.virginvoyages.data.entities;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.util.GUIDGenerator;
@@ -22,13 +25,15 @@ import lombok.experimental.Accessors;
 public class ReferenceTypeData {
 
 	@Id
+	@GeneratedValue(generator="system-uuid")
+	@GenericGenerator(name="system-uuid",strategy = "uuid")
 	@Column(name="REFERENCE_TYPE_ID")
-	private String referenceTypeID;
+	private String referenceTypeID;	
 
 	@Column(name="REFERENCE_TYPE")
 	private String referenceType = null;
 	
-	@OneToOne(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REFERENCE_SOURCE_ID")
 	private ReferenceSourceData referenceSourceData;
 	

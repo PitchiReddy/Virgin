@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.greaterThan;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +35,7 @@ public class ReferenceTypeRepositoryTest {
 	public void testCreate() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
-		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate(listOfreferenceSourceData,createdReferenceSource.referenceSourceID());
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate(createdReferenceSource.referenceSourceID());
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
 		assertThat(referenceTypeData.referenceType(), equalTo(createdReferenceType.referenceType()));
 		
@@ -49,12 +49,11 @@ public class ReferenceTypeRepositoryTest {
 	public void testUpdate() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
-		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(listOfreferenceSourceData,createdReferenceSource.referenceSourceID());
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(createdReferenceSource.referenceSourceID());
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
 		assertThat(referenceTypeDataToCreate.referenceType(), equalTo(createdReferenceType.referenceType()));
 		
-		ReferenceTypeData referenceTypeDataToUpdate = testDataHelper.getReferenceTypeDataEntityForUpdate(listOfreferenceSourceData,createdReferenceSource.referenceSourceID());
+		ReferenceTypeData referenceTypeDataToUpdate = testDataHelper.getReferenceTypeDataEntityForUpdate(createdReferenceType.referenceTypeID(), createdReferenceSource.referenceSourceID());
 		referenceTypeDataToUpdate.referenceTypeID(createdReferenceType.referenceTypeID());
 		ReferenceTypeData updatedReferenceType = referenceTypeRepository.save(referenceTypeDataToUpdate);
 		assertThat(updatedReferenceType.referenceTypeID(), equalTo(createdReferenceType.referenceTypeID()));
@@ -71,12 +70,11 @@ public class ReferenceTypeRepositoryTest {
 		
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
-		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(listOfreferenceSourceData,createdReferenceSource.referenceSourceID());
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(createdReferenceSource.referenceSourceID());
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
 		assertThat(referenceTypeDataToCreate.referenceType(), equalTo(createdReferenceType.referenceType()));
 		
-		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(referenceTypeDataToCreate.referenceTypeID());
+		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
 		assertThat(retrievedReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(retrievedReferenceType.referenceType()));
 		assertThat(createdReferenceType.referenceTypeID(), equalTo(retrievedReferenceType.referenceTypeID()));
@@ -92,15 +90,14 @@ public class ReferenceTypeRepositoryTest {
 		
 		List<ReferenceTypeData> referenceTypes = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
 		assertThat(referenceTypes, notNullValue());
-		assertThat(referenceTypes, hasSize(0));
+		assertThat(referenceTypes, hasSize(greaterThan(0)));
 	}
 	
 	@Test 
 	public void testDelete() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
-		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(listOfreferenceSourceData,createdReferenceSource.referenceSourceID());
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate(createdReferenceSource.referenceSourceID());
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
 		assertThat(referenceTypeDataToCreate.referenceType(), equalTo(createdReferenceType.referenceType()));
 		

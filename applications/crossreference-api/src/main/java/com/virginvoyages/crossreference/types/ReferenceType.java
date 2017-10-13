@@ -1,6 +1,6 @@
 package com.virginvoyages.crossreference.types;
 
-import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.data.entities.ReferenceSourceData;
@@ -26,14 +26,14 @@ public class ReferenceType   {
   
   
   
-  public ReferenceTypeData convertToDataEntity(List<ReferenceSourceData> listOfreferenceSourceData) {
+  public ReferenceTypeData convertToDataEntity() {
 	 
 	  ReferenceTypeData referenceTypeData = null;
 	  try {
 	  referenceTypeData =  new ReferenceTypeData()
 			  .referenceType(this.referenceType())
 			  .referenceTypeID(this.referenceTypeID())
-			  .referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(this.referenceSourceID())).map(source -> source).findAny().get());
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID));
 	  
 	  }
 	  catch (Exception e) {
@@ -43,11 +43,10 @@ public class ReferenceType   {
 					 			  
   }
 
-  public ReferenceTypeData convertToUpdateDataEntity(List<ReferenceSourceData> listOfreferenceSourceData) {
+  public ReferenceTypeData convertToUpdateDataEntity(String referenceTypeID) {
 	  return new ReferenceTypeData()
 			  .referenceTypeID(referenceTypeID)
-			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(this.referenceSourceID()))
-			  .referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(this.referenceSourceID())).map(source -> source).findAny().get())
+			  .referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSourceID()))
 			  .referenceType(this.referenceType());
 			  
   }

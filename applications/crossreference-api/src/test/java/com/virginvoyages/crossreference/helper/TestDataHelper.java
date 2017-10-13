@@ -1,9 +1,6 @@
 package com.virginvoyages.crossreference.helper;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
@@ -48,17 +45,17 @@ public class TestDataHelper {
 		return new ReferenceSourceData().referenceSource("Seaware_ID_Updated").referenceSourceID("ignore").inActive(false);
 	}
 
-	public ReferenceTypeData getReferenceTypeDataEntityForCreate(List<ReferenceSourceData> listOfreferenceSourceData,String referenceSourceID) {
+	public ReferenceTypeData getReferenceTypeDataEntityForCreate(String referenceSourceID) {
 		return new ReferenceTypeData()
 				.referenceType("Reservation")
 				.referenceTypeID("RT1")
-				 .referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(referenceSourceID)).map(source -> source).findAny().get());
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSourceID));
 	}
 	
-	public ReferenceTypeData getReferenceTypeDataEntityForUpdate(List<ReferenceSourceData> listOfreferenceSourceData,String referenceSourceID) {
+	public ReferenceTypeData getReferenceTypeDataEntityForUpdate(String referenceTypeID, String referenceSourceID) {
 		return new ReferenceTypeData()
 				.referenceType("Reservation_updated")
-				.referenceTypeID("RT1")
-				.referenceSourceData(listOfreferenceSourceData.stream().filter(source -> source.referenceSourceID().equals(referenceSourceID)).map(source -> source).findAny().get());
+				.referenceTypeID(referenceTypeID)
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSourceID));
 	}
 }

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
-import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +26,6 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
 	
-	@Autowired
-	ReferenceSourceRepository referenceSourceRepository;
-
 	/**
 	 * Create reference Type based on referenceType.
 	 * @param referenceType
@@ -40,9 +35,8 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public void addReferenceType(ReferenceType referenceType) {
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
 		log.debug("Entering addReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToDataEntity(listOfreferenceSourceData));
+		referenceTypeRepository.save(referenceType.convertToDataEntity());
 
 	}
 
@@ -81,9 +75,8 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	@Override
 	public void updateReferenceType(ReferenceType referenceType) {
-		List<ReferenceSourceData> listOfreferenceSourceData = (List<ReferenceSourceData>) referenceSourceRepository.findAll();
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(listOfreferenceSourceData));
+		referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
 	}
 
 	/**
