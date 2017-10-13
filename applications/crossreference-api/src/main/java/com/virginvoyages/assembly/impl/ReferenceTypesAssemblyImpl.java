@@ -34,9 +34,10 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 
 	@Override
-	public void addReferenceType(ReferenceType referenceType) {
+	public ReferenceType addReferenceType(ReferenceType referenceType) {
 		log.debug("Entering addReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToDataEntity());
+		ReferenceTypeData referenceTypeData =	referenceTypeRepository.save(referenceType.convertToDataEntity());
+		return referenceTypeData.convertToBusinessEntity();
 
 	}
 
@@ -74,9 +75,10 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 * @return
 	 */
 	@Override
-	public void updateReferenceType(ReferenceType referenceType) {
+	public ReferenceType updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
+		ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
+		return referenceTypeData.convertToBusinessEntity();
 	}
 
 	/**

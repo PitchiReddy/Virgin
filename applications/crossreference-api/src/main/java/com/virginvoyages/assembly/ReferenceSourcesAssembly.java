@@ -11,13 +11,13 @@ import com.virginvoyages.crossreference.sources.ReferenceSource;
  */
 public interface ReferenceSourcesAssembly {
 
-	public void addReferenceSource(ReferenceSource referenceSource);
+	public ReferenceSource addReferenceSource(ReferenceSource referenceSource);
 	
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID);
 	
 	public void deleteReferenceSourceByID(String referenceSourceID);
 	
-	public void updateReferenceSource(ReferenceSource referenceSource);
+	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource);
 	
 	public List<ReferenceSource> findSources();
 }

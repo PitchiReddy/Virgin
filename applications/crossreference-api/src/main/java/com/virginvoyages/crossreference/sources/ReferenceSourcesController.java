@@ -43,7 +43,7 @@ public class ReferenceSourcesController {
 	 * @param ReferenceSource
 	 * @param xCorrelationID - Correlation ID across the enterprise application components.
 	 * @param xVVClientID - Application identifier of client.
-	 * @return
+	 * @return ReferenceSource returns a referenceSource
 	 */
 	@ApiOperation(value = "", notes = "Add a new `ReferenceSource`.", response = Void.class, tags = {
 			"ReferenceSource", })
@@ -51,14 +51,14 @@ public class ReferenceSourcesController {
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
 	@RequestMapping(value = "/sources", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<Void> addReferenceSource(
+	public ResponseEntity<ReferenceSource> addReferenceSource(
 			@ApiParam(value = "ReferenceSource object that needs to be created", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Source");
-		referenceSourcesAssembly.addReferenceSource(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
+		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 
 	/**
@@ -102,6 +102,12 @@ public class ReferenceSourcesController {
 		return new ResponseEntity<List<ReferenceSource>>(listOfReferenceSources,HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceSourceID
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return ReferenceSource returns a referenceSource
+	 */
 	@ApiOperation(value = "Find reference source by ID", notes = "Returns a reference source for a specified reference source identity.  This identity is a univeral reference identity.", response = ReferenceSource.class, tags = {
 			"ReferenceSource", })
 	@ApiResponses(value = {
@@ -120,7 +126,7 @@ public class ReferenceSourcesController {
 	 * @param ReferenceSource - input referenceSource
 	 * @param xCorrelationID - Correlation ID across the enterprise application components.
 	 * @param xVVClientID - Application identifier of client.
-	 * @return ReferenceSource - Update a `ReferenceSource` object.
+	 * @return ReferenceSource returns a referenceSource.
 	 */
 	@ApiOperation(value = "", notes = "Update a `ReferenceSource` object.", response = Void.class, tags = {
 			"ReferenceSource", })
@@ -128,14 +134,14 @@ public class ReferenceSourcesController {
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
 	@RequestMapping(value = "/sources", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateReferenceSource(
+	public ResponseEntity<ReferenceSource> updateReferenceSource(
 			@ApiParam(value = "ReferenceSource object that needs to be updated", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		//TODO mandatory check for referenceSourceID
-		referenceSourcesAssembly.updateReferenceSource(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		
+		ReferenceSource referenceSource = referenceSourcesAssembly.updateReferenceSource(body);
+		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 
 }

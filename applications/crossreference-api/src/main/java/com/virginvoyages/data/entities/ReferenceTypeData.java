@@ -18,6 +18,11 @@ import com.virginvoyages.data.util.GUIDGenerator;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/**
+ * @author snarthu
+ * Table containing ReferenceTypeData
+ *
+ */
 @Entity
 @Table(name = "REFERENCE_TYPE")
 @Data

@@ -15,6 +15,19 @@ import com.virginvoyages.crossreference.sources.ReferenceSource;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/**
+ * Table containing ReferenceSourceData
+ * @author snarthu
+ *
+ */
+/**
+ * @author snarthu
+ *
+ */
+/**
+ * @author snarthu
+ *
+ */
 @Entity
 @Table(name = "REFERENCE_SOURCE")
 @Data

@@ -12,13 +12,13 @@ import com.virginvoyages.crossreference.types.ReferenceType;
  */
 public interface ReferenceTypesAssembly {
 
-	public void addReferenceType(ReferenceType referenceType);
+	public ReferenceType addReferenceType(ReferenceType referenceType);
 
 	public ReferenceType findReferenceTypeByID(String referenceTypeID);
 
 	public void deleteReferenceTypeByID(String referenceTypeID);
 
-	public void updateReferenceType(ReferenceType body);
+	public ReferenceType updateReferenceType(ReferenceType body);
 
 	public List<ReferenceType> findTypes();
 }

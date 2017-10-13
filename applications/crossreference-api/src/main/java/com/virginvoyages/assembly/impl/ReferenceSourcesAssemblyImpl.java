@@ -30,15 +30,14 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	 * @return
 	 */
 	@Override
-	public void addReferenceSource(ReferenceSource referenceSource) {
+	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourceRepository.save(referenceSource.convertToDataEntity());
-
+		ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
+		return referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
 	 * Find reference source by ID.
-	 * 
 	 * @param referenceSourceID
 	 *            - input referenceSourceID.
 	 * @return ReferenceSource - returns a ReferenceSource
@@ -52,7 +51,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 
 	/**
 	 * Remove the ReferenceSource.
-	 * 
 	 * @param referenceSourceID
 	 *            - input referenceSourceID.
 	 * @return
@@ -65,7 +63,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 
 	/**
 	 * Update a `ReferenceSource` object .
-	 * 
 	 * @param referenceSourceID
 	 *            - input referenceSourceID.
 	 * @param referenceSource
@@ -73,9 +70,10 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	 * @return
 	 */
 	@Override
-	public void updateReferenceSource(ReferenceSource referenceSource) {
+	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
+		ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
+		return referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
