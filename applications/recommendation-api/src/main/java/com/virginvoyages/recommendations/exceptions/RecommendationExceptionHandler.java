@@ -11,4 +11,14 @@ public class RecommendationExceptionHandler {
 		return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
 	}
 
+	@ExceptionHandler(TribeNotFoundException.class)
+	public ResponseEntity<Void> handleTribeNotFoundException() {
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+
+	@ExceptionHandler(InvalidSailorIdException.class)
+	public ResponseEntity<Void> handleInvalidSailorIdException() {
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

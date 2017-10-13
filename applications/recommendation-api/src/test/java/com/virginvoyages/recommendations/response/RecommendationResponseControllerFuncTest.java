@@ -2,6 +2,7 @@ package com.virginvoyages.recommendations.response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.RecommendationFunctionalTestSupport;
 import com.virginvoyages.recommendations.helper.TestDataHelper;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 public class RecommendationResponseControllerFuncTest extends RecommendationFunctionalTestSupport {
@@ -105,5 +108,21 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
    			all();
 	}
 
-
+	@Test
+	public void givenSailorIdGetTheTribeDetailsData() {
+		final Map<String, String> parameters = testDataHelper.getTribeRequestParameters();
+	    final String response = 
+	    
+	    given().params(parameters)
+		    .get("/recommendation-api/v1/tribe").
+		then().statusCode(200).extract().response().asString();
+		final JsonPath responseJsonPath = new JsonPath(response);
+		final String responseTribeValue = responseJsonPath.get("tribe");
+		assertNotNull(responseTribeValue);
+		
+	}
+	
+	
+	
+	
 }
