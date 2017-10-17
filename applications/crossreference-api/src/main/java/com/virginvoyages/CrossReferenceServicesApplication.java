@@ -1,12 +1,20 @@
 package com.virginvoyages;
 
+import java.util.Arrays;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
@@ -16,6 +24,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = "com.virginvoyages")
 public class CrossReferenceServicesApplication implements CommandLineRunner {
 
+	@Autowired
+	private ApplicationContext appContext;
+	
     public static void main(String[] args) throws Exception {
         new SpringApplication(CrossReferenceServicesApplication.class).run(args);
     }
@@ -25,6 +36,25 @@ public class CrossReferenceServicesApplication implements CommandLineRunner {
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
         }
+        
+        /*String[] beans = appContext.getBeanDefinitionNames();
+        Arrays.sort(beans);
+        System.out.println("\n\n\n#########################################");
+        for (String bean : beans) {
+            System.out.println(bean);
+        }
+        System.out.println("#########################################\n\n\n");*/
+        //String[] beans = appContext.getBeansOfType(DataSource.class);
+        Map<String,DataSource> beans = appContext.getBeansOfType(DataSource.class);
+        System.out.println("\n\n\n#########################################");
+        System.out.println(beans);
+        System.out.println("#########################################\n\n\n");
+        //Arrays.sort(beans);
+        /*System.out.println("\n\n\n#########################################");
+        for (String bean : beans) {
+            System.out.println(bean);
+        }
+        System.out.println("#########################################\n\n\n");*/
     }
 
     class ExitException extends RuntimeException implements ExitCodeGenerator {
