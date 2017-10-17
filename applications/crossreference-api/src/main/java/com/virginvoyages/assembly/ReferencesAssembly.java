@@ -13,7 +13,7 @@ import com.virginvoyages.crossreference.references.References;
  */
 public interface ReferencesAssembly {
 
-	public void addReference(Reference reference);
+	public Reference addReference(Reference reference);
 
 	public Reference findReferenceByID(String referenceID);
 
@@ -23,5 +23,9 @@ public interface ReferencesAssembly {
 
 	public List<Reference> findReferencesByMaster(String masterID);
 
-	public void updateReference(Reference body);
+	public Reference updateReference(Reference body);
+
+	public List<Reference> findReferencesBySource(Reference reference);
+
+	public List<Reference> findReferencesSourceAndTargetSource(Reference reference);
 }

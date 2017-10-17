@@ -32,38 +32,38 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * Create reference based on reference. 
 	 * @param reference
 	 *            - input reference.
-	 * @return
+	 * @return Reference - returns a reference
 	 */
 	@Override
-	public void addReference(Reference reference) {
-		log.debug("adding references");
-		referenceRepository.save(reference.convertToDataEntity());
+	public Reference addReference(Reference reference) {
+		log.debug("Entering addReference method in ReferencesAssemblyImpl");
+		ReferenceData referenceData =	referenceRepository.save(reference.convertToDataEntity());
+		return referenceData.convertToBusinessEntity();
 	}
 
 	/**
 	 * Find reference by ID. 
 	 * @param referenceID
-	 *            - input reference.
+	 *            - input referenceID.
 	 * @return Reference - returns a reference
 	 */
 	public Reference findReferenceByID(String referenceID) {
 		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl");
-		ReferenceData referenceData = referenceRepository.findOne(Long.valueOf(referenceID));
+		ReferenceData referenceData = referenceRepository.findOne(referenceID);
 		return null == referenceData ? null : referenceData.convertToBusinessEntity();
 		
 	}
 
 	/**
-	 * Find reference by ID. 
+	 * delete reference by ID. 
 	 * @param referenceID
-	 *            - input reference.
+	 *            - input referenceID.
 	 * @return 
 	 */
 	@Override
 	public void deleteReferenceByID(String referenceID) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		long convertReferenceID = Long.parseLong(referenceID);
-		referenceRepository.delete(convertReferenceID);
+		referenceRepository.delete(referenceID);
 		
 		
 	}
@@ -80,32 +80,45 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	
 	/**
 	 * Finding reference. 
-	 * finalized
-	 * 
+	@Override
 	 * @return List Of Reference
 	 */
-	@Override
 	public List<Reference> findReferencesByMaster(String masterID) {
 		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
 		Iterable<ReferenceData> referenceDataIterable = referenceRepository.findAll();
 		List<Reference> listOfReference = new ArrayList<>();
 		for (ReferenceData referenceData : referenceDataIterable) {
+			if((referenceData.masterID()).equals(masterID)) {
 			listOfReference.add(referenceData.convertToBusinessEntity());
+			}
 		}
-		return null == referenceDataIterable ? null : listOfReference;	}
-	
+		return null == referenceDataIterable ? null : listOfReference;	
+	}
 	/**
 	 * Update reference Type by ID. 
-	 * not finalized
-	 * 
 	 * @param referenceID
 	 * @param reference
 	 * @return 
 	 */
 	@Override
-	public void updateReference(Reference reference) {
+	public Reference updateReference(Reference reference) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
+		ReferenceData referenceData =	referenceRepository.save(reference.convertToUpdateDataEntity(reference.referenceID()));
+		return referenceData.convertToBusinessEntity();
 		
+	}
+
+	@Override
+	public List<Reference> findReferencesBySource(Reference reference) {
+		log.debug("Entering findReferencesBySource method in ReferencesAssemblyImpl");
+		return null;
+	}
+
+	@Override
+	public List<Reference> findReferencesSourceAndTargetSource(Reference reference) {
+		log.debug("Entering findReferencesSourceAndTargetSource method in ReferencesAssemblyImpl");
+		return null;
+	
 	}
 
 }

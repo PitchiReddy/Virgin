@@ -138,7 +138,6 @@ public class ReferenceTypesController {
 	/**
 	 * Update reference Type     
 	 * @param  body
-	 *         - Update reference type by ID and body
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID

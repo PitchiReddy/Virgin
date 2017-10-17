@@ -34,5 +34,14 @@ public class Reference   {
 			  
   }
 
+public ReferenceData convertToUpdateDataEntity(String referenceID) {
+	
+	 return new ReferenceData()
+			  .referenceID(referenceID)
+			  .nativeSourceIDValue(nativeSourceIDValue())
+			  .masterID(masterID())
+			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(referenceTypeID()));
+  }
+
 }
 

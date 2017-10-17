@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

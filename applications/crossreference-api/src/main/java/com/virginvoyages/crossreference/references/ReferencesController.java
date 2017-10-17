@@ -2,8 +2,6 @@ package com.virginvoyages.crossreference.references;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.types.ReferenceType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,21 +49,21 @@ public class ReferencesController {
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
 	 *            - Application identifier of client.
-	 * @return
+	 * @return Reference -  returns a reference
 	 */
 	@ApiOperation(value = "", notes = "Add a new `Reference`.", response = Void.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<Void> addReference(
+	public ResponseEntity<Reference> addReference(
 			@ApiParam(value = "Reference object that needs to be created", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
-		referencesAssembly.addReference(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		Reference reference = referencesAssembly.addReference(body);
+		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 	}
 
 	/**
@@ -92,6 +88,15 @@ public class ReferencesController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceID
+	 *            - Find reference  by ID
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return Reference - returns a reference
+	 */
 	@ApiOperation(value = "Find reference by ID", notes = "Returns a reference for a specified reference identity.  This identity is a univeral reference identity.", response = Reference.class, tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -116,6 +121,16 @@ public class ReferencesController {
 		
 		return new ResponseEntity<References>(referencesAssembly.findReferences(), HttpStatus.OK);
 	}
+	
+	/**
+	 * @param masterID
+	 *            - Find reference type by masterID
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return List ofReference - returns a referenceList
+	 */
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
@@ -139,10 +154,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		/* The params need to be now got from the request body
-		 * return new ResponseEntity<List<Reference>>(
-			mockAPI.findReferencesBySource(nativeSourceID, sourceID, typeID, targetSourceID), HttpStatus.OK)*/
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		List<Reference> referenceData = referencesAssembly.findReferencesBySource(reference);
+		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
@@ -154,10 +167,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		/* The params need to be now got from the request body
-		 * return new ResponseEntity<List<Reference>>(
-			mockAPI.findReferencesBySource(nativeSourceID, sourceID, typeID, targetSourceID), HttpStatus.OK)*/
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		List<Reference> referenceData =referencesAssembly.findReferencesSourceAndTargetSource(reference);
+		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
@@ -186,6 +197,16 @@ public class ReferencesController {
 		// do some magic!
 		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
 	}
+	
+	/**
+	 * Update reference      
+	 * @param  body
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return Reference - returns a reference
+	 */
 
 	@ApiOperation(value = "", notes = "Update a `Reference` object.", response = Void.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
@@ -193,14 +214,14 @@ public class ReferencesController {
 			@ApiResponse(code = 405, message = "Validation exception", response = Void.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateReference(
+	public ResponseEntity<Reference> updateReference(
 			@ApiParam(value = "Reference object that needs to be updated", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
 		//TODO mandatory check for reference id
-		referencesAssembly.updateReference(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		Reference reference =	referencesAssembly.updateReference(body);
+		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 	}
 
 }
