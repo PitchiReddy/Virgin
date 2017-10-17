@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -76,10 +77,16 @@ public class ReferenceSourceRepositoryTest {
 	
 	@Test 
 	public void testFindAll() {
+				
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
 		List<ReferenceSourceData> referenceSources = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
 		assertThat(referenceSources, notNullValue());
 		assertThat(referenceSources, hasSize(greaterThan(0)));
+		
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+		
 	}
 	
 	@Test 

@@ -38,24 +38,32 @@ public class TestDataHelper {
 	}
 	
 	public ReferenceSourceData getReferenceSourceDataEntityForCreate() {
-		return new ReferenceSourceData().referenceSource("Seaware_4_ID").referenceSourceID("ignore").inActive(false);
+		return new ReferenceSourceData().referenceSource("Seaware_5_ID").referenceSourceID("ignore").inActive(false);
 	}
 	
 	public ReferenceSourceData getReferenceSourceDataEntityForUpdate() {
 		return new ReferenceSourceData().referenceSource("Seaware_ID_Updated").referenceSourceID("ignore").inActive(false);
 	}
+	
+	public ReferenceSource getReferenceSourceBusinessEntityForCreate() {
+		return new ReferenceSourceData()
+				.referenceSource("Seaware_5_ID")
+				.referenceSourceID("ignore")
+				.inActive(false)
+				.convertToBusinessEntity();
+	}
 
-	public ReferenceTypeData getReferenceTypeDataEntityForCreate(String referenceSourceID) {
+	public ReferenceTypeData getReferenceTypeDataEntityForCreate() {
 		return new ReferenceTypeData()
-				.referenceType("Reservation")
-				.referenceTypeID("RT1")
-				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSourceID));
+				.referenceType("Reservation_Testfindone")
+				.referenceTypeID("ignore");
+				//.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
 	}
 	
-	public ReferenceTypeData getReferenceTypeDataEntityForUpdate(String referenceTypeID, String referenceSourceID) {
+	public ReferenceTypeData getReferenceTypeDataEntityForUpdate() {
 		return new ReferenceTypeData()
-				.referenceType("Reservation_updated")
-				.referenceTypeID(referenceTypeID)
-				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSourceID));
+				.referenceType("Reservation_updated");
+				//.referenceTypeID("RT1");
+				//.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
 	}
 }

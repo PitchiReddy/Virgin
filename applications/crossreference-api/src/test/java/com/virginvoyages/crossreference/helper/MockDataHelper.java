@@ -9,6 +9,7 @@ import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.data.entities.ReferenceSourceData;
 
 @Component
 public class MockDataHelper {
@@ -93,5 +94,19 @@ public class MockDataHelper {
 
 	public String getValidMasterID() {
 		return "M30";
+	}
+	
+	public ReferenceSourceData getMockReferenceSourceDataEntity() {
+		return new ReferenceSourceData()
+				.referenceSource("Seaware_5_ID")
+				.referenceSourceID("ignore")
+				.inActive(false);
+	}
+	
+	public ReferenceSource getMockReferenceSourceBusinessEntity() {
+		return new ReferenceSource()
+				.referenceSource("Seaware_5_ID")
+				.referenceSourceID("ignore")
+				.inActive(false);
 	}
 }
