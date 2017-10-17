@@ -1,9 +1,6 @@
 package com.virginvoyages;
 
 import java.util.Arrays;
-import java.util.Map;
-
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -37,24 +34,16 @@ public class CrossReferenceServicesApplication implements CommandLineRunner {
             throw new ExitException();
         }
         
+        /* 
+         * #### uncomment to see all loaded beans for troubleshooting ####
+         */
         /*String[] beans = appContext.getBeanDefinitionNames();
         Arrays.sort(beans);
         System.out.println("\n\n\n#########################################");
         for (String bean : beans) {
             System.out.println(bean);
         }
-        System.out.println("#########################################\n\n\n");*/
-        //String[] beans = appContext.getBeansOfType(DataSource.class);
-        Map<String,DataSource> beans = appContext.getBeansOfType(DataSource.class);
-        System.out.println("\n\n\n#########################################");
-        System.out.println(beans);
-        System.out.println("#########################################\n\n\n");
-        //Arrays.sort(beans);
-        /*System.out.println("\n\n\n#########################################");
-        for (String bean : beans) {
-            System.out.println(bean);
-        }
-        System.out.println("#########################################\n\n\n");*/
+        System.out.println("#########################################\n\n\n");   */  
     }
 
     class ExitException extends RuntimeException implements ExitCodeGenerator {
