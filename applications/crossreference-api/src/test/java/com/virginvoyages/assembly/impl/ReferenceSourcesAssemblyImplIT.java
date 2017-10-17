@@ -2,7 +2,9 @@ package com.virginvoyages.assembly.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -32,44 +34,50 @@ public class ReferenceSourcesAssemblyImplIT {
 	@Test
 	public void givenValidReferenceSourceCreateReferenceSourceShouldReturnReferenceSource() {
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.addReferenceSource(referenceSource);
-		assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(referenceSource.referenceSourceID(), equalTo("RS1"));
-		assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
+		assertThat(createdReferenceSource.referenceSourceID(), is(notNullValue()));
+		assertThat(createdReferenceSource.referenceSource(), equalTo(referenceSource.referenceSource()));
+		assertThat(createdReferenceSource.inActive(), equalTo(referenceSource.inActive()));
+		
 	}
 	
 	@Test
 	public void givenValidReferenceSourceFindReferenceSourceShouldReturnReferenceSource() {
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.addReferenceSource(referenceSource);
-		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(referenceSource.referenceSourceID());
+		ReferenceSource createdReferenceSource =  referenceSourcesAssembly.addReferenceSource(referenceSource);
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		assertThat(findReferenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(findReferenceSource.referenceSource(), equalTo("Seaware"));
+		assertThat(findReferenceSource.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
 	
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
-		//assertThat(referenceSource.referenceSourceID(), is(nullValue()));
+		ReferenceSource createdReferenceSource =  referenceSourcesAssembly.addReferenceSource(referenceSource);
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		assertThat(findReferenceSource, is(nullValue()));
 	}
 	
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSource.referenceSource("Updated Seaware");
-		referenceSourcesAssembly.updateReferenceSource(referenceSource);
-		assertThat(referenceSource.referenceSource(), equalTo("Updated Seaware"));
+		ReferenceSource createReferenceSource = testDataHelper.getDataForCreateReferenceSource();
+		ReferenceSource updateReferenceSource = testDataHelper.getDataForUpdateReferenceSource(createReferenceSource);
+		ReferenceSource updatedReferenceSource = referenceSourcesAssembly.updateReferenceSource(updateReferenceSource);
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(updatedReferenceSource.referenceSourceID());
+		assertThat(updatedReferenceSource.referenceSourceID(), equalTo(findReferenceSource.referenceSourceID()));
+		assertThat(updatedReferenceSource.referenceSource(), equalTo(findReferenceSource.referenceSource()));
+		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
 	
 	@Test
 	public void givenValidReferenceSourceFindSourcesShouldRetunsReferenceSources() {
-		testDataHelper.getDataForCreateReferenceSource();
+		ReferenceSource createReferenceSource = testDataHelper.getDataForCreateReferenceSource();
 		List<ReferenceSource> referenceSourceList =referenceSourcesAssembly.findSources();
-		assertThat(referenceSourceList, hasSize(5));
+		assertThat(referenceSourceList, hasSize(greaterThan(0)));
 		for(ReferenceSource referenceSource: referenceSourceList) {
-			assertThat(referenceSource.referenceSource(), equalTo("Seaware"));
-			referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
+			assertThat(referenceSource.referenceSource(), equalTo(createReferenceSource.referenceSource()));
 		}
 		
 	}

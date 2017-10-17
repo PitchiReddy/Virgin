@@ -60,13 +60,14 @@ public class ReferenceSourcesAssemblyImplTest {
 		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
 	}
 
-	/*@Test
+	@Test
 	public void givenValidReferenceSourcesUpdateReferenceSourcesShouldReturnUpdatedReferenceSources() {
-		ReferenceSource referenceSource = mockDataHelper.getDataForCreateReferenceSource();
-		referenceSource.referenceSource("Updated Seaware");
-		referenceSourcesAssemblyImpl.updateReferenceSource(referenceSource);
-		assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(referenceSource.referenceSource(), equalTo("Updated Seaware"));
-	}*/
+		ReferenceSourceData mockReferenceSourceData = mockDataHelper.getMockReferenceSourceDataEntity();
+		ReferenceSource mockUpdateReferenceSource = mockReferenceSourceData.convertToBusinessEntity().referenceSource(mockDataHelper.getDataForUpdateReferenceSource());
+		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockUpdateReferenceSource.convertToDataEntity());
+		ReferenceSource updatedReferenceSource = referenceSourcesAssemblyImpl.updateReferenceSource(mockUpdateReferenceSource);
+		assertThat(updatedReferenceSource.referenceSourceID(), is(notNullValue()));
+		assertThat(updatedReferenceSource.referenceSource(), equalTo(mockUpdateReferenceSource.referenceSource()));
+	}
 
 }

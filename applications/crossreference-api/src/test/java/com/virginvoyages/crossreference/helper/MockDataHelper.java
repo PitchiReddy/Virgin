@@ -1,5 +1,8 @@
 package com.virginvoyages.crossreference.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +13,7 @@ import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @Component
 public class MockDataHelper {
@@ -24,6 +28,14 @@ public class MockDataHelper {
 	public ReferenceSource getDataForCreateReferenceSource() {
 		return new ReferenceSource().referenceSourceID("RS1")
 				.referenceSource("Seaware");
+	}
+	
+	public String getDataForUpdateReferenceSource() {
+		return "Updated Seaware_5_ID";
+	}
+	
+	public String getDataForUpdateReferenceType() {
+		 return "Updated Reservation_Testfindone";
 	}
 
 	public Audited createAuditDataForCreate() {
@@ -101,6 +113,25 @@ public class MockDataHelper {
 				.referenceSource("Seaware_5_ID")
 				.referenceSourceID("ignore")
 				.inActive(false);
+	}
+	
+	
+	public ReferenceTypeData getMockReferenceTypeDataEntity() {
+		return new ReferenceTypeData()
+				.referenceType("Reservation_Testfindone")
+				.referenceTypeID("ignore")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getMockReferenceSourceDataEntity().referenceSourceID()));
+	}
+	
+	public List<ReferenceTypeData> getMockReferenceTypeDataEntityList() {
+		List<ReferenceTypeData> listOfReferenceTypeData = new ArrayList<>();
+		listOfReferenceTypeData.add(new ReferenceTypeData()
+		.referenceType("Reservation_Testfindone")
+		.referenceTypeID("ignore")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getMockReferenceSourceDataEntity().referenceSourceID())));
+		
+		return listOfReferenceTypeData;
+		
 	}
 	
 	public ReferenceSource getMockReferenceSourceBusinessEntity() {

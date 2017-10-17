@@ -18,15 +18,20 @@ public class TestDataHelper {
 
 	public ReferenceSource getDataForCreateReferenceSource() {
 
-		return new ReferenceSource().referenceSourceID("RS1").referenceSource("Seaware");
+		return new ReferenceSource().referenceSource("Seaware").inActive(true);
 	}
+	
+	public ReferenceSource getDataForUpdateReferenceSource(ReferenceSource referenceSource) {
 
+		return referenceSource.referenceSource("Updated Seaware");
+	}
+	
 	public ReferenceType getDataForCreateReferenceType() {
 
-		return new ReferenceType().referenceTypeID("RT5").referenceType("Reservation");
-
+		return new ReferenceType().referenceType("Reservation");
+	
 	}
-
+	
 	public Reference getDataForCreateReference() {
 
 		return new Reference().referenceID("R30").masterID("M30").nativeSourceIDValue("NSID30");
@@ -56,8 +61,21 @@ public class TestDataHelper {
 	public ReferenceTypeData getReferenceTypeDataEntityForCreate() {
 		return new ReferenceTypeData()
 				.referenceType("Reservation_Testfindone")
-				.referenceTypeID("ignore");
-				//.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
+				.referenceTypeID("ignore")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceBusinessEntityForCreate().referenceSourceID()));
+	}
+	
+	public ReferenceTypeData getReferenceTypeDataForCreate(ReferenceSource referenceSource) {
+		return new ReferenceTypeData()
+				.referenceType("Reservation_Testfindone")
+				.referenceTypeID("ignore")
+				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSource.referenceSourceID()));
+	}
+	
+	
+	public String getReferenceTypeDataForUpdate() {
+		return "Updated Reservation_Testfindone";
+		
 	}
 	
 	public ReferenceTypeData getReferenceTypeDataEntityForUpdate() {
