@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: crossreference-api-service
+  labels:
+    name: crossreference-api-service
+    version: latest
+    visualize: "true"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: crossreference-api-service
+        version: latest
+        visualize: "true"
+    spec:
+          containers:
+          - name: crossreference-api
+            image: murtazacg/crossreference-api:0.0.1
+            imagePullPolicy: "Always"
+            resources:
+              limits:
+                memory: 700Mi
+            env:
+            - name: LOG_LOCATION
+              valueFrom:
+                configMapKeyRef:
+                  name: integration-api-configmap
+                  key: LOG_LOCATION
+            - name: APPLICATION_PROPERTIES_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: integration-api-configmap
+                  key: CROSSREFERENCE_API_SERVICE_PROPERTIES_PATH
+            - name: SERVICE_PROPERTIES_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: integration-api-configmap
+                  key: CROSSREFERENCE_API_SERVICE_PROPERTIES_PATH
+            ports:
+             - containerPort: 8432
+            volumeMounts:
+            - name: log-mount
+              mountPath: /var/log/applogs/Logs
+            - name: crossreference-api-properties
+              mountPath: /etc/config/crossreference-api/
+          volumes:
+          - name: log-mount
+            hostPath:
+              path: /var/log/applogs/crossreference-api/
+          - name: crossreference-api-properties
+            configMap:
+              name: crossreference-api-configmap
