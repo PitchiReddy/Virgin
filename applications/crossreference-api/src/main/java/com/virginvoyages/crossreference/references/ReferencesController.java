@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.references;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -96,6 +98,7 @@ public class ReferencesController {
 	 * @param xVVClientID
 	 *            - Application identifier of client.
 	 * @return Reference - returns a reference
+	 * @throws MandatoryFieldsMissingException 
 	 */
 	@ApiOperation(value = "Find reference by ID", notes = "Returns a reference for a specified reference identity.  This identity is a univeral reference identity.", response = Reference.class, tags = {
 			"Reference", })
@@ -104,8 +107,10 @@ public class ReferencesController {
 	public ResponseEntity<Reference> findReferenceByID(
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
-			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
 		
+		if(StringUtils.isEmpty(referenceID)) 
+        	throw new MandatoryFieldsMissingException();
 		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 /**
  * Controller class to handle API requests for operations related to
@@ -84,6 +86,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("deleting Reference Type");
+		if(StringUtils.isEmpty(referenceTypeID)) {
+			throw new MandatoryFieldsMissingException();
+		}
 		referenceTypesAssembly.deleteReferenceTypeByID(referenceTypeID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -107,8 +112,11 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("finding Reference Type By referenceTypeID");
-		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByID(referenceTypeID),
-				HttpStatus.OK);
+		if(StringUtils.isEmpty(referenceTypeID)) {
+			throw new MandatoryFieldsMissingException();
+		}
+		ReferenceType referenceType = referenceTypesAssembly.findReferenceTypeByID(referenceTypeID);
+		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 
 	/**

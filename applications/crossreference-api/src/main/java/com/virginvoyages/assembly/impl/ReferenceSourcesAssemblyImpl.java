@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,7 +48,10 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
 		ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
-		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
+		 if(referenceSourceData==null) {
+			 throw new DataNotFoundException();
+		 }
+		return  referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
@@ -58,11 +63,17 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
+		ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
+		if(null!=referenceSourceData) {
 		referenceSourceRepository.delete(referenceSourceID);
+		}else {
+			 throw new DataNotFoundException();
+		}
+		
 	}
 
 	/**
-	 * Update a `ReferenceSource` object .
+	 * Update a `ReferenceSource` object.
 	 * @param referenceSourceID
 	 *            - input referenceSourceID.
 	 * @param referenceSource
@@ -72,7 +83,13 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
+		ReferenceSourceData referenceSourceData = null;
+		ReferenceSourceData findReferenceSourceData = referenceSourceRepository.findOne(referenceSource.referenceSourceID());
+		if(null!=findReferenceSourceData) {
+		referenceSourceData = referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
+		}else {
+			 throw new DataNotFoundException();
+		}
 		return referenceSourceData.convertToBusinessEntity();
 	}
 

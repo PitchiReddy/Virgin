@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceTypeData;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
@@ -52,7 +53,10 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering findReferenceTypeByID method in ReferenceTypesAssemblyImpl");
 		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
-		return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+		if(referenceTypeData==null) {
+		throw new DataNotFoundException();
+		}
+		return referenceTypeData.convertToBusinessEntity();
 
 	}
 
@@ -64,7 +68,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	public void deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.delete(referenceTypeID);
+		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
+		if(null!=referenceTypeData) {
+			referenceTypeRepository.delete(referenceTypeID);
+		}
+		else {
+			throw new DataNotFoundException();
+		}
+		
 
 	}
 
@@ -77,7 +88,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
+		ReferenceTypeData referenceTypeData = null;
+		ReferenceTypeData findReferenceTypeData = referenceTypeRepository.findOne(referenceType.referenceTypeID());
+		if(null!=findReferenceTypeData) {
+		 referenceTypeData = referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
+		}
+		else {
+			throw new DataNotFoundException();
+		}
 		return referenceTypeData.convertToBusinessEntity();
 	}
 
