@@ -1,14 +1,16 @@
 
 /**
+ * Flyway Migration Script.
  * Engine: MySQL
- * Version: 0.0.1
- * Description: Initial Table Structure for XREF database 
+ * Version: 0.1
+ * Description:Table Structure for XREF database 
  */
 
 CREATE TABLE REFERENCE_SOURCE (
 	REFERENCE_SOURCE_ID VARCHAR(255) NOT NULL PRIMARY KEY,
 	REFERENCE_SOURCE VARCHAR(255) NOT NULL,
-	INACTIVE TINYINT(1)
+	INACTIVE TINYINT(1),
+	UNIQUE (REFERENCE_SOURCE)
 );  
 
 CREATE TABLE REFERENCE_TYPE (
