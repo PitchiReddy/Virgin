@@ -44,6 +44,16 @@ public class CrossReferenceServicesApplication implements CommandLineRunner {
             System.out.println(bean);
         }
         System.out.println("#########################################\n\n\n");   */  
+        
+        /*
+         * Uncomment to see datasource 
+         */
+        /*System.out.println("\n\n\n#########################################");
+        System.out.println("Data Source URL ===>"+appContext.getEnvironment().getProperty("spring.datasource.url"));
+        System.out.println("Data Source Username ===>"+appContext.getEnvironment().getProperty("spring.datasource.username"));
+        System.out.println("Data Source Password ===>"+appContext.getEnvironment().getProperty("spring.datasource.password"));
+        System.out.println("#########################################\n\n\n");*/
+       
     }
 
     class ExitException extends RuntimeException implements ExitCodeGenerator {

@@ -1,0 +1,2 @@
+LOG_LOCATION: /var/log/applogs/Logs/
+CROSSREFERENCE_API_PROPERTIES_PATH: /etc/config/crossreference-api/crossreference-api.yml
