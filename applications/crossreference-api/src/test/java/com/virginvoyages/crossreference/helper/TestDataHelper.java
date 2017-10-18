@@ -78,6 +78,11 @@ public class TestDataHelper {
 		
 	}
 	
+	public String getReferenceSourceForUpdate() {
+		return "Updated Seaware_5_ID";
+		
+	}
+	
 	public ReferenceTypeData getReferenceTypeDataEntityForUpdate() {
 		return new ReferenceTypeData()
 				.referenceType("Reservation_updated");

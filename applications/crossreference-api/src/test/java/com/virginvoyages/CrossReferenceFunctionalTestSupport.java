@@ -13,6 +13,9 @@ import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
 
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+
 public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	@Autowired
@@ -22,24 +25,23 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
     public void contextLoads() {
     }
 
-	public ReferenceSource createTestReferenceSource() {
+	public Response createTestReferenceSource() {
 
 		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSource", referenceSource.referenceSource());
 		parameters.put("inActive", referenceSource.inActive());
 
-		given()
+		Response response = given()
 			.contentType("application/json")
 			.body(parameters)
 			.post("/xref-api/v1/sources").
 
 		then()
-			.statusCode(200);
+			.statusCode(200).extract().response();
 
-		return referenceSource;
+		return response;
 	}
 	
 	public void deleteTestReferenceSource(String referenceSourceID) {
@@ -52,26 +54,30 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 			.statusCode(200);
 	}
 
-	public ReferenceType createTestReferenceType() {
+	public Response createTestReferenceType() {
 
+		Response referenceSource = createTestReferenceSource();
+		String responseBody  = referenceSource.getBody().asString();
+		JsonPath jsonPath = new JsonPath(responseBody);
+	
 		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceTypeID", referenceType.referenceTypeID());
 		parameters.put("referenceType", referenceType.referenceType());
-
+		parameters.put("referenceSourceID", jsonPath.getString("referenceSourceID"));
+		
+		
 		// create reference type
-		given()
+		Response response = given()
 			.contentType("application/json")
 			.body(parameters)
 			.post("/xref-api/v1/types/").
 
 		then()
 			.assertThat()
-			.statusCode(200)
-			.log()
-			.all();
+			.statusCode(200).extract().response();
+		
 
-		return referenceType;
+		return response;
 	}
 	
 	public void deleteTestReferenceType(String referenceTypeID) {
