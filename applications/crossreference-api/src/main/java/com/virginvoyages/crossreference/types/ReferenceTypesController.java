@@ -63,6 +63,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Type");
+		if(StringUtils.isEmpty(body.referenceType())||StringUtils.isEmpty(body.referenceSourceID())) {
+				throw new MandatoryFieldsMissingException();
+			}
 		ReferenceType referenceType =referenceTypesAssembly.addReferenceType(body);
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
@@ -164,7 +167,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		//TODO - mandatory check for id in body
+		if(StringUtils.isEmpty(body.referenceTypeID())||StringUtils.isEmpty(body.referenceType())||StringUtils.isEmpty(body.referenceSourceID())) {
+			throw new MandatoryFieldsMissingException();
+		}
 		ReferenceType referenceType = referenceTypesAssembly.updateReferenceType(body);
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}

@@ -3,7 +3,7 @@ package com.virginvoyages.crossreference.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Reference source id is not available in ReferenceSource")
+@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Data creation is failing in database")
 public class DataInsertionException extends RuntimeException {
 
 	/**

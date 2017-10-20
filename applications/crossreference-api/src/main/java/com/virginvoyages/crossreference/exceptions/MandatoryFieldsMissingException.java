@@ -3,7 +3,7 @@ package com.virginvoyages.crossreference.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Mandatory fields missing in ReferenceSource")
+@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Mandatory fields is missing")
 public class MandatoryFieldsMissingException extends RuntimeException {
 
 	/**

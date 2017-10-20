@@ -60,7 +60,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Source");
-		if(body==null) {
+		if(StringUtils.isEmpty(body.referenceSource())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
@@ -152,7 +152,10 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		
+		if(StringUtils.isEmpty(body.referenceSourceID())||StringUtils.isEmpty(body.referenceSource())) {
+			throw new MandatoryFieldsMissingException();
+			
+		}
 		ReferenceSource referenceSource = referenceSourcesAssembly.updateReferenceSource(body);
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
