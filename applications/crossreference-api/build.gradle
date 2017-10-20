@@ -53,6 +53,7 @@ dependencies {
     compile "org.projectlombok:lombok:1.16.16"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile 'mysql:mysql-connector-java'
+    compile "org.flywaydb:flyway-core:4.2.0"
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
