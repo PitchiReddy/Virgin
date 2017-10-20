@@ -12,6 +12,13 @@ spring:
     date-format: com.virginvoyages.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+      url: ${xref.datasource.url}
+      username: ${xref.datasource.username}
+      password: ${xref.datasource.password}
 
 management:
   security:
