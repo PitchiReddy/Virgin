@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: crossreference-api-service
+  labels:
+    name: crossreference-api-service
+    visualize: "true"
+spec:
+    type: NodePort
+    ports:
+     - name: http
+       nodePort: 31435
+       port: 80
+       targetPort: 8435
+    selector:
+      name: crossreference-api-service

@@ -1,6 +1,15 @@
 spring:
   application:
     name: crossreference-api
+  config:
+      location: ${application_properties_path},${service_properties_path}
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+      url: ${xref.datasource.url}
+      username: ${xref.datasource.username}
+      password: ${xref.datasource.password}
   
 server:
   port: 8435

@@ -1,9 +1,5 @@
 package com.virginvoyages.crm.client;
 
-import feign.Logger;
-import feign.RequestInterceptor;
-import feign.codec.Encoder;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +10,9 @@ import org.springframework.security.oauth2.common.AuthenticationScheme;
 
 import com.virginvoyages.crm.SecretsUtility;
 
-import java.util.Base64;
+import feign.RequestInterceptor;
+import feign.codec.Encoder;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
