@@ -2,6 +2,8 @@ package com.virginvoyages.assembly.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +79,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToUpdateDataEntity(referenceType.referenceTypeID()));
+		ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToDataEntity());
 		return referenceTypeData.convertToBusinessEntity();
 	}
 
@@ -88,13 +90,12 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public List<ReferenceType> findTypes() {
 		log.debug("Entering findTypes method in ReferenceTypesAssemblyImpl");
-		Iterable<ReferenceTypeData> referenceTypeDataIterable = referenceTypeRepository.findAll();
+		List<ReferenceTypeData> listOfReferenceTypeData = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
 		List<ReferenceType> listOfReferenceType = new ArrayList<>();
-		for (ReferenceTypeData referenceTypeData : referenceTypeDataIterable) {
-			listOfReferenceType.add(referenceTypeData.convertToBusinessEntity());
+		if(null != listOfReferenceTypeData && listOfReferenceTypeData.size() > 0 ) {
+			listOfReferenceType = listOfReferenceTypeData.stream().map(referenceTypeData -> referenceTypeData.convertToBusinessEntity()).collect(Collectors.toList());
 		}
-		return null == referenceTypeDataIterable ? null : listOfReferenceType;
-
+		return listOfReferenceType;
 	}
 
 }

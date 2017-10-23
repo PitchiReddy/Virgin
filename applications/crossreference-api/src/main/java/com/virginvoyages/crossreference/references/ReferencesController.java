@@ -2,8 +2,6 @@ package com.virginvoyages.crossreference.references;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
-import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.types.ReferenceType;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -42,8 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReferencesController {
 	
 	@Autowired
-	private ReferencesAssembly referencesAssembly;
-	
+	private MockCrossReferenceAPI mockAPI; 
 	
 	/**
 	 * It is adding new Reference
@@ -66,7 +62,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
-		referencesAssembly.addReference(body);
+		mockAPI.addReference(body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -88,7 +84,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		referencesAssembly.deleteReferenceByID(referenceID);
+		//referencesAssembly.deleteReferenceByID(referenceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -101,7 +97,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);
+		return new ResponseEntity<Reference>(mockAPI.findReferenceByID(referenceID), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
@@ -114,7 +110,7 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
 		
-		return new ResponseEntity<References>(referencesAssembly.findReferences(), HttpStatus.OK);
+		return new ResponseEntity<References>(mockAPI.findReferences(page, size), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
@@ -127,7 +123,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target source identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetSourceID", required = false) String targetSourceID) {
 		
-		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferencesByMaster(masterID),HttpStatus.OK);
+		return new ResponseEntity<List<Reference>>(mockAPI.findReferencesByMaster(masterID, targetSourceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
@@ -199,7 +195,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
 		//TODO mandatory check for reference id
-		referencesAssembly.updateReference(body);
+		mockAPI.updateReference(body.referenceID(),body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

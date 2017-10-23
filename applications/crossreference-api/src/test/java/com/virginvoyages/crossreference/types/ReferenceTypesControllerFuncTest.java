@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.sources.ReferenceSource;
+
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
@@ -21,28 +23,27 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() {
 
 		//Create test reference Type
-		Response referenceType = createTestReferenceType();
-		String responseBody  = referenceType.getBody().asString();
-		JsonPath jsonPath = new JsonPath(responseBody);
-		
+		JsonPath referenceTypeJson = createTestReferenceType();
+				
 		//Test
 		given().
 				contentType("application/json").
-				get("/xref-api/v1/types/" + jsonPath.getString("referenceTypeID")).
+				get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
 		then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(jsonPath.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(jsonPath.getString("referenceType"))).
+				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+				assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
 				log().
 				all();
 		   
 		//cleanup
-		deleteTestReferenceType(jsonPath.getString("referenceTypeID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
 	//TODO implement test
@@ -61,15 +62,12 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	public void givenValidReferenceTypeDeleteReferenceTypeByIdShouldDeleteReferenceType() {
 		
 		//Create test reference
-		Response referenceType = createTestReferenceType();
-		String responseBody  = referenceType.getBody().asString();
-		JsonPath jsonPath = new JsonPath(responseBody);
-		
-		
+		JsonPath referenceTypeJson = createTestReferenceType();
+				
 	    //Test Delete
 		given().
 				contentType("application/json").
-				delete("/xref-api/v1/types/" + jsonPath.getString("referenceTypeID")).
+				delete("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
 		then().
 				assertThat().statusCode(200).
 				log().
@@ -78,77 +76,91 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		//Test that deleted ID does not exist.
 		given().
 				contentType("application/json").
-				get("/xref-api/v1/types/" + jsonPath.getString("referenceTypeID")).
+				get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
 		then().
 				assertThat().statusCode(200).
 				//TODO test that relevant excpetion in response when reference Type not found
 				//assertThat().body(
 				log().
 				all();
+		
+		//cleanup
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
 	//TODO implement test
-	@Test
+	/*@Test
 	  public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowSomeException() {
 		
-	}
+	}*/
 	
 	@Test
-	public void givenValidReferenceTypeAddReferenceTypeShouldReturnReferenceType() {
+	public void givenAllRequiredDataInRequestBodyAddReferenceTypeShouldAddReferenceType() {
 		
-		Response referenceSource = createTestReferenceSource();
-		String responseBody  = referenceSource.getBody().asString();
-		JsonPath jsonPath = new JsonPath(responseBody);
-	
+		//Create Reference Source 
+		JsonPath referenceSourceJson = createTestReferenceSource();
 		
-		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
+		String testReferenceTypeName = testDataHelper.getRandomAlphabeticString();
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceType", referenceType.referenceType());
-		parameters.put("referenceSourceID", jsonPath.getString("referenceSourceID"));
+		parameters.put("referenceType", testReferenceTypeName);
+		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
 		
 		//create reference type
-		Response response = given()
+		JsonPath createdReferenceTypeJson = given()
 				.contentType("application/json")
 				.body(parameters)
 				.post("/xref-api/v1/types/")
 		
 		.then()
-				.assertThat().statusCode(200).extract().response();
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all()
+				.extract()
+				.response()
+				.jsonPath();
 		
-		String referenceTypeBody  = response.getBody().asString();
-		JsonPath jsonTypePath = new JsonPath(referenceTypeBody);
-		
+			
         //find with ID and test
 		given().
 				contentType("application/json").
-				get("/xref-api/v1/types/" + jsonTypePath.getString("referenceTypeID")).
+				get("/xref-api/v1/types/" + createdReferenceTypeJson.getString("referenceTypeID")).
 		then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(jsonTypePath.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(jsonTypePath.getString("referenceType"))).
+				assertThat().body("referenceTypeID", equalTo(createdReferenceTypeJson.getString("referenceTypeID"))).
+				assertThat().body("referenceType", equalTo(createdReferenceTypeJson.getString("referenceType"))).
 				log().
 				all();
 		   
 		//cleanup
-		deleteTestReferenceType(jsonTypePath.getString("referenceTypeID"));
+		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(createdReferenceTypeJson.getString("referenceSourceID"));
 	
 	} 
 	
+	//TODO
+	/*@Test
+	public void givenReferenceTypeIDInRequestBodyAddReferenceTypeShouldNOTUseTheIDToCreateReferenceType() {
+		
+	}*/
+	
 	@Test
-	public void givenValidReferenceTypeUpdateReferenceTypeShouldUpdateReferenceType() {
+	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {
 		
-		Response referenceSource = createTestReferenceSource();
+		/*Response referenceSource = createTestReferenceSource();
 		String responseBody  = referenceSource.getBody().asString();
-		JsonPath jsonPath = new JsonPath(responseBody);
+		JsonPath jsonPath = new JsonPath(responseBody);*/
 		
-		Response referenceType = createTestReferenceType();
-		String responseTypeBody  = referenceType.getBody().asString();
-		JsonPath jsonTypePath = new JsonPath(responseTypeBody);
+		JsonPath referenceTypeJson = createTestReferenceType();
+		
+		JsonPath referenceSourceToUpdateJson = createTestReferenceSource();
 	
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceType", testDataHelper.getReferenceTypeDataForUpdate());
-		parameters.put("referenceSourceID", jsonPath.getString("referenceSourceID"));
-				
+		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
+		parameters.put("referenceType", referenceTypeJson.getString("referenceType"));
+		parameters.put("referenceSourceID", referenceSourceToUpdateJson.getString("referenceSourceID"));
+		
 		given()
 				.contentType("application/json")
 				.body(parameters)
@@ -156,50 +168,64 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		
 		.then()
 				.assertThat().statusCode(200)
+				.assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID")))
+				.assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType")))
+				.assertThat().body("referenceSourceID", equalTo(referenceSourceToUpdateJson.getString("referenceSourceID")))
 				.log()
-				.all();
+				.all()
+				.extract()
+				.jsonPath();
 		
-		//Test that updated name is reflecting
+		/*//Test that updated name is reflecting
 		given().
 				contentType("application/json").
-		        get("/xref-api/v1/types/" + jsonTypePath.getString("referenceTypeID")).
+		        get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
         then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(jsonTypePath.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(jsonTypePath.getString("referenceType"))).
+				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+				assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
+				assertThat().body("referenceSourceID", equalTo(referenceSourceToUpdateJson.getString("referenceSourceID"))).
 				log().
-				all();
+				all();*/
 			
 		//cleanup
-		deleteTestReferenceType(jsonTypePath.getString("referenceTypeID"));		
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+		deleteTestReferenceSource(referenceSourceToUpdateJson.getString("referenceSourceID"));
 	} 
 	
+	/*@Test
+	public void givenValidReferenceTypeNameInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeString() {
+		
+	}*/
+	
+	/*@Test
+	public void givenInvalidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldThrowSomeException() {
+		
+	}*/
 	
 	@Test
 	public void givenValidReferenceTypesExistFindTypesShouldReturnListOfReferenceTypes() {
 		
 		//create reference Type
-		Response referenceType = createTestReferenceType();
-		String responseTypeBody  = referenceType.getBody().asString();
-		JsonPath jsonTypePath = new JsonPath(responseTypeBody);
-	
-		
+		JsonPath referenceTypeJson = createTestReferenceType();
+				
 	    ValidatableResponse response = 
 	    given()
 				.contentType("application/json")
-				.get("/xref-api/v1/types/"+ jsonTypePath.getString("referenceTypeID"))
+				.param("page", 1)
+				.param("size", 10)
+				.get("/xref-api/v1/types/")
 		
 	    .then()
 				.assertThat().statusCode(200)
-				.assertThat().body("referenceTypeID", equalTo(jsonTypePath.getString("referenceTypeID")))
 				.log()
 				.all();
 	    
-	    assertThat(response.extract().jsonPath().getMap("$").size(), greaterThan(0));
+	    assertThat(response.extract().jsonPath().getList("$").size(), greaterThan(0));
 		
 		//cleanup
-		deleteTestReferenceType(jsonTypePath.getString("referenceTypeID"));		
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));	
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	} 
-
-
 }

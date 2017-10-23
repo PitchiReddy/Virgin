@@ -8,11 +8,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
-
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.crossreference.references.ReferencesEmbedded;
@@ -188,22 +185,4 @@ public class MockCrossReferenceAPI {
 				.masterID("M1")
 				.nativeSourceIDValue("NSID1");
 	}
-	
-	private Audited createAuditDataForCreate() {
-		return new Audited()
-				.createDate(LocalDate.now())
-				.createUser("mockXREFapi");
-	}
-	
-	
-	private Audited updateAuditDataForUpdate(Audited audited) {
-		if(null == audited) {
-			audited = createAuditDataForCreate();
-		}
-		return audited
-			   .updateDate(LocalDate.now())
-		 	   .updateUser("mockXREFapi");
-		
-	}
-
 }

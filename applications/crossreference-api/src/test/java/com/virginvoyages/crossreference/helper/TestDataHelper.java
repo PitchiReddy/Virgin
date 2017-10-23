@@ -1,11 +1,15 @@
 package com.virginvoyages.crossreference.helper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.helper.RandomDataGenerator;
 
 /**
  * Helper class for testcases
@@ -15,78 +19,73 @@ import com.virginvoyages.data.entities.ReferenceTypeData;
  */
 @Service
 public class TestDataHelper {
-
-	public ReferenceSource getDataForCreateReferenceSource() {
-
-		return new ReferenceSource().referenceSource("Seaware").inActive(true);
-	}
 	
-	public ReferenceSource getDataForUpdateReferenceSource(ReferenceSource referenceSource) {
-
-		return referenceSource.referenceSource("Updated Seaware");
-	}
+	@Autowired
+	private RandomDataGenerator randomDataGenerator;
 	
-	public ReferenceType getDataForCreateReferenceType() {
-
-		return new ReferenceType().referenceType("Reservation");
+	private static String TEST_DATA_INDICATOR = "UT_data";
 	
-	}
-	
-	public Reference getDataForCreateReference() {
-
-		return new Reference().referenceID("R30").masterID("M30").nativeSourceIDValue("NSID30");
-	}
-
-	public String createReferenceSourceInJson(String referenceSourceID, String referenceSource, boolean inActive) {
-		return "{ \"referenceSourceID\": \"" + referenceSourceID + "\", " + "\"referenceSource\":\""
-				+ referenceSource + "\", " + "\"inActive\":\"" + inActive + "\"}";
-	}
-	
-	public ReferenceSourceData getReferenceSourceDataEntityForCreate() {
-		return new ReferenceSourceData().referenceSource("Seaware_5_ID").referenceSourceID("ignore").inActive(false);
-	}
-	
-	public ReferenceSourceData getReferenceSourceDataEntityForUpdate() {
-		return new ReferenceSourceData().referenceSource("Seaware_ID_Updated").referenceSourceID("ignore").inActive(false);
-	}
-	
-	public ReferenceSource getReferenceSourceBusinessEntityForCreate() {
+	public ReferenceSourceData getReferenceSourceDataEntity() {
 		return new ReferenceSourceData()
-				.referenceSource("Seaware_5_ID")
-				.referenceSourceID("ignore")
-				.inActive(false)
+				.referenceSource(randomDataGenerator.generateRandomAlphabeticString(TEST_DATA_INDICATOR))
+				.referenceSourceID("to_be_ignored")
+				.inActive(false);
+	}
+	
+	public ReferenceSource getReferenceSourceBusinessEntity() {
+		return getReferenceSourceDataEntity()
 				.convertToBusinessEntity();
 	}
+	
+	public ReferenceTypeData getReferenceTypeDataEntity() {
+		return getReferenceTypeDataEntity(getReferenceSourceDataEntity());
+	}
+	
+	public ReferenceTypeData getReferenceTypeDataEntity(ReferenceSourceData referenceSourceData) {
+		return new ReferenceTypeData()
+				.referenceType(randomDataGenerator.generateRandomAlphabeticString(TEST_DATA_INDICATOR))
+				.referenceTypeID("to_be_ignored")
+				.referenceSourceData(referenceSourceData);
+	}
+	
+	public ReferenceType getReferenceTypeBusinessEntity() {
+		return getReferenceTypeBusinessEntity(getReferenceSourceBusinessEntity());
+	}
+	
+	public ReferenceType getReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
+		return getReferenceTypeDataEntity(referenceSource.convertToDataEntity())
+				.convertToBusinessEntity();
+	}
+	
+	public ReferenceData getReferenceDataEntity() {
+		return getReferenceDataEntity(getReferenceTypeDataEntity());
+								
+	}
+	
+	public ReferenceData getReferenceDataEntity(ReferenceTypeData referenceTypeData) {
+		return new ReferenceData()
+				.referenceID("to_be_ignored")
+				.nativeSourceIDValue(randomDataGenerator.generateRandomAlphaNumericString(TEST_DATA_INDICATOR))
+				.masterID(randomDataGenerator.generateRandomAlphaNumericString())
+				.referenceTypeData(referenceTypeData);
+								
+	}
+	
+	public Reference getReferenceBusinessEntity() {
+		return getReferenceBusinessEntity(getReferenceTypeBusinessEntity());
+	}
+	
+	public Reference getReferenceBusinessEntity(ReferenceType referenceType) {
+		return getReferenceDataEntity(referenceType.convertToDataEntity())
+				.convertToBusinessEntity();
+	}
+	
+	public String getRandomAlphabeticString() {
+		return randomDataGenerator.generateRandomAlphabeticString(TEST_DATA_INDICATOR);
+	}
+	
+	public String getRandomAlphanumericString() {
+		return randomDataGenerator.generateRandomAlphaNumericString(TEST_DATA_INDICATOR);
+	}
 
-	public ReferenceTypeData getReferenceTypeDataEntityForCreate() {
-		return new ReferenceTypeData()
-				.referenceType("Reservation_Testfindone")
-				.referenceTypeID("ignore")
-				.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceBusinessEntityForCreate().referenceSourceID()));
-	}
-	
-	public ReferenceTypeData getReferenceTypeDataForCreate(ReferenceSource referenceSource) {
-		return new ReferenceTypeData()
-				.referenceType("Reservation_Testfindone")
-				.referenceTypeID("ignore")
-				.referenceSourceData(new ReferenceSourceData().referenceSourceID(referenceSource.referenceSourceID()));
-	}
-	
-	
-	public String getReferenceTypeDataForUpdate() {
-		return "Updated Reservation_Testfindone";
-		
-	}
-	
-	public String getReferenceSourceForUpdate() {
-		return "Updated Seaware_5_ID";
-		
-	}
-	
-	public ReferenceTypeData getReferenceTypeDataEntityForUpdate() {
-		return new ReferenceTypeData()
-				.referenceType("Reservation_updated");
-				//.referenceTypeID("RT1");
-				//.referenceSourceData(new ReferenceSourceData().referenceSourceID(getReferenceSourceDataEntityForCreate().referenceSourceID()));
-	}
 }

@@ -4,14 +4,19 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+
 import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
@@ -23,7 +28,7 @@ public class ReferenceTypeRepositoryTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
 	
@@ -32,13 +37,20 @@ public class ReferenceTypeRepositoryTest {
 	
 	
 	@Test 
-	public void testCreate() {
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+	public void testSuccessfulCreate() {
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
-		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate();
-		referenceTypeData.referenceSourceData(createdReferenceSource);
+		
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
+		
 		assertThat(referenceTypeData.referenceType(), equalTo(createdReferenceType.referenceType()));
+		
+		//Assert by find
+		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
+		assertThat(retrievedReferenceType, notNullValue());
+		assertThat(createdReferenceType.referenceType(), equalTo(retrievedReferenceType.referenceType()));
+		assertThat(createdReferenceType.referenceTypeID(), equalTo(retrievedReferenceType.referenceTypeID()));
 		
 		//cleanup
 		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
@@ -46,37 +58,72 @@ public class ReferenceTypeRepositoryTest {
 		
 	}
 	
+	//@Test(expected = DataNotFoundException.class)
+	@Test(expected = InvalidDataAccessApiUsageException.class)
+	public void testDataIntegrityViolationOnCreateWithNoReferenceSourceDataID() {
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(new ReferenceSourceData());
+		referenceTypeRepository.save(referenceTypeData);
+	}
+	
+	@Test(expected = JpaObjectRetrievalFailureException.class)
+	public void testDataIntegrityViolationOnCreateWithInvalidReferenceSourceDataID() {
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(new ReferenceSourceData().referenceSourceID("random"));
+		referenceTypeRepository.save(referenceTypeData);
+	}
+	
 	@Test 
-	public void testUpdate() {
+	public void testUpdateAssociatedReferenceSource() {
 		
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData referenceSourceToCreateType = referenceSourceRepository.save(referenceSourceData);
 		
-		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntityForCreate();
-		referenceTypeDataToCreate.referenceSourceData(createdReferenceSource);
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntity(referenceSourceToCreateType);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
 		assertThat(referenceTypeDataToCreate.referenceType(), equalTo(createdReferenceType.referenceType()));
 		
-		ReferenceTypeData referenceTypeDataToUpdate = testDataHelper.getReferenceTypeDataEntityForUpdate();
-		referenceTypeDataToUpdate.referenceTypeID(createdReferenceType.referenceTypeID());
-		referenceTypeDataToUpdate.referenceSourceData(createdReferenceType.referenceSourceData());
-		ReferenceTypeData updatedReferenceType = referenceTypeRepository.save(referenceTypeDataToUpdate);
+		ReferenceSourceData referenceSourceForUpdation = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData referenceSourceToUpdateType = referenceSourceRepository.save(referenceSourceForUpdation);
+				
+		createdReferenceType.referenceSourceData(referenceSourceToUpdateType);
+		ReferenceTypeData updatedReferenceType = referenceTypeRepository.save(createdReferenceType);
+		
 		assertThat(updatedReferenceType.referenceTypeID(), equalTo(createdReferenceType.referenceTypeID()));
-		assertThat(updatedReferenceType.referenceType(), equalTo(referenceTypeDataToUpdate.referenceType()));
+		assertThat(updatedReferenceType.referenceSourceData().referenceSourceID(), equalTo(referenceSourceToUpdateType.referenceSourceID()));
 		
 		//cleanup
 		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
-		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+		referenceSourceRepository.delete(referenceSourceToCreateType.referenceSourceID());
+		referenceSourceRepository.delete(referenceSourceToUpdateType.referenceSourceID());
+	}
+	
+	public void testUpdateReferenceTypeName() {
+		
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData referenceSourceToCreateType = referenceSourceRepository.save(referenceSourceData);
+		
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntity(referenceSourceToCreateType);
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
+		assertThat(referenceTypeDataToCreate.referenceType(), equalTo(createdReferenceType.referenceType()));
+		
+		String referenceTypeToUpdateTo = testDataHelper.getRandomAlphabeticString();
+		createdReferenceType.referenceType(referenceTypeToUpdateTo);
+		ReferenceTypeData updatedReferenceType = referenceTypeRepository.save(createdReferenceType);
+		
+		assertThat(updatedReferenceType.referenceTypeID(), equalTo(createdReferenceType.referenceTypeID()));
+		assertThat(updatedReferenceType.referenceType(), equalTo(referenceTypeToUpdateTo));
+		
+		//cleanup
+		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
+		referenceSourceRepository.delete(referenceSourceToCreateType.referenceSourceID());
 	}
 	
 	@Test 
 	public void testFindOne() {
 		
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
-		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate();
-		referenceTypeData.referenceSourceData(createdReferenceSource);
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
 		
 		//ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(referenceTypeDataToCreate.referenceTypeID());
@@ -95,11 +142,10 @@ public class ReferenceTypeRepositoryTest {
 	@Test 
 	public void testFindAll() {
 		
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
-		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate();
-		referenceTypeData.referenceSourceData(createdReferenceSource);
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
 		
 		List<ReferenceTypeData> referenceTypes = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
@@ -113,11 +159,10 @@ public class ReferenceTypeRepositoryTest {
 	@Test 
 	public void testDelete() {
 		
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
-		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntityForCreate();
-		referenceTypeData.referenceSourceData(createdReferenceSource);
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
 		
 		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
@@ -126,9 +171,12 @@ public class ReferenceTypeRepositoryTest {
 		assertThat(createdReferenceType.referenceTypeID(), equalTo(retrievedReferenceType.referenceTypeID()));
 		
 		referenceTypeRepository.delete(retrievedReferenceType.referenceTypeID());
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
 		ReferenceTypeData deletedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
 		assertThat(deletedReferenceType, nullValue());
+		
+		
 			
 	}
 

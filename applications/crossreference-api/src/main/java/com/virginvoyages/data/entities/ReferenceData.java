@@ -23,7 +23,7 @@ public class ReferenceData {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="REFERENCE_ID")
-	private Long referenceID;
+	private String referenceID;
 
 	@Column(name="NATIVE_SOURCE_ID_VALUE")
 	private String nativeSourceIDValue;
@@ -43,6 +43,24 @@ public class ReferenceData {
 				.referenceTypeID(String.valueOf(this.referenceTypeData()));
 				
 				
-}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ReferenceData)) {
+			return false;
+		}
+		ReferenceData other = (ReferenceData) obj;
+		return referenceID().equals(other.referenceID());
+	}
+	
+	@Override
+	public int hashCode() {
+		return referenceID().hashCode();
+	}
 	
 }	

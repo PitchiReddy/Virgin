@@ -40,10 +40,10 @@ public class ReferenceSourceData implements Serializable {
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid",strategy = "uuid")
     @Column(name="REFERENCE_SOURCE_ID")
-	private String referenceSourceID = null;
+	private String referenceSourceID;
 
 	@Column(name="REFERENCE_SOURCE",nullable = false)
-	private String referenceSource = null;
+	private String referenceSource;
 
 	@Column(name="INACTIVE")
 	private Boolean inActive = false;
