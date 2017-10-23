@@ -1,11 +1,9 @@
 package com.virginvoyages.crossreference.references;
 
-import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.crossreference.model.Audited;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.data.entities.ReferenceData;
+import com.virginvoyages.data.entities.ReferenceTypeData;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,29 +14,25 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class Reference   {
 	
-  @JsonProperty("auditData")	
-  private Audited auditData = null;	
-
-  @JsonProperty("referenceSource")
-  private ReferenceSource referenceSource = null;
-
-  @JsonProperty("referenceType")
-  private ReferenceType referenceType = null;
-
   @JsonProperty("referenceID")
   private String referenceID = null;
 
-  @JsonProperty("nativeSourceID")
-  private String nativeSourceID = null;
+  @JsonProperty("nativeSourceIDValue")
+  private String nativeSourceIDValue = null;
 
   @JsonProperty("masterID")
-  private String masterID = null;
-
-  @JsonProperty("expiry")
-  private LocalDate expiry = null;
-
-  @JsonProperty("details")
-  private String details = null;
+  private String masterID;
+  
+  @JsonProperty("referenceTypeID")
+  private String referenceTypeID = null;
+  
+  public ReferenceData convertToDataEntity() {
+	  return new ReferenceData()
+			  .nativeSourceIDValue(this.nativeSourceIDValue())
+			  .masterID(this.masterID())
+			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
+			  
+  }
 
 }
 

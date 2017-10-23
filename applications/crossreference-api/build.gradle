@@ -19,7 +19,6 @@ buildscript {
         classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
     }
-    
 }
 
 apply from: "../../java.gradle"
@@ -27,7 +26,6 @@ apply plugin: "org.springframework.boot"
 apply plugin: "docker"
 apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
-
 
 group = "com.virginvoyages"
 version = '1.0'
@@ -96,12 +94,14 @@ jacocoTestReport {
                     //'**/*Data**',
                     // TODO Refactor to use naming (package or class) and regular expression
                     // Exclude Lombok generated code.
-                    'com/virginvoyages/crossreference/model/Audited.class',
                     'com/virginvoyages/crossreference/references/Reference.class',
                     'com/virginvoyages/crossreference/references/References.class',
                     'com/virginvoyages/crossreference/references/ReferencesEmbedded.class',
                     'com/virginvoyages/crossreference/sources/ReferenceSource.class',
-                    'com/virginvoyages/crossreference/types/Type.class',
+                    'com/virginvoyages/crossreference/types/ReferenceType.class',
+                    'com/virginvoyages/crossreference/data/entities/ReferenceSourceData.class',
+                    'com/virginvoyages/crossreference/data/entities/ReferenceTypeData.class',
+                    'com/virginvoyages/crossreference/data/entities/ReferenceData.class',
                     // Exclude POJO
                     'com/virginvoyages/model/Link.class',
                     'com/virginvoyages/model/Links.class',

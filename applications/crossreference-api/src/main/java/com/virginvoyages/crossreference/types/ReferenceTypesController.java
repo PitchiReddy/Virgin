@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 
 import io.swagger.annotations.Api;
@@ -38,36 +37,34 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @ExposesResourceFor(ReferenceType.class)
 public class ReferenceTypesController {
-
-	@Autowired
-	private MockCrossReferenceAPI mockAPI;
-
+	
 	@Autowired
 	private ReferenceTypesAssembly referenceTypesAssembly;
 
 	/**
 	 * It is adding new ReferenceType Record
-	 * 
 	 * @param ReferenceType
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
 	 *            - Application identifier of client.
-	 * @return
+	 * @return ReferenceType - returns a referenceType
 	 */
 	@ApiOperation(value = "", notes = "Add a new `ReferenceType`.", response = Void.class, tags = { "ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
 	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<Void> addReferenceType(
-			@ApiParam(value = "Reference object that needs to be created", required = true) @RequestBody ReferenceType body,
+	public ResponseEntity<ReferenceType> addReferenceType(
+			@ApiParam(value = "Reference Type object that needs to be created", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+		
 		log.debug("Adding Reference Type");
-		referenceTypesAssembly.addReferenceType(body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		ReferenceType referenceType =referenceTypesAssembly.addReferenceType(body);
+		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
+
 	/**
 	 * @param referenceTypeID
 	 *            - delete reference type by ID
@@ -85,7 +82,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-
+		
 		log.debug("deleting Reference Type");
 		referenceTypesAssembly.deleteReferenceTypeByID(referenceTypeID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -100,7 +97,7 @@ public class ReferenceTypesController {
 	 *            - Application identifier of client.
 	 * @return ReferenceType - returns a referenceType
 	 */
-	@ApiOperation(value = "Find reference type by ID", notes = "Returns a reference source for a specified reference source identity.  This identity is a univeral reference identity.", response = ReferenceType.class, tags = {
+	@ApiOperation(value = "Find reference type by ID", notes = "Returns a reference type for a specified reference type identity.  This identity is a univeral reference identity.", response = ReferenceType.class, tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = ReferenceType.class) })
 	@RequestMapping(value = "/types/{referenceTypeID}", produces = { "application/json" }, method = RequestMethod.GET)
@@ -108,11 +105,12 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+		
 		log.debug("finding Reference Type By referenceTypeID");
 		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByID(referenceTypeID),
 				HttpStatus.OK);
 	}
-	
+
 	/**
 	 * find types by using below parameters
 	 * @param page         
@@ -126,40 +124,41 @@ public class ReferenceTypesController {
 	@ApiOperation(value = "", notes = "Gets `ReferenceType` objects.", response = ReferenceType.class, responseContainer = "List", tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = ReferenceType.class) })
-	@RequestMapping(value = "/types", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
+			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<ReferenceType>> findTypes(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "") @RequestParam(value = "page", required = false) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = false) Integer size) {
-
+			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
+		
 		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(), HttpStatus.OK);
 	}
-	
+
 	/**
-	 * @param referenceTypeID         
+	 * Update reference Type     
 	 * @param  body
 	 *         - Update reference type by ID and body
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
 	 *            - Application identifier of client.
-	 * @return 
+	 * @return ReferenceType - returns a referenceType
 	 */
 	@ApiOperation(value = "", notes = "Update a `ReferenceType` object.", response = Void.class, tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
-			@ApiResponse(code = 404, message = "ReferenceSource not found", response = Void.class),
+			@ApiResponse(code = 404, message = "ReferenceType not found", response = Void.class),
 			@ApiResponse(code = 405, message = "Validation exception", response = Void.class) })
-	@RequestMapping(value = "/types/{referenceTypeID}", produces = { "application/json" }, consumes = {
+	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateReferenceType(
-			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
-			@ApiParam(value = "Reference object that needs to be updated", required = true) @RequestBody ReferenceType body,
+	public ResponseEntity<ReferenceType> updateReferenceType(
+			@ApiParam(value = "ReferenceType object that needs to be updated", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		referenceTypesAssembly.updateReferenceType(referenceTypeID, body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		
+		//TODO - mandatory check for id in body
+		ReferenceType referenceType = referenceTypesAssembly.updateReferenceType(body);
+		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
-
 }

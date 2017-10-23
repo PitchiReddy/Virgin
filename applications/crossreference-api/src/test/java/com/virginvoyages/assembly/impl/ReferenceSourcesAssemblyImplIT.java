@@ -2,9 +2,11 @@ package com.virginvoyages.assembly.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
@@ -28,49 +31,83 @@ public class ReferenceSourcesAssemblyImplIT {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-	
 	@Test
-	public void givenValidReferenceSourceCreateReferenceSourceShouldReturnReferenceSource() {
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.addReferenceSource(referenceSource);
-		assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(referenceSource.referenceSourceID(), equalTo("RS1"));
-		assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
+	public void givenValidReferenceSourceDataAddReferenceSourceShouldCreateAndReturnReferenceSource() {
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
+		//Assert by find
+		ReferenceSource retrievedReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		assertThat(retrievedReferenceSource, notNullValue());
+		assertThat(createdReferenceSource.referenceSourceID(), equalTo(retrievedReferenceSource.referenceSourceID()));
+		assertThat(createdReferenceSource.referenceSource(), equalTo(retrievedReferenceSource.referenceSource()));
+		
+		//cleanup
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		
 	}
 	
+	//TODO - Implement in assembly code to set to NULL in ReferencesourceData if emptystring - MySQL doesnt treat empty string as null.
+	/*@Test
+	public void givenEmptyStringAsReferenceSourceAddReferenceSourceShouldThrowMandatoryFieldsMissingException() {
+				
+	}*/
+	
 	@Test
-	public void givenValidReferenceSourceFindReferenceSourceShouldReturnReferenceSource() {
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.addReferenceSource(referenceSource);
-		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(referenceSource.referenceSourceID());
+	public void givenValidReferenceSourceIDFindReferenceSourceByIDShouldReturnReferenceSource() {
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource =  referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		assertThat(findReferenceSource.referenceSourceID(), is(notNullValue()));
-		assertThat(findReferenceSource.referenceSourceName(), equalTo("Seaware"));
+		assertThat(findReferenceSource.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		
+		//cleanup
+		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
+	
+	//TODO
+	/*@Test
+	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldThrowDataNotFoundException() {
+		
+	}*/
 	
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
-		//assertThat(referenceSource.referenceSourceID(), is(nullValue()));
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource =  referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		assertThat(findReferenceSource, is(nullValue()));
 	}
 	
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		referenceSource.referenceSourceName("Updated Seaware");
-		referenceSourcesAssembly.updateReferenceSource(referenceSource.referenceSourceID(), referenceSource);
-		assertThat(referenceSource.referenceSourceName(), equalTo("Updated Seaware"));
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource =  referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
+		String referenceSourceUpdateString = testDataHelper.getRandomAlphabeticString();
+		createdReferenceSource.referenceSource(referenceSourceUpdateString);
+		
+		ReferenceSource updatedReferenceSource = referenceSourcesAssembly.updateReferenceSource(createdReferenceSource);
+		
+		assertThat(updatedReferenceSource.referenceSourceID(), equalTo(createdReferenceSource.referenceSourceID()));
+		assertThat(updatedReferenceSource.referenceSource(), equalTo(referenceSourceUpdateString));
+		
+		referenceSourcesAssembly.deleteReferenceSourceByID(updatedReferenceSource.referenceSourceID());
 	}
 	
 	@Test
 	public void givenValidReferenceSourceFindSourcesShouldRetunsReferenceSources() {
-		testDataHelper.getDataForCreateReferenceSource();
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
 		List<ReferenceSource> referenceSourceList =referenceSourcesAssembly.findSources();
-		assertThat(referenceSourceList, hasSize(5));
-		for(ReferenceSource referenceSource: referenceSourceList) {
-			assertThat(referenceSource.referenceSourceName(), equalTo("Seaware"));
-			referenceSourcesAssembly.deleteReferenceSourceByID(referenceSource.referenceSourceID());
-		}
+		assertThat(referenceSourceList, hasSize(greaterThan(0)));
+		
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		
 	}
 }

@@ -8,11 +8,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
-
-import com.virginvoyages.crossreference.model.Audited;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.crossreference.references.ReferencesEmbedded;
@@ -45,8 +42,6 @@ public class MockCrossReferenceAPI {
                 .map(Map.Entry::getKey).findFirst()
                 .orElse(null);
 		if (key == null) {
-			addReferenceSource(reference.referenceSource());
-			addReferenceType(reference.referenceType());
 			references.put(reference.referenceID(), reference);
         } 
 	}
@@ -54,7 +49,7 @@ public class MockCrossReferenceAPI {
 	public void updateReference(String referenceID, Reference reference) {
 		Reference existingReference = references.get(referenceID);
 		if(null != existingReference)
-			reference.auditData(updateAuditDataForUpdate(existingReference.auditData()));
+	//		reference.auditData(updateAuditDataForUpdate(existingReference.auditData()));
 			references.put(referenceID, reference);
 	}
 		
@@ -89,7 +84,7 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.masterID().equals(masterID) && e.referenceSource().referenceSourceID().equals(targetSourceID))
+                .filter(e -> e.masterID().equals(masterID))
                 .collect(Collectors.toList());
     }
 	
@@ -101,7 +96,7 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceID().equals(nativeSourceID) && e.referenceSource().referenceSourceID().equals(sourceID))
+                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
                 .collect(Collectors.toList());
 	}
 	
@@ -109,10 +104,8 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceID().equals(nativeSourceID) 
-                		&& e.referenceSource().referenceSourceID().equals(sourceID) 
-                		&& e.referenceType().referenceTypeID().equals(typeID))
-                .collect(Collectors.toList());
+                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
+                             .collect(Collectors.toList());
 	}
 	
 	public void addReferenceType(ReferenceType referenceType) {
@@ -128,7 +121,7 @@ public class MockCrossReferenceAPI {
 	public void updateReferenceType(String referenceTypeID, ReferenceType referenceType) {
 		ReferenceType existingReferenceType = referenceTypes.get(referenceTypeID);
 		if(null != existingReferenceType)
-			referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
+			//referenceType.auditData(updateAuditDataForUpdate(existingReferenceType.auditData()));
 			referenceTypes.put(referenceTypeID, referenceType);
 	}
 	
@@ -157,7 +150,7 @@ public class MockCrossReferenceAPI {
 	public void updateReferenceSource(String referenceSourceID, ReferenceSource referenceSource) {
 		ReferenceSource existingReferenceSource = referenceSources.get(referenceSourceID);
 		if(null != existingReferenceSource)
-			referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
+			//referenceSource.auditData(updateAuditDataForUpdate(existingReferenceSource.auditData()));
 			referenceSources.put(referenceSourceID, referenceSource);
 	}
 	
@@ -175,46 +168,21 @@ public class MockCrossReferenceAPI {
 	
 	private ReferenceSource createReferenceSource() {
 		return new ReferenceSource()
-				.auditData(createAuditDataForCreate())
 				.referenceSourceID("RS1")
-				.referenceSourceName("Seaware");
+				.referenceSource("Seaware");
 	}
 	
 	private ReferenceType createReferenceType() {
 		return new ReferenceType()
-				.auditData(createAuditDataForCreate())
 				.referenceTypeID("RT1")
-				.referenceType("Reservation")
-				.referenceName("DiningOption");
+				.referenceType("Reservation");
+				
 	}
 	
 	private Reference createReference() {
 		return new Reference()
-				.auditData(createAuditDataForCreate())
-				.referenceType(findReferenceTypeByID("RT1"))
-				.referenceSource(findReferenceSourceByID("RS1"))
 				.referenceID("R1")
-				.details("Dummy Reference Entry")
-				.expiry(LocalDate.now())
 				.masterID("M1")
-				.nativeSourceID("NSID1");
+				.nativeSourceIDValue("NSID1");
 	}
-	
-	private Audited createAuditDataForCreate() {
-		return new Audited()
-				.createDate(LocalDate.now())
-				.createUser("mockXREFapi");
-	}
-	
-	
-	private Audited updateAuditDataForUpdate(Audited audited) {
-		if(null == audited) {
-			audited = createAuditDataForCreate();
-		}
-		return audited
-			   .updateDate(LocalDate.now())
-		 	   .updateUser("mockXREFapi");
-		
-	}
-
 }

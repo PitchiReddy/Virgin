@@ -2,13 +2,13 @@ package com.virginvoyages.crossreference.sources;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
@@ -24,33 +25,71 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Test
+	public void givenValidReferenceSourceAddReferenceSourceShouldCreateReferenceSource() {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
+		parameters.put("referenceSource", referenceSource.referenceSource());
+		parameters.put("inActive", referenceSource.inActive());
+		
+		//create reference source
+		JsonPath jsonResponse = given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/sources/")
+		
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.extract()
+				.response()
+				.body().jsonPath();
+		
+		//find with ID and test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + jsonResponse.getString("referenceSourceID")).
+		then().
+				assertThat().statusCode(200).
+				assertThat().body("referenceSourceID", equalTo(jsonResponse.getString("referenceSourceID"))).
+				assertThat().body("referenceSource", equalTo(jsonResponse.getString("referenceSource"))).
+				log().
+				all();
+		   
+		//cleanup
+		deleteTestReferenceSource(jsonResponse.getString("referenceSourceID"));
+	
+	} 
 
 	@Test
 	public void givenValidReferenceSourceIDGetReferenceSourceByIdShouldReturnReferenceSource() {
 
 		//Create test reference source
-		ReferenceSource referenceSource = createTestReferenceSource();
-		
-		//Test
+		JsonPath createdReferenceJson = createTestReferenceSource();
+			
+		//Test by find
 		given().
 				contentType("application/json").
-				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
+				get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
 		then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo(referenceSource.referenceSourceName())).
+				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID"))).
+				assertThat().body("referenceSource", equalTo(createdReferenceJson.getString("referenceSource"))).
 				log().
 				all();
 		   
 		//cleanup
-		deleteTestReferenceSource(referenceSource.referenceSourceID());
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
 	}
 	
-	//TODO implement test
-	/*@Test
-	public void givenInValidReferenceSourceIDGetReferenceSourceByIdShouldThrowSomeException() {
+	//TODO test
+	/*public void givenIvValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
 		
 	}*/
+	
 	
 	//TODO implement test
 	/*@Test
@@ -62,12 +101,14 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	public void givenValidReferenceSourceDeleteReferenceSourceByIdShouldDeleteReferenceSource() {
 		
 		//Create test reference
-	    ReferenceSource referenceSource = createTestReferenceSource();
+		JsonPath createdReferenceJson = createTestReferenceSource();
+			
+		System.out.println("\n\n created source ID==>"+createdReferenceJson.getString("referenceSourceID")+"\n\n");
 		
 	    //Test Delete
 		given().
 				contentType("application/json").
-				delete("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
+				delete("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
 		then().
 				assertThat().statusCode(200).
 				log().
@@ -76,73 +117,36 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//Test that deleted ID does not exist.
 		given().
 				contentType("application/json").
-				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
+				get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
 		then().
-				assertThat().statusCode(200).
-				//TODO test that relevant excpetion in response when reference source not found
-				//assertThat().body(
+		        //TODO Update this to SC_NOT found once error scenario is implemented.
+				assertThat().statusCode(HttpStatus.SC_OK).
 				log().
 				all();
 	}
 	
 	//TODO implement test
 	/*@Test
-	  public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowSomeException() {
+	public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowSomeException() {
 		
 	}*/
 	
 	@Test
-	public void givenValidReferenceSourceAddReferenceSourceShouldCreateReferenceSource() {
-		
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
-		parameters.put("referenceSourceName", referenceSource.referenceSourceName());
-		parameters.put("inActive", referenceSource.inActive());
-		
-		//create reference
-		given()
-				.contentType("application/json")
-				.body(parameters)
-				.post("/xref-api/v1/sources/")
-		
-		.then()
-				.assertThat().statusCode(200)
-				.log()
-				.all();
-		
-        //find with ID and test
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
-		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo(referenceSource.referenceSourceName())).
-				log().
-				all();
-		   
-		//cleanup
-		deleteTestReferenceSource(referenceSource.referenceSourceID());
-	
-	} 
-	
-	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
 		
-		ReferenceSource referenceSource = createTestReferenceSource();
-		
+		JsonPath createdReferenceJson = createTestReferenceSource();
+	
+		String referenceSourceUpdateString = testDataHelper.getRandomAlphabeticString();
+			
 		//update source name
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("auditData", referenceSource.auditData());
-		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
-		parameters.put("referenceSourceName", "Updated Source Name");
-		parameters.put("inActive", referenceSource.inActive());
+		parameters.put("referenceSourceID", createdReferenceJson.getString("referenceSourceID"));
+		parameters.put("referenceSource", referenceSourceUpdateString);
 		
 		given()
 				.contentType("application/json")
 				.body(parameters)
-				.put("/xref-api/v1/sources/"+referenceSource.referenceSourceID())
+				.put("/xref-api/v1/sources")
 		
 		.then()
 				.assertThat().statusCode(200)
@@ -152,16 +156,15 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//Test that updated resource name is reflecting
 		given().
 				contentType("application/json").
-		        get("/xref-api/v1/sources/" + referenceSource.referenceSourceID()).
+		        get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
         then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceSourceID", equalTo(referenceSource.referenceSourceID())).
-				assertThat().body("referenceSourceName", equalTo("Updated Source Name")).
-				log().
-				all();
+				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID"))).
+				assertThat().body("referenceSource", equalTo(referenceSourceUpdateString));
+				
 			
 		//cleanup
-		deleteTestReferenceSource(referenceSource.referenceSourceID());		
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
 	} 
 	
 	
@@ -169,23 +172,25 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSources() {
 		
 		//create reference source
-	    ReferenceSource referenceSource = createTestReferenceSource();
+		JsonPath createdReferenceJson = createTestReferenceSource();
+		
 		
 	    ValidatableResponse response = 
 	    given()
 				.contentType("application/json")
+				.param("page", 1)
+				.param("size", 10)
 				.get("/xref-api/v1/sources/")
 		
 	    .then()
 				.assertThat().statusCode(200)
-				.assertThat().body("referenceSourceID", hasItem(referenceSource.referenceSourceID()))
 				.log()
 				.all();
 	    
 	    assertThat(response.extract().jsonPath().getList("$").size(), greaterThan(0));
-		
+	  
 		//cleanup
-		deleteTestReferenceSource(referenceSource.referenceSourceID());		
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
 	} 
 
 

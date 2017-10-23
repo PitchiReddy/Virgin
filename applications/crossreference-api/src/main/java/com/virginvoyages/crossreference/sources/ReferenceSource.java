@@ -1,8 +1,7 @@
 package com.virginvoyages.crossreference.sources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.crossreference.model.Audited;
-
+import com.virginvoyages.data.entities.ReferenceSourceData;
 import lombok.Data;
 import lombok.experimental.Accessors;
 /**
@@ -12,17 +11,21 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent = true, chain = true)
 public class ReferenceSource   {
-  @JsonProperty("auditData")	
-  private Audited auditData = null;	
-
+  
   @JsonProperty("referenceSourceID")
   private String referenceSourceID = null;
 
-  @JsonProperty("referenceSourceName")
-  private String referenceSourceName = null;
+  @JsonProperty("referenceSource")
+  private String referenceSource = null;
 
   @JsonProperty("inActive")
   private Boolean inActive = null;
-
- }
+  
+  public ReferenceSourceData convertToDataEntity() {
+	  return new ReferenceSourceData()
+			  .referenceSource(this.referenceSource())
+			  .referenceSourceID(this.referenceSourceID())
+			  .inActive(this.inActive());
+  }
+}
 
