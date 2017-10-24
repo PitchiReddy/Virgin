@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.data.util.GUIDGenerator;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -39,10 +38,6 @@ public class ReferenceData {
     @JoinColumn(name = "REFERENCE_TYPE_ID")
 	private ReferenceTypeData referenceTypeData;
 	
-	public ReferenceData() {
-		referenceID(GUIDGenerator.generateRandomGUID());
-	}
-
 	public Reference convertToBusinessEntity() {
 		return new Reference()
 				.referenceID(String.valueOf(this.referenceID()))
@@ -51,6 +46,24 @@ public class ReferenceData {
 				.referenceTypeID(String.valueOf(this.referenceTypeData()));
 				
 				
-}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ReferenceData)) {
+			return false;
+		}
+		ReferenceData other = (ReferenceData) obj;
+		return referenceID().equals(other.referenceID());
+	}
+	
+	@Override
+	public int hashCode() {
+		return referenceID().hashCode();
+	}
 	
 }	

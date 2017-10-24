@@ -27,13 +27,5 @@ public class ReferenceSource   {
 			  .referenceSourceID(this.referenceSourceID())
 			  .inActive(this.inActive());
   }
-  
-	public ReferenceSourceData convertToUpdateDataEntity(String referenceSourceID) {
-		  return new ReferenceSourceData()
-				  .referenceSourceID(referenceSourceID)
-				  .referenceSource(this.referenceSource())
-				  .inActive(this.inActive());
-	  } 
-
- }
+}
 

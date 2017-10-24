@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.crossreference.types.ReferenceType;
+
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 
 public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
@@ -22,24 +24,24 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
     public void contextLoads() {
     }
 
-	public ReferenceSource createTestReferenceSource() {
+	public JsonPath createTestReferenceSource() {
 
-		ReferenceSource referenceSource = testDataHelper.getDataForCreateReferenceSource();
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
 		parameters.put("referenceSource", referenceSource.referenceSource());
 		parameters.put("inActive", referenceSource.inActive());
 
-		given()
+		JsonPath jsonResponse = given()
 			.contentType("application/json")
 			.body(parameters)
 			.post("/xref-api/v1/sources").
 
 		then()
-			.statusCode(200);
+			.statusCode(200).extract().response().jsonPath();
 
-		return referenceSource;
+		return jsonResponse;
 	}
 	
 	public void deleteTestReferenceSource(String referenceSourceID) {
@@ -52,26 +54,29 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 			.statusCode(200);
 	}
 
-	public ReferenceType createTestReferenceType() {
-
-		ReferenceType referenceType = testDataHelper.getDataForCreateReferenceType();
+	public JsonPath createTestReferenceType(JsonPath referenceSourceJson) {
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceTypeID", referenceType.referenceTypeID());
-		parameters.put("referenceType", referenceType.referenceType());
-
+		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
+		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
+		
+		
 		// create reference type
-		given()
+		Response response = given()
 			.contentType("application/json")
 			.body(parameters)
 			.post("/xref-api/v1/types/").
 
 		then()
 			.assertThat()
-			.statusCode(200)
-			.log()
-			.all();
+			.statusCode(200).extract().response();
+		
 
-		return referenceType;
+		return response.jsonPath();
+	}
+	
+	public JsonPath createTestReferenceType() {
+		return createTestReferenceType(createTestReferenceSource());
 	}
 	
 	public void deleteTestReferenceType(String referenceTypeID) {
@@ -84,16 +89,26 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 			.statusCode(200);
 	}
 	
-	public Reference createTestReferences() {
-
-		Reference reference = testDataHelper.getDataForCreateReference();
+	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
+		
+		String createdReferenceSourceID = referenceTypeResponse.getString("referenceSourceID");
+		String createdReferenceTypeID = referenceTypeResponse.getString("referenceTypeID");
+		
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
+		
+		Map<String, Object> referenceType = new HashMap<String, Object>();
+		referenceType.put("referenceTypeID", createdReferenceTypeID);
+		referenceType.put("referenceType", referenceTypeResponse.getString("referenceType"));
+		referenceType.put("referenceSourceID", createdReferenceSourceID);
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		
+		
 		// create references 
-		given()
+		JsonPath responseJson = given()
 		     .contentType("application/json") 
 		     .body(parameters)
 		     .post("/xref-api/v1/references/").
@@ -102,9 +117,16 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		 	.assertThat()
 		 	.statusCode(200)
 		 	.log()
-		 	.all();
-		
-		return reference;
+		 	.all()
+		 	.extract()
+		 	.jsonPath();
+		 			
+		return responseJson;
+	}
+	
+	public JsonPath createTestReference() {
+		return createTestReference(createTestReferenceType());
+			
 	}
 	
 	public void deleteTestReference(String referenceID) {
@@ -115,6 +137,11 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		then()
 			.statusCode(200);
+	}
+	
+	//Deprecated method - should not be used - use createTestReference instead
+	public Reference createTestReferences() {
+		return new Reference();
 	}
 
 }

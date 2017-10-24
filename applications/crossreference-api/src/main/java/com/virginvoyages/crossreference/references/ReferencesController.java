@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,7 +42,10 @@ import lombok.extern.slf4j.Slf4j;
 public class ReferencesController {
 	
 	@Autowired
-	private ReferencesAssembly referencesAssembly;
+	private ReferencesAssembly referencesAssembly; 
+	
+	@Autowired
+	private MockCrossReferenceAPI mockAPI; 
 	
 	
 	/**
@@ -66,6 +71,7 @@ public class ReferencesController {
 		log.debug("Adding Reference");
 		Reference reference = referencesAssembly.addReference(body);
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
+
 	}
 
 	/**
@@ -86,7 +92,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		referencesAssembly.deleteReferenceByID(referenceID);
+		//referencesAssembly.deleteReferenceByID(referenceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -109,9 +115,11 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
 		
+
 		if(StringUtils.isEmpty(referenceID)) 
         	throw new MandatoryFieldsMissingException();
 		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);
+
 	}
 
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
@@ -124,7 +132,7 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
 		
-		return new ResponseEntity<References>(referencesAssembly.findReferences(), HttpStatus.OK);
+		return new ResponseEntity<References>(mockAPI.findReferences(page, size), HttpStatus.OK);
 	}
 	
 	/**
@@ -147,7 +155,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target source identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetSourceID", required = false) String targetSourceID) {
 		
-		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferencesByMaster(masterID),HttpStatus.OK);
+		return new ResponseEntity<List<Reference>>(mockAPI.findReferencesByMaster(masterID, targetSourceID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
@@ -227,6 +235,7 @@ public class ReferencesController {
 		//TODO mandatory check for reference id
 		Reference reference =	referencesAssembly.updateReference(body);
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
+
 	}
 
 }

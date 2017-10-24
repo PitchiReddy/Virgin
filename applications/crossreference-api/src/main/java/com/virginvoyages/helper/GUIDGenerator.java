@@ -1,4 +1,4 @@
-package com.virginvoyages.data.util;
+package com.virginvoyages.helper;
 
 import java.util.UUID;
 

@@ -2,11 +2,14 @@ package com.virginvoyages.assembly.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 
@@ -63,13 +66,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
-		if(null!=referenceSourceData) {
 		referenceSourceRepository.delete(referenceSourceID);
-		}else {
-			 throw new DataNotFoundException();
-		}
-		
 	}
 
 	/**
@@ -83,12 +80,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		ReferenceSourceData referenceSourceData = null;
-		ReferenceSourceData findReferenceSourceData = referenceSourceRepository.findOne(referenceSource.referenceSourceID());
-		if(null!=findReferenceSourceData) {
-		referenceSourceData = referenceSourceRepository.save(referenceSource.convertToUpdateDataEntity(referenceSource.referenceSourceID()));
-		}else {
-			 throw new DataNotFoundException();
+		ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
+		if(null == referenceSourceData) {
+			throw new DataNotFoundException();
 		}
 		return referenceSourceData.convertToBusinessEntity();
 	}
@@ -102,12 +96,13 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public List<ReferenceSource> findSources() {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		Iterable<ReferenceSourceData> referenceSourceDataIterable = referenceSourceRepository.findAll();
+		List<ReferenceSourceData> listOfReferenceSourceData = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
 		List<ReferenceSource> listOfReferenceSource = new ArrayList<>();
-		for (ReferenceSourceData referenceSourceData : referenceSourceDataIterable) {
-			listOfReferenceSource.add(referenceSourceData.convertToBusinessEntity());
+		if(null != listOfReferenceSourceData && listOfReferenceSourceData.size() > 0 ) {
+			listOfReferenceSource = listOfReferenceSourceData.stream().map(referenceSourceData -> referenceSourceData.convertToBusinessEntity()).collect(Collectors.toList());
 		}
-		return null == referenceSourceDataIterable ? null : listOfReferenceSource;
+		return listOfReferenceSource;
+		
 	}
 
 }

@@ -3,11 +3,9 @@ package com.virginvoyages.data.repositories;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.greaterThan;
-
-
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
@@ -15,10 +13,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,32 +26,72 @@ public class ReferenceSourceRepositoryTest {
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
 	@Autowired
 	private ReferenceSourceRepository referenceSourceRepository;
 	
+	@Autowired
+	private ReferenceTypeRepository referenceTypeRepository;
+	
 	@Test 
 	public void testCreate() {
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		assertThat(referenceSourceData.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		
+		//Assert by find
+		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(createdReferenceSource.referenceSourceID());
+		assertThat(retrievedReferenceSource, notNullValue());
+		assertThat(createdReferenceSource.referenceSource(), equalTo(retrievedReferenceSource.referenceSource()));
+		assertThat(createdReferenceSource.referenceSourceID(), equalTo(retrievedReferenceSource.referenceSourceID()));
 		
 		//cleanup
 		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
 	}
 	
+	@Test(expected = DataIntegrityViolationException.class)
+	public void testCreateWithEmptyReferenceSourceName() {
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		
+		//Resetting name to null
+		referenceSourceData.referenceSource(null);
+		referenceSourceRepository.save(referenceSourceData);
+	}
+	
+	@Test
+	public void testCreateWithDuplicateReferenceSource() {
+		
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		assertThat(referenceSourceData.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		
+		try {
+			//Saving again with same data
+			referenceSourceRepository.save(referenceSourceData);
+		}catch(DataIntegrityViolationException dex) {
+			assert(true);
+			return;
+		}finally {
+			//cleanup
+			referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+		}
+		assert(false);
+			
+	}
+	
 	@Test 
 	public void testUpdate() {
-		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
 		assertThat(referenceSourceDataToCreate.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
 		
-		ReferenceSourceData referenceSourceDataToUpdate = testDataHelper.getReferenceSourceDataEntityForUpdate();
-		referenceSourceDataToUpdate.referenceSourceID(createdReferenceSource.referenceSourceID());
-		ReferenceSourceData updatedReferenceSource = referenceSourceRepository.save(referenceSourceDataToUpdate);
+		String referenceSourceToUpdate = testDataHelper.getRandomAlphabeticString();
+		createdReferenceSource.referenceSource(referenceSourceToUpdate);
+		
+		ReferenceSourceData updatedReferenceSource = referenceSourceRepository.save(createdReferenceSource);
 		assertThat(updatedReferenceSource.referenceSourceID(), equalTo(createdReferenceSource.referenceSourceID()));
-		assertThat(updatedReferenceSource.referenceSource(), equalTo(referenceSourceDataToUpdate.referenceSource()));
+		assertThat(updatedReferenceSource.referenceSource(), equalTo(referenceSourceToUpdate));
 		
 		//cleanup
 		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
@@ -60,7 +100,7 @@ public class ReferenceSourceRepositoryTest {
 	
 	@Test 
 	public void testFindOne() {
-		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
 		assertThat(referenceSourceDataToCreate.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
 		
@@ -77,7 +117,7 @@ public class ReferenceSourceRepositoryTest {
 	@Test 
 	public void testFindAll() {
 				
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
 		List<ReferenceSourceData> referenceSources = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
@@ -90,7 +130,7 @@ public class ReferenceSourceRepositoryTest {
 	
 	@Test 
 	public void testDelete() {
-		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntityForCreate();
+		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
 		assertThat(referenceSourceDataToCreate.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
 		
@@ -104,6 +144,32 @@ public class ReferenceSourceRepositoryTest {
 		ReferenceSourceData deletedReferenceSource = referenceSourceRepository.findOne(createdReferenceSource.referenceSourceID());
 		assertThat(deletedReferenceSource, nullValue());
 			
+	}
+	
+	public void testDeleteOfSourceLinkedToType() {
+		
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
+		
+		assertThat(referenceTypeData.referenceType(), equalTo(createdReferenceType.referenceType()));
+		
+		try {	
+			//deleting source that is linked to type
+			referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+			
+		}catch(DataIntegrityViolationException dex) {
+			assert(true);
+			return;
+		}finally {
+			//cleanup
+			referenceTypeRepository.delete(referenceTypeData);
+			referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+			
+		}
+		assert(false);
 	}
 }
 
