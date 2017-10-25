@@ -39,6 +39,8 @@ public class MockRecommendationAPI {
 				.nbxUniqueKey("234"));
 		addTribeData(new Tribe().tribe("Sailor Dummy Tribe"));
 		addTribeData(new Tribe().tribe("Sailor Dummy Tribe").subTribe("Sailor Dummy Sub Tribe"));
+		addTribeData(new Tribe().tribe("Explorer"));
+		addTribeData(new Tribe().tribe("Sports"));
     }
 	
 	public void addRecommendationResponse(String nbxUniqueKey, String recommendation, String selectionSentiment) {
