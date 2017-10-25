@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-
 import java.util.List;
 
 import org.junit.Test;
@@ -18,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 
@@ -48,11 +48,12 @@ public class ReferenceSourcesAssemblyImplIT {
 		
 	}
 	
-	//TODO - Implement in assembly code to set to NULL in ReferencesourceData if emptystring - MySQL doesnt treat empty string as null.
-	/*@Test
+	@Test(expected = MandatoryFieldsMissingException.class)
 	public void givenEmptyStringAsReferenceSourceAddReferenceSourceShouldThrowMandatoryFieldsMissingException() {
-				
-	}*/
+		ReferenceSource referenceSourceToCreate = testDataHelper.getEmptyReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		assertThat(createdReferenceSource, is(nullValue()));
+	}
 	
 	@Test
 	public void givenValidReferenceSourceIDFindReferenceSourceByIDShouldReturnReferenceSource() {
@@ -67,11 +68,12 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
 	
-	//TODO
-	/*@Test
+	
+	@Test(expected = DataNotFoundException.class)
 	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldThrowDataNotFoundException() {
-		
-	}*/
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
+		assertThat(findReferenceSource, is(nullValue()));
+	}
 	
 	@Test(expected = DataNotFoundException.class)
 	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
@@ -84,10 +86,10 @@ public class ReferenceSourcesAssemblyImplIT {
 		assertThat(findReferenceSource, is(nullValue()));
 	}
 	
-	/*@Test
+	@Test(expected = DataNotFoundException.class)
 	public void givenInvalidReferenceSourceIDDeleteReferenceSourceShouldThrowDataNotFoundException() {
-		
-	}*/
+		referenceSourcesAssembly.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
+	}
 	
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {

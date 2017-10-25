@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
-
+import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 /**
  * Implementation for {@link ReferenceSourcesAssemblyImpl}
@@ -37,6 +40,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
+		if(StringUtils.isEmpty(referenceSource.referenceSource())) {
+			throw new MandatoryFieldsMissingException();
+		}
 		ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
 		return referenceSourceData.convertToBusinessEntity();
 	}
@@ -66,7 +72,16 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public void deleteReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering deleteReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		referenceSourceRepository.delete(referenceSourceID);
+		try{
+			referenceSourceRepository.delete(referenceSourceID);
+		}
+		catch(EmptyResultDataAccessException erdae) {
+			throw new DataNotFoundException();
+		}
+		catch(DataIntegrityViolationException die) {
+			throw new DataAccessException();
+		}
+		
 	}
 
 	/**

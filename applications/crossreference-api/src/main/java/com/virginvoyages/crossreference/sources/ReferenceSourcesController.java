@@ -60,9 +60,6 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Source");
-		if(StringUtils.isEmpty(body.referenceSource())) {
-			throw new MandatoryFieldsMissingException();
-		}
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}

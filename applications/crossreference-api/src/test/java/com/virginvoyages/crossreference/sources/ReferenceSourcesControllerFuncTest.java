@@ -85,17 +85,32 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
 	}
 	
-	//TODO test
-	/*public void givenIvValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
+	@Test
+	public void givenInValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
+	  given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				log().
+				all();
 		
-	}*/
+	}
 	
 	
-	//TODO implement test
-	/*@Test
-	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowSomeException() {
 	
-	}*/
+	@Test
+	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowBadRequestException() {
+	 given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/").
+		then().
+		        assertThat().statusCode(400).
+		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+	            log().
+	       		all();
+	}
 	
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceByIdShouldDeleteReferenceSource() {
@@ -124,11 +139,29 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				all();
 	}
 	
-	//TODO implement test
-	/*@Test
-	public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowSomeException() {
-		
-	}*/
+	@Test
+	public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowDataNotFoundException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				log().
+				all();
+	}
+	
+	@Test
+	public void givenNoReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowBadRequestException() {
+	 given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/").
+		then().
+		        assertThat().statusCode(400).
+		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+	            log().
+	       		all();
+	}
 	
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
@@ -192,5 +225,47 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
 	} 
 
-
+	@Test
+	public void givenEmptyReferenceSourceIdUpdateReferenceSourceShouldThrowMandatoryFieldsMissingException() {
+		
+		//update source name with empty body
+		Map<String, Object> parameters = new HashMap<String, Object>();
+	//	parameters.put("referenceSourceID", createdReferenceJson.getString("referenceSourceID"));
+	//	parameters.put("referenceSource", referenceSourceUpdateString);
+		
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/sources")
+		
+		.then()
+				.assertThat().statusCode(404)
+				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+		
+	} 
+	
+	@Test
+	public void givenEmptyReferenceSourceAddReferenceSourceShouldThrowMandatoryFieldsMissingException() {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
+	//	parameters.put("referenceSource", referenceSource.referenceSource());
+		parameters.put("inActive", referenceSource.inActive());
+		
+		//create reference source
+		 given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/sources/")
+		
+		.then()
+		.assertThat().statusCode(404)
+		.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+		.log()
+		.all();
+		
+	}
 }

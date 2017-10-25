@@ -44,6 +44,18 @@ public class TestDataHelper {
 				.convertToBusinessEntity();
 	}
 	
+	public ReferenceSource getEmptyReferenceSourceBusinessEntity() {
+		return getEmptyReferenceSourceDataEntity()
+				.convertToBusinessEntity();
+	}
+	
+	public ReferenceSourceData getEmptyReferenceSourceDataEntity() {
+		return new ReferenceSourceData()
+				.referenceSource("")
+				.referenceSourceID("to_be_ignored")
+				.inActive(false);
+	}
+
 	public ReferenceTypeData getReferenceTypeDataEntity() {
 		return getReferenceTypeDataEntity(getReferenceSourceDataEntity());
 	}
