@@ -1,67 +1,90 @@
 package com.virginvoyages.recommendations.response;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.BDDMockito.given;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.virginvoyages.recommendations.assembly.impl.RecommendationResponseAssemblyImpl;
+import com.virginvoyages.recommendations.exceptions.DataInsertionException;
+import com.virginvoyages.recommendations.helper.TestDataHelper;
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration
-@WebAppConfiguration
-//@WebMvcTest(RecommendationResponseController.class)
-//@ImportAutoConfiguration({ FeignAutoConfiguration.class })
+@SpringBootTest
+@AutoConfigureMockMvc
 public class RecommendationResponseControllerTest {
 	
 	//TODO Unit Tests for RecommendationResponseController.
 	
-	/*@Autowired
-    private WebApplicationContext wac;
-	
+	@Autowired
 	private MockMvc mvc;
+	
+	@Autowired
+	private TestDataHelper testDataHelper;
 
 	@MockBean
-	RecommendationResponseAssembly recommendationResponseAssembly;
-	*/
-	//@Autowired
-	//private TestDataHelper testDataHelper;
+	RecommendationResponseAssemblyImpl recommendationResponseAssemblyImpl;
 	
-	/*@InjectMocks
-	RecommendationResponseController recommendationResponseController;*/
-	
-	/*@Before
-    public void setup() {
-		mvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }*/
-	
-	//@Test
-	//public void givenRecommendationResponseSavedSuccessfullyrecommendationResponsePutShouldReturnOKResponse() throws Exception{
+
+	@Test
+	public void givenRecommendationResponseSavedSuccessfullyrecommendationResponsePutShouldReturnOKResponse() throws Exception{
 		
-		/*Map<String, Object> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
+		Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("nbxUniqueKey", responseData.get("nbxUniqueKey"));
 		parameters.put("sailorSelection", responseData.get("sailorSelection"));
 		parameters.put("selectionSentiment", responseData.get("selectionSentiment"));
 		
-		given(recommendationResponseAssembly.addRecommendationResponse((Integer)responseData.get("nbxUniqueKey"),
+		given(recommendationResponseAssemblyImpl.addRecommendationResponse(responseData.get("nbxUniqueKey"),
 				(String)responseData.get("sailorSelection"), (String)responseData.get("selectionSentiment"))).willReturn(true);
 			
 	    mvc.perform(
-	    		put("v1/recommendationResponse")
+	    		put("/recommendation-api/v1/recommendationResponse")
 	    		.param("nbxUniqueKey", "1")
 	    		.param("sailorSelection","2")
 	    		.param("selectionSentiment", "SELECTED")
 	    		.contentType("application/json"))
-	    .andExpect(status().is(HttpStatus.OK.value()));*/
+	    .andExpect(status().is(HttpStatus.OK.value()));
 	    
 		
-	//}
+	}
 	
-	/*@Test
-	public void givenRecommendationResponseNOTSavedSuccessfullyRecommendationResponsePutShouldReturnNotModifiedResponse() {
+	@SuppressWarnings("unchecked")
+	@Test(expected = DataInsertionException.class)
+	public void givenRecommendationResponseNOTSavedSuccessfullyRecommendationResponsePutShouldReturnNotModifiedResponse() throws Exception{
+        Map<String, String> responseData = testDataHelper.getRecommendationResponseDataToSubmit();
 		
-	}*/
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nbxUniqueKey", responseData.get("nbxUniqueKey"));
+		parameters.put("sailorSelection", responseData.get("sailorSelection"));
+		parameters.put("selectionSentiment", responseData.get("selectionSentiment"));
+		
+		given(recommendationResponseAssemblyImpl.addRecommendationResponse(responseData.get("nbxUniqueKey"),
+				(String)responseData.get("sailorSelection"), (String)responseData.get("selectionSentiment"))).willThrow(DataInsertionException.class);
+		
+		mvc.perform(
+	    		put("/recommendation-api/v1/recommendationResponse")
+	    		.param("nbxUniqueKey", "1")
+	    		.param("sailorSelection","2")
+	    		.param("selectionSentiment", "SELECTED")
+	    		.contentType("application/json"))
+	    .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
+		
+	}
 	
 	
 
