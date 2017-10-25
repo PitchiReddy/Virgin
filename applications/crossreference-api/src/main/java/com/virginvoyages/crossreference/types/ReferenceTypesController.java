@@ -63,9 +63,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Type");
-		if(StringUtils.isEmpty(body.referenceType())||StringUtils.isEmpty(body.referenceSourceID())) {
-				throw new MandatoryFieldsMissingException();
-			}
+		if((StringUtils.isEmpty(body.referenceType()) || body.referenceType().trim().length() == 0) || StringUtils.isEmpty(body.referenceSourceID())) {
+			throw new MandatoryFieldsMissingException();
+		}
 		ReferenceType referenceType =referenceTypesAssembly.addReferenceType(body);
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}

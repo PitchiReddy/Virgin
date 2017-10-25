@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceTypeData;
@@ -70,7 +73,16 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 */
 	public void deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		referenceTypeRepository.delete(referenceTypeID);
+		try {
+			referenceTypeRepository.delete(referenceTypeID);
+		}
+		catch(EmptyResultDataAccessException erdae) {
+			throw new DataNotFoundException();
+		}
+		catch(DataIntegrityViolationException die) {
+			throw new DataAccessException();
+		}
+
 	}
 
 	/**

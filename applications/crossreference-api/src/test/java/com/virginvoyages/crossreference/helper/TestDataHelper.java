@@ -108,5 +108,23 @@ public class TestDataHelper {
 	public String getRandomAlphanumericString() {
 		return randomDataGenerator.generateRandomAlphaNumericString(TEST_DATA_INDICATOR);
 	}
+	
+	public ReferenceType getEmptyReferenceTypeBusinessEntity() {
+		return getEmptyReferenceTypeBusinessEntity(getReferenceSourceBusinessEntity());
+	}
+	
+	public ReferenceType getEmptyReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
+		return getEmptyReferenceTypeDataEntity(referenceSource.convertToDataEntity())
+				.convertToBusinessEntity();
+	}
+	
+	public ReferenceTypeData getEmptyReferenceTypeDataEntity(ReferenceSourceData referenceSourceData) {
+		return new ReferenceTypeData()
+				.referenceType("")
+				.referenceTypeID("to_be_ignored")
+				.referenceSourceData(referenceSourceData);
+
+	}
+
 
 }
