@@ -99,9 +99,9 @@ jacocoTestReport {
                     'com/virginvoyages/crossreference/references/ReferencesEmbedded.class',
                     'com/virginvoyages/crossreference/sources/ReferenceSource.class',
                     'com/virginvoyages/crossreference/types/ReferenceType.class',
-                    'com/virginvoyages/crossreference/data/entities/ReferenceSourceData.class',
-                    'com/virginvoyages/crossreference/data/entities/ReferenceTypeData.class',
-                    'com/virginvoyages/crossreference/data/entities/ReferenceData.class',
+                    'com/virginvoyages/data/entities/ReferenceSourceData.class',
+                    'com/virginvoyages/data/entities/ReferenceTypeData.class',
+                    'com/virginvoyages/data/entities/ReferenceData.class',
                     // Exclude POJO
                     'com/virginvoyages/model/Link.class',
                     'com/virginvoyages/model/Links.class',

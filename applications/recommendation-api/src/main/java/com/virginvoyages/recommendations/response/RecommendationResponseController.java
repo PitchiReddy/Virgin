@@ -32,7 +32,8 @@ public class RecommendationResponseController {
 
 	@ApiOperation(value = "", notes = "To update the exising recommendation with feedback based on the customer's selected option", response = Void.class, tags = {
 			"Recommendation Response", })
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Void.class) })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Created", response = Void.class),
+			@ApiResponse(code = 304, message = "Not Created", response = Void.class) })
 	@RequestMapping(value = "/recommendationResponse", method = RequestMethod.PUT)
 
 	public ResponseEntity<Void> recommendationResponsePut(
