@@ -149,7 +149,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(body.referenceSourceID())||StringUtils.isEmpty(body.referenceSource())) {
+		if(StringUtils.isEmpty(body.referenceSourceID())||StringUtils.isEmpty(body.referenceSource()) ||body.referenceSource().trim().length() == 0 || body.referenceSourceID().trim().length() == 0) {
 			throw new MandatoryFieldsMissingException();
 			
 		}

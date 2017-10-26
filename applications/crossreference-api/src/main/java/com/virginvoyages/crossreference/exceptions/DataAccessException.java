@@ -3,7 +3,7 @@ package com.virginvoyages.crossreference.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Data not found for given parameters")
+@ResponseStatus(value=HttpStatus.METHOD_NOT_ALLOWED, reason="id is foreing key in child table")
 public class DataAccessException extends RuntimeException {
 
 	/**

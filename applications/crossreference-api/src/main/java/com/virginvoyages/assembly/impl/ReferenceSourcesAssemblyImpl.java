@@ -40,7 +40,8 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		if(StringUtils.isEmpty(referenceSource.referenceSource())) {
+		if(StringUtils.isEmpty(referenceSource.referenceSource()) ||referenceSource.referenceSourceID().trim().length() == 0 
+				                     || referenceSource.referenceSource().trim().length() == 0) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
