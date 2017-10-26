@@ -3,6 +3,7 @@ package com.virginvoyages.crossreference.references;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.virginvoyages.data.entities.ReferenceData;
+import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.entities.ReferenceTypeData;
 
 import lombok.Data;
@@ -25,13 +26,13 @@ public class Reference   {
   
   @JsonProperty("referenceTypeID")
   private String referenceTypeID = null;
-  
+
   public ReferenceData convertToDataEntity() {
 	  return new ReferenceData()
 			  .nativeSourceIDValue(this.nativeSourceIDValue())
+			  .referenceID(this.referenceID())
 			  .masterID(this.masterID())
-			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
-			  
+			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID));
   }
 
 public ReferenceData convertToUpdateDataEntity(String referenceID) {

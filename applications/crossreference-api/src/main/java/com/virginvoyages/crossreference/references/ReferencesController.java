@@ -92,7 +92,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		//referencesAssembly.deleteReferenceByID(referenceID);
+		referencesAssembly.deleteReferenceByID(referenceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -114,8 +114,8 @@ public class ReferencesController {
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
-		
-
+	
+		log.debug("Find reference by ID");
 		if(StringUtils.isEmpty(referenceID)) 
         	throw new MandatoryFieldsMissingException();
 		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);

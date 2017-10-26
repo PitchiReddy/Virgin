@@ -91,37 +91,22 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 		
-		String createdReferenceSourceID = referenceTypeResponse.getString("referenceSourceID");
-		String createdReferenceTypeID = referenceTypeResponse.getString("referenceTypeID");
-		
-		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		
-		Map<String, Object> referenceType = new HashMap<String, Object>();
-		referenceType.put("referenceTypeID", createdReferenceTypeID);
-		referenceType.put("referenceType", referenceTypeResponse.getString("referenceType"));
-		referenceType.put("referenceSourceID", createdReferenceSourceID);
-		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceID", reference.referenceID());
-		parameters.put("masterID", reference.masterID());
-		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
-		
+		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
+		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
+		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
 		
 		// create references 
-		JsonPath responseJson = given()
+		Response response = given()
 		     .contentType("application/json") 
 		     .body(parameters)
 		     .post("/xref-api/v1/references/").
 
 		then()
 		 	.assertThat()
-		 	.statusCode(200)
-		 	.log()
-		 	.all()
-		 	.extract()
-		 	.jsonPath();
-		 			
-		return responseJson;
+		 	.statusCode(200).extract().response();
+		
+		return response.jsonPath();
 	}
 	
 	public JsonPath createTestReference() {

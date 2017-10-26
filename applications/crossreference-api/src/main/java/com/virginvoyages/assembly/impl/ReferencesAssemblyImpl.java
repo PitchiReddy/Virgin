@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.data.entities.ReferenceData;
@@ -50,8 +51,10 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	public Reference findReferenceByID(String referenceID) {
 		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl");
 		ReferenceData referenceData = referenceRepository.findOne(referenceID);
-		return null == referenceData ? null : referenceData.convertToBusinessEntity();
-		
+		if(referenceData == null) {
+			throw new DataNotFoundException();
+		}
+		return referenceData.convertToBusinessEntity();
 	}
 
 	/**
