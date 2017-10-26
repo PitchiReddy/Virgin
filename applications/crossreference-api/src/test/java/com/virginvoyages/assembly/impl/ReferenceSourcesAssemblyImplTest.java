@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,6 +79,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	@Test
 	public void givenRepositorySavesReferenceSourceDataUpdateReferenceSourcesShouldReturnSavedEntity() {
 		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		when(referenceSourceRepository.findOne((any(String.class)))).thenReturn(mockReferenceSourceData);
 		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
 		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.updateReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
 		assertThat(createdReferenceSource, notNullValue());
@@ -98,19 +100,12 @@ public class ReferenceSourcesAssemblyImplTest {
 	}
 	
 	@Test(expected = DataNotFoundException.class)
-	public void givenRepositoryReturnsNoReferenceSourceDataDeleteReferenceSourceByIDShouldReturnEmptyReferenceType() {
-		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
-		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
-	    ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.addReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
-		assertThat(createdReferenceSource, notNullValue());
-		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
+	public void givenRepositoryReturnsValidReferenceSourceDataDeleteReferenceSourceByIDShouldReturnEmptyReferenceType() {
+		Mockito.spy(ReferenceSourceData.class);
 		referenceSourcesAssemblyImpl.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
 		ReferenceSource findReferenceSource = referenceSourcesAssemblyImpl.findReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
 		assertThat(findReferenceSource, is(nullValue()));
 	}
 	
-	@Test
-	public void givenRepositoryReturnsNoReferenceSourceDataDeleteReferenceSourceByIDShouldThrowDataNotFoundException() {
-		referenceSourcesAssemblyImpl.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
-	}
+	
 }
