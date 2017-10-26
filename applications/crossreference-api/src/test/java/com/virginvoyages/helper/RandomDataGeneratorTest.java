@@ -2,6 +2,7 @@ package com.virginvoyages.helper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -20,16 +21,16 @@ public class RandomDataGeneratorTest {
 	private RandomDataGenerator randomDataGenerator;
 	
 	@Test
-	public void testGenerateRandomAlphabeticStringWithNoSizeSpecified() {
-		String randomString = randomDataGenerator.generateRandomAlphabeticString();
-		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
+	public void testGenerateRandomAlphabeticStringWithPrefixAndNoSizeSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphabeticString("prefix");
+		System.out.println("\n\n Random Alphabetic String with prefix===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
-		assertThat(randomString.length(),equalTo(5));
+		assertThat(randomString.startsWith("prefix"),is(true));
 		assertThat(StringUtils.isAlpha(randomString));
 	}
 	
 	@Test
-	public void testGenerateRandomAlphabeticStringWithSizeSpecified() {
+	public void testGenerateRandomAlphabeticStringWithWithSizeNoPrefixSpecified() {
 		String randomString = randomDataGenerator.generateRandomAlphabeticString(10);
 		System.out.println("\n\n Random Alphabetic String with size 10===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
@@ -38,22 +39,59 @@ public class RandomDataGeneratorTest {
 	}
 	
 	@Test
-	public void testGenerateRandomAlphaNumericStringWithNoSizeSpecified() {
-		String randomString = randomDataGenerator.generateRandomAlphaNumericString();
-		System.out.println("\n\n Random Alphanumeric String ===>"+randomString+"\n\n");
+	public void testGenerateRandomAlphabeticStringWithNoSizeAndNoPrefixSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphabeticString();
+		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(5));
+		assertThat(StringUtils.isAlpha(randomString));
+	}
+	
+	@Test
+	public void testGenerateRandomAlphabeticStringWithSizeAndPrefixSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphabeticString("prefix",2);
+		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
+		assertThat(randomString, notNullValue());
+		assertThat(randomString.length(),equalTo(9));
+		assertThat(randomString.startsWith("prefix"),is(true));
+		assertThat(StringUtils.isAlpha(randomString));
+	}
+		
+	@Test
+	public void testGenerateRandomAlphaNumericStringWithPrefixAndNoSizeSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphaNumericString("prefix");
+		System.out.println("\n\n Random Alphanumeric String with prefix===>"+randomString+"\n\n");
+		assertThat(randomString, notNullValue());
+		assertThat(randomString.startsWith("prefix"),is(true));
 		assertThat(StringUtils.isAlphanumeric(randomString));
 	}
 	
 	@Test
-	public void testGenerateRandomAlphaNumericStringWithSizeSpecified() {
-		String randomString = randomDataGenerator.generateRandomAlphaNumericString(15);
-		System.out.println("\n\n Random Alpha numeric String with size 15===>"+randomString+"\n\n");
+	public void testGenerateRandomAlphaNumericStringWithWithSizeNoPrefixSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphaNumericString(10);
+		System.out.println("\n\n Random Alphanumeric String with size 10===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
-		assertThat(randomString.length(),equalTo(15));
-		assertThat(StringUtils.isAlphanumeric(randomString));
-		
+		assertThat(randomString.length(),equalTo(10));
+		assertThat(StringUtils.isAlpha(randomString));
+	}
+	
+	@Test
+	public void testGenerateRandomAlphaNumericStringWithNoSizeAndNoPrefixSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphaNumericString();
+		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
+		assertThat(randomString, notNullValue());
+		assertThat(randomString.length(),equalTo(5));
+		assertThat(StringUtils.isAlpha(randomString));
+	}
+	
+	@Test
+	public void testGenerateRandomAlphaNumericStringWithSizeAndPrefixSpecified() {
+		String randomString = randomDataGenerator.generateRandomAlphaNumericString("prefix",2);
+		System.out.println("\n\n Random Alphanumeric String ===>"+randomString+"\n\n");
+		assertThat(randomString, notNullValue());
+		assertThat(randomString.length(),equalTo(9));
+		assertThat(randomString.startsWith("prefix"),is(true));
+		assertThat(StringUtils.isAlpha(randomString));
 	}
 	
 	
