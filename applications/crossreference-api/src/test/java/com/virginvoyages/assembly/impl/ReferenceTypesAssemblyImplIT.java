@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
-import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
@@ -146,15 +145,5 @@ public class ReferenceTypesAssemblyImplIT {
 		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	}
-	
-	@Test(expected= MandatoryFieldsMissingException.class)
-	public void givenEmptyStringAsReferenceTypeAddReferenceTypeShouldThrowMandatoryFieldsMissingException() {
-		
-		ReferenceSource referenceSourceToCreate = testDataHelper.getEmptyReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
-		ReferenceType referenceType = testDataHelper.getEmptyReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
-		assertThat(createdReferenceType, is(nullValue()));
-		
-	}
+
 }

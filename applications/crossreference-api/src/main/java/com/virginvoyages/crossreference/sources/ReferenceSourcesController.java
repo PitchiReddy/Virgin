@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
@@ -60,6 +61,10 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Source");
+		if(StringUtils.isEmpty(body.referenceSource()) ||body.referenceSourceID().trim().length() == 0 
+                || body.referenceSource().trim().length() == 0) {
+                   throw new MandatoryFieldsMissingException();
+}
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
@@ -128,7 +133,7 @@ public class ReferenceSourcesController {
 		if(StringUtils.isEmpty(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
-		ReferenceSource	referenceSource =referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
+		ReferenceSource referenceSource =referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 

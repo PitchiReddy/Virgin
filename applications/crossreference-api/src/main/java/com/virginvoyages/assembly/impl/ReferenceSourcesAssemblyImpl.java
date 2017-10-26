@@ -10,13 +10,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
-import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.data.entities.ReferenceSourceData;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import lombok.extern.slf4j.Slf4j;
-import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 /**
  * Implementation for {@link ReferenceSourcesAssemblyImpl}
@@ -40,10 +39,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		if(StringUtils.isEmpty(referenceSource.referenceSource()) ||referenceSource.referenceSourceID().trim().length() == 0 
-				                     || referenceSource.referenceSource().trim().length() == 0) {
-			throw new MandatoryFieldsMissingException();
-		}
 		ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
 		return referenceSourceData.convertToBusinessEntity();
 	}
@@ -96,9 +91,12 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
-		if(null == referenceSourceData) {
-			throw new DataNotFoundException();
+		ReferenceSourceData referenceSourceData = null;
+		ReferenceSourceData findReferenceSourceData = referenceSourceRepository.findOne(referenceSource.referenceSourceID());
+		if(null!=findReferenceSourceData) {
+		referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
+		}else {
+			throw new DataUpdationException();
 		}
 		return referenceSourceData.convertToBusinessEntity();
 	}
