@@ -1,4 +1,4 @@
-package com.vv.hbase.starter.config;
+package com.virginvoyages.hbase.starter.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

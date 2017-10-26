@@ -1,4 +1,4 @@
-package com.vv.hbase.starter.config;
+package com.virginvoyages.hbase.starter.config;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
