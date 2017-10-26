@@ -1,6 +1,6 @@
 apply from: '../../java.gradle'
 
-group = 'com.vv.hbase.starter'
+group = 'com.virginvoyages.hbase.starter'
 version = '0.0.1-SNAPSHOT'
 
 description = """hbase-starter"""
