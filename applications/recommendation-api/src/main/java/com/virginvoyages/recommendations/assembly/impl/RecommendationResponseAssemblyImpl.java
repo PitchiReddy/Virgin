@@ -17,7 +17,7 @@ public class RecommendationResponseAssemblyImpl implements RecommendationRespons
 	private RecommendationResponseRepository recommendationResponseRespository;
 	
 	@Override
-	public boolean addRecommendationResponse(String nbxUniqueKey, String sailorSelection, String selectionSentiment) {
+	public boolean addRecommendationResponse(String nbxUniqueKey, String sailorSelection, String selectionSentiment) throws DataInsertionException {
 		log.debug("Entering addRecommendationResponse");
 		try {
 			recommendationResponseRespository.save(nbxUniqueKey, sailorSelection, selectionSentiment);
