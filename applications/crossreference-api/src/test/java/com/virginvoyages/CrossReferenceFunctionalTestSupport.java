@@ -60,7 +60,6 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
 		
-		
 		// create reference type
 		Response response = given()
 			.contentType("application/json")
@@ -91,6 +90,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 	
+		//JsonPath referenceSourceJson = createTestReferenceSource();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
 		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
@@ -109,6 +109,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		 	.log()
 		 	.all()
 		 	.extract()
+		 	.response()
 		 	.jsonPath();
 		 			
 		return responseJson;
