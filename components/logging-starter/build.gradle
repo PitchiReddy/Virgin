@@ -1,0 +1,33 @@
+apply from: '../../java.gradle'
+
+group = 'com.virginvoyages.logging.starter'
+version = '0.0.1-SNAPSHOT'
+
+description = """logging-starter"""
+
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+     jcenter()
+}
+
+ 
+   dependencies {
+
+compile "ch.qos.logback:logback-core:1.2.3"
+    compile "org.springframework.boot:spring-boot-starter:1.5.8.RELEASE"
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-access
+compile group: 'ch.qos.logback', name: 'logback-access', version: '1.2.3'
+    
+    compile "net.logstash.logback:logstash-logback-encoder:$logbackVersion"
+    compile "org.projectlombok:lombok:1.16.16"
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.5.8.RELEASE'
+
+    
+
+}
+
