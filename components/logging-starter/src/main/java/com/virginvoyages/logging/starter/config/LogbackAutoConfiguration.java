@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.util.ResourceUtils;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class LogbackAutoConfiguration {
 	
 	@Bean
