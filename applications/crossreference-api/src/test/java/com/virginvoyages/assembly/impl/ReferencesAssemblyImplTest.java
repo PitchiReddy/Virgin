@@ -49,4 +49,14 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
 	}
+	
+	/*@Test
+	public void givenRepositorySavesReferenceDataUpdateReferenceShouldReturnSavedEntity() {
+		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
+		Reference createdReference = referencesAssemblyImpl.updateReference(mockReferenceData.convertToBusinessEntity());
+		assertThat(createdReference, notNullValue());
+		assertThat(createdReference.referenceID(), notNullValue());
+		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
+	}*/
 }

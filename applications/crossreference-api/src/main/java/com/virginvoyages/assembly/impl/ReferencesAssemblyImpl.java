@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.data.entities.ReferenceData;
@@ -113,7 +114,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		ReferenceData referenceData = null;
 		ReferenceData	findReferenceData = referenceRepository.findOne(reference.referenceID());
 		if(null == findReferenceData) {
-			throw new DataNotFoundException();
+			throw new DataUpdationException();
 		}
 		else {
 		 referenceData = referenceRepository.save(reference.convertToUpdateDataEntity(reference.referenceID()));
