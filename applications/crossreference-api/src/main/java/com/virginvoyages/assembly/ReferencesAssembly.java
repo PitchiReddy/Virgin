@@ -3,7 +3,6 @@ package com.virginvoyages.assembly;
 import java.util.List;
 
 import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.crossreference.references.References;
 
 /**
  * {@code Interface} for assembly tasks for References
@@ -19,7 +18,7 @@ public interface ReferencesAssembly {
 
 	public void deleteReferenceByID(String referenceID);
 
-	public References findReferences();
+	public List<Reference> findReferences();
 
 	public List<Reference> findReferencesByMaster(String masterID);
 

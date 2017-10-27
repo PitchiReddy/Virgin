@@ -2,13 +2,15 @@ package com.virginvoyages.crossreference.references;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import io.restassured.response.ValidatableResponse;
 
 import io.restassured.path.json.JsonPath;
 
@@ -22,7 +24,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() {
 
-		//Create test reference Type
+		//Create test reference
 		JsonPath referenceJson = createTestReference();
 				
 		//Test
@@ -34,12 +36,14 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				assertThat().body("referenceID", equalTo(referenceJson.getString("referenceID"))).
 				assertThat().body("masterID", equalTo(referenceJson.getString("masterID"))).
 				assertThat().body("nativeSourceIDValue", equalTo(referenceJson.getString("nativeSourceIDValue"))).
+				assertThat().body("referenceTypeID", equalTo(referenceJson.getString("referenceTypeID"))).
+				assertThat().body("referenceSourceID", equalTo(referenceJson.getString("referenceSourceID"))).
 				log().
 				all();
 				   
 		//cleanup
-		//deleteTestReference(referenceJson.getString("referenceID"));
-		//deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
+		deleteTestReference(referenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
 		//deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
 	}
 	
@@ -56,6 +60,32 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				log().
 				all();
 				
+	}
+	
+	@Test
+	public void givenValidReferenceExistFindReferencesShouldReturnListOfReferences() {
+		
+		//create reference
+		JsonPath referenceJson = createTestReference();
+				
+	    ValidatableResponse response = 
+	    given()
+				.contentType("application/json")
+				.param("page", 1)
+				.param("size", 10)
+				.get("/xref-api/v1/references/")
+		
+	    .then()
+				.assertThat().statusCode(200)
+				.log()
+				.all();
+	    
+	    assertThat(response.extract().jsonPath().getMap("$").size(), greaterThan(0));
+		
+		//cleanup
+		deleteTestReference(referenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
+		//deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
 	}
 
 }

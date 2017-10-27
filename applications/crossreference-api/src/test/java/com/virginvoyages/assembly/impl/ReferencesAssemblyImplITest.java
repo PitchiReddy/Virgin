@@ -7,6 +7,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +25,7 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
+import static org.hamcrest.Matchers.hasSize;
 
 
 @RunWith(SpringRunner.class)
@@ -58,4 +63,15 @@ public class ReferencesAssemblyImplITest {
 		assertThat(findReference.referenceID(), is(nullValue()));
 	}
 	
+	@Test
+	public void givenRepositoryReturnsListOfReferenceDataFindReferencesShouldReturnCorrespondingReferences() {
+	
+		List<ReferenceData> mockReferenceList = new ArrayList<ReferenceData>();
+		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
+		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
+		
+		when(referenceRepository.findAll()).thenReturn(mockReferenceList);
+		List<Reference> referenceList = referencesAssemblyImpl.findReferences();
+		assertThat(referenceList, hasSize(equalTo(mockReferenceList.size())));
+	}
 }

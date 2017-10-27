@@ -4,6 +4,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -57,6 +62,33 @@ public class ReferencesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	
 	}
+	
+	@Test 
+	public void givenPagesandSizesGetReferencesShouldReturnListOfReferences() throws Exception {
+		
+		ReferenceSource createdReferenceSource= null;
+		ReferenceType createdReferenceType = null;
+		Reference createdReference = null;
+		for(int i=1;i<=2;i++)
+		{
+			ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+			createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
+			
+			ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
+			createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
+			
+			Reference reference = testDataHelper.getReferenceBusinessEntity(createdReferenceType);
+			createdReference = referencesAssembly.addReference(reference);
 
+		}
+		List<Reference> listOfReferences = referencesAssembly.findReferences();
+		assertThat(listOfReferences, hasSize(greaterThan(0)));
+		
+		//cleanup
+		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+	
+	}
 
 }

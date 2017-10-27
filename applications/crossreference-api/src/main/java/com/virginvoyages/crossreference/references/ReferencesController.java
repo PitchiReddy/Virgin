@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.Page;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -122,6 +123,16 @@ public class ReferencesController {
 
 	}
 
+	/**
+	 * Gets `Reference` objects
+	 * @param page         
+	 * @param size        
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = References.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
@@ -132,7 +143,10 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
 		
-		return new ResponseEntity<References>(mockAPI.findReferences(page, size), HttpStatus.OK);
+		log.debug("Find reference objects");
+		List<Reference> listOfReference = referencesAssembly.findReferences();
+		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 	
 	/**

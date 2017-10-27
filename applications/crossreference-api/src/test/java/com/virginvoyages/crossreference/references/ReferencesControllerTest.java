@@ -2,9 +2,13 @@ package com.virginvoyages.crossreference.references;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,29 @@ public class ReferencesControllerTest {
 				.andExpect(jsonPath("referenceID",equalTo(reference.referenceID())))
 				.andExpect(jsonPath("nativeSourceIDValue",equalTo(reference.nativeSourceIDValue())))
 		 		.andExpect(status().isOk());
+
+	}		
+	
+	@Test 
+	public void givenValidReferenceExistFindReferencesShouldReturnListOfReferences() throws Exception {
+		
+		Reference firstReference = testDataHelper.getReferenceBusinessEntity();
+		Reference secondReference = testDataHelper.getReferenceBusinessEntity();
+		List<Reference> listOfReference = new ArrayList<Reference>();
+		listOfReference.add(firstReference); 
+		listOfReference.add(secondReference); 
+		System.out.println("size ..."+ listOfReference.size());
+		given(referencesAssembly.findReferences()).willReturn(listOfReference);
+	
+		 //Test
+		 mvc.perform(
+				get("/references"))
+				.andDo(print())
+				.andExpect(jsonPath("$", hasSize(2)))
+				//.andExpect(jsonPath("$.[*]", hasItems(listOfReference.get(0))))
+				.andExpect(status().isOk())
+				.andReturn();
+
 
 	}		
 

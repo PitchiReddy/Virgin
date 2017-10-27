@@ -1,9 +1,13 @@
 package com.virginvoyages.data.repositories;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +106,30 @@ public class ReferenceRepositoryTest {
 		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
 	}
+	
+	@Test 
+	public void testFindAll() {
+		
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
+	
+		ReferenceData referenceData = testDataHelper.getReferenceDataEntity(createdReferenceType);
+		ReferenceData createdReference = referenceRepository.save(referenceData);
+	
+		List<ReferenceData> referenceTypes = (List<ReferenceData>)referenceRepository.findAll();
+		assertThat(createdReference, notNullValue());
+		assertThat(referenceTypes, hasSize(greaterThan(0)));
+		
+		//cleanup
+		referenceRepository.delete(createdReference.referenceID());
+		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+				
+	}
+
 
 	@Test 
 	public void testDelete() {

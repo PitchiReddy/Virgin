@@ -92,9 +92,10 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
+		parameters.put("masterID", testDataHelper.getRandomAlphabeticString());
 		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
+		parameters.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 		
 		// create references 
 		Response response = given()

@@ -5,13 +5,12 @@ package com.virginvoyages.assembly.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -71,13 +70,18 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		
 	}
 	/**
-	 * Finding reference Type.
-	 * @return List Of References
+	 * Finding references
+	 * @return List Of Reference
 	 */
 	@Override
-	public References findReferences() {
+	public List<Reference> findReferences() {
 		log.debug("Entering findReferences method in ReferencesAssemblyImpl");
-		return null;
+		List<ReferenceData> listOfReferenceData = (List<ReferenceData>)referenceRepository.findAll();
+		List<Reference> listOfReference = new ArrayList<>();
+		if(null != listOfReferenceData && listOfReferenceData.size() > 0 ) {
+			listOfReference = listOfReferenceData.stream().map(referenceData->referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		}
+		return listOfReference;
 		
 	}
 	
