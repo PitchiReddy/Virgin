@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
@@ -49,6 +50,34 @@ public class ReferenceSourcesAssemblyImplTest {
 	}
 
 	@Test
+	public void givenRepositoryReturnsSavedEntityAddReferenceSourcesShouldReturnSavedReference() {
+		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
+		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.addReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
+		assertThat(createdReferenceSource, notNullValue());
+		assertThat(createdReferenceSource.referenceSourceID(), notNullValue());
+		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
+	}
+	
+	@Test(expected = DataInsertionException.class)
+	public void givenRepositoryReturnsNullAddReferenceSourcesShouldThrowDataInsertException() {
+		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(null);
+		referenceSourcesAssemblyImpl.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
+	}
+	
+	@Test(expected = DataInsertionException.class)
+	public void givenRepositoryReturnsReferenceSourceDataWithEmptyIdAddReferenceSourcesShouldThrowDataInsertException() {
+		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(new ReferenceSourceData());
+		referenceSourcesAssemblyImpl.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
+	}
+	
+	@Test(expected = DataInsertionException.class)
+	public void givenRepositoryThrowsAnyExceptionAddReferenceSourcesShouldThrowDataInsertException() {
+		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenThrow(new RuntimeException());
+		referenceSourcesAssemblyImpl.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
+	}
+	
+	@Test
 	public void givenRepositoryReturnsValidReferenceSourceDatafindReferenceSourceByIDShouldReturnReferenceSource() {
 		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		when(referenceSourceRepository.findOne((any(String.class)))).thenReturn(mockReferenceSourceData);
@@ -64,16 +93,6 @@ public class ReferenceSourcesAssemblyImplTest {
 		ReferenceSource findReferenceSource = referenceSourcesAssemblyImpl.findReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
 		assertThat(findReferenceSource, is(nullValue()));
 	
-	}
-
-	@Test
-	public void givenRepositorySavesReferenceSourceDataAddReferenceSourcesShouldReturnSavedEntity() {
-		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
-		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
-		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.addReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
-		assertThat(createdReferenceSource, notNullValue());
-		assertThat(createdReferenceSource.referenceSourceID(), notNullValue());
-		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
 	}
 	
 	@Test

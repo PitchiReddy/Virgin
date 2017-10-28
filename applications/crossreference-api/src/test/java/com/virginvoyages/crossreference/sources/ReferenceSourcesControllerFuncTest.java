@@ -239,7 +239,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				.put("/xref-api/v1/sources")
 		
 		.then()
-				.assertThat().statusCode(404)
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
 				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
 				.log()
 				.all();
@@ -262,7 +262,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				.post("/xref-api/v1/sources/")
 		
 		.then()
-		.assertThat().statusCode(404)
+		.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
 		.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
 		.log()
 		.all();

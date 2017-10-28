@@ -1,6 +1,7 @@
 package com.virginvoyages.assembly.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -46,6 +47,32 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 
 	}
+	
+	/*@Test TODO XREF TESTS
+	public void givenEmptyReferenceSourceNameAddReferenceSourceShouldThrowDataInsertionException() {
+		
+	}*/
+	
+	@Test 
+	public void givenReferenceSourceIDHasValidSourceIDAddReferenceSourceShouldIgnoreIDAndCreateSourceWithUUID() {
+		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		
+		ReferenceSource referenceSourceWithExistingID = testDataHelper.getReferenceSourceBusinessEntity()
+															.referenceSourceID(createdReferenceSource.referenceSourceID());
+		ReferenceSource createdReferenceSourceWithExistingID = referenceSourcesAssembly.addReferenceSource(referenceSourceWithExistingID);
+		assertThat(createdReferenceSource.referenceSourceID(), not(equalTo(createdReferenceSourceWithExistingID.referenceSourceID())));
+		
+		//cleanup
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSourceWithExistingID.referenceSourceID());
+				
+	}
+	
+	/*@Test TODO XREF TESTS
+	public void givenReferenceSourceNameAlreadyExistsAddReferenceSourceShouldThrowDataInsertionException() {
+		
+	}*/
 
 	@Test
 	public void givenValidReferenceSourceIDFindReferenceSourceByIDShouldReturnReferenceSource() {
