@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceTypeData;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
@@ -94,7 +95,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToDataEntity());
+		ReferenceTypeData referenceTypeData = null;
+		ReferenceTypeData findReferenceTypeData = referenceTypeRepository.findOne(referenceType.referenceTypeID());
+		if(null!=findReferenceTypeData) {
+			referenceTypeData = referenceTypeRepository.save(referenceType.convertToDataEntity());
+		}
+		else {
+			throw new DataUpdationException();
+		}
 		return referenceTypeData.convertToBusinessEntity();
 	}
 

@@ -89,7 +89,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("deleting Reference Type");
-		if(StringUtils.isEmpty(referenceTypeID)) {
+		if(StringUtils.isEmpty(referenceTypeID)||referenceTypeID.trim().length()==0) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referenceTypesAssembly.deleteReferenceTypeByID(referenceTypeID);
@@ -115,7 +115,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("finding Reference Type By referenceTypeID");
-		if(StringUtils.isEmpty(referenceTypeID)) {
+		if(StringUtils.isEmpty(referenceTypeID)||referenceTypeID.trim().length()==0) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType = referenceTypesAssembly.findReferenceTypeByID(referenceTypeID);
@@ -167,7 +167,8 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(body.referenceTypeID())||StringUtils.isEmpty(body.referenceType())||StringUtils.isEmpty(body.referenceSourceID())) {
+		if(StringUtils.isEmpty(body.referenceTypeID())||body.referenceType().trim().length()==0||body.referenceSourceID().trim().length()==0
+				                      ||body.referenceTypeID().trim().length()==0) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType = referenceTypesAssembly.updateReferenceType(body);
