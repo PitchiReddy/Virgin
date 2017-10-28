@@ -22,6 +22,7 @@ dependencies {
 	 exclude group: 'log4j', module: "log4j"
 	 
 	}
+	compile(project(':components:logging-starter'))
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
