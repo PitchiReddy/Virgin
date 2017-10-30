@@ -34,8 +34,8 @@ allprojects {
    || project.name.contains("recommendation-api") || 
    project.name.contains("sailor-api") ) {
 	task buildDocker(type: Docker, dependsOn: build) {
-		 push = true
-		 tagVersion = version + "." + System.getenv("BUILD_NUMBER")
+		push = true
+		tagVersion = version + "." + System.getenv("BUILD_NUMBER")
 		  	tag = "virginvoyages-cap-images.jfrog.io/$project.name"
 		    dockerfile = file("$project.projectDir/src/main/docker/Dockerfile")
 		    doFirst {
@@ -49,5 +49,5 @@ allprojects {
 	
  }
 }
-
+	
 defaultTasks "clean", "build", "buildDocker"
