@@ -44,12 +44,12 @@ public class ReferencesControllerTest {
 		
 			 //Test
 		     mvc.perform(
-					post("/references/")
+					post("/references")
 					.contentType("application/json")
 			 		.content("{ \"masterID\" : \""+reference.masterID()+
 					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
 					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
-					  		"\",\"referenceID\" : \""+reference.referenceID()))
+					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
        }
 	
