@@ -4,10 +4,8 @@ import static io.restassured.RestAssured.given;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
@@ -19,6 +17,8 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	public Map<String, Object> referenceParam = new HashMap<String, Object>();
 	
 	@Test
     public void contextLoads() {
@@ -95,7 +95,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		parameters.put("masterID", testDataHelper.getRandomAlphabeticString());
 		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
-		parameters.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
+		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 		
 		// create references 
 		Response response = given()

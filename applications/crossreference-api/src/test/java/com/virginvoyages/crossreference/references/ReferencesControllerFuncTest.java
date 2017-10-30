@@ -20,12 +20,13 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-	
 	@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() {
 
 		//Create test reference
 		JsonPath referenceJson = createTestReference();
+	
+		String referenceSourceID = (String)referenceParam.get("referenceSourceID");
 				
 		//Test
 		given().
@@ -37,14 +38,13 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				assertThat().body("masterID", equalTo(referenceJson.getString("masterID"))).
 				assertThat().body("nativeSourceIDValue", equalTo(referenceJson.getString("nativeSourceIDValue"))).
 				assertThat().body("referenceTypeID", equalTo(referenceJson.getString("referenceTypeID"))).
-				assertThat().body("referenceSourceID", equalTo(referenceJson.getString("referenceSourceID"))).
 				log().
 				all();
-				   
+						   
 		//cleanup
 		deleteTestReference(referenceJson.getString("referenceID"));
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
-		//deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
+		deleteTestReferenceSource(referenceSourceID);
 	}
 	
 	@Test
@@ -67,6 +67,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		//create reference
 		JsonPath referenceJson = createTestReference();
+		
+		String referenceSourceID = (String)referenceParam.get("referenceSourceID");
 				
 	    ValidatableResponse response = 
 	    given()
@@ -85,7 +87,32 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//cleanup
 		deleteTestReference(referenceJson.getString("referenceID"));
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
-		//deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
+		deleteTestReferenceSource(referenceSourceID);
 	}
+	
+	@Test
+	public void givenEmptyReferenceIDInFindReferenceByIDShouldThrowBadRequestException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/references/" +" ").
+		then().
+				assertThat().statusCode(400).
+				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+				log().
+				all();
+	}
+	
+	@Test
+	public void givenMaxReferenceIDInFindReferenceByIDShouldThrowMaximumRequestIDException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/references/" + testDataHelper.getInvalidReferenceID()).
+		then().
+				assertThat().statusCode(404).
+				body("exception",equalTo("com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException")).
+				log().
+				all();
+	}
+
 
 }
