@@ -57,9 +57,18 @@ tasks.withType(JavaExec) {
 }
 
 springBoot  {
-    buildInfo()
+    // This statement tells the Gradle Spring Boot plugin
+    // to generate a file
+    // build/resources/main/META-INF/build-info.properties
+    // that is picked up by Spring Boot to display
+    // via /info endpoint.
+    buildInfo {
+        // Generate extra build info.
+        additionalProperties = [
+                buildNumber: System.getenv("BUILD_NUMBER") ? System.getenv("BUILD_NUMBER") : ""
+        ]
+    }
 }
-
 
 jacocoTestReport {
     afterEvaluate {

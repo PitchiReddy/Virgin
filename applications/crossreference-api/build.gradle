@@ -85,7 +85,12 @@ springBoot  {
     // build/resources/main/META-INF/build-info.properties
     // that is picked up by Spring Boot to display
     // via /info endpoint.
-    buildInfo()
+    buildInfo {
+        // Generate extra build info.
+        additionalProperties = [
+                buildNumber: System.getenv("BUILD_NUMBER") ? System.getenv("BUILD_NUMBER") : ""
+        ]
+    }
 }
 
 jacocoTestReport {
