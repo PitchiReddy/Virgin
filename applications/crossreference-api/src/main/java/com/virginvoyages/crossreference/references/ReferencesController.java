@@ -94,7 +94,8 @@ public class ReferencesController {
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		if(StringUtils.isEmpty(referenceID)) {
+		
+		if(StringUtils.isEmpty(referenceID)||referenceID.trim().length()==0) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referencesAssembly.deleteReferenceByID(referenceID);

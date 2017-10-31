@@ -102,6 +102,22 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	}
 	
 	@Test
+	public void givenEmptyReferenceIDInRequestBodyDeleteReferenceByIdShouldThrowSomeException() {
+
+		//Test invalid ReferenceTypeId Delete
+		given().
+				contentType("application/json").
+		when().		
+				delete("/xref-api/v1/references/"+" ").
+		then().
+				assertThat().statusCode(405).
+				assertThat().body("exception", equalTo("org.springframework.web.HttpRequestMethodNotSupportedException")).
+				log().
+				all();	
+		
+	}
+	
+	@Test
 	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {
 		
 		
