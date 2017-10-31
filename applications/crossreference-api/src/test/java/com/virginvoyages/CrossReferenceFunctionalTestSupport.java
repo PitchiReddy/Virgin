@@ -20,6 +20,8 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	public Map<String, Object> parameters = new HashMap<String, Object>();
+	
 	@Test
     public void contextLoads() {
     }
@@ -91,10 +93,11 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 	
 		//JsonPath referenceSourceJson = createTestReferenceSource();
-		Map<String, Object> parameters = new HashMap<String, Object>();
+		
 		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
 		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
+		parameters.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 		
 		
 		// create references 

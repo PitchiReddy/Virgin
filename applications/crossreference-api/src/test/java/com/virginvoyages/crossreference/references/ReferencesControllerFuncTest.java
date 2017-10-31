@@ -22,7 +22,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
 	@Test
 	public void givenValidReferenceAndAddReferenceShouldCreateReference() {
 		
@@ -85,6 +85,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		//Create test reference
 		JsonPath referenceJson = createTestReference();
+		
+		String referenceSourceID = (String) parameters.get("referenceSourceID");
 				
 	    //Test Delete
 		given().
@@ -95,18 +97,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				log().
 				all();
 		
-		/*//Test that deleted ID does not exist.
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/references/" + referenceJson.getString("referenceID")).
-		then().
-				assertThat().statusCode(200).
-				log().
-				all();*/
-		
-		//cleanup
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
-	//	deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
+		deleteTestReferenceSource(referenceSourceID);
 	}
 	
 	@Test
@@ -115,6 +107,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		JsonPath referenceJson = createTestReference();
 		JsonPath referenceTypeToUpdateJson = createTestReferenceType();
+		String referenceSourceID = (String) parameters.get("referenceSourceID");
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceJson.getString("referenceTypeID"));
@@ -141,7 +134,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
 		deleteTestReferenceType(referenceTypeToUpdateJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeToUpdateJson.getString("referenceSourceID"));
-	//	deleteTestReferenceSource(referenceJson.getString("referenceSourceID"));
+		deleteTestReferenceSource(referenceSourceID);
 	} 
 	
 		
