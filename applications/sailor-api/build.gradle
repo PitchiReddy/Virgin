@@ -65,7 +65,8 @@ springBoot  {
     buildInfo {
         // Generate extra build info.
         additionalProperties = [
-                buildNumber: System.getenv("BUILD_NUMBER") ? System.getenv("BUILD_NUMBER") : ""
+                buildNumber: System.getenv("BUILD_NUMBER") ? System.getenv("BUILD_NUMBER") : "",
+		demoAttribute: "test"
         ]
     }
 }
