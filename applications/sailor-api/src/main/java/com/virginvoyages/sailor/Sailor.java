@@ -22,11 +22,6 @@ public class Sailor implements Identifiable<String> {
     @JsonProperty("id")
     private String id;
 
-    @JsonProperty("demo")
-    public String getDemo() {
-        return firstName + " " + lastName;
-    }
-
     @JsonProperty("seawareClientID")
     private String seawareClientID;
 
