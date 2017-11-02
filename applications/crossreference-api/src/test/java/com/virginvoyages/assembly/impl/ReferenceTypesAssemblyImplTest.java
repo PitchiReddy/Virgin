@@ -60,6 +60,7 @@ public class ReferenceTypesAssemblyImplTest {
 	/*@Test
 	public void givenRepositorySavesReferenceTypeDataUpdateReferenceTypeShouldReturnSavedEntity() {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(mockReferenceTypeData);
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
 		ReferenceType createdReferenceType = referenceTypesAssemblyImpl.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
 		assertThat(createdReferenceType, notNullValue());
