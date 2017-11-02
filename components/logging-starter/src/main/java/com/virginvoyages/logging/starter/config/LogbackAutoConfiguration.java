@@ -33,7 +33,7 @@ public class LogbackAutoConfiguration {
                                 @Override
                                 public void customize(Context context) {
                                     LogbackValve logbackValve = new LogbackValve();
-                                    logbackValve.setFilename(file.getAbsolutePath());
+                                    logbackValve.setFilename("logback.xml");
                                     context.getPipeline().addValve(logbackValve);
                                 }
 
