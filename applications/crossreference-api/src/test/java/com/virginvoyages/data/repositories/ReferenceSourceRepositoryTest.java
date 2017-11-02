@@ -54,14 +54,8 @@ public class ReferenceSourceRepositoryTest {
 	public void testSaveWithEmptyReferenceSourceName() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		
-		//Resetting name to null
-		try {
 		referenceSourceData.referenceSource(null);
 		referenceSourceRepository.save(referenceSourceData);
-		}catch(DataIntegrityViolationException dex) {
-			//dex.printStackTrace();
-			System.out.println("\n\n Error Message ===> "+dex.getRootCause().getMessage());
-		}
 	}
 	
 	@Test

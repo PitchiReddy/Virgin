@@ -25,7 +25,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
 import com.virginvoyages.data.entities.ReferenceTypeData;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
@@ -58,7 +57,7 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
 	}
 	
-	@Test
+	/*@Test
 	public void givenRepositorySavesReferenceTypeDataUpdateReferenceTypeShouldReturnSavedEntity() {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
@@ -66,7 +65,21 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
+	}*/
+	@Test
+	public void givenRepositoryReturnsUpdatedReferenceTypeDataUpdateReferenceTypeShouldReturnUpdatedEntity() {
+		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(mockReferenceTypeData);
+		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
+		ReferenceType updatedReferenceType = referenceTypesAssemblyImpl.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+		assertThat(updatedReferenceType, notNullValue());
+		assertThat(updatedReferenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
 	}
+	
+	/*@Test //TODO XREF TESTS
+	public void givenFineOneReturnsNoReferenceTypeDataUpdateReferenceTypeShouldThrowDataUpdationException() {
+		
+	}*/
 
 	@Test
 	public void givenRepositoryReturnsValidReferenceTypeDatafindReferenceTypeByIDShouldReturnReferenceType() {

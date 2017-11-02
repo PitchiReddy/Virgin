@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
@@ -66,6 +67,9 @@ public class ReferenceSourcesController {
                    throw new MandatoryFieldsMissingException();
 }
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
+		if(null == referenceSource) {
+			throw new DataInsertionException("ReferenceSource Not Saved due to Unkown reasons");
+		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 
@@ -134,6 +138,9 @@ public class ReferenceSourcesController {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceSource referenceSource =referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
+		if(null == referenceSource) {
+			throw new DataNotFoundException();
+		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 

@@ -15,7 +15,7 @@ public interface ReferenceSourcesAssembly {
 	
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID);
 	
-	public void deleteReferenceSourceByID(String referenceSourceID);
+	public boolean deleteReferenceSourceByID(String referenceSourceID);
 	
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource);
 	
