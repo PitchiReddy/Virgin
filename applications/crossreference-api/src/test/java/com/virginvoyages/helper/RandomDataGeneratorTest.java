@@ -26,7 +26,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphabetic String with prefix===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.startsWith("prefix"),is(true));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphabetic String with size 10===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(10));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(5));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class RandomDataGeneratorTest {
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(9));
 		assertThat(randomString.startsWith("prefix"),is(true));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 		
 	@Test
@@ -63,7 +63,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphanumeric String with prefix===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.startsWith("prefix"),is(true));
-		assertThat(StringUtils.isAlphanumeric(randomString));
+		assertThat(StringUtils.isAlphanumeric(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphanumeric String with size 10===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(10));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -81,7 +81,7 @@ public class RandomDataGeneratorTest {
 		System.out.println("\n\n Random Alphabetic String ===>"+randomString+"\n\n");
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(5));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	@Test
@@ -91,7 +91,7 @@ public class RandomDataGeneratorTest {
 		assertThat(randomString, notNullValue());
 		assertThat(randomString.length(),equalTo(9));
 		assertThat(randomString.startsWith("prefix"),is(true));
-		assertThat(StringUtils.isAlpha(randomString));
+		assertThat(StringUtils.isAlpha(randomString), equalTo(true));
 	}
 	
 	
