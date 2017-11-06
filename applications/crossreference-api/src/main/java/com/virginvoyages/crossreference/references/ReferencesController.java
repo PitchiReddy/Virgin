@@ -153,7 +153,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target source identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetSourceID", required = false) String targetSourceID) {
 		
-		return new ResponseEntity<List<Reference>>(mockAPI.findReferencesByMaster(masterID, targetSourceID),HttpStatus.OK);
+		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferenceByMasterId(masterID),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
