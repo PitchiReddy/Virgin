@@ -1,4 +1,5 @@
 apply from: '../../java.gradle'
+apply plugin: "com.github.spotbugs"
 
 group = 'com.virginvoyages.hbase.starter'
 version = '0.0.1-SNAPSHOT'
@@ -11,5 +12,12 @@ dependencies {
     compile ("org.apache.hbase:hbase-client:1.3.1") {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
         exclude group: "log4j", module: "log4j"
+    }
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
     }
 }

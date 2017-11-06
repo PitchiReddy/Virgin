@@ -44,7 +44,7 @@ public class Links {
         return first;
     }
 
-    public void Link(Link first) {
+    public void link(Link first) {
         this.first = first;
     }
 

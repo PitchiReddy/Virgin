@@ -3,6 +3,7 @@ apply plugin: "org.springframework.boot"
 apply plugin: "docker"
 apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
+apply plugin: "com.github.spotbugs"
 
 group = "com.virginvoyages"
 version = '1.0'
@@ -110,6 +111,13 @@ jacocoTestReport {
                     'com/virginvoyages/api/MockSailorAPI.class'
             ])
         })
+    }
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
     }
 }
 

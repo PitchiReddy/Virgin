@@ -1,6 +1,5 @@
 package com.virginvoyages.logging.starter.config;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.apache.catalina.Context;
@@ -21,7 +20,7 @@ public class LogbackAutoConfiguration {
     @ConditionalOnProperty(name = "logback.path")
     public EmbeddedServletContainerCustomizer containerCustomizer(
             final @Value("${logback.path:}") String path) throws FileNotFoundException {
-        final File file = ResourceUtils.getFile(path);
+        ResourceUtils.getFile(path);
         return new EmbeddedServletContainerCustomizer() {
 
             @Override

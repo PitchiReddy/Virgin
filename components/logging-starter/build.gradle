@@ -1,4 +1,5 @@
 apply from: '../../java.gradle'
+apply plugin: "com.github.spotbugs"
 
 group = 'com.virginvoyages.logging.starter'
 version = '0.0.1-SNAPSHOT'
@@ -13,3 +14,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
 }
 
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
