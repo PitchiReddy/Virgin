@@ -1,2 +1,0 @@
-LOG_LOCATION: /var/log/applogs/Logs/
-SAILOR_API_PROPERTIES_PATH: /etc/config/sailor-api/sailor-api.yml
