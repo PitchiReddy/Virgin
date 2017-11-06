@@ -35,9 +35,8 @@ public class ReferenceTypeRepositoryTest {
 	@Autowired
 	private ReferenceSourceRepository referenceSourceRepository;
 	
-	
 	@Test 
-	public void testSuccessfulCreate() {
+	public void testSuccessfulSave() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		
@@ -58,21 +57,25 @@ public class ReferenceTypeRepositoryTest {
 		
 	}
 	
-	//@Test(expected = DataNotFoundException.class)
 	@Test(expected = InvalidDataAccessApiUsageException.class)
-	public void testDataIntegrityViolationOnCreateWithNoReferenceSourceDataID() {
+	public void testDataIntegrityViolationOnSaveWithNoReferenceSourceDataID() {
 		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(new ReferenceSourceData());
 		referenceTypeRepository.save(referenceTypeData);
 	}
 	
 	@Test(expected = JpaObjectRetrievalFailureException.class)
-	public void testDataIntegrityViolationOnCreateWithInvalidReferenceSourceDataID() {
+	public void testDataIntegrityViolationOnSaveWithInvalidReferenceSourceDataID() {
 		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(new ReferenceSourceData().referenceSourceID("random"));
 		referenceTypeRepository.save(referenceTypeData);
 	}
 	
+	/*@Test TODO XREF TESTS
+	public void testExceptionOnSaveWithEmptyReferenceTypeName() {
+		
+	}*/
+	
 	@Test 
-	public void testUpdateAssociatedReferenceSource() {
+	public void testSaveWithValidTypeIDUpdatesAssociatedReferenceSource() {
 		
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData referenceSourceToCreateType = referenceSourceRepository.save(referenceSourceData);
@@ -96,7 +99,8 @@ public class ReferenceTypeRepositoryTest {
 		referenceSourceRepository.delete(referenceSourceToUpdateType.referenceSourceID());
 	}
 	
-	public void testUpdateReferenceTypeName() {
+	@Test
+	public void testSaveWithValidTypeIDUpdatesReferenceTypeName() {
 		
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData referenceSourceToCreateType = referenceSourceRepository.save(referenceSourceData);
@@ -117,6 +121,11 @@ public class ReferenceTypeRepositoryTest {
 		referenceSourceRepository.delete(referenceSourceToCreateType.referenceSourceID());
 	}
 	
+	/*@Test TODO - XREF TESTS
+	public void testUpdateReferenceTypeNameToNull() {
+	
+	}*/
+	
 	@Test 
 	public void testFindOne() {
 		
@@ -125,8 +134,6 @@ public class ReferenceTypeRepositoryTest {
 		
 		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
-		
-		//ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(referenceTypeDataToCreate.referenceTypeID());
 		
 		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
 		assertThat(retrievedReferenceType, notNullValue());
@@ -157,7 +164,7 @@ public class ReferenceTypeRepositoryTest {
 	}
 	
 	@Test 
-	public void testDelete() {
+	public void testSuccessfulDelete() {
 		
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
@@ -175,9 +182,10 @@ public class ReferenceTypeRepositoryTest {
 		
 		ReferenceTypeData deletedReferenceType = referenceTypeRepository.findOne(createdReferenceType.referenceTypeID());
 		assertThat(deletedReferenceType, nullValue());
-		
-		
-			
 	}
 
+	/*@Test TODO - XREF TESTS
+	public void testDeleteOfTypeLinkedToReference() {
+		
+	}*/
 }

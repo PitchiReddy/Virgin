@@ -17,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = "com.virginvoyages")
 public class CrossReferenceServicesApplication implements CommandLineRunner {
 
+
     public static void main(String[] args) throws Exception {
         new SpringApplication(CrossReferenceServicesApplication.class).run(args);
     }

@@ -1,5 +1,6 @@
 package com.virginvoyages.crossreference.references;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,8 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 @ExposesResourceFor(References.class)
 public class ReferencesController {
 	
+	/*@Autowired
+	private ReferencesAssembly referencesAssembly; 
+	*/
 	@Autowired
 	private MockCrossReferenceAPI mockAPI; 
+	
 	
 	/**
 	 * It is adding new Reference
@@ -49,7 +55,7 @@ public class ReferencesController {
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
 	 *            - Application identifier of client.
-	 * @return
+	 * @return Reference -  returns a reference
 	 */
 	@ApiOperation(value = "", notes = "Add a new `Reference`.", response = Void.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
@@ -64,6 +70,7 @@ public class ReferencesController {
 		log.debug("Adding Reference");
 		mockAPI.addReference(body);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+
 	}
 
 	/**
@@ -88,6 +95,16 @@ public class ReferencesController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceID
+	 *            - Find reference  by ID
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return Reference - returns a reference
+	 * @throws MandatoryFieldsMissingException 
+	 */
 	@ApiOperation(value = "Find reference by ID", notes = "Returns a reference for a specified reference identity.  This identity is a univeral reference identity.", response = Reference.class, tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -95,9 +112,11 @@ public class ReferencesController {
 	public ResponseEntity<Reference> findReferenceByID(
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
-			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
 		
+
 		return new ResponseEntity<Reference>(mockAPI.findReferenceByID(referenceID), HttpStatus.OK);
+
 	}
 
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
@@ -112,6 +131,16 @@ public class ReferencesController {
 		
 		return new ResponseEntity<References>(mockAPI.findReferences(page, size), HttpStatus.OK);
 	}
+	
+	/**
+	 * @param masterID
+	 *            - Find reference type by masterID
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return List ofReference - returns a referenceList
+	 */
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
@@ -135,10 +164,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		/* The params need to be now got from the request body
-		 * return new ResponseEntity<List<Reference>>(
-			mockAPI.findReferencesBySource(nativeSourceID, sourceID, typeID, targetSourceID), HttpStatus.OK)*/
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
+		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
@@ -150,10 +177,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		/* The params need to be now got from the request body
-		 * return new ResponseEntity<List<Reference>>(
-			mockAPI.findReferencesBySource(nativeSourceID, sourceID, typeID, targetSourceID), HttpStatus.OK)*/
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
+		return new ResponseEntity<List<Reference>>(new ArrayList<Reference>(),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
@@ -182,6 +207,16 @@ public class ReferencesController {
 		// do some magic!
 		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
 	}
+	
+	/**
+	 * Update reference      
+	 * @param  body
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return Reference - returns a reference
+	 */
 
 	@ApiOperation(value = "", notes = "Update a `Reference` object.", response = Void.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
@@ -189,14 +224,15 @@ public class ReferencesController {
 			@ApiResponse(code = 405, message = "Validation exception", response = Void.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateReference(
+	public ResponseEntity<Reference> updateReference(
 			@ApiParam(value = "Reference object that needs to be updated", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
 		//TODO mandatory check for reference id
 		mockAPI.updateReference(body.referenceID(),body);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Reference>(HttpStatus.OK);
+
 	}
 
 }

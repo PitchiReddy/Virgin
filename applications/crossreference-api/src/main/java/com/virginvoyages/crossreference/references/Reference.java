@@ -33,6 +33,5 @@ public class Reference   {
 			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
 			  
   }
-
 }
 

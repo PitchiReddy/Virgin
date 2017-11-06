@@ -55,7 +55,7 @@ paths:
         - $ref: '#/parameters/clientID'
         - in: body
           name: body
-          description: Reference object that needs to be created
+          description: Reference object that needs to be created. referenceSourceID in the body will be ignored.Internal UUIDs will replace any ID specified. 
           required: true
           schema:
             $ref: "#/definitions/Reference"
