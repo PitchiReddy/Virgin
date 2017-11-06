@@ -88,14 +88,14 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
 
-	@Test(expected = DataNotFoundException.class)
+	@Test
 	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldThrowDataNotFoundException() {
 		ReferenceSource findReferenceSource = referenceSourcesAssembly
 				.findReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
 		assertThat(findReferenceSource, is(nullValue()));
 	}
 
-	@Test(expected = DataNotFoundException.class)
+	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
 		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);

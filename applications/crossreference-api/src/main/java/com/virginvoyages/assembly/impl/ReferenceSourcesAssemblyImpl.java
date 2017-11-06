@@ -48,16 +48,16 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 		ReferenceSourceData referenceSourceData	= new ReferenceSourceData();
 		try {
 			referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
-			if(null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) {
-				log.error("ReferenceSource Repository failed to return saved entity/saved ID, No exception from repository. Exiting Assembly method");
-				return null;
-			}
 		}catch(DataIntegrityViolationException dex) {	
 			log.error("DataIntegrityViolationException encountered while adding reference",dex);
-			throw new DataInsertionException(dex.getRootCause().getMessage());
+			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
+			throw new DataInsertionException(errorMessage);
 		}catch(Exception ex) {
 			log.error("Exception encountered while adding reference",ex);
 			throw new UnknownException();
+		}
+		if(null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) {
+			return null;
 		}
 		log.debug("Exiting addReferenceSource method in ReferenceSourcesAssemblyImpl");
 		return referenceSourceData.convertToBusinessEntity();
@@ -127,27 +127,26 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		/*ReferenceSourceData referenceSourceData = null;
-		ReferenceSourceData findReferenceSourceData = referenceSourceRepository.findOne(referenceSource.referenceSourceID());
-		if(null!=findReferenceSourceData) {
-			referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
-		}else {
-			throw new DataUpdationException();
-		}*/
-		//ReferenceSourceData referenceSourceData = new ReferenceSourceData();
+		
 		if(!referenceSourceRepository.exists(referenceSource.referenceSourceID())){
+			log.error("Reference source does not exist with ID ==> "+referenceSource.referenceSourceID());
 			throw new DataUpdationException();
 		}
+		
+		ReferenceSourceData referenceSourceData = new ReferenceSourceData();
 		try {
-			ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
-			return referenceSourceData.convertToBusinessEntity();
+			referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
 		}catch(DataIntegrityViolationException dex) {	
-			log.error("DataIntegrityViolationException encountered while updating reference",dex);
+			log.error("DataIntegrityViolationException encountered while updating reference source",dex);
 			throw new DataUpdationException();
 		}catch(Exception ex) {
-			log.error("Exception encountered while updating reference",ex);
+			log.error("Exception encountered while updating reference source",ex);
 			throw new UnknownException();
 		}
+		if(null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) {
+			return null;
+		}
+		return referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**

@@ -62,12 +62,14 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Source");
-		if(StringUtils.isEmpty(body.referenceSource()) ||body.referenceSourceID().trim().length() == 0 
-                || body.referenceSource().trim().length() == 0) {
-                   throw new MandatoryFieldsMissingException();
-}
+		if(StringUtils.isBlank(body.referenceSource())) {
+            throw new MandatoryFieldsMissingException();
+		}
+		
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
+		
 		if(null == referenceSource) {
+			log.error("ReferenceSource Not saved due to unknown reasons ==> "+body.referenceSource());
 			throw new DataInsertionException("ReferenceSource Not Saved due to Unkown reasons");
 		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
@@ -94,6 +96,7 @@ public class ReferenceSourcesController {
 		}
 		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSourceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(referenceSourceID)) {
+		if(StringUtils.isBlank(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceSource referenceSource =referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
@@ -161,7 +164,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(body.referenceSourceID())||StringUtils.isEmpty(body.referenceSource()) ||body.referenceSource().trim().length() == 0 || body.referenceSourceID().trim().length() == 0) {
+		if(StringUtils.isBlank(body.referenceSourceID())||StringUtils.isBlank(body.referenceSource())) {
 			throw new MandatoryFieldsMissingException();
 			
 		}
