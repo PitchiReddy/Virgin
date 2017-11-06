@@ -54,7 +54,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
     
 	@Override
 	public Sailor getSailorById(String sailorID) {
-		AccountData accountData = new AccountData();
+		AccountData accountData;
 		try {
 			accountData = accountClient.findAccount(sailorID);
 		} catch (FeignException fe) {

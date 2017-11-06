@@ -4,10 +4,11 @@ import static io.restassured.RestAssured.given;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
@@ -90,7 +91,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	}
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
-		
+	
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("masterID", testDataHelper.getRandomAlphabeticString());
 		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
@@ -124,10 +125,4 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		then()
 			.statusCode(200);
 	}
-	
-	//Deprecated method - should not be used - use createTestReference instead
-	public Reference createTestReferences() {
-		return new Reference();
-	}
-
 }
