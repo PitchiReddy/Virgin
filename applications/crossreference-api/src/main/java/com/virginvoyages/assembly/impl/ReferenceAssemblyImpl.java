@@ -26,8 +26,7 @@ public class ReferenceAssemblyImpl implements ReferenceAssembly{
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId) {
 		List<ReferenceData> referenceDataList =  refRepo.findByMasterID(masterId);
-	    List<Reference> referencesList = new ArrayList<>();
-	  return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).
+	   return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).
 	  stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}
 
