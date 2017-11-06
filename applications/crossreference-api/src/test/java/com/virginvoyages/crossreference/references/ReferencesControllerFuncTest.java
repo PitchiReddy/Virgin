@@ -83,22 +83,37 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Test
 	public void givenValidReferenceDeleteReferenceByIdShouldDeleteReference() {
 		
-		//Create test reference
-		JsonPath referenceJson = createTestReference();
+		JsonPath referenceTypeJson = createTestReferenceType();
 		
-		String referenceSourceID = (String) parameters.get("referenceSourceID");
-				
-	    //Test Delete
+		//Create test reference
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+		
+		//Test successfuly created
+		given().
+			contentType("application/json").
+			get("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
+		then().
+			assertThat().statusCode(200).
+			assertThat().body("referenceID", equalTo(createdReferenceJson.getString("referenceID")));
+		
+	    //Delete
 		given().
 				contentType("application/json").
-				delete("/xref-api/v1/references/" + referenceJson.getString("referenceID")).
+				delete("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
 		then().
 				assertThat().statusCode(200).
 				log().
 				all();
+		//Try to find deleted reference
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
+		then().
+				assertThat().statusCode(404);
 		
-		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
-		deleteTestReferenceSource(referenceSourceID);
+		
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
 	@Test
@@ -117,7 +132,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 	}
 	
-	@Test
+	/*@Test
 	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {
 		
 		
@@ -151,7 +166,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReferenceType(referenceTypeToUpdateJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeToUpdateJson.getString("referenceSourceID"));
 		deleteTestReferenceSource(referenceSourceID);
-	} 
+	} */
 	
 	/*@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() {

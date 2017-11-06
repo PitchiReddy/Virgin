@@ -61,7 +61,7 @@ public class ReferencesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	}
 	
-	@Test
+	@Test(expected = DataNotFoundException.class)
 	public void givenValidReferenceDeleteReferenceAndItShouldDeleteReference() {
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
