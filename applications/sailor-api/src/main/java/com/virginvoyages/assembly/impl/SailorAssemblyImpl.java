@@ -13,6 +13,7 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
+import com.virginvoyages.crm.client.ReferenceClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
@@ -44,6 +45,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	private QueryClient queryClient;
 	
 	@Autowired
+	private ReferenceClient referenceClient;
+	
+	@Autowired
 	private SailorQueryHelper sailorQueryHelper;
 	
 	@Autowired
@@ -57,6 +61,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		AccountData accountData;
 		try {
 			accountData = accountClient.findAccount(sailorID);
+			referenceClient.findBySource(sailorID, "seawareClientID");
 		} catch (FeignException fe) {
 			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
