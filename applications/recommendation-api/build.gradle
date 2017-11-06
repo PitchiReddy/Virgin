@@ -1,4 +1,3 @@
-
 apply from: "../../java.gradle"
 apply plugin: "org.springframework.boot"
 apply plugin: "docker"
@@ -16,12 +15,9 @@ dependencyManagement {
 }
 
 dependencies {
-
-	compile(project(':components:hbase-starter')){
-	 exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-	 exclude group: 'log4j', module: "log4j"
-	 
-	}
+    compile project(":components:logging-starter")
+    compile project(":components:hbase-starter")
+    
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
@@ -35,17 +31,29 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.8"
     compile "joda-time:joda-time:2.9.9"
     compile "org.projectlombok:lombok:1.16.16"
+    
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
 
-
+// The run task added by the application plugin
+// is also of type JavaExec.
 tasks.withType(JavaExec) {
     systemProperties System.properties
 }
 
 springBoot  {
-    buildInfo()
+    // This statement tells the Gradle Spring Boot plugin
+    // to generate a file
+    // build/resources/main/META-INF/build-info.properties
+    // that is picked up by Spring Boot to display
+    // via /info endpoint.
+    buildInfo {
+        // Generate extra build info.
+        additionalProperties = [
+                buildNumber: System.getenv("BUILD_NUMBER") ? System.getenv("BUILD_NUMBER") : ""
+        ]
+    }
 }
 
 jacocoTestReport {

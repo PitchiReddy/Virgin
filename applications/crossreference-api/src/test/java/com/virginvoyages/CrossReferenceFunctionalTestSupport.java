@@ -4,10 +4,8 @@ import static io.restassured.RestAssured.given;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
@@ -19,6 +17,8 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	public Map<String, Object> referenceParam = new HashMap<String, Object>();
 	
 	@Test
     public void contextLoads() {
@@ -91,37 +91,23 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 		
-		String createdReferenceSourceID = referenceTypeResponse.getString("referenceSourceID");
-		String createdReferenceTypeID = referenceTypeResponse.getString("referenceTypeID");
-		
-		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		
-		Map<String, Object> referenceType = new HashMap<String, Object>();
-		referenceType.put("referenceTypeID", createdReferenceTypeID);
-		referenceType.put("referenceType", referenceTypeResponse.getString("referenceType"));
-		referenceType.put("referenceSourceID", createdReferenceSourceID);
-		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceID", reference.referenceID());
-		parameters.put("masterID", reference.masterID());
-		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
-		
+		parameters.put("masterID", testDataHelper.getRandomAlphabeticString());
+		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
+		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
+		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 		
 		// create references 
-		JsonPath responseJson = given()
+		Response response = given()
 		     .contentType("application/json") 
 		     .body(parameters)
 		     .post("/xref-api/v1/references/").
 
 		then()
 		 	.assertThat()
-		 	.statusCode(200)
-		 	.log()
-		 	.all()
-		 	.extract()
-		 	.jsonPath();
-		 			
-		return responseJson;
+		 	.statusCode(200).extract().response();
+		
+		return response.jsonPath();
 	}
 	
 	public JsonPath createTestReference() {

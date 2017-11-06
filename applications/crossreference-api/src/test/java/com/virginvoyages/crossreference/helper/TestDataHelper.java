@@ -96,5 +96,10 @@ public class TestDataHelper {
 	public String getRandomAlphanumericString() {
 		return randomDataGenerator.generateRandomAlphaNumericString(TEST_DATA_INDICATOR);
 	}
+	
+	public String getInvalidReferenceID() {
+		return "8acdcf785f5df97c015f5df9960f00051";
+	}
+	
 
 }

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.model.Page;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -92,7 +94,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		//referencesAssembly.deleteReferenceByID(referenceID);
+		referencesAssembly.deleteReferenceByID(referenceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -114,14 +116,28 @@ public class ReferencesController {
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
-		
-
-		if(StringUtils.isEmpty(referenceID)) 
+	
+		log.debug("Find reference by ID");
+		if(StringUtils.isEmpty(referenceID) || (referenceID.trim().length() == 0)) 
         	throw new MandatoryFieldsMissingException();
+		
+		if(referenceID.trim().length() >= 33) {
+			throw new ReferenceIDMaxRequestSizeException();
+		}
 		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);
 
 	}
 
+	/**
+	 * Gets `Reference` objects
+	 * @param page         
+	 * @param size        
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = References.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
@@ -132,7 +148,10 @@ public class ReferencesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
 		
-		return new ResponseEntity<References>(mockAPI.findReferences(page, size), HttpStatus.OK);
+		log.debug("Find reference objects");
+		List<Reference> listOfReference = referencesAssembly.findReferences();
+		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 	
 	/**

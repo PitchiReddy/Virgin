@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
