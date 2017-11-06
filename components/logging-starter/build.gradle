@@ -1,0 +1,15 @@
+apply from: '../../java.gradle'
+
+group = 'com.virginvoyages.logging.starter'
+version = '0.0.1-SNAPSHOT'
+
+description = "logging-starter"
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
+    compile "ch.qos.logback:logback-core:$logbackCoreVersion"
+    compile "ch.qos.logback:logback-access:$logbackCoreVersion"    
+    compile "net.logstash.logback:logstash-logback-encoder:$logbackVersion"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
+}
+

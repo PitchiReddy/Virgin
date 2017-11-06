@@ -6,9 +6,13 @@ package com.virginvoyages.assembly.impl;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.crossreference.references.References;
 import com.virginvoyages.data.entities.ReferenceData;
@@ -63,9 +67,13 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public void deleteReferenceByID(String referenceID) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		referenceRepository.delete(referenceID);
-		
-		
+		try{
+			referenceRepository.delete(referenceID);
+		}
+		catch(EmptyResultDataAccessException | DataIntegrityViolationException dive) {
+			throw new DataNotFoundException();
+		}
+	
 	}
 	/**
 	 * Finding reference Type.
@@ -103,7 +111,14 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public Reference updateReference(Reference reference) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		ReferenceData referenceData =	referenceRepository.save(reference.convertToUpdateDataEntity(reference.referenceID()));
+		ReferenceData referenceData = null;
+		ReferenceData	findReferenceData = referenceRepository.findOne(reference.referenceID());
+		if(null == findReferenceData) {
+			throw new DataUpdationException();
+		}
+		else {
+		 referenceData = referenceRepository.save(reference.convertToUpdateDataEntity(reference.referenceID()));
+		}
 		return referenceData.convertToBusinessEntity();
 		
 	}

@@ -69,6 +69,9 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
+		if(StringUtils.isEmpty(body.referenceTypeID())||body.nativeSourceIDValue().trim().length()==0||body.masterID().trim().length()==0) {
+			throw new MandatoryFieldsMissingException();
+		}
 		Reference reference = referencesAssembly.addReference(body);
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 
@@ -92,7 +95,10 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		//referencesAssembly.deleteReferenceByID(referenceID);
+		if(StringUtils.isEmpty(referenceID)||referenceID.trim().length()==0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		referencesAssembly.deleteReferenceByID(referenceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -232,7 +238,10 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		//TODO mandatory check for reference id
+		if(StringUtils.isEmpty(body.referenceTypeID())||body.nativeSourceIDValue().trim().length()==0
+				||body.masterID().trim().length()==0||body.referenceTypeID().trim().length()==0) {
+			throw new MandatoryFieldsMissingException();
+		}
 		Reference reference =	referencesAssembly.updateReference(body);
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 

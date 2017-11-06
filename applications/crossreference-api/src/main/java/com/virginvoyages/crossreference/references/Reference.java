@@ -29,6 +29,7 @@ public class Reference   {
   public ReferenceData convertToDataEntity() {
 	  return new ReferenceData()
 			  .nativeSourceIDValue(this.nativeSourceIDValue())
+			  .referenceID(this.referenceID())
 			  .masterID(this.masterID())
 			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
 			  
