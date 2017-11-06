@@ -45,7 +45,6 @@ public class ReferenceData {
 				.masterID(String.valueOf(this.masterID()))
 				.referenceTypeID(this.referenceTypeData().referenceTypeID());
 				
-				
 	}
 	
 	@Override
