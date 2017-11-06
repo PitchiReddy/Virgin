@@ -92,9 +92,9 @@ public class SailorAssemblyImplTest {
 	public void givenSailorWithPreferencesExistsWithSailorIDGetSailorbyIdShouldReturnSailorWithPreferences() {
 
 		when(accountClient.findAccount(any(String.class))).thenReturn(new AccountData());
-		when(preferenceAssembly.findSailorPreferences(new String())).thenReturn(mockDataHelper.getPreferencesEmbedded(true));
+		when(preferenceAssembly.findSailorPreferences("")).thenReturn(mockDataHelper.getPreferencesEmbedded(true));
 				
-		Sailor sailor = sailorAssembly.getSailorById(new String());
+		Sailor sailor = sailorAssembly.getSailorById("");
 		
 		assertThat(sailor.preferences().size(), not(equalTo(0)));
 	}
@@ -104,8 +104,8 @@ public class SailorAssemblyImplTest {
 	
 		AccountData accountData = mockDataHelper.generateAccountDataToCreate();
 				
-		when(sailorQueryHelper.generateFindQueryString(accountData)).thenReturn(new String());
-		when(queryClient.findAccounts(new String())).thenReturn(mockDataHelper.getQueryResultsDataWithThreeAccountDataRecordsWithSameData());
+		when(sailorQueryHelper.generateFindQueryString(accountData)).thenReturn("");
+		when(queryClient.findAccounts("")).thenReturn(mockDataHelper.getQueryResultsDataWithThreeAccountDataRecordsWithSameData());
 		
 		List<AccountData> accountsList = mockDataHelper.getQueryResultsDataWithThreeAccountDataRecordsWithSameData().records();
 		
@@ -124,7 +124,7 @@ public class SailorAssemblyImplTest {
 	@Test
 	public void givenSailorsDoNotExistWithMatchingDataFindSailorsShouldReturnEmptyList() {
 		
-		when(sailorQueryHelper.generateFindQueryString(any(AccountData.class))).thenReturn(new String());
+		when(sailorQueryHelper.generateFindQueryString(any(AccountData.class))).thenReturn("");
 		AccountData accountData = mockDataHelper.generateAccountDataToCreate();
 		when(queryClient.findAccounts(any(String.class))).thenReturn(new QueryResultsData<AccountData>());
 		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);

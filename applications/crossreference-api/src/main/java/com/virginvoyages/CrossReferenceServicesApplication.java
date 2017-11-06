@@ -17,7 +17,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = "com.virginvoyages")
 public class CrossReferenceServicesApplication implements CommandLineRunner {
 
-	public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws Exception {
         new SpringApplication(CrossReferenceServicesApplication.class).run(args);
     }
 
@@ -26,10 +27,9 @@ public class CrossReferenceServicesApplication implements CommandLineRunner {
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
         }
-        
     }
 
-    class ExitException extends RuntimeException implements ExitCodeGenerator {
+    static class ExitException extends RuntimeException implements ExitCodeGenerator {
         private static final long serialVersionUID = 1L;
 
         @Override

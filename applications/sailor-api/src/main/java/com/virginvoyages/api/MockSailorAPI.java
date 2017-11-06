@@ -90,12 +90,6 @@ public class MockSailorAPI {
     }
 
     public Sailors sailorsGet(Integer page, Integer size) {
-        if (page == null) {
-            page = 0;
-        }
-        if (size == null) {
-            size = 10;
-        }
         Sailors sailorsWrapper = new Sailors().page(new Page().size(size)).embedded(new SailorsEmbedded().sailors(sailors.values().stream()
                 .collect(Collectors.toList())));
         sailorsWrapper.page().totalElements(sailorsWrapper.embedded().sailors().size()).number(1).totalPages(1);
