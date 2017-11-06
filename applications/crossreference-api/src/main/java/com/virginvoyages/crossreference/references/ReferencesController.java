@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+import com.virginvoyages.assembly.ReferenceAssembly;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
@@ -40,9 +41,9 @@ import lombok.extern.slf4j.Slf4j;
 @ExposesResourceFor(References.class)
 public class ReferencesController {
 	
-	/*@Autowired
-	private ReferencesAssembly referencesAssembly; 
-	*/
+	@Autowired
+	private ReferenceAssembly referencesAssembly; 
+	
 	@Autowired
 	private MockCrossReferenceAPI mockAPI; 
 	
