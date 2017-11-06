@@ -91,14 +91,13 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	}
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
-	
-		//JsonPath referenceSourceJson = createTestReferenceSource();
+			
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
 		
-		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
-		parameters.put("nativeSourceIDValue", testDataHelper.getRandomAlphabeticString());
-		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
-		parameters.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
-		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceID", reference.referenceID());
+		parameters.put("masterID", reference.masterID());
+		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		
 		// create references 
 		JsonPath responseJson = given()
