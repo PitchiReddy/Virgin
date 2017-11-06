@@ -56,11 +56,10 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			log.error("Exception encountered while adding reference",ex);
 			throw new UnknownException();
 		}
-		if(null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) {
-			return null;
-		}
+		
 		log.debug("Exiting addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		return referenceSourceData.convertToBusinessEntity();
+		return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
+			
 	}
 
 	/**
@@ -75,16 +74,14 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 		ReferenceSourceData referenceSourceData	= new ReferenceSourceData();
 		try {
 			referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
-			if(referenceSourceData==null) {
-				log.error("Data not found for reference source ID ==>"+referenceSourceID+" , Exiting Assembly method");
-				return null;
-			}
+			
 		}catch(Exception ex) {
 			log.error("Reference Source ID ==>"+referenceSourceID+"\nException encountered in findReferenceSourceByID",ex);
 			throw new UnknownException();
 		}
+		
 		log.debug("Exiting findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		return  referenceSourceData.convertToBusinessEntity();
+		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
@@ -132,7 +129,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			log.error("Reference source does not exist with ID ==> "+referenceSource.referenceSourceID());
 			throw new DataUpdationException();
 		}
-		
 		ReferenceSourceData referenceSourceData = new ReferenceSourceData();
 		try {
 			referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
@@ -143,10 +139,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			log.error("Exception encountered while updating reference source",ex);
 			throw new UnknownException();
 		}
-		if(null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) {
-			return null;
-		}
-		return referenceSourceData.convertToBusinessEntity();
+		
+		log.debug("Exiting updateReferenceSource method in ReferenceSourcesAssemblyImpl");
+		return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**

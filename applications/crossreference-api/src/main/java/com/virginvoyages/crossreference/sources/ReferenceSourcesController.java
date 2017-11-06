@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
@@ -65,9 +66,7 @@ public class ReferenceSourcesController {
 		if(StringUtils.isBlank(body.referenceSource())) {
             throw new MandatoryFieldsMissingException();
 		}
-		
 		ReferenceSource referenceSource  = referenceSourcesAssembly.addReferenceSource(body);
-		
 		if(null == referenceSource) {
 			log.error("ReferenceSource Not saved due to unknown reasons ==> "+body.referenceSource());
 			throw new DataInsertionException("ReferenceSource Not Saved due to Unkown reasons");
@@ -140,7 +139,7 @@ public class ReferenceSourcesController {
 		if(StringUtils.isBlank(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
-		ReferenceSource referenceSource =referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
+		ReferenceSource referenceSource = referenceSourcesAssembly.findReferenceSourceByID(referenceSourceID);
 		if(null == referenceSource) {
 			throw new DataNotFoundException();
 		}
@@ -169,6 +168,10 @@ public class ReferenceSourcesController {
 			
 		}
 		ReferenceSource referenceSource = referenceSourcesAssembly.updateReferenceSource(body);
+		if(null == referenceSource) {
+			log.error("ReferenceSource Not saved due to unknown reasons ==> "+body.referenceSourceID());
+			throw new DataUpdationException();
+		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 
