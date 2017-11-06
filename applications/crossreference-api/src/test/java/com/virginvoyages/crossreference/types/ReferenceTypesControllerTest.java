@@ -11,19 +11,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.data.repositories.ReferenceRepository;
+import com.virginvoyages.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(value=ReferenceTypesController.class)
 public class ReferenceTypesControllerTest {
 
 	@Autowired
@@ -32,10 +33,17 @@ public class ReferenceTypesControllerTest {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-	
 	@MockBean(name="referenceTypesAssembly")
-	ReferenceTypesAssembly referenceTypesAssembly;
+    private ReferenceTypesAssembly referenceTypesAssembly;
 	
+	@MockBean(name="referenceTypeRepository")
+    private ReferenceTypeRepository referenceTypeRepository;
+		
+	@MockBean(name="referenceSourceRepository")
+    private ReferenceSourceRepository referenceSourceRepository;
+		
+	@MockBean(name="referenceRepository")
+    private ReferenceRepository referenceRepository;
 	
 	@Test 
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() throws Exception {

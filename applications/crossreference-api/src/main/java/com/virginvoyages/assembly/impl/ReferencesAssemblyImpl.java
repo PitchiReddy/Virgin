@@ -6,13 +6,16 @@ package com.virginvoyages.assembly.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -110,7 +113,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public Reference updateReference(Reference reference) {
 		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-		ReferenceData referenceData =	referenceRepository.save(reference.convertToUpdateDataEntity(reference.referenceID()));
+		ReferenceData referenceData =	referenceRepository.save(reference.convertToDataEntity());
 		return referenceData.convertToBusinessEntity();
 		
 	}

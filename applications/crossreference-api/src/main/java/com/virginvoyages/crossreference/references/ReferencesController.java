@@ -1,5 +1,6 @@
 package com.virginvoyages.crossreference.references;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,6 +47,7 @@ public class ReferencesController {
 	@Autowired
 	private ReferencesAssembly referencesAssembly; 
 	
+	
 	@Autowired
 	private MockCrossReferenceAPI mockAPI; 
 	
@@ -65,14 +67,14 @@ public class ReferencesController {
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
 	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<Reference> addReference(
+	public ResponseEntity<Void> addReference(
 			@ApiParam(value = "Reference object that needs to be created", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
-		Reference reference = referencesAssembly.addReference(body);
-		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
+		mockAPI.addReference(body);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 
 	}
 
@@ -186,7 +188,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		List<Reference> referenceData = referencesAssembly.findReferencesBySource(reference);
+		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
 		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 
@@ -199,8 +201,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		List<Reference> referenceData =referencesAssembly.findReferencesSourceAndTargetSource(reference);
-		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
+		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
+		return new ResponseEntity<List<Reference>>(new ArrayList<Reference>(),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
@@ -252,8 +254,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
 		//TODO mandatory check for reference id
-		Reference reference =	referencesAssembly.updateReference(body);
-		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
+		mockAPI.updateReference(body.referenceID(),body);
+		return new ResponseEntity<Reference>(HttpStatus.OK);
 
 	}
 

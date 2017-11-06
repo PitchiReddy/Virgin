@@ -19,7 +19,7 @@ public class ReferenceSource   {
   private String referenceSource = null;
 
   @JsonProperty("inActive")
-  private Boolean inActive = null;
+  private Boolean inActive = false;
   
   public ReferenceSourceData convertToDataEntity() {
 	  return new ReferenceSourceData()
@@ -27,5 +27,23 @@ public class ReferenceSource   {
 			  .referenceSourceID(this.referenceSourceID())
 			  .inActive(this.inActive());
   }
-}
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ReferenceSource)) {
+			return false;
+		}
+		ReferenceSource other = (ReferenceSource) obj;
+		return referenceSourceID().equals(other.referenceSourceID());
+	}
 
+	@Override
+	public int hashCode() {
+		return referenceSourceID().hashCode();
+	}
+
+}

@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.sources;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -26,8 +27,10 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	//Add Reference
+	
 	@Test
-	public void givenValidReferenceSourceAddReferenceSourceShouldCreateReferenceSource() {
+	public void givenValidReferenceSourceInRequestBodyAddReferenceSourceShouldCreateReferenceSourceAndSetInResponse() {
 		
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -55,6 +58,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		then().
 				assertThat().statusCode(200).
 				assertThat().body("referenceSourceID", equalTo(jsonResponse.getString("referenceSourceID"))).
+				assertThat().body("referenceSourceID", not(equalTo(referenceSource.referenceSourceID()))).
 				assertThat().body("referenceSource", equalTo(jsonResponse.getString("referenceSource"))).
 				log().
 				all();
@@ -63,7 +67,30 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(jsonResponse.getString("referenceSourceID"));
 	
 	} 
+	
+	@Test
+	public void givenEmptyReferenceSourceAddReferenceSourceShouldThrowMandatoryFieldsMissingException() {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", referenceSource.referenceSourceID());
+	    parameters.put("inActive", referenceSource.inActive());
+		
+		//create reference source
+		 given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/sources/")
+		
+		.then()
+		.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+		.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+		.log()
+		.all();
+		
+	}
 
+	//Get reference source by ID
 	@Test
 	public void givenValidReferenceSourceIDGetReferenceSourceByIdShouldReturnReferenceSource() {
 
@@ -85,18 +112,34 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
 	}
 	
-	//TODO test
-	/*public void givenIvValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
+	@Test
+	public void givenInValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
+	  given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				log().
+				all();
 		
-	}*/
+	}
 	
 	
-	//TODO implement test
-	/*@Test
-	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowSomeException() {
 	
-	}*/
+	@Test
+	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowBadRequestException() {
+	 given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/").
+		then().
+		        assertThat().statusCode(400).
+		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+	            log().
+	       		all();
+	}
 	
+	//Delete Reference Source By ID
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceByIdShouldDeleteReferenceSource() {
 		
@@ -124,12 +167,31 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				all();
 	}
 	
-	//TODO implement test
-	/*@Test
-	public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowSomeException() {
-		
-	}*/
+	@Test
+	public void givenInvalidReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowDataNotFoundException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				log().
+				all();
+	}
 	
+	@Test
+	public void givenNoReferenceSourceIDInRequestDeleteReferenceSourceByIdShouldThrowBadRequestException() {
+	 given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/").
+		then().
+		        assertThat().statusCode(400).
+		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+	            log().
+	       		all();
+	}
+	
+	//Update Reference Source
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
 		
@@ -166,6 +228,27 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
 	} 
 	
+	@Test
+	public void givenEmptyReferenceSourceIdUpdateReferenceSourceShouldThrowMandatoryFieldsMissingException() {
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", "");
+		parameters.put("referenceSource", "update");
+		
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/sources")
+		
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+		
+	} 
+	
+	//Find sources
 	
 	@Test
 	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSources() {
@@ -191,6 +274,5 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		//cleanup
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
 	} 
-
-
+		
 }

@@ -20,7 +20,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-	@Test
+	/*@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() {
 
 		//Create test reference
@@ -45,7 +45,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReference(referenceJson.getString("referenceID"));
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceSourceID);
-	}
+	}*/
 	
 	@Test
 	public void givenInValidReferenceIDGetReferenceByIdShouldThrowDataNotFoundExceptionException() {
@@ -62,7 +62,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				
 	}
 	
-	@Test
+	/*@Test
 	public void givenValidReferenceExistFindReferencesShouldReturnListOfReferences() {
 		
 		//create reference
@@ -88,7 +88,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReference(referenceJson.getString("referenceID"));
 		deleteTestReferenceType(referenceJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceSourceID);
-	}
+	}*/
 	
 	@Test
 	public void givenEmptyReferenceIDInFindReferenceByIDShouldThrowBadRequestException() {

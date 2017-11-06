@@ -158,7 +158,7 @@ public class ReferenceRepositoryTest {
 		ReferenceData deletedReference = referenceRepository.findOne(createdReference.referenceID());
 		assertThat(deletedReference, nullValue());
 	}
-	
+
 	/*@Test 
 	public void testForReferenceByMaster() {
 		
