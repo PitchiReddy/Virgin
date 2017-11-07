@@ -45,15 +45,18 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl. referenceSource.referenceSource() ==> "+referenceSource.referenceSource());
 		referenceSource.referenceSourceID(StringUtils.EMPTY);
+		if(StringUtils.isEmpty(referenceSource.referenceSource())) {
+			referenceSource.referenceSource(null);
+		}
 		try {
 			ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
 			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
 		}catch(DataIntegrityViolationException dex) {	
-			log.error("DataIntegrityViolationException encountered while adding reference",dex);
+			log.error("DataIntegrityViolationException encountered while adding reference source",dex);
 			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
 			throw new DataInsertionException(errorMessage);
 		}catch(Exception ex) {
-			log.error("Exception encountered while adding reference",ex);
+			log.error("Exception encountered while adding reference source",ex);
 			throw new UnknownException();
 		}
 	}

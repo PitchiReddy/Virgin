@@ -1,6 +1,7 @@
 package com.virginvoyages.data.repositories;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +38,9 @@ public class ReferenceSourceRepositoryTest {
 	public void testSuccessfulSave() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		
 		assertThat(referenceSourceData.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		assertThat(referenceSourceData.referenceSourceID(), not(equalTo(createdReferenceSource.referenceSourceID())));
 		
 		//Assert by find
 		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(createdReferenceSource.referenceSourceID());
@@ -51,11 +54,8 @@ public class ReferenceSourceRepositoryTest {
 	}
 	
 	@Test(expected = DataIntegrityViolationException.class)
-	public void testSaveWithEmptyReferenceSourceName() {
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
-		
-		referenceSourceData.referenceSource(null);
-		referenceSourceRepository.save(referenceSourceData);
+	public void testSaveWithNullReferenceSourceName() {
+		referenceSourceRepository.save(testDataHelper.getReferenceSourceDataEntity().referenceSource(null));
 	}
 	
 	@Test
@@ -116,8 +116,8 @@ public class ReferenceSourceRepositoryTest {
 	@Test 
 	public void testFindAll() {
 				
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
+				testDataHelper.getReferenceSourceDataEntity());
 		
 		List<ReferenceSourceData> referenceSources = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
 		assertThat(referenceSources, notNullValue());
@@ -140,15 +140,14 @@ public class ReferenceSourceRepositoryTest {
 		
 		referenceSourceRepository.delete(retrievedReferenceSource.referenceSourceID());
 		
-		ReferenceSourceData deletedReferenceSource = referenceSourceRepository.findOne(createdReferenceSource.referenceSourceID());
-		assertThat(deletedReferenceSource, nullValue());
+		assertThat(referenceSourceRepository.findOne(createdReferenceSource.referenceSourceID()), nullValue());
 			
 	}
 	
 	public void testDeleteOfSourceLinkedToType() {
 		
-		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
+				testDataHelper.getReferenceSourceDataEntity());
 		
 		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);

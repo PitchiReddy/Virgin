@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
@@ -63,10 +64,14 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference Type");
-		if((StringUtils.isEmpty(body.referenceType()) || body.referenceType().trim().length() == 0) || StringUtils.isEmpty(body.referenceSourceID())) {
+		if(StringUtils.isBlank(body.referenceType()) || StringUtils.isBlank(body.referenceSourceID())){
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType =referenceTypesAssembly.addReferenceType(body);
+		if(null == referenceType) {
+			log.error("ReferenceType Not saved due to unknown reasons ==> "+body.referenceType());
+			throw new DataInsertionException("ReferenceType Not Saved due to Unkown reasons");
+		}
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 
