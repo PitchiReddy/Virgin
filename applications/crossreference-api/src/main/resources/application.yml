@@ -40,7 +40,6 @@ logging:
     org.springframework.web.client: DEBUG
     com.virginvoyages: DEBUG
 ---
----
 spring:
   jpa:
     hibernate:
