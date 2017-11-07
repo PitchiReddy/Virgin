@@ -13,11 +13,13 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
+import com.virginvoyages.crm.client.Reference;
 import com.virginvoyages.crm.client.ReferenceClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
+import com.virginvoyages.crm.data.ReferenceData;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -59,9 +61,12 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	@Override
 	public Sailor getSailorById(String sailorID) {
 		AccountData accountData;
+		ReferenceData referenceData;
 		try {
 			accountData = accountClient.findAccount(sailorID);
-			referenceClient.findBySource(sailorID, "seawareClientID");
+			referenceData = setRequestParamsInReferenceData("123","1234","12345");
+			Reference reference = referenceClient.findBySource(referenceData);
+			log.debug("Request to return reference {}", reference);
 		} catch (FeignException fe) {
 			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
@@ -73,6 +78,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 
 	}
 
+	
 	@Override
 	public void deleteSailorById(String sailorID) {
 		try {
@@ -136,5 +142,14 @@ public class SailorAssemblyImpl implements SailorAssembly {
 				.associatePreferences(preferencesEmbedded)
 				.associateSailingHistory(bookingsEmbedded);
 	}
-
+	
+	private ReferenceData setRequestParamsInReferenceData(String masterID,String nativeSourceIDValue,String referenceTypeID){
+		ReferenceData  referenceData = new ReferenceData();
+		referenceData.masterID(masterID);
+		referenceData.nativeSourceIDValue(nativeSourceIDValue);
+		referenceData.referenceTypeID(referenceTypeID);
+    	return referenceData;
+    
+	}
+	
 }

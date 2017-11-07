@@ -1,7 +1,6 @@
 package com.virginvoyages.assembly;
 
 import java.util.List;
-
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
 
@@ -39,4 +38,5 @@ public interface SailorAssembly {
 	 * @return
 	 */
 	public Sailor createSailor(AccountData accountData);
+	
 }

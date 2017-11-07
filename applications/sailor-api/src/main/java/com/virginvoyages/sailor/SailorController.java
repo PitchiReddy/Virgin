@@ -19,13 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.virginvoyages.api.MockSailorAPI;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.exceptions.DataNotFoundException;
 import com.virginvoyages.sailor.exceptions.MandatoryFieldsMissingException;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -99,7 +97,6 @@ public class SailorController {
         	throw new MandatoryFieldsMissingException();
         
         Sailor sailor = sailorAssembly.getSailorById(sailorID);
-        
         return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(sailor, entityLinks), HttpStatus.OK);
     }
     
