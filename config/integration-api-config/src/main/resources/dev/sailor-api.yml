@@ -1,6 +1,7 @@
 crm:
   service:
     url: https://virginvoyages--dev.cs67.my.salesforce.com
+    seawareurl: http://10.3.0.8:8080/touchts/vx-resSumView
     version: v40.0
   username: ednZfc2FpbG9yX2FwaUB2aXJnaW52b3lhZ2VzLmNvbS5kZXY=
   password: 9VmlyZ2luNDU2
