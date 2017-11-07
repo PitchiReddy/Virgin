@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,12 +14,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
@@ -45,6 +48,116 @@ public class ReferenceTypesControllerTest {
 	@MockBean(name="referenceTypeRepository")
     private ReferenceTypeRepository referenceTypeRepository;
 	
+	//Add
+	@Test
+	public void givenRequestBodyHasEmptyReferenceTypeAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+				
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+		
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+"\","
+						+ "\"referenceType\" : \"\","
+						+ "\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
+		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+	
+	@Test
+	public void givenRequestBodyHasNoReferenceTypeAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+		
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+		
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+							"\",\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
+		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+	
+	@Test
+	public void givenRequestBodyHasEmptyReferenceSourceIDAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+		
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+		
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+
+						"\",\"referenceSourceID\" : \"\"}"))
+		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+		        		
+	}
+	
+	@Test
+	public void givenRequestBodyHasNoReferenceSourceIDAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
+		
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+		
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+"\"}"))
+		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+		
+	
+	@Test
+	public void givenAssemblyMethodReturnsNullAddReferenceTypeShouldSetDataInsertExceptionToResponse () throws Exception {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+		
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(null);
+		
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+
+						"\",\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
+				.andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
+	}
+	
+	@Test
+	public void givenAssemblyMethodReturnsReferenceTypeWithIDAddReferenceTypeShouldSetAddedReferenceTypeDetailsToResponse () throws Exception {
+		
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+		
+		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+				
+		//Test
+		mvc.perform(
+				post("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+
+						"\",\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
+				.andExpect(jsonPath("referenceSourceID",equalTo(referenceSource.referenceSourceID())))
+				.andExpect(jsonPath("referenceTypeID",equalTo(referenceType.referenceTypeID())))
+				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
+				.andExpect(status().is(HttpStatus.OK.value()));
+	}
 	
 	@Test 
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() throws Exception {
@@ -101,16 +214,6 @@ public class ReferenceTypesControllerTest {
 		        .andExpect(status().isOk());
 		
 	}
-
-	/*@Test
-	public void givenValidReferenceTypeAddReferenceTypeShouldReturnReferenceTypes() throws Exception {
-
-		mvc.perform(post("/types/")
-				.contentType("application/json")
-				.content(mockDataHelper.createReferenceTypeInJson("RT30", "Activity", "Reservation")))
-				.andExpect(status().isOk());
-		
-	}*/
 	
 	@Test 
 	public void givenValidReferenceTypeUpdateReferenceTypeByIDShouldUpdateReferenceType() throws Exception {

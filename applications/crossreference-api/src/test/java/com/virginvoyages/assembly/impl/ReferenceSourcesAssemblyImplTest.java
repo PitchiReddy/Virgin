@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,14 +67,14 @@ public class ReferenceSourcesAssemblyImplTest {
 	
 	public void givenRepositoryReturnsNullAddReferenceSourcesShouldReturnNull() {
 		when(referenceSourceRepository.save(testDataHelper.getReferenceSourceDataEntity())).thenReturn(null);
-		ReferenceSource referenceSource = referenceSourcesAssemblyImpl.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
-		assertThat(referenceSource, nullValue());
+		assertThat(referenceSourcesAssemblyImpl.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity()), nullValue());
 	}
 	
 	public void givenRepositoryReturnsReferenceSourceDataWithEmptyIdAddReferenceSourcesShouldReturnNull() {
 		when(referenceSourceRepository.save(testDataHelper.getReferenceSourceDataEntity())).thenReturn(new ReferenceSourceData());
-		ReferenceSource referenceSource = referenceSourcesAssemblyImpl.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
-		assertThat(referenceSource, nullValue());
+		assertThat(referenceSourcesAssemblyImpl.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity()), nullValue());
 	}
 	
 	@Test(expected = DataInsertionException.class)
@@ -103,8 +102,8 @@ public class ReferenceSourcesAssemblyImplTest {
 	
 	public void givenRepositoryReturnsNullfindReferenceSourceByIDShouldReturnNull() {
 		when(referenceSourceRepository.findOne((any(String.class)))).thenReturn(null);
-		ReferenceSource findReferenceSource = referenceSourcesAssemblyImpl.findReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
-		assertThat(findReferenceSource, is(nullValue()));
+		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByID(
+				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	
 	}
 	
@@ -118,8 +117,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	public void givenDeleteOnRepositoryDoesNotThrowAnyExceptionDeleteReferenceSourceByIDShouldReturnTrue() {
 		//Do nothing for refereenceSourceRepository.delete
 		doNothing().when(referenceSourceRepository).delete(testDataHelper.getReferenceSourceDataEntity());
-		boolean deleted = referenceSourcesAssemblyImpl.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
-		assert(deleted);
+		assert(referenceSourcesAssemblyImpl.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString()));
 		
 	}
 	
