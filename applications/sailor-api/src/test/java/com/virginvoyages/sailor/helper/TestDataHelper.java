@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crm.data.ReferenceData;
 import com.virginvoyages.sailor.Sailor;
 
 @Service
@@ -95,5 +96,14 @@ public class TestDataHelper {
 	
 	public String getSailorIDWithOutSailingHistory() {
 		return " ";
+	}
+	
+	public ReferenceData generateReferenceSource() {
+		ReferenceData referenceData = new ReferenceData();
+		referenceData.masterID("M1");
+		referenceData.nativeSourceIDValue("NSID1");
+		referenceData.referenceTypeID("8acdcfb55f9185fa015f918615c20004");
+		System.out.println("ReferenceData    " + referenceData);
+		return referenceData;
 	}
 }

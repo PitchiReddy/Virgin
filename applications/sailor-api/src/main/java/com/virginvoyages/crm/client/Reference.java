@@ -1,6 +1,10 @@
 package com.virginvoyages.crm.client;
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -9,28 +13,35 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(fluent = true, chain = true)
-public class Reference   {
+public class Reference  implements Serializable  {
 	
-  @JsonProperty("referenceID")
-  private String referenceID = null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  @JsonProperty("nativeSourceIDValue")
-  private String nativeSourceIDValue = null;
+	@JsonProperty("referenceID")
+	private String referenceID = null;
 
-  @JsonProperty("masterID")
-  private String masterID;
-  
-  @JsonProperty("referenceTypeID")
-  private String referenceTypeID = null;
-  
-  public Reference convertToBusinessEntity() {
+	@JsonProperty("nativeSourceIDValue")
+	private String nativeSourceIDValue = null;
+
+	@JsonProperty("masterID")
+	private String masterID;
+
+	@JsonProperty("referenceTypeID")
+	private String referenceTypeID = null;
+
+	@JsonProperty("errors")
+	private List<String> errors = new ArrayList<String>();
+	
+	public Reference convertToBusinessEntity() {
 		return new Reference()
 				.referenceID(String.valueOf(this.referenceID()))
 				.nativeSourceIDValue(String.valueOf(this.nativeSourceIDValue()))
 				.masterID(String.valueOf(this.masterID()))
 				.referenceTypeID(String.valueOf(this.referenceTypeID()));
-				
-				
+
 	}
 	
 }

@@ -164,7 +164,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
-		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
+		List<Reference> referenceData = mockAPI.findReferencesBySource("NSID1",null,null,null);
 		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 

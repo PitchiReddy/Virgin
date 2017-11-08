@@ -1,6 +1,8 @@
 package com.virginvoyages.crm.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.virginvoyages.crm.client.Reference;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,5 +21,13 @@ public class ReferenceData {
 	
 	@JsonProperty("referenceTypeID")
 	private String referenceTypeID;
+	
+	public Reference convertToReferenceObject(ReferenceData referenceData) {
+		Reference reference = new Reference();
+		reference.masterID(referenceData.masterID());
+		reference.nativeSourceIDValue(referenceData.nativeSourceIDValue());
+		reference.referenceTypeID(referenceData.referenceTypeID());
+		return reference;
+	}
 
 }
