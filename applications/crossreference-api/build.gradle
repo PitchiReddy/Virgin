@@ -3,7 +3,7 @@ apply plugin: "org.springframework.boot"
 apply plugin: "docker"
 apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
-apply plugin: "com.github.spotbugs"
+//apply plugin: "com.github.spotbugs"
 
 group = "com.virginvoyages"
 version = '1.0'
@@ -17,6 +17,7 @@ dependencyManagement {
 
 dependencies {
     compile project(":components:logging-starter")
+    compile project(":components:shared-code")
     
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"

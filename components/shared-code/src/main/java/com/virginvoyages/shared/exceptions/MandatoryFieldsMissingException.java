@@ -1,4 +1,4 @@
-package com.virginvoyages.sailor.exceptions;
+package com.virginvoyages.shared.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

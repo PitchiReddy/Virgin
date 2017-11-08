@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+
+import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.assembly.ReferenceAssembly;
-import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -113,7 +115,7 @@ public class ReferencesController {
 	public ResponseEntity<Reference> findReferenceByID(
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
-			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
+			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException {
 		
 
 		return new ResponseEntity<Reference>(mockAPI.findReferenceByID(referenceID), HttpStatus.OK);

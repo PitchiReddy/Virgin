@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.types;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import java.util.HashMap;
@@ -21,6 +22,86 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	//Add
+	
+	@Test
+	public void givenAllRequiredDataInRequestBodyAddReferenceTypeShouldAddReferenceType() {
+		
+		//Create Reference Source 
+		JsonPath referenceSourceJson = createTestReferenceSource();
+		
+		String testReferenceTypeName = testDataHelper.getRandomAlphabeticString();
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceType", testReferenceTypeName);
+		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
+		
+		//create reference type
+		JsonPath createdReferenceTypeJson = given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/types/")
+		
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all()
+				.extract()
+				.response()
+				.jsonPath();
+		
+			
+        //find with ID and test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/" + createdReferenceTypeJson.getString("referenceTypeID")).
+		then().
+				assertThat().statusCode(200).
+				assertThat().body("referenceTypeID", equalTo(createdReferenceTypeJson.getString("referenceTypeID"))).
+				assertThat().body("referenceType", equalTo(createdReferenceTypeJson.getString("referenceType"))).
+				log().
+				all();
+		   
+		//cleanup
+		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(createdReferenceTypeJson.getString("referenceSourceID"));
+	
+	} 
+	
+	@Test
+	public void givenReferenceTypeIDInRequestBodyAddReferenceTypeShouldNOTUseTheIDToCreateReferenceType() {
+		
+		//Create Reference Source 
+		JsonPath referenceSourceJson = createTestReferenceSource();
+	
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
+		parameters.put("referenceTypeID", testDataHelper.getRandomAlphanumericString());
+		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
+		
+		//create reference type
+		JsonPath createdReferenceTypeJson =  given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/types/")
+		
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.assertThat().body("referenceTypeID", not(equalTo(parameters.get("referenceTypeID"))))
+				.log()
+				.all().extract()
+				.response()
+				.jsonPath();
+		
+		
+		//cleanup
+		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceSourceJson.getString("referenceSourceID"));
+			
+	}
 	
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() {
@@ -103,7 +184,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	  public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowSomeException() {
+	public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowSomeException() {
 
 		//Test invalid ReferenceTypeId Delete
 		given().
@@ -116,82 +197,6 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				all();	
 	}
 	
-	@Test
-	public void givenAllRequiredDataInRequestBodyAddReferenceTypeShouldAddReferenceType() {
-		
-		//Create Reference Source 
-		JsonPath referenceSourceJson = createTestReferenceSource();
-		
-		String testReferenceTypeName = testDataHelper.getRandomAlphabeticString();
-		
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceType", testReferenceTypeName);
-		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
-		
-		//create reference type
-		JsonPath createdReferenceTypeJson = given()
-				.contentType("application/json")
-				.body(parameters)
-				.post("/xref-api/v1/types/")
-		
-		.then()
-				.assertThat()
-				.statusCode(200)
-				.log()
-				.all()
-				.extract()
-				.response()
-				.jsonPath();
-		
-			
-        //find with ID and test
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/types/" + createdReferenceTypeJson.getString("referenceTypeID")).
-		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(createdReferenceTypeJson.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(createdReferenceTypeJson.getString("referenceType"))).
-				log().
-				all();
-		   
-		//cleanup
-		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
-		deleteTestReferenceSource(createdReferenceTypeJson.getString("referenceSourceID"));
-	
-	} 
-	
-	@Test
-	public void givenReferenceTypeIDInRequestBodyAddReferenceTypeShouldNOTUseTheIDToCreateReferenceType() {
-		
-		//Create Reference Source 
-		JsonPath referenceSourceJson = createTestReferenceSource();
-	
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
-		parameters.put("referenceTypeID", testDataHelper.getRandomAlphanumericString());
-		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
-		
-		//create reference type
-		JsonPath createdReferenceTypeJson =  given()
-				.contentType("application/json")
-				.body(parameters)
-				.post("/xref-api/v1/types/")
-		
-		.then()
-				.assertThat()
-				.statusCode(200)
-				.log()
-				.all().extract()
-				.response()
-				.jsonPath();
-		
-		
-		//cleanup
-		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
-		deleteTestReferenceSource(referenceSourceJson.getString("referenceSourceID"));
-			
-	}
 	
 	@Test
 	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {

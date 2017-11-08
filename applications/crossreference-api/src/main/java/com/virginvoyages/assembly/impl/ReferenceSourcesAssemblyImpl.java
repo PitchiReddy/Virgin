@@ -45,21 +45,20 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	public ReferenceSource addReferenceSource(ReferenceSource referenceSource) {
 		log.debug("Entering addReferenceSource method in ReferenceSourcesAssemblyImpl. referenceSource.referenceSource() ==> "+referenceSource.referenceSource());
 		referenceSource.referenceSourceID(StringUtils.EMPTY);
-		ReferenceSourceData referenceSourceData	= new ReferenceSourceData();
+		if(StringUtils.isEmpty(referenceSource.referenceSource())) {
+			referenceSource.referenceSource(null);
+		}
 		try {
-			referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
+			ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(referenceSource.convertToDataEntity());
+			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
 		}catch(DataIntegrityViolationException dex) {	
-			log.error("DataIntegrityViolationException encountered while adding reference",dex);
+			log.error("DataIntegrityViolationException encountered while adding reference source",dex);
 			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
 			throw new DataInsertionException(errorMessage);
 		}catch(Exception ex) {
-			log.error("Exception encountered while adding reference",ex);
+			log.error("Exception encountered while adding reference source",ex);
 			throw new UnknownException();
 		}
-		
-		log.debug("Exiting addReferenceSource method in ReferenceSourcesAssemblyImpl");
-		return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
-			
 	}
 
 	/**
@@ -71,17 +70,13 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public ReferenceSource findReferenceSourceByID(String referenceSourceID) {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl for referenceSourceID ==> "+referenceSourceID);
-		ReferenceSourceData referenceSourceData	= new ReferenceSourceData();
 		try {
-			referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
-			
+			ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
+			return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
 		}catch(Exception ex) {
 			log.error("Reference Source ID ==>"+referenceSourceID+"\nException encountered in findReferenceSourceByID",ex);
 			throw new UnknownException();
 		}
-		
-		log.debug("Exiting findReferenceSourceByID method in ReferenceSourcesAssemblyImpl");
-		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
@@ -129,9 +124,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			log.error("Reference source does not exist with ID ==> "+referenceSource.referenceSourceID());
 			throw new DataUpdationException();
 		}
-		ReferenceSourceData referenceSourceData = new ReferenceSourceData();
 		try {
-			referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
+			ReferenceSourceData referenceSourceData = referenceSourceRepository.save(referenceSource.convertToDataEntity());
+			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
 		}catch(DataIntegrityViolationException dex) {	
 			log.error("DataIntegrityViolationException encountered while updating reference source",dex);
 			throw new DataUpdationException();
@@ -139,9 +134,6 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			log.error("Exception encountered while updating reference source",ex);
 			throw new UnknownException();
 		}
-		
-		log.debug("Exiting updateReferenceSource method in ReferenceSourcesAssemblyImpl");
-		return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
 	}
 
 	/**
