@@ -32,9 +32,6 @@ public class Reference  implements Serializable  {
 	@JsonProperty("referenceTypeID")
 	private String referenceTypeID = null;
 
-	@JsonProperty("errors")
-	private List<String> errors = new ArrayList<String>();
-	
 	public Reference convertToBusinessEntity() {
 		return new Reference()
 				.referenceID(String.valueOf(this.referenceID()))

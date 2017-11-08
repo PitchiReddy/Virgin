@@ -61,15 +61,17 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	@Override
 	public Sailor getSailorById(String sailorID) {
 		AccountData accountData;
-		ReferenceData referenceData;
+		Reference referenceData;
 		try {
 			accountData = accountClient.findAccount(sailorID);
 			referenceData = setRequestParamsInReferenceData("123","1234","ignore","12345");
 			log.debug(" referenceData    " + referenceData);
 			List<Reference> listofReference = referenceClient.findBySource(referenceData);
 			for(Reference reference: listofReference) {
-				log.debug("Request to return reference {}", reference);
+				log.debug("Request to return reference {}", reference);	
 			}
+			
+		
 		} catch (FeignException fe) {
 			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
@@ -146,8 +148,8 @@ public class SailorAssemblyImpl implements SailorAssembly {
 				.associateSailingHistory(bookingsEmbedded);
 	}
 	
-	private ReferenceData setRequestParamsInReferenceData(String masterID,String nativeSourceIDValue,String referenceID,String referenceTypeID){
-		ReferenceData  referenceData = new ReferenceData();
+	private Reference setRequestParamsInReferenceData(String masterID,String nativeSourceIDValue,String referenceID,String referenceTypeID){
+		Reference  referenceData = new Reference();
 		referenceData.masterID(masterID);
 		referenceData.nativeSourceIDValue(nativeSourceIDValue);
 		referenceData.referenceID(referenceID);
