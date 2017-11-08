@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crm.data.SeawareData;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
@@ -26,6 +27,9 @@ public class AccountClientTest {
 	
 	@Autowired
 	private AccountClient accountClient;
+	
+	@Autowired
+	private SeawareClient seawareClient;
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
@@ -78,6 +82,12 @@ public class AccountClientTest {
     	}
         assert(false);
     }
+    
+    @Test
+    public void findSeawareData() {
+	SeawareData seawareData =	testDataHelper.genarateSeawaredataToCreate();
+	seawareClient.findseawareData(seawareData);
    
+    }
   
 }

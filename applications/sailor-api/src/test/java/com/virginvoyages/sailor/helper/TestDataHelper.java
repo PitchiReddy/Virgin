@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crm.data.OTA_ReadRQ;
+import com.virginvoyages.crm.data.POS;
+import com.virginvoyages.crm.data.ReadRequests;
+import com.virginvoyages.crm.data.SeawareData;
 import com.virginvoyages.sailor.Sailor;
 
 @Service
@@ -95,5 +99,18 @@ public class TestDataHelper {
 	
 	public String getSailorIDWithOutSailingHistory() {
 		return " ";
+	}
+	
+
+	public SeawareData genarateSeawaredataToCreate() {
+		SeawareData seawareData = new SeawareData();
+		OTA_ReadRQ oTA_ReadRQ = new OTA_ReadRQ();
+		oTA_ReadRQ.setPOS(new POS());
+		oTA_ReadRQ.setReadRequests(new ReadRequests());
+		oTA_ReadRQ.setPrimaryLangID("PrimaryLangID");
+		oTA_ReadRQ.setVersion("1.0");
+		oTA_ReadRQ.setXmlns("xmlns");
+		seawareData.setOTA_ReadRQ(oTA_ReadRQ);
+		return seawareData;
 	}
 }
