@@ -1,4 +1,4 @@
-package com.virginvoyages.crossreference.references;
+package com.virginvoyages.model.crossreference;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.virginvoyages.model.Links;

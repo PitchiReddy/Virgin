@@ -28,6 +28,7 @@ import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceSourcesController.class)

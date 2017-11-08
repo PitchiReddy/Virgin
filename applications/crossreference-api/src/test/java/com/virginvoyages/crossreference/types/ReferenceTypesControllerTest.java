@@ -21,7 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 

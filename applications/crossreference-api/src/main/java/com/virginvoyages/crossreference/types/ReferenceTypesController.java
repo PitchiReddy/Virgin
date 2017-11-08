@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;

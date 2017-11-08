@@ -1,8 +1,8 @@
-package com.virginvoyages.crossreference.types;
+package com.virginvoyages.model.crossreference;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

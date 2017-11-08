@@ -12,14 +12,14 @@ import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.UnknownException;
-import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.data.entities.ReferenceTypeData;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 import lombok.extern.slf4j.Slf4j;
 

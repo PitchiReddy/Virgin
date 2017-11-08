@@ -19,7 +19,7 @@ import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 

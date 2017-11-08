@@ -24,12 +24,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.UnknownException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.data.repositories.ReferenceTypeRepository;
 
 @RunWith(SpringRunner.class)

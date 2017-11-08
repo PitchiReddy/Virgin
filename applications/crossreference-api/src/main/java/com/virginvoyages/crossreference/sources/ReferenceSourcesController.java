@@ -17,6 +17,7 @@ import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;

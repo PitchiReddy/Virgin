@@ -10,11 +10,11 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.crossreference.references.References;
-import com.virginvoyages.crossreference.references.ReferencesEmbedded;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.References;
+import com.virginvoyages.model.crossreference.ReferencesEmbedded;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.model.Page;
 
 /**
@@ -90,9 +90,17 @@ public class MockCrossReferenceAPI {
 	
 	public List<Reference> findReferencesBySource(String nativeSourceID,String sourceID,String typeID,String targetSourceID){
 		
-		if(StringUtils.isNotEmpty(typeID)) {
+		/*if(StringUtils.isNotEmpty(typeID)) {
 			return findReferencesSourceAndTypeID(nativeSourceID,sourceID,typeID);
-		}
+		}*/
+		references.put("R1", new Reference()
+				.referenceID("R1")
+				.masterID("M1")
+				.nativeSourceIDValue("NSID1"));
+		references.put("R2", new Reference()
+				.referenceID("R2")
+				.masterID("M1")
+				.nativeSourceIDValue("NSID2"));
 		return references
 				.values()
 				.stream()

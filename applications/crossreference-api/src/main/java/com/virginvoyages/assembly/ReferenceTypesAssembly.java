@@ -2,7 +2,7 @@ package com.virginvoyages.assembly;
 
 import java.util.List;
 
-import com.virginvoyages.crossreference.types.ReferenceType;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 /**
  * {@code Interface} for assembly tasks for ReferenceType

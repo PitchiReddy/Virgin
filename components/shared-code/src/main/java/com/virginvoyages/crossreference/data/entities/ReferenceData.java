@@ -1,4 +1,4 @@
-package com.virginvoyages.data.entities;
+package com.virginvoyages.crossreference.data.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.virginvoyages.crossreference.references.Reference;
+import com.virginvoyages.model.crossreference.Reference;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

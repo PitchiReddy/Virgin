@@ -2,7 +2,7 @@ package com.virginvoyages.assembly;
 
 import java.util.List;
 
-import com.virginvoyages.crossreference.sources.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 
 /**
  * {@code Interface} for assembly tasks for reference source

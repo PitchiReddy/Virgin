@@ -2,7 +2,7 @@ package com.virginvoyages.data.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 
 /**
  * {@code Interface} for ReferenceTypeRepository operations for ReferenceType

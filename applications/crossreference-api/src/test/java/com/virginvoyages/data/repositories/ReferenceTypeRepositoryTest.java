@@ -19,9 +19,9 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
 
 
 @RunWith(SpringRunner.class)

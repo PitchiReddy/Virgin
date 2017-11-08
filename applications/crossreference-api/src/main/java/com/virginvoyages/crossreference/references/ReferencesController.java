@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.References;
 import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;

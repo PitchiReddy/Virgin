@@ -26,14 +26,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.exceptions.DataAccessException;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.UnknownException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.data.entities.ReferenceSourceData;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.data.repositories.ReferenceSourceRepository;
 
 @RunWith(SpringRunner.class)
