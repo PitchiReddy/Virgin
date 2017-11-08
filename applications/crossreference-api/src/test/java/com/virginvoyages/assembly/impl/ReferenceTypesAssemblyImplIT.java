@@ -2,31 +2,34 @@ package com.virginvoyages.assembly.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.sources.ReferenceSource;
 import com.virginvoyages.crossreference.types.ReferenceType;
+
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ReferenceTypesAssemblyImplIT {
 	
-	
-
 	@Autowired
 	private ReferenceTypesAssembly referenceTypesAssembly;
 	
@@ -36,18 +39,16 @@ public class ReferenceTypesAssemblyImplIT {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-		
 	@Test
 	public void givenValidReferenceTypeAddReferenceTypeShouldCreateReferenceTypeAndReturnCreatedType() {
 		
-		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
 		
-		ReferenceType referenceTypeToCreate = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceTypeToCreate);
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
 		assertThat(createdReferenceType.referenceTypeID(),notNullValue());
-		assertThat(createdReferenceType.referenceType(), equalTo(referenceTypeToCreate.referenceType()));
-		
+				
 		//Assert by find
 		ReferenceType retrievedReferenceType = referenceTypesAssembly.findReferenceTypeByID(createdReferenceType.referenceTypeID());
 		assertThat(retrievedReferenceType, notNullValue());
@@ -60,21 +61,67 @@ public class ReferenceTypesAssemblyImplIT {
 		
 	} 
 	
-	@Test(expected= DataNotFoundException.class)
-	public void givenInvalidReferenceSourceIdFindReferenceTypeShouldThrowInvalidReferenceSourceException() {
-		ReferenceType retrievedReferenceType = referenceTypesAssembly.findReferenceTypeByID(testDataHelper.getRandomAlphanumericString());
-		assertThat(retrievedReferenceType, is(nullValue()));
+	@Test
+	public void givenEmptyReferenceTypeNameAddReferenceTypeShouldThrowDataInsertException() {
+		
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
+		
+		ReferenceType referenceTypeToCreate = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
+		referenceTypeToCreate.referenceType(StringUtils.EMPTY);
+		try {
+			referenceTypesAssembly.addReferenceType(referenceTypeToCreate);
+		}catch(DataInsertionException ex) {
+			assert(true);
+			return;
+		}finally {
+			//cleanup
+			referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		}
+		assert(false);
+		
 	}
 	
+	@Test(expected = DataInsertionException.class)
+	public void givenInvalidReferenceSourceIDAddReferenceTypeShouldThrowDataInsertException() {
+		referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(new ReferenceSource().referenceSourceID("dummy")));
+	}
 	
+	@Test 
+	public void givenReferenceTypeIDHasValidTypeIDAddReferenceTypeShouldIgnoreIDAndCreateTypeWithUUID() {
+		
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
+		
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+		
+		ReferenceType createdReferenceTypeWithExistingID = referenceTypesAssembly.addReferenceType(
+																	testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource)
+																						.referenceTypeID(createdReferenceType.referenceTypeID()));
+		assertThat(createdReferenceType.referenceTypeID(), not(equalTo(createdReferenceTypeWithExistingID.referenceTypeID())));
+		
+		//cleanup
+		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceTypeWithExistingID.referenceTypeID());
+		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+				
+	}
+	
+	@Test(expected= DataNotFoundException.class)
+	public void givenInvalidReferenceSourceIdFindReferenceTypeShouldThrowInvalidReferenceSourceException() {
+		assertThat(referenceTypesAssembly.findReferenceTypeByID(testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	}
+		
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() throws Exception {
 		
-		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
-		
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
+
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
 
 		ReferenceType findReferenceType = referenceTypesAssembly.findReferenceTypeByID(createdReferenceType.referenceTypeID());
 		assertThat(findReferenceType.referenceTypeID(), is(notNullValue()));
@@ -89,19 +136,17 @@ public class ReferenceTypesAssemblyImplIT {
 	
 	@Test(expected = DataNotFoundException.class)
 	public void givenValidReferenceTypeDeleteReferenceTypeShouldDeleteReferenceType() {
-		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
 		
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
-		
-		
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+			
 		//cleanup
 		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		
-		ReferenceType findReferenceType = referenceTypesAssembly.findReferenceTypeByID(createdReferenceType.referenceTypeID());
-		assertThat(findReferenceType, is(nullValue()));
+		assertThat(referenceTypesAssembly.findReferenceTypeByID(createdReferenceType.referenceTypeID()), is(nullValue()));
 		
 	}
 	
@@ -113,11 +158,11 @@ public class ReferenceTypesAssemblyImplIT {
 	
 	@Test
 	public void givenValidReferenceTypeUpdateReferenceTypeShouldUpdateReferenceType() {
-		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+								testDataHelper.getReferenceSourceBusinessEntity());
 		
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdRferenceType = referenceTypesAssembly.addReferenceType(referenceType);
+		ReferenceType createdRferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
 		
 		String referenceTypeToUpdate = testDataHelper.getRandomAlphabeticString();
 		
@@ -133,14 +178,13 @@ public class ReferenceTypesAssemblyImplIT {
 	@Test
 	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
 		
-		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
 		
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
 		
-		List<ReferenceType> referenceTypeList =referenceTypesAssembly.findTypes();
-		assertThat(referenceTypeList, hasSize(greaterThan(0)));
+		assertThat(referenceTypesAssembly.findTypes(), hasSize(greaterThan(0)));
 		
 		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
