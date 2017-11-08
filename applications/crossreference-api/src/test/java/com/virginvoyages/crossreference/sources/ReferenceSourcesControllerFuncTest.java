@@ -85,7 +85,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 		.then()
 		.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-		.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+		.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 		.log()
 		.all();
 		
@@ -120,7 +120,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 		
@@ -175,7 +175,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 	}
@@ -243,7 +243,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 				.log()
 				.all();
 		
