@@ -102,6 +102,24 @@ public class ReferenceSourcesControllerTest {
 						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
 			    .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
+	
+	@Test
+	public void givenAssemblyMethodReturnsReferenceSourceWithIDAddReferenceSourceSetAddedReferenceSourceDetailsToResponse () throws Exception {
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		
+		given(referenceSourcesAssembly.addReferenceSource(referenceSource)).willReturn(referenceSource);
+				
+		//Test
+		mvc.perform(
+				post("/sources/")
+				.contentType("application/json")
+				.content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+
+						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
+				.andExpect(jsonPath("referenceSourceID",equalTo(referenceSource.referenceSourceID())))
+				.andExpect(jsonPath("referenceSource",equalTo(referenceSource.referenceSource())))
+				.andExpect(jsonPath("inActive",equalTo(referenceSource.inActive())))
+		        .andExpect(status().is(HttpStatus.OK.value()));
+	}
 		
 	// Delete Reference Source
 	@Test
@@ -295,22 +313,5 @@ public class ReferenceSourcesControllerTest {
 						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
 		        .andExpect(status().isOk());
 	}
-	
-	@Test
-	public void givenAssemblyMethodReturnsReferenceSourceWithIDAddReferenceSourceSetAddedReferenceSourceDetailsToResponse () throws Exception {
-		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		
-		given(referenceSourcesAssembly.addReferenceSource(referenceSource)).willReturn(referenceSource);
-				
-		//Test
-		mvc.perform(
-				post("/sources/")
-				.contentType("application/json")
-				.content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+
-						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
-				.andExpect(jsonPath("referenceSourceID",equalTo(referenceSource.referenceSourceID())))
-				.andExpect(jsonPath("referenceSource",equalTo(referenceSource.referenceSource())))
-				.andExpect(jsonPath("inActive",equalTo(referenceSource.inActive())))
-		        .andExpect(status().is(HttpStatus.OK.value()));
-	}
 }

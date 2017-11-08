@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+
 /**
  * Exception handler class for exception thrown during Sailor operations
  * @author rpraveen

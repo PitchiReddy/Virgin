@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
 import com.virginvoyages.model.Page;
+import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -128,7 +128,7 @@ public class ReferencesController {
 		log.debug("Find reference by ID");
 		if(StringUtils.isEmpty(referenceID) || (referenceID.trim().length() == 0)) 
         	throw new MandatoryFieldsMissingException();
-		
+				
 		if(referenceID.trim().length() >= 33) {
 			throw new ReferenceIDMaxRequestSizeException();
 		}

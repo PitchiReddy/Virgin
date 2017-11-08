@@ -17,7 +17,7 @@ import com.virginvoyages.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
-import com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,8 +107,7 @@ public class ReferenceSourcesController {
 			"ReferenceSource", })
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
-	@RequestMapping(value = "/sources", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/sources", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<ReferenceSource>> findSources(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
