@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 /**

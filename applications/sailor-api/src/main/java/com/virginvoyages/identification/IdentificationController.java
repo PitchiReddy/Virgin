@@ -1,11 +1,12 @@
 package com.virginvoyages.identification;
 
-import com.virginvoyages.api.MockSailorAPI;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.virginvoyages.sailor.api.MockSailorAPI;
 
 @RestController
 @Api(value = "Identification", description = "Identifications for a Sailor", tags = "Identification")
