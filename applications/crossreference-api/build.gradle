@@ -17,6 +17,7 @@ dependencyManagement {
 
 dependencies {
     compile project(":components:logging-starter")
+    compile project(":components:shared-code")
     
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
