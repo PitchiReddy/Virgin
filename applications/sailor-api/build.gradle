@@ -18,6 +18,7 @@ dependencyManagement {
 dependencies {
     compile project(":components:logging-starter")
     compile project(":components:hbase-starter")
+    compile project(":components:shared-code")
     compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-xml-provider', version: '2.8.10'
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
@@ -34,7 +35,6 @@ dependencies {
     compile "org.projectlombok:lombok:1.16.16"
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "io.rest-assured:rest-assured:3.0.3"
-    
 }
 
 // The run task added by the application plugin

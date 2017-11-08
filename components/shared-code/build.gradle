@@ -1,0 +1,23 @@
+apply from: '../../java.gradle'
+apply plugin: "com.github.spotbugs"
+
+group = 'com.virginvoyages.shared'
+version = '0.0.1-SNAPSHOT'
+
+description = "shared-code"
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "ch.qos.logback:logback-core:$logbackCoreVersion"
+    compile "ch.qos.logback:logback-access:$logbackCoreVersion"    
+    compile "net.logstash.logback:logstash-logback-encoder:$logbackVersion"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
