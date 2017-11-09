@@ -103,6 +103,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 			
 	}
 	
+	//Find By ID
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() {
 
