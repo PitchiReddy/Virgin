@@ -13,13 +13,13 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
-import com.virginvoyages.crm.client.Reference;
-import com.virginvoyages.crm.client.ReferenceClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crm.data.ReferenceData;
+import com.virginvoyages.crossreference.client.Reference;
+import com.virginvoyages.crossreference.client.CrossreferenceClient;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -47,7 +47,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	private QueryClient queryClient;
 	
 	@Autowired
-	private ReferenceClient referenceClient;
+	private CrossreferenceClient referenceClient;
 	
 	@Autowired
 	private SailorQueryHelper sailorQueryHelper;

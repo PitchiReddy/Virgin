@@ -1,7 +1,7 @@
 package com.virginvoyages.crm.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.crm.client.Reference;
+import com.virginvoyages.crossreference.client.Reference;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

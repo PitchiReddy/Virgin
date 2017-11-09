@@ -1,4 +1,4 @@
-package com.virginvoyages.crm.client;
+package com.virginvoyages.crossreference.client;
 
 
 import java.io.Serializable;

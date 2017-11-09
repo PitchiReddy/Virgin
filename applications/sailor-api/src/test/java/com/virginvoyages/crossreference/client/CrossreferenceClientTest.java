@@ -1,4 +1,4 @@
-package com.virginvoyages.crm.client;
+package com.virginvoyages.crossreference.client;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -10,14 +10,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.virginvoyages.crossreference.client.Reference;
+import com.virginvoyages.crossreference.client.CrossreferenceClient;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ReferenceClientTest {
+public class CrossreferenceClientTest {
 	
 	@Autowired
-	private ReferenceClient referenceClient;
+	private CrossreferenceClient referenceClient;
 	
 	@Autowired
 	private TestDataHelper testDataHelper;

@@ -1,0 +1,5 @@
+xref:
+  datasource:
+    url: jdbc:mysql://localhost:3306/xref
+    username: root
+    password: root
