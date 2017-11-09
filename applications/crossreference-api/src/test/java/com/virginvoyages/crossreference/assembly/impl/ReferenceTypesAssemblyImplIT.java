@@ -137,7 +137,6 @@ public class ReferenceTypesAssemblyImplIT {
 	}
 	
 	//Delete
-	@Test(expected = DataNotFoundException.class)
 	public void givenValidReferenceTypeDeleteReferenceTypeShouldDeleteReferenceType() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
