@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
 import com.virginvoyages.model.Page;
@@ -78,6 +79,10 @@ public class ReferencesController {
 			throw new MandatoryFieldsMissingException();
 		}
 		Reference reference = referencesAssembly.addReference(body);
+		if(null == reference) {
+			log.error("Reference Not saved due to unknown reasons ==> "+body.referenceTypeID());
+			throw new DataInsertionException("Reference Not Saved due to Unkown reasons");
+		}
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 	}
 

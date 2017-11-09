@@ -14,6 +14,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataAccessException;
+import com.virginvoyages.crossreference.exceptions.DataInsertionException;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.UnknownException;
@@ -44,9 +46,22 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 */
 	@Override
 	public Reference addReference(Reference reference) {
-		log.debug("Entering addReference method in ReferencesAssemblyImpl");
-		ReferenceData referenceData =	referenceRepository.save(reference.convertToDataEntity());
-		return referenceData.convertToBusinessEntity();
+		log.debug("Entering addReference method in ReferencesAssemblyImpl.reference.nativeSourceIDValue() ==> "+reference.nativeSourceIDValue());
+		reference.referenceID(StringUtils.EMPTY);
+		if(StringUtils.isEmpty(reference.nativeSourceIDValue())) {
+			reference.nativeSourceIDValue(null);
+		}
+		try {
+			ReferenceData referenceData	= referenceRepository.save(reference.convertToDataEntity());
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
+		}catch(DataIntegrityViolationException dex) {	
+			log.error("DataIntegrityViolationException encountered while adding reference ",dex);
+			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
+			throw new DataInsertionException(errorMessage);
+		}catch(Exception ex) {
+			log.error("Exception encountered while adding reference ",ex);
+			throw new UnknownException();
+		}
 	}
 
 	/**
@@ -72,14 +87,20 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 */
 	@Override
 	public void deleteReferenceByID(String referenceID) {
-		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
+		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl for referenceID ==> "+referenceID);
 		try{
 			referenceRepository.delete(referenceID);
-		}
-		catch(EmptyResultDataAccessException | DataIntegrityViolationException dive) {
+		}catch(EmptyResultDataAccessException edex) {
+			log.error("Reference ID ==>"+referenceID+"\nEmptyResultDataAccessException encountered in deleteReferenceByID",edex);
 			throw new DataNotFoundException();
+		}catch(DataIntegrityViolationException dex) {
+			log.error("Reference ID ==>"+referenceID+"\nDataIntegrityViolationException encountered in deleteReferenceByID",dex);
+			throw new DataAccessException();
+		}catch(Exception ex) {
+			log.error("Reference ID ==>"+referenceID+"\nException encountered in deleteReferenceByID",ex);
+			throw new UnknownException();
 		}
-	
+		log.debug("Exiting deleteReferenceByID method in ReferencesAssemblyImpl");
 	}
 	/**
 	 * Finding references
