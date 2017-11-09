@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,5 +261,24 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				body("exception",equalTo("com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException")).
 				log().
 				all();
+	}
+	
+	@Test
+	public void givenEmptyReferenceIdUpdateReferenceShouldThrowMandatoryFieldsMissingException() {
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceID", "");
+		parameters.put("nativeSourceIDValue", "update");
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/references")
+		
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+		
 	}
 }

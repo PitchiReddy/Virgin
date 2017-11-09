@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
 import com.virginvoyages.model.Page;
 import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
@@ -264,6 +265,10 @@ public class ReferencesController {
 			throw new MandatoryFieldsMissingException();
 		}
 		Reference reference =	referencesAssembly.updateReference(body);
+		if(null == reference) {
+			log.error("Reference Not saved due to unknown reasons ==> "+body.referenceID());
+			throw new DataUpdationException();
+		}
 		return new ResponseEntity<Reference>(reference,HttpStatus.OK);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.DataUpdationException;
+import com.virginvoyages.crossreference.exceptions.UnknownException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
@@ -111,26 +113,29 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		}
 		return null == referenceDataIterable ? null : listOfReference;	
 	}
+	
 	/**
-	 * Update reference Type by ID. 
-	 * @param referenceID
+	 * Update reference by ID. 
 	 * @param reference
 	 * @return 
 	 */
 	@Override
 	public Reference updateReference(Reference reference) {
-		log.debug("Entering deleteReferenceByID method in ReferencesAssemblyImpl");
-
-		ReferenceData referenceData = null;
-		ReferenceData	findReferenceData = referenceRepository.findOne(reference.referenceID());
-		if(null == findReferenceData) {
+		log.debug("Entering updateReference method in ReferencesAssemblyImpl");
+		if(!referenceRepository.exists(reference.referenceID())){
+			log.error("Reference does not exist with ID ==> "+reference.referenceID());
 			throw new DataUpdationException();
 		}
-		else {
-		 referenceData = referenceRepository.save(reference.convertToDataEntity());
+		try {
+			ReferenceData referenceData = referenceRepository.save(reference.convertToDataEntity());
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
+		}catch(DataIntegrityViolationException dex) {	
+			log.error("DataIntegrityViolationException encountered while updating reference ",dex);
+			throw new DataUpdationException();
+		}catch(Exception ex) {
+			log.error("Exception encountered while updating reference ",ex);
+			throw new UnknownException();
 		}
-		return referenceData.convertToBusinessEntity();
-		
 	}
 
 	@Override
