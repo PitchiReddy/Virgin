@@ -17,9 +17,8 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
-import com.virginvoyages.crm.data.ReferenceData;
-import com.virginvoyages.crossreference.client.Reference;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
+import com.virginvoyages.crossreference.client.Reference;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -61,17 +60,8 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	@Override
 	public Sailor getSailorById(String sailorID) {
 		AccountData accountData;
-		Reference referenceData;
 		try {
 			accountData = accountClient.findAccount(sailorID);
-			referenceData = setRequestParamsInReferenceData("123","1234","ignore","12345");
-			log.debug(" referenceData    " + referenceData);
-			List<Reference> listofReference = referenceClient.findBySource(referenceData);
-			for(Reference reference: listofReference) {
-				log.debug("Request to return reference {}", reference);	
-			}
-			
-		
 		} catch (FeignException fe) {
 			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
@@ -79,11 +69,11 @@ public class SailorAssemblyImpl implements SailorAssembly {
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}
+		
 		return convertAccountDataToSailor(accountData, loadPreferences(sailorID), null);
-
+		
 	}
 
-	
 	@Override
 	public void deleteSailorById(String sailorID) {
 		try {
@@ -138,24 +128,22 @@ public class SailorAssemblyImpl implements SailorAssembly {
 				
  	}
 	
-	private PreferencesEmbedded loadPreferences(String sailorID) {
+	public PreferencesEmbedded loadPreferences(String sailorID) {
 		return preferenceAssembly.findSailorPreferences(sailorID);
 	}
 	
-	private Sailor convertAccountDataToSailor(AccountData accoundData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
-		return accoundData.convertToSailorObject()
-				.associatePreferences(preferencesEmbedded)
-				.associateSailingHistory(bookingsEmbedded);
+	public Sailor convertAccountDataToSailor(AccountData accountData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
+		return accountData.convertToSailorObject()
+								.associatePreferences(preferencesEmbedded)
+								.associateSailingHistory(bookingsEmbedded)
+								.seawareClientID(getSeawareClientIDForSailor(accountData.id()));
+		
 	}
-	
-	private Reference setRequestParamsInReferenceData(String masterID,String nativeSourceIDValue,String referenceID,String referenceTypeID){
-		Reference  referenceData = new Reference();
-		referenceData.masterID(masterID);
-		referenceData.nativeSourceIDValue(nativeSourceIDValue);
-		referenceData.referenceID(referenceID);
-		referenceData.referenceTypeID(referenceTypeID);
-    	return referenceData;
-    
+		
+	public String getSeawareClientIDForSailor(String sailorID) {
+		List<Reference> listofReference = referenceClient.findBySource(
+				new Reference().nativeSourceIDValue(sailorID));
+		return (null != listofReference && listofReference.size() > 0) ? listofReference.get(0).nativeSourceIDValue():null;
 	}
 	
 }
