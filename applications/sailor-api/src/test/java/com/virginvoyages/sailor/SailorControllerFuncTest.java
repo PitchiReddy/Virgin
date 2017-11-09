@@ -88,7 +88,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 	
 	    then().
 			statusCode(404).
-			assertThat().body("exception", equalTo("com.virginvoyages.sailor.exceptions.DataNotFoundException"));
+			assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException"));
 		
 	}
 	
@@ -138,7 +138,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 	
 	    then().
 			statusCode(404).
-			assertThat().body("exception", equalTo("com.virginvoyages.sailor.exceptions.DataNotFoundException"));
+			assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException"));
 		
 	}
 	
@@ -176,7 +176,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
         
 	    then().
 	       		assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.sailor.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 	       		log().
 	       		all();
 	}
@@ -192,7 +192,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
         
 	    then().
 	       		assertThat().statusCode(405).
-				assertThat().body("exception", equalTo("com.virginvoyages.sailor.exceptions.MandatoryFieldsMissingException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException")).
 	       		log().
 	       		all();
     }
@@ -269,7 +269,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
    		then().
    				statusCode(405).
    				assertThat().
-   				body("exception",equalTo("com.virginvoyages.sailor.exceptions.MandatoryFieldsMissingException")).
+   				body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException")).
    				log().
    				all();
 	}
