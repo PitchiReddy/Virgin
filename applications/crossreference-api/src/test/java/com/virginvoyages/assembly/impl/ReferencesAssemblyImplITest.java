@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,11 +21,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.data.entities.ReferenceData;
-import com.virginvoyages.data.repositories.ReferenceRepository;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.model.crossreference.Reference;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

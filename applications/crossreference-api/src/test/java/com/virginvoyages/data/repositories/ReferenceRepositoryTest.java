@@ -1,11 +1,12 @@
 package com.virginvoyages.data.repositories;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -13,10 +14,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.data.entities.ReferenceData;
-import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

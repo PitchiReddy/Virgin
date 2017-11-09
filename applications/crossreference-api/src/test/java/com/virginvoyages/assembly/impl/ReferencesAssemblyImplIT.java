@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
@@ -12,15 +14,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.virginvoyages.assembly.ReferenceSourcesAssembly;
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
+
 import com.virginvoyages.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
+import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.crossreference.types.ReferenceType;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
