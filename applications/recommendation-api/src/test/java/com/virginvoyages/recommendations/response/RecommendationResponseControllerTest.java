@@ -1,12 +1,12 @@
 package com.virginvoyages.recommendations.response;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.BDDMockito.given;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.virginvoyages.recommendations.assembly.impl.RecommendationResponseAssemblyImpl;
-import com.virginvoyages.recommendations.exceptions.DataInsertionException;
 import com.virginvoyages.recommendations.helper.TestDataHelper;
 
 

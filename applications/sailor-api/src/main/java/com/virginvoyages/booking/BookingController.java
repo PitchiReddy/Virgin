@@ -1,8 +1,9 @@
 package com.virginvoyages.booking;
 
-import com.virginvoyages.api.MockSailorAPI;
 import com.virginvoyages.assembly.BookingAssembly;
 import com.virginvoyages.model.Page;
+import com.virginvoyages.sailor.api.MockSailorAPI;
+
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

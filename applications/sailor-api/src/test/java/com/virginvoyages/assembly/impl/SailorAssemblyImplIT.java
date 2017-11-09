@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 /**
@@ -82,11 +82,10 @@ public class SailorAssemblyImplIT {
 		// creating three test users with same firstname
 		testDataHelper.createTestSailor(firstName, "One_LN");
 		testDataHelper.createTestSailor(firstName, "Two_LN");
-		testDataHelper.createTestSailor(firstName, "Three_LN");
 		AccountData accountData = new AccountData();
 		accountData.firstName(firstName);
 		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
-		assertThat(listOfSailors, hasSize(3));
+		assertThat(listOfSailors, hasSize(2));
 		for (Sailor sailor : listOfSailors) {
 			assertThat(sailor.firstName(), equalTo(accountData.firstName()));
 			testDataHelper.deleteSailor(sailor.id());
