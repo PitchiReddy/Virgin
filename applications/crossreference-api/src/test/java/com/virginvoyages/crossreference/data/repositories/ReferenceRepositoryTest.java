@@ -1,4 +1,4 @@
-package com.virginvoyages.data.repositories;
+package com.virginvoyages.crossreference.data.repositories;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
