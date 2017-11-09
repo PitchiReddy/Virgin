@@ -1,5 +1,8 @@
 package com.virginvoyages.crm.data;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class SeawareData {
 
 	 private OTA_ReadRQ OTA_ReadRQ;

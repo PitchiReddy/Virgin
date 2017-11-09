@@ -22,6 +22,7 @@ import feign.FeignException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+
 public class AccountClientTest {
 
 	
@@ -33,6 +34,7 @@ public class AccountClientTest {
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
 	
 	@Test
     public void createAccountCreatesNewAccount() {
@@ -77,7 +79,7 @@ public class AccountClientTest {
     	try {
     		accountClient.findAccount(testSailor.id());
     	}catch(FeignException fe) {
-    		assertThat(fe.status(),equalTo(HttpStatus.NOT_FOUND.value()));
+    		assertThat(fe.getMessage(),equalTo(HttpStatus.NOT_FOUND.value()));
     		return;
     	}
         assert(false);
@@ -85,9 +87,8 @@ public class AccountClientTest {
     
     @Test
     public void findSeawareData() {
-	SeawareData seawareData =	testDataHelper.genarateSeawaredataToCreate();
-	seawareClient.findseawareData(seawareData);
-   
+	String data = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
+   System.out.println("111111111111111111111111" + data);
     }
   
 }

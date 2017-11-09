@@ -1,5 +1,8 @@
 package com.virginvoyages.crm.data;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class OTA_ReadRQ {
 
 	private ReadRequests ReadRequests;

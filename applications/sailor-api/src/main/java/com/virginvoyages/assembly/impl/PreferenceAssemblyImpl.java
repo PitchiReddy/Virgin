@@ -42,9 +42,9 @@ public class PreferenceAssemblyImpl implements PreferenceAssembly {
 			}
 			
 		} catch (FeignException fe) {
-			if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
+			/*if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
 				throw new InvalidQueryFilterException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 		}
 		return preferencesEmbedded;

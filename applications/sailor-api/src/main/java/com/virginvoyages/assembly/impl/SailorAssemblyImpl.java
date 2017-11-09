@@ -58,9 +58,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		try {
 			accountData = accountClient.findAccount(sailorID);
 		} catch (FeignException fe) {
-			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
+			/*if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}
@@ -73,9 +73,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		try {
 			accountClient.deleteAccount(sailorID);
 		} catch (FeignException fe) {
-			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
+			/*if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}

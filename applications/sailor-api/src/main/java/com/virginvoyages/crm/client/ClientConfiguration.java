@@ -1,9 +1,11 @@
 package com.virginvoyages.crm.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
@@ -35,7 +37,7 @@ public class ClientConfiguration {
 
     private SecretsUtility secrets = new SecretsUtility();
 
-    @Bean
+    /*@Bean
     RequestInterceptor oauth2FeignRequestInterceptor(OAuth2ClientContext oAuth2ClientContext) {
         String decodedUsername = secrets.decode(username);
         ResourceOwnerPasswordResourceDetails resourceOwnerPasswordResourceDetails = new ResourceOwnerPasswordResourceDetails();
@@ -49,7 +51,7 @@ public class ClientConfiguration {
         log.debug("CRM User Name {}", decodedUsername);
 
         return new OAuth2FeignRequestInterceptor(oAuth2ClientContext, resourceOwnerPasswordResourceDetails);
-    }
+    }*/
 
     
     

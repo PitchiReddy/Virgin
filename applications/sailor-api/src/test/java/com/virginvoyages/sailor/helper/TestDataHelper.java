@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crm.data.BookingChannel;
 import com.virginvoyages.crm.data.OTA_ReadRQ;
 import com.virginvoyages.crm.data.POS;
+import com.virginvoyages.crm.data.ProfileReadRequest;
 import com.virginvoyages.crm.data.ReadRequests;
+import com.virginvoyages.crm.data.RequestorID;
 import com.virginvoyages.crm.data.SeawareData;
+import com.virginvoyages.crm.data.Source;
+import com.virginvoyages.crm.data.UniqueID;
 import com.virginvoyages.sailor.Sailor;
 
 @Service
@@ -102,15 +107,39 @@ public class TestDataHelper {
 	}
 	
 
-	public SeawareData genarateSeawaredataToCreate() {
+	public OTA_ReadRQ genarateSeawaredataToCreate() {
 		SeawareData seawareData = new SeawareData();
+		
 		OTA_ReadRQ oTA_ReadRQ = new OTA_ReadRQ();
-		oTA_ReadRQ.setPOS(new POS());
+		POS pos = new POS();
+		Source source = new Source();
+		ReadRequests readRequests = new ReadRequests();
+		ProfileReadRequest profileReadRequest =  new ProfileReadRequest();
+		UniqueID uniqueID = new UniqueID();
+		uniqueID.setID("405");
+		uniqueID.setID_Context("SEAWARE");
+		uniqueID.setType("1");
+		profileReadRequest.setUniqueID(uniqueID);
+		readRequests.setProfileReadRequest(profileReadRequest);
+		RequestorID requestorID = new RequestorID();
+		requestorID.setID("5");
+		requestorID.setType("5");
+		requestorID.setID_Context("SEAWARE");
+		BookingChannel bookingChannel = new BookingChannel();
+		bookingChannel.setCompanyName("OPENTRAVEL");
+		bookingChannel.setType("1");
+		
+		
+		
+		source.setRequestorID(requestorID);
+		
+		source.setBookingChannel(bookingChannel);
+		oTA_ReadRQ.setPOS(pos);
 		oTA_ReadRQ.setReadRequests(new ReadRequests());
-		oTA_ReadRQ.setPrimaryLangID("PrimaryLangID");
-		oTA_ReadRQ.setVersion("1.0");
-		oTA_ReadRQ.setXmlns("xmlns");
-		seawareData.setOTA_ReadRQ(oTA_ReadRQ);
-		return seawareData;
+		oTA_ReadRQ.setPrimaryLangID("ENG");
+		oTA_ReadRQ.setVersion("1");
+		oTA_ReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
+		oTA_ReadRQ.setReadRequests(readRequests);
+		return oTA_ReadRQ;
 	}
 }

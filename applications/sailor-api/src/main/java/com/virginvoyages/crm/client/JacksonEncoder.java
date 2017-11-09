@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import feign.RequestTemplate;
+import feign.codec.EncodeException;
 import feign.codec.Encoder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,5 +35,7 @@ public class JacksonEncoder implements Encoder {
 			log.debug("JsonProcessingException encountered",jpex);
 		}
 	}
+
+	
 
 }
