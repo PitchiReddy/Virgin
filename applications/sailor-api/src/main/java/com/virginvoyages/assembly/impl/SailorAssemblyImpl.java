@@ -21,8 +21,8 @@ import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
-import com.virginvoyages.sailor.exceptions.DataNotFoundException;
-import com.virginvoyages.sailor.exceptions.UnknownException;
+import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 import feign.FeignException;

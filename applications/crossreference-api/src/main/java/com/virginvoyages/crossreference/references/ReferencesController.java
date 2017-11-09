@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockCrossReferenceAPI;
-import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.DataInsertionException;
-import com.virginvoyages.crossreference.exceptions.DataUpdationException;
+import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
+import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataUpdationException;
+import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.References;
+import com.virginvoyages.model.crossreference.ReferencesEmbedded;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -132,13 +136,16 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
 	
 		log.debug("Find reference by ID");
-		if(StringUtils.isEmpty(referenceID) || (referenceID.trim().length() == 0)) 
-        	throw new MandatoryFieldsMissingException();
-				
-		if(referenceID.trim().length() >= 33) {
+		if (StringUtils.isBlank(referenceID) || (referenceID.trim().length() == 0))
+			throw new MandatoryFieldsMissingException();
+		if (referenceID.trim().length() >= 33) {
 			throw new ReferenceIDMaxRequestSizeException();
 		}
-		return new ResponseEntity<Reference>(referencesAssembly.findReferenceByID(referenceID), HttpStatus.OK);
+		Reference reference = referencesAssembly.findReferenceByID(referenceID);
+		if (null == reference) {
+			throw new DataNotFoundException();
+		}
+		return new ResponseEntity<Reference>(reference, HttpStatus.OK);
 
 	}
 

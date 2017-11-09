@@ -126,7 +126,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowSomeException() {
+	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowDataNotFoundException() {
 		
 		//Test
 		given().
@@ -134,7 +134,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				get("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 		   
@@ -192,7 +192,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				delete("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();	
 	}
@@ -353,7 +353,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 				.log()
 				.all();
 		

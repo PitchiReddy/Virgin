@@ -7,7 +7,6 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.api.MockSailorAPI;
 import com.virginvoyages.booking.Booking;
 import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.contact.ContactMethod;
@@ -21,6 +20,7 @@ import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.preference.Preference;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
+import com.virginvoyages.sailor.api.MockSailorAPI;
 
 @Component
 public class MockDataHelper {

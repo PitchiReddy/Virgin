@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockSailorAPI;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.sailor.exceptions.DataNotFoundException;
-import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.sailor.api.MockSailorAPI;
+import com.virginvoyages.exceptions.DataNotFoundException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

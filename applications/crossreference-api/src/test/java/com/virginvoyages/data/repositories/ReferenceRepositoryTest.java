@@ -15,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.data.entities.ReferenceData;
-import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

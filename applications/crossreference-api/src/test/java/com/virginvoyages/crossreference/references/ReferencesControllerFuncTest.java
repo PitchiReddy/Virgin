@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.data.entities.ReferenceData;
 
 import io.restassured.path.json.JsonPath;
 

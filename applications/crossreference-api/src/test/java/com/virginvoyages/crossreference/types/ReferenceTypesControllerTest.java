@@ -18,12 +18,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.data.repositories.ReferenceRepository;
-import com.virginvoyages.data.repositories.ReferenceSourceRepository;
-import com.virginvoyages.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceTypesController.class)
