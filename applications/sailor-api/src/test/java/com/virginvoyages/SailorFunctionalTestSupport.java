@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.FunctionalTestSupport;
 
 public class SailorFunctionalTestSupport extends FunctionalTestSupport {
 	

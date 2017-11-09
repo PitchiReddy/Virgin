@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.virginvoyages.assembly.SailorAssembly;
-import com.virginvoyages.sailor.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
 
 @RunWith(SpringRunner.class)
