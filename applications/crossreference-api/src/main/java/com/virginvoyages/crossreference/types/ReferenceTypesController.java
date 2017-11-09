@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
-import com.virginvoyages.crossreference.exceptions.DataInsertionException;
-import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

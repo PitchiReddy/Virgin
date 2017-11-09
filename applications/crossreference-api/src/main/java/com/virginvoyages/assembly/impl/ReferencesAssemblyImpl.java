@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.UnknownException;
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.data.entities.ReferenceData;
-import com.virginvoyages.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.exceptions.UnknownException;
+import com.virginvoyages.model.crossreference.Reference;
 
 import lombok.extern.slf4j.Slf4j;
 

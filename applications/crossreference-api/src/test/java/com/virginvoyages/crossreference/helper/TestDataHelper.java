@@ -3,12 +3,12 @@ package com.virginvoyages.crossreference.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.crossreference.types.ReferenceType;
-import com.virginvoyages.data.entities.ReferenceData;
-import com.virginvoyages.data.entities.ReferenceSourceData;
-import com.virginvoyages.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.helper.RandomDataGenerator;
 
 /**

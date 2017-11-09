@@ -5,7 +5,6 @@ import static io.restassured.RestAssured.port;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,18 +17,19 @@ import io.restassured.RestAssured;
 public abstract class FunctionalTestSupport {
 
     @LocalServerPort
-    static int LOCAL_PORT;
+    int LOCAL_PORT;
 
-    @BeforeClass
+    /*@BeforeClass
     public static void globalSetup() {
         port = LOCAL_PORT;
-    }
+    }*/
 
     @Before
     public void setUp() {
+    	port = LOCAL_PORT;
         RestAssured.given()
                 .header("correlationID", UUID.randomUUID().toString());
         //specification.log().everything();
     }
-         
+
 }

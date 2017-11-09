@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.api.MockCrossReferenceAPI;
 import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
 import com.virginvoyages.model.Page;
-import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+
+import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
+import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.References;
+import com.virginvoyages.model.crossreference.ReferencesEmbedded;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -131,6 +135,7 @@ public class ReferencesController {
 			throw new DataNotFoundException();
 		}
 		return new ResponseEntity<Reference>(reference, HttpStatus.OK);
+
 	}
 
 	/**

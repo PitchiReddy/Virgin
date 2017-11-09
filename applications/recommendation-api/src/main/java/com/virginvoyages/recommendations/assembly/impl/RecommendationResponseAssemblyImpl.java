@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.recommendations.assembly.RecommendationResponseAssembly;
 import com.virginvoyages.recommendations.data.repositories.RecommendationResponseRepository;
-import com.virginvoyages.recommendations.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.DataInsertionException;
 
 import lombok.extern.slf4j.Slf4j;
 
