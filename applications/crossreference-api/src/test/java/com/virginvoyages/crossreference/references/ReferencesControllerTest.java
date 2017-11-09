@@ -6,18 +6,16 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.virginvoyages.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.data.repositories.ReferenceRepository;
@@ -64,15 +62,27 @@ public class ReferencesControllerTest {
 
 	}		
 	
+	@Test
+	public void givenAssemblyReturnsNullGetReferenceByIdShouldThrowDataNotFoundException() throws Exception {
+		
+		String testReferenceID = testDataHelper.getRandomAlphanumericString();
+		given(referencesAssembly.findReferenceByID(testReferenceID))
+			.willReturn(null);
+		//Test
+		mvc.perform(
+				 get("/sources/"+testReferenceID)
+				.contentType("application/json"))
+		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+	}
+	
+	
 	@Test 
 	public void givenValidReferenceExistFindReferencesShouldReturnListOfReferences() throws Exception {
 		
-		Reference firstReference = testDataHelper.getReferenceBusinessEntity();
-		Reference secondReference = testDataHelper.getReferenceBusinessEntity();
-		List<Reference> listOfReference = new ArrayList<Reference>();
-		listOfReference.add(firstReference); 
-		listOfReference.add(secondReference); 
-		given(referencesAssembly.findReferences()).willReturn(listOfReference);
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		given(referencesAssembly.findReferences()).willReturn(referenceList);
 	
 		 //Test
 		 mvc.perform(
@@ -83,6 +93,37 @@ public class ReferencesControllerTest {
 				.andReturn();
 
 
-	}		
+	}	
+	
+	@Test
+	public void givenNoValueForPageInRequestParamsFindReferencesShouldSetBadRequestCodeInResponse() throws Exception {
+		
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferences()).willReturn(referenceList);
+		
+		//Test
+		mvc.perform(
+				 get("/references/?size=1")
+				.contentType("application/json"))
+			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+	
+	@Test
+	public void givenNoValueForSizeInRequestParamsFindReferencesShouldSetBadRequestCodeInResponse() throws Exception {
+		
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferences()).willReturn(referenceList);
+		
+		//Test	
+		mvc.perform(
+				 get("/references/?page=1")
+				.contentType("application/json"))
+			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+	
 
 }

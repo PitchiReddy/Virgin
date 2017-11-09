@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.data.entities.ReferenceData;
@@ -58,8 +55,8 @@ public class ReferencesAssemblyImplITest {
 		assertThat(findReference.nativeSourceIDValue(), equalTo(mockReferenceData.nativeSourceIDValue()));
 	}
 	
-	@Test(expected=DataNotFoundException.class)
-	public void givenRepositoryReturnsNoReferenceDatafindReferenceByIDShouldThrowDataNotFoundException() {
+	@Test(expected=NullPointerException.class)
+	public void givenRepositoryReturnsNoReferenceDatafindReferenceByIDShouldThrowSomeException() {
 		Reference findReference = referencesAssemblyImpl.findReferenceByID(testDataHelper.getRandomAlphabeticString());
 		assertThat(findReference.referenceID(), is(nullValue()));
 	}

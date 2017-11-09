@@ -6,12 +6,10 @@ package com.virginvoyages.assembly.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.virginvoyages.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.DataNotFoundException;
+import com.virginvoyages.crossreference.exceptions.UnknownException;
 import com.virginvoyages.crossreference.references.Reference;
 import com.virginvoyages.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
@@ -51,12 +49,14 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return Reference - returns a reference
 	 */
 	public Reference findReferenceByID(String referenceID) {
-		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl");
-		ReferenceData referenceData = referenceRepository.findOne(referenceID);
-		if(referenceData == null) {
-			throw new DataNotFoundException();
+		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl for referenceID ==> " + referenceID);
+		try {
+			ReferenceData referenceData = referenceRepository.findOne(referenceID);
+			return null == referenceData ? null : referenceData.convertToBusinessEntity();
+		} catch (Exception ex) {
+			log.error("Find Reference ID ==>" + referenceID + "\nException encountered in findReferenceByID", ex);
+			throw new UnknownException();
 		}
-		return referenceData.convertToBusinessEntity();
 	}
 
 	/**
