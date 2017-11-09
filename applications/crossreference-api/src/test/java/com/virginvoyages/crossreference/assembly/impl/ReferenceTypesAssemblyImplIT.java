@@ -39,6 +39,7 @@ public class ReferenceTypesAssemblyImplIT {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	//Add
 	@Test
 	public void givenValidReferenceTypeAddReferenceTypeShouldCreateReferenceTypeAndReturnCreatedType() {
 		
@@ -109,9 +110,10 @@ public class ReferenceTypesAssemblyImplIT {
 				
 	}
 	
-	@Test(expected= DataNotFoundException.class)
-	public void givenInvalidReferenceSourceIdFindReferenceTypeShouldThrowInvalidReferenceSourceException() {
-		assertThat(referenceTypesAssembly.findReferenceTypeByID(testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	//Find By ID
+	public void givenInvalidReferenceTypeIdFindReferenceTypeByIDShouldReturnNull() {
+		assertThat(referenceTypesAssembly.findReferenceTypeByID(
+				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
 		
 	@Test
@@ -134,6 +136,7 @@ public class ReferenceTypesAssemblyImplIT {
 	
 	}
 	
+	//Delete
 	@Test(expected = DataNotFoundException.class)
 	public void givenValidReferenceTypeDeleteReferenceTypeShouldDeleteReferenceType() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
