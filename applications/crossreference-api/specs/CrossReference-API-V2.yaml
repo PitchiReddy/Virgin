@@ -242,6 +242,26 @@ paths:
           description: Successful response
           schema:
             $ref: '#/definitions/ReferenceSource'
+  
+  /sources/findByName/{referenceSourceName}:
+    parameters:
+      - $ref: '#/parameters/referenceSourceName'
+    get:
+      tags:
+        - ReferenceSource
+      summary: Find reference source by Name
+      description: Returns a reference source for a specified reference source name. 
+      operationId: getReferenceSourceByName
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReferenceSource'
 
   /types:
     get:
@@ -528,6 +548,12 @@ parameters:
     name: referenceSourceID
     in: path
     description: The reference source identifier
+    type: string
+    required: true
+  referenceSourceName:
+    name: referenceSourceName
+    in: path
+    description: The reference source name
     type: string
     required: true
   referenceTypeID:
