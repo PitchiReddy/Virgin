@@ -58,7 +58,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "profiles",
     "errors"
 })
-@XmlRootElement(name = "vx:OTA_ProfileReadRS")
+@XmlRootElement(name = "OTA_ProfileReadRS")
 public class OTAProfileReadRS {
 
     @XmlElement(name = "Success")

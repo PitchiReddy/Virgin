@@ -71,10 +71,7 @@ public class SeawareClientConfiguration {
 	 
 	 @Bean
 	    public Decoder decoder(){
-		 JAXBContextFactory jaxbFactory = new JAXBContextFactory.Builder()
-				    .withMarshallerJAXBEncoding("UTF-8")
-				    .withMarshallerSchemaLocation("http://www.opentravel.org/OTA/2003/05")
-				    .build();
-	        return new JAXBDecoder(jaxbFactory);
+		 
+	        return new SeawareJaxbDecoder();
 	    }
 }

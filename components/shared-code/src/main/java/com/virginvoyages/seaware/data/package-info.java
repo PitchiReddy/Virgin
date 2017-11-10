@@ -6,8 +6,12 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.opentravel.org/OTA/2003/05", 
-xmlns = {
-        @javax.xml.bind.annotation.XmlNs(prefix="vx", namespaceURI="http://www.opentravel.org/OTA/2003/05")
-    },
-elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED )
+/*xmlns = {
+        @XmlNs(prefix="vx", namespaceURI="http://www.opentravel.org/OTA/2003/05"),
+        @XmlNs(prefix="xs", namespaceURI="http://www.w3.org/2001/XMLSchema"),
+        @XmlNs(prefix="xs", namespaceURI="http://www.w3.org/2001/XMLSchema")
+    },*/
+elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+
 package com.virginvoyages.seaware.data;
+import javax.xml.bind.annotation.*;

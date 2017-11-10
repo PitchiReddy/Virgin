@@ -5,12 +5,21 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+import java.io.File;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.xml.sax.InputSource;
 
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
@@ -86,9 +95,9 @@ public class AccountClientTest {
     }
     
     @Test
-    public void findSeawareData() {
+    public void findSeawareData() throws Exception {
     	OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
-	System.out.println("Data is ::::" + otaProfileReadRS.getPrimaryLangID());
+    	System.out.println("Data is ::::" + otaProfileReadRS.getProfiles());
     }
   
 }
