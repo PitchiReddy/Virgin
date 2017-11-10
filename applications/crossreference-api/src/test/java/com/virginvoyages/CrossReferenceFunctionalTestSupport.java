@@ -20,6 +20,11 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	public Map<String, Object> parameters = new HashMap<String, Object>();
+
+	public Map<String, Object> referenceParam = new HashMap<String, Object>();
+
+
 	@Test
     public void contextLoads() {
     }
@@ -60,7 +65,6 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
 		
-		
 		// create reference type
 		Response response = given()
 			.contentType("application/json")
@@ -91,24 +95,18 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	
 	public JsonPath createTestReference(JsonPath referenceTypeResponse) {
 		
-//		String createdReferenceSourceID = referenceTypeResponse.getString("referenceSourceID");
-//		String createdReferenceTypeID = referenceTypeResponse.getString("referenceTypeID");
-		
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		
-//		Map<String, Object> referenceType = new HashMap<String, Object>();
-//		referenceType.put("referenceTypeID", createdReferenceTypeID);
-//		referenceType.put("referenceType", referenceTypeResponse.getString("referenceType"));
-//		referenceType.put("referenceSourceID", createdReferenceSourceID);
-		
 		Map<String, Object> parameters = new HashMap<String, Object>();
+
 		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
-		
+		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
+		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
+
 		
 		// create references 
-		JsonPath responseJson = given()
+		Response response = given()
 		     .contentType("application/json") 
 		     .body(parameters)
 		     .post("/xref-api/v1/references/").
@@ -119,9 +117,10 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		 	.log()
 		 	.all()
 		 	.extract()
-		 	.jsonPath();
-		 			
-		return responseJson;
+		 	.response();
+			
+		return response.jsonPath();
+
 	}
 	
 	public JsonPath createTestReference() {
@@ -138,10 +137,4 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		then()
 			.statusCode(200);
 	}
-	
-	//Deprecated method - should not be used - use createTestReference instead
-	public Reference createTestReferences() {
-		return new Reference();
-	}
-
 }

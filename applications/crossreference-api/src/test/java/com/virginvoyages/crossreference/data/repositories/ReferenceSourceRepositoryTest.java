@@ -36,6 +36,7 @@ public class ReferenceSourceRepositoryTest {
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
 	
+	//Add/Update
 	@Test 
 	public void testSuccessfulSave() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
@@ -99,8 +100,9 @@ public class ReferenceSourceRepositoryTest {
 		
 	}
 	
+	//Find By ID	
 	@Test 
-	public void testFindOne() {
+	public void testFindByIDWithValidID() {
 		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
 		assertThat(referenceSourceDataToCreate.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
@@ -115,6 +117,13 @@ public class ReferenceSourceRepositoryTest {
 	
 	}
 	
+	@Test 
+	public void testFindByIDWithInvalidIDReturnsNull() {
+		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(testDataHelper.getRandomAlphabeticString());
+		assertThat(retrievedReferenceSource, nullValue());
+	}
+	
+	//Find All
 	@Test 
 	public void testFindAll() {
 				
