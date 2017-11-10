@@ -182,4 +182,9 @@ public class ReferenceRepositoryTest {
 	}*/
 	
 	
+	@Test
+	public void testFindReferenceByMaster() {
+
+	}
+	
 }
