@@ -1,5 +1,8 @@
 package com.virginvoyages.sailor.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,9 @@ import com.virginvoyages.crm.data.SeawareData;
 import com.virginvoyages.crm.data.Source;
 import com.virginvoyages.crm.data.UniqueID;
 import com.virginvoyages.sailor.Sailor;
+import com.virginvoyages.seaware.data.OTAReadRQ;
+import com.virginvoyages.seaware.data.POSType;
+import com.virginvoyages.seaware.data.SourceType;
 
 @Service
 public class TestDataHelper {
@@ -107,25 +113,28 @@ public class TestDataHelper {
 	}
 	
 
-	public OTA_ReadRQ genarateSeawaredataToCreate() {
-		SeawareData seawareData = new SeawareData();
+	public OTAReadRQ genarateSeawaredataToCreate() {
 		
-		OTA_ReadRQ oTA_ReadRQ = new OTA_ReadRQ();
-		POS pos = new POS();
-		Source source = new Source();
-		ReadRequests readRequests = new ReadRequests();
-		ProfileReadRequest profileReadRequest =  new ProfileReadRequest();
-		UniqueID uniqueID = new UniqueID();
-		uniqueID.setID("405");
-		uniqueID.setID_Context("SEAWARE");
+		OTAReadRQ otaReadRQ = new OTAReadRQ();
+		POSType posType = new POSType();
+	    List<SourceType> source = new ArrayList<>();
+	    SourceType sourceType = new SourceType();
+	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
+	    OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
+	    OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID uniqueID = new OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID();
+		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
+		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
+	    
+	    uniqueID.setID("405");
+		uniqueID.setIDContext("SEAWARE");
 		uniqueID.setType("1");
-		profileReadRequest.setUniqueID(uniqueID);
-		readRequests.setProfileReadRequest(profileReadRequest);
-		RequestorID requestorID = new RequestorID();
+		profileReadRequest.getUniqueID().add(uniqueID);
+		readRequests.getProfileReadRequest().add(profileReadRequest);
+	
 		requestorID.setID("5");
 		requestorID.setType("5");
-		requestorID.setID_Context("SEAWARE");
-		BookingChannel bookingChannel = new BookingChannel();
+		requestorID.setIDContext("SEAWARE");
+		
 		bookingChannel.setCompanyName("OPENTRAVEL");
 		bookingChannel.setType("1");
 		

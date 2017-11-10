@@ -88,7 +88,6 @@ public class AccountClientTest {
     @Test
     public void findSeawareData() {
 	String data = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
-   System.out.println("111111111111111111111111" + data);
     }
   
 }
