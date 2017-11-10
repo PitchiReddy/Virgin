@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
-import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
@@ -46,11 +46,11 @@ public class ReferenceSourcesControllerTest {
 	@MockBean(name="referenceSourceRepository")
     private ReferenceSourceRepository referenceSourceRepository;
 	
-	@MockBean(name="referenceTypesAssembly")
-    private ReferenceTypesAssembly referenceTypesAssembly;
-	
 	@MockBean(name="referenceTypeRepository")
     private ReferenceTypeRepository referenceTypeRepository;
+	
+	@MockBean(name="referenceRepository")
+    private ReferenceRepository referenceRepository;
 	
 	
 	//Add Reference Source
