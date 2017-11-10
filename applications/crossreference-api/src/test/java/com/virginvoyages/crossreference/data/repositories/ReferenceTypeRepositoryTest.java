@@ -143,9 +143,9 @@ public class ReferenceTypeRepositoryTest {
 	}
 	
 	
-	//Find One
+	//Find By ID
 	@Test 
-	public void testFindOne() {
+	public void testFindByIDWithValidID() {
 		
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
 				testDataHelper.getReferenceSourceDataEntity());
@@ -162,6 +162,13 @@ public class ReferenceTypeRepositoryTest {
 		referenceTypeRepository.delete(retrievedReferenceType.referenceTypeID());
 		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 	
+	}
+	
+	@Test 
+	public void testFindByIDWithInvalidIDReturnsNull() {
+		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(testDataHelper.getRandomAlphabeticString());
+		assertThat(retrievedReferenceType, nullValue());
+			
 	}
 	
 	//Find All

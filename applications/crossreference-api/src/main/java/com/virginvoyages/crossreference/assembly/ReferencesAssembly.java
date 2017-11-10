@@ -2,6 +2,8 @@ package com.virginvoyages.crossreference.assembly;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import com.virginvoyages.model.crossreference.Reference;
 
 
@@ -21,7 +23,7 @@ public interface ReferencesAssembly {
 
 	public List<Reference> findReferences();
 
-	public List<Reference> findReferencesByMaster(String masterID);
+	public List<Reference> findReferenceByMasterId(String masterID, Pageable pageable);
 
 	public Reference updateReference(Reference body);
 

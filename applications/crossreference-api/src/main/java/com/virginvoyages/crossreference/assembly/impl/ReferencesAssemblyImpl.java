@@ -4,13 +4,17 @@
 package com.virginvoyages.crossreference.assembly.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
@@ -120,21 +124,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		
 	}
 	
-	/**
-	 * Finding reference. 
 	@Override
-	 * @return List Of Reference
-	 */
-	public List<Reference> findReferencesByMaster(String masterID) {
-		log.debug("Entering findReferencesByMaster method in ReferencesAssemblyImpl");
-		Iterable<ReferenceData> referenceDataIterable = referenceRepository.findAll();
-		List<Reference> listOfReference = new ArrayList<>();
-		for (ReferenceData referenceData : referenceDataIterable) {
-			if((referenceData.masterID()).equals(masterID)) {
-			listOfReference.add(referenceData.convertToBusinessEntity());
-			}
-		}
-		return null == referenceDataIterable ? null : listOfReference;	
+	public List<Reference> findReferenceByMasterId(String masterId, Pageable pageable) {
+		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterID(masterId,pageable);
+	return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
+	  stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}
 	
 	/**
