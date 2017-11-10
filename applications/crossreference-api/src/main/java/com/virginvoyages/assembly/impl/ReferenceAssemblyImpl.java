@@ -12,9 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ReferenceAssembly;
-import com.virginvoyages.crossreference.references.Reference;
-import com.virginvoyages.data.entities.ReferenceData;
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.data.repositories.ReferenceRepository;
+import com.virginvoyages.model.crossreference.Reference;
 
 import lombok.extern.slf4j.Slf4j;
 

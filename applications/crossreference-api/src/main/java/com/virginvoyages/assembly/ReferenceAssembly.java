@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
-import com.virginvoyages.crossreference.references.Reference;
+import com.virginvoyages.model.crossreference.Reference;
+
 
 public interface ReferenceAssembly {
 

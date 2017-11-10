@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
@@ -84,7 +85,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 		.then()
 		.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-		.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+		.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 		.log()
 		.all();
 		
@@ -119,7 +120,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 		
@@ -174,7 +175,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				get("/xref-api/v1/sources/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 	}
@@ -242,7 +243,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.crossreference.exceptions.MandatoryFieldsMissingException"))
+				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 				.log()
 				.all();
 		

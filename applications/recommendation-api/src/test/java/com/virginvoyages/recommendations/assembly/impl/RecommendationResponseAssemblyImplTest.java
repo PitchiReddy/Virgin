@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.recommendations.data.repositories.RecommendationResponseRepository;
-import com.virginvoyages.recommendations.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.recommendations.helper.TestDataHelper;
 import com.virginvoyages.recommendations.model.RecommendationResponse;
 

@@ -1,5 +1,6 @@
 package com.virginvoyages.crossreference.types;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -18,12 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.virginvoyages.assembly.ReferenceSourcesAssembly;
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
+import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.crossreference.sources.ReferenceSource;
-import com.virginvoyages.data.repositories.ReferenceSourceRepository;
-import com.virginvoyages.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceTypesController.class)
@@ -159,8 +161,17 @@ public class ReferenceTypesControllerTest {
 				.andExpect(status().is(HttpStatus.OK.value()));
 	}
 	
+	// Find By ID
+	@Test
+	public void givenReferenceTypeIDNotPresentInPathVariableGetReferenceTypeByIDShouldThrowMandatoryFieldsMissingException() throws Exception {
+		mvc.perform(
+				get("/types/")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+	
 	@Test 
-	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() throws Exception {
+	public void givenAssemblyMethodReturnsValidReferenceTypeGetReferenceTypeByIdShouldSetReferenceTypeDetailsInReponse() throws Exception {
 		
 		 ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
 		 
@@ -171,13 +182,24 @@ public class ReferenceTypesControllerTest {
 				get("/types/" + referenceType.referenceTypeID())
 				.contentType("application/json"))
 				.andExpect(jsonPath("referenceTypeID",equalTo(referenceType.referenceTypeID())))
-				//.andExpect(jsonPath("referenceName",equalTo(referenceType.referenceName())))
 				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
 		 		.andExpect(status().isOk());
 
-	}		
+	}	
 	
+	@Test 
+	public void givenAssemblyMethodReturnsNullGetReferenceTypeByIdShouldSetDataNotFoundExceptionInReponse() throws Exception {
 		
+		 given(referenceTypesAssembly.findReferenceTypeByID(testDataHelper.getRandomAlphabeticString()))
+			.willReturn(null);
+		//Test
+		 mvc.perform(
+				get("/types/" + testDataHelper.getRandomAlphabeticString())
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+
+	}
+			
 	/*@Test 
 	public void  givenInValidReferenceTypeIDShouldThrowDataNotFoundException() throws Exception {
 		

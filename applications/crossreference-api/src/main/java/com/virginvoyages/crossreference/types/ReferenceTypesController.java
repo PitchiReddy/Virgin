@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.assembly.ReferenceTypesAssembly;
-import com.virginvoyages.crossreference.exceptions.DataInsertionException;
-import com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.crossreference.ReferenceType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -120,10 +122,13 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("finding Reference Type By referenceTypeID");
-		if(StringUtils.isEmpty(referenceTypeID)||referenceTypeID.trim().length()==0) {
+		if(StringUtils.isBlank(referenceTypeID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType = referenceTypesAssembly.findReferenceTypeByID(referenceTypeID);
+		if(null == referenceType) {
+			throw new DataNotFoundException();
+		}
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 
