@@ -1,7 +1,6 @@
 package com.virginvoyages.sailor.helper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +9,8 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.crm.data.BookingChannel;
-import com.virginvoyages.crm.data.OTA_ReadRQ;
-import com.virginvoyages.crm.data.POS;
-import com.virginvoyages.crm.data.ProfileReadRequest;
-import com.virginvoyages.crm.data.ReadRequests;
-import com.virginvoyages.crm.data.RequestorID;
-import com.virginvoyages.crm.data.SeawareData;
-import com.virginvoyages.crm.data.Source;
-import com.virginvoyages.crm.data.UniqueID;
 import com.virginvoyages.sailor.Sailor;
+import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.OTAReadRQ;
 import com.virginvoyages.seaware.data.POSType;
 import com.virginvoyages.seaware.data.SourceType;
@@ -115,16 +106,16 @@ public class TestDataHelper {
 
 	public OTAReadRQ genarateSeawaredataToCreate() {
 		
-		OTAReadRQ otaReadRQ = new OTAReadRQ();
+		final OTAReadRQ otaReadRQ = new OTAReadRQ();
 		POSType posType = new POSType();
-	    List<SourceType> source = new ArrayList<>();
 	    SourceType sourceType = new SourceType();
 	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
 	    OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
 	    OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID uniqueID = new OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID();
 		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
 		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
-	    
+		CompanyNameType companyNameType = new CompanyNameType();
+		companyNameType.setValue("OPENTRAVEL");
 	    uniqueID.setID("405");
 		uniqueID.setIDContext("SEAWARE");
 		uniqueID.setType("1");
@@ -135,20 +126,21 @@ public class TestDataHelper {
 		requestorID.setType("5");
 		requestorID.setIDContext("SEAWARE");
 		
-		bookingChannel.setCompanyName("OPENTRAVEL");
+		bookingChannel.setCompanyName(companyNameType);
 		bookingChannel.setType("1");
 		
 		
 		
-		source.setRequestorID(requestorID);
+		sourceType.setRequestorID(requestorID);
 		
-		source.setBookingChannel(bookingChannel);
-		oTA_ReadRQ.setPOS(pos);
-		oTA_ReadRQ.setReadRequests(new ReadRequests());
-		oTA_ReadRQ.setPrimaryLangID("ENG");
-		oTA_ReadRQ.setVersion("1");
-		oTA_ReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
-		oTA_ReadRQ.setReadRequests(readRequests);
-		return oTA_ReadRQ;
+		sourceType.setBookingChannel(bookingChannel);
+		posType.getSource().add(sourceType);
+		otaReadRQ.setPOS(posType);
+		otaReadRQ.setReadRequests(readRequests);
+		otaReadRQ.setPrimaryLangID("ENG");
+		otaReadRQ.setVersion(new BigDecimal(1));
+		//otaReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
+		otaReadRQ.setReadRequests(readRequests);
+		return otaReadRQ;
 	}
 }

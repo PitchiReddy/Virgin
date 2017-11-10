@@ -14,9 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.crm.data.SeawareData;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+import com.virginvoyages.seaware.data.OTAProfileReadRS;
 
 import feign.FeignException;
 
@@ -87,7 +87,8 @@ public class AccountClientTest {
     
     @Test
     public void findSeawareData() {
-	String data = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
+    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
+	System.out.println("Data is ::::" + otaProfileReadRS.getPrimaryLangID());
     }
   
 }

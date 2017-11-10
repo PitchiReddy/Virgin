@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Bean;
 import feign.Client;
 import feign.RetryableException;
 import feign.Retryer;
+import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.jaxb.JAXBContextFactory;
+import feign.jaxb.JAXBDecoder;
 import feign.jaxb.JAXBEncoder;
 import feign.okhttp.OkHttpClient;
 import okhttp3.Authenticator;
@@ -64,5 +66,15 @@ public class SeawareClientConfiguration {
 				    .withMarshallerSchemaLocation("http://www.opentravel.org/OTA/2003/05")
 				    .build();
 	        return new JAXBEncoder(jaxbFactory);
+	    }
+
+	 
+	 @Bean
+	    public Decoder decoder(){
+		 JAXBContextFactory jaxbFactory = new JAXBContextFactory.Builder()
+				    .withMarshallerJAXBEncoding("UTF-8")
+				    .withMarshallerSchemaLocation("http://www.opentravel.org/OTA/2003/05")
+				    .build();
+	        return new JAXBDecoder(jaxbFactory);
 	    }
 }

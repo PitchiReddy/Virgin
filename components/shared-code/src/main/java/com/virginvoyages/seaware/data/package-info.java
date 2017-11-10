@@ -5,5 +5,9 @@
 // Generated on: 2017.11.09 at 04:47:21 PM IST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.opentravel.org/OTA/2003/05", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.opentravel.org/OTA/2003/05", 
+xmlns = {
+        @javax.xml.bind.annotation.XmlNs(prefix="vx", namespaceURI="http://www.opentravel.org/OTA/2003/05")
+    },
+elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED )
 package com.virginvoyages.seaware.data;
