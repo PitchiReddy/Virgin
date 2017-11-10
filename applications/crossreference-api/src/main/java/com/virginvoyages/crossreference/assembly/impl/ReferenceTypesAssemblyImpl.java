@@ -78,11 +78,13 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType findReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering findReferenceTypeByID method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
-		if(referenceTypeData==null) {
-		throw new DataNotFoundException();
+		try {
+			ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
+			return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+		}catch(Exception ex) {
+			log.error("Reference Type ID ==>"+referenceTypeID+"\nException encountered in findReferenceTypeByID",ex);
+			throw new UnknownException();
 		}
-		return referenceTypeData.convertToBusinessEntity();
 
 	}
 
