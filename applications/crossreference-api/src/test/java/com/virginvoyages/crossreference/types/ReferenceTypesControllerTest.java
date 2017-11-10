@@ -19,13 +19,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceTypesController.class)
@@ -37,18 +38,17 @@ public class ReferenceTypesControllerTest {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
-	
-	@MockBean(name="referenceSourcesAssembly")
-    private ReferenceSourcesAssembly referenceSourcesAssembly;
-	
-	@MockBean(name="referenceSourceRepository")
-    private ReferenceSourceRepository referenceSourceRepository;
-	
 	@MockBean(name="referenceTypesAssembly")
     private ReferenceTypesAssembly referenceTypesAssembly;
 	
 	@MockBean(name="referenceTypeRepository")
     private ReferenceTypeRepository referenceTypeRepository;
+		
+	@MockBean(name="referenceSourceRepository")
+    private ReferenceSourceRepository referenceSourceRepository;
+		
+	@MockBean(name="referenceRepository")
+    private ReferenceRepository referenceRepository;
 	
 	//Add
 	@Test
