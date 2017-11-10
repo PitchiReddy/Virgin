@@ -148,7 +148,7 @@ public class ReferenceSourcesController {
 	}
 	
 	/**
-	 * @param referenceSourceID
+	 * @param referenceSourceName
 	 * @param xCorrelationID - Correlation ID across the enterprise application components.
 	 * @param xVVClientID - Application identifier of client.
 	 * @return ReferenceSource returns a referenceSource
