@@ -376,6 +376,26 @@ paths:
           description: Successful response
           schema:
             $ref: '#/definitions/ReferenceType'
+            
+  /types/findByName/{referenceTypeName}:
+    parameters:
+      - $ref: '#/parameters/referenceTypeName'
+    get:
+      tags:
+        - ReferenceType
+      summary: Find reference type by Name
+      description: Returns a reference type for a specified reference source name. 
+      operationId: getReferenceTypeByName
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/correlationID'
+        - $ref: '#/parameters/clientID'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReferenceType'
 
   /references/search/findBySource:
     post:
@@ -560,6 +580,12 @@ parameters:
     name: referenceTypeID
     in: path
     description: The reference type identifier
+    type: string
+    required: true
+  referenceTypeName:
+    name: referenceTypeName
+    in: path
+    description: The reference type name
     type: string
     required: true
   correlationID:

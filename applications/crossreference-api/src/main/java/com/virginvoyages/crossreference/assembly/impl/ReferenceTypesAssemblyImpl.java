@@ -88,6 +88,12 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	}
 
+	@Override
+	public ReferenceType findReferenceTypeByName(String referenceTypeName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/**
 	 * Delete reference Type by ID. 
 	 * @param referenceTypeID
