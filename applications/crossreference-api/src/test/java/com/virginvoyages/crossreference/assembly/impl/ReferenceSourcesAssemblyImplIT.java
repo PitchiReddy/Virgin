@@ -95,6 +95,7 @@ public class ReferenceSourcesAssemblyImplIT {
 		
 	}
 
+	//Find By ID
 	@Test
 	public void givenValidReferenceSourceIDFindReferenceSourceByIDShouldReturnReferenceSource() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
@@ -110,7 +111,7 @@ public class ReferenceSourcesAssemblyImplIT {
 	}
 
 	@Test
-	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldThrowDataNotFoundException() {
+	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldReturnNull() {
 		assertThat(referenceSourcesAssembly.findReferenceSourceByID(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
