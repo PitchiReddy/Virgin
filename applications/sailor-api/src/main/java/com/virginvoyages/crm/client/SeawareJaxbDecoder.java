@@ -26,6 +26,7 @@ public class SeawareJaxbDecoder implements Decoder {
 			throw new UnsupportedOperationException("JAXB only supports decoding raw types. Found " + type);
 		}
 		try {
+			@SuppressWarnings("rawtypes")
 			final JAXBContext jaxbContext = JAXBContext.newInstance((Class) type);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			return jaxbUnmarshaller.unmarshal(new InputSource(response.body().asInputStream()));
