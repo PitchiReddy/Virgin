@@ -78,6 +78,12 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			throw new UnknownException();
 		}
 	}
+	
+	@Override
+	public ReferenceSource findReferenceSourceByName(String referenceSourceName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Remove the ReferenceSource.

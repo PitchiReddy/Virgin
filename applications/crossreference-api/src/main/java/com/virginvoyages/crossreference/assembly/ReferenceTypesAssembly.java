@@ -15,6 +15,8 @@ public interface ReferenceTypesAssembly {
 	public ReferenceType addReferenceType(ReferenceType referenceType);
 
 	public ReferenceType findReferenceTypeByID(String referenceTypeID);
+	
+	public ReferenceType findReferenceTypeByName(String referenceTypeName);
 
 	public void deleteReferenceTypeByID(String referenceTypeID);
 

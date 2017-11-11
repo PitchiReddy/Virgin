@@ -203,12 +203,14 @@ public class ReferencesController {
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
-	@RequestMapping(value = "/references/search/findBySource", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> findReferencesSource(
+	@RequestMapping(value = "/references/search/findByType", method = RequestMethod.POST)
+	public ResponseEntity<List<Reference>> findReferencesType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
 		
+		//TODO mandatory check for nativesourceidval and referencetypeid
+		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
 		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
@@ -216,13 +218,15 @@ public class ReferencesController {
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
-	@RequestMapping(value = "/references/search/findBySourceAndTargetSource", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> findReferencesSourceAndTargetSource(
+	@RequestMapping(value = "/references/search/findReferencesTypeAndTargetType", method = RequestMethod.POST)
+	public ResponseEntity<List<Reference>> findByTypeAndTargetType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
+			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 		
+		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
+		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		return new ResponseEntity<List<Reference>>(new ArrayList<Reference>(),HttpStatus.OK);
 	}
 

@@ -18,6 +18,7 @@ import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
 import io.swagger.annotations.Api;
@@ -132,6 +133,25 @@ public class ReferenceTypesController {
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 
+	/**
+	 * @param referenceSourceName
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return ReferenceSource returns a referenceSource
+	 */
+	@ApiOperation(value = "Find reference type by Name", notes = "Returns a reference type for a specified reference type Name.", response = ReferenceType.class, tags = {
+			"ReferenceSource", })
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
+	@RequestMapping(value = "/types/findByName/{referenceTypeName}", produces = {
+			"application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<ReferenceType> getReferenceSourceByName(
+			@ApiParam(value = "The reference type name", required = true) @PathVariable("referenceTypeName") String referenceTypeName,
+			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
+			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+		
+		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByName(referenceTypeName),HttpStatus.OK);
+	}
 	/**
 	 * find types by using below parameters
 	 * @param page         
