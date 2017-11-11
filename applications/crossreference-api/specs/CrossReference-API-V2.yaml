@@ -396,33 +396,30 @@ paths:
           description: Successful response
           schema:
             $ref: '#/definitions/ReferenceType'
-
-  /references/search/findBySource:
+  
+  /references/search/findByType:
     post:
       tags:
         - Reference
       description: Returns one or more references
-      operationId: findReferencesSource
+      operationId: findReferencesType
       parameters:
         - $ref: '#/parameters/correlationID'
         - $ref: '#/parameters/clientID'
         - in: body
           name: reference
-          description: Parameters to find reference by source.
+          description: Parameters to find reference by type.
           schema:
             type: object
             required:
               - nativeSourceIDValue
-              - sourceID
-              - typeID
+              - referenceTypeID
             properties:
               nativeSourceIDValue:
                 type: string
-              sourceID:
+              referenceTypeID:
                 type: string
-              typeID:
-                type: string
-              targetSourceID:
+              targetReferenceTypeID:
                 type: string
       responses:
         200:
@@ -432,33 +429,30 @@ paths:
             items:
               $ref: '#/definitions/Reference'
               
-  /references/search/findBySourceAndTargetSource:
+  /references/search/findByTypeAndTargetType:
     post:
       tags:
         - Reference
       description: Returns one or more references
-      operationId: findReferencesSourceAndTargetSource
+      operationId: findReferencesTypeAndTargetType
       parameters:
         - $ref: '#/parameters/correlationID'
         - $ref: '#/parameters/clientID'
         - in: body
           name: reference
-          description: Parameters to find reference by source.
+          description: Parameters to find reference by type.
           schema:
             type: object
             required:
               - nativeSourceIDValue
-              - sourceID
-              - typeID
-              - targetSourceID
+              - referenceTypeID
+              - targetReferenceTypeID
             properties:
               nativeSourceIDValue:
                 type: string
-              sourceID:
+              referenceTypeID:
                 type: string
-              typeID:
-                type: string
-              targetSourceID:
+              targetReferenceTypeID:
                 type: string
       responses:
         200:
@@ -467,7 +461,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Reference'
-
+              
   /references/search/findByMaster:
     get:
       tags:
@@ -654,8 +648,8 @@ definitions:
     allOf:
       - type: object
         properties:
-          referenceType:
-            $ref: '#/definitions/ReferenceType'
+          referenceTypeID:
+            type: string
           referenceID:
             type: string
           nativeSourceIDValue:
