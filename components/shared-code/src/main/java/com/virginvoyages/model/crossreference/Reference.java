@@ -26,6 +26,10 @@ public class Reference   {
   @JsonProperty("referenceTypeID")
   private String referenceTypeID = null;
   
+  //Only for input to search by type and target type operation
+  @JsonProperty("targetReferenceTypeID")
+  private String targetReferenceTypeID = null;
+  
   public ReferenceData convertToDataEntity() {
 	  return new ReferenceData()
 			  .nativeSourceIDValue(this.nativeSourceIDValue())

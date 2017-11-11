@@ -146,6 +146,26 @@ public class ReferenceSourcesController {
 		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
+	
+	/**
+	 * @param referenceSourceName
+	 * @param xCorrelationID - Correlation ID across the enterprise application components.
+	 * @param xVVClientID - Application identifier of client.
+	 * @return ReferenceSource returns a referenceSource
+	 */
+	@ApiOperation(value = "Find reference source by Name", notes = "Returns a reference source for a specified reference source Name.", response = ReferenceSource.class, tags = {
+			"ReferenceSource", })
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
+	@RequestMapping(value = "/sources/findByName/{referenceSourceName}", produces = {
+			"application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<ReferenceSource> getReferenceSourceByName(
+			@ApiParam(value = "The reference source name", required = true) @PathVariable("referenceSourceName") String referenceSourceName,
+			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
+			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+		
+		return new ResponseEntity<ReferenceSource>(referenceSourcesAssembly.findReferenceSourceByName(referenceSourceName),HttpStatus.OK);
+	}
 
 	/**
 	 * @param ReferenceSource - input referenceSource
