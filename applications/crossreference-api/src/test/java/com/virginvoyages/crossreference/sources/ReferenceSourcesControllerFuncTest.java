@@ -113,6 +113,20 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
 	}
 	
+	//find by Reference source name
+	
+	@Test
+	public void givenValidReferenceSourceNameGetReferenceSourceByNameShouldReturnReferenceSource() {
+		//TO DO
+	}
+	
+	@Test
+	public void givenInvalidReferenceSourceNameGetReferenceSourceByNameShouldThrowDataNotFoundException() {
+	//TODO
+
+	}
+	
+	
 	@Test
 	public void givenInValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
 	  given().
@@ -126,6 +140,10 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 	}
 	
+	@Test
+	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowBadRequestException() {
+	//	TODO
+	}
 	
 	
 	@Test
