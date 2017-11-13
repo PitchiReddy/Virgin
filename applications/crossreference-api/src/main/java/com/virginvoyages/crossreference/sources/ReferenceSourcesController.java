@@ -57,8 +57,7 @@ public class ReferenceSourcesController {
 			"ReferenceSource", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
-	@RequestMapping(value = "/sources", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.POST)
+	@RequestMapping(value = "/sources", produces = { "application/json" },  method = RequestMethod.POST)
 	public ResponseEntity<ReferenceSource> addReferenceSource(
 			@ApiParam(value = "ReferenceSource object that needs to be created", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
@@ -177,8 +176,7 @@ public class ReferenceSourcesController {
 			"ReferenceSource", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
-	@RequestMapping(value = "/sources", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.PUT)
+	@RequestMapping(value = "/sources", produces = { "application/json" }, method = RequestMethod.PUT)
 	public ResponseEntity<ReferenceSource> updateReferenceSource(
 			@ApiParam(value = "ReferenceSource object that needs to be updated", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,

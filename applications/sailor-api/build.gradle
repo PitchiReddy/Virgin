@@ -111,7 +111,7 @@ jacocoTestReport {
                     'com/virginvoyages/model/Links.class',
                     'com/virginvoyages/model/Page.class',
                     // Exclude Stub code
-                    'com/virginvoyages/api/MockSailorAPI.class'
+                    'com/virginvoyages/sailor/api/MockSailorAPI.class'
             ])
         })
     }
