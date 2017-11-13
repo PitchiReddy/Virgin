@@ -118,11 +118,33 @@ public class ReferenceSourceRepositoryTest {
 	}
 	
 	@Test 
+	public void testFindByreferenceSourceNameWithValidReferenceSource() {
+		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
+		assertThat(referenceSourceDataToCreate.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+		
+		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findByReferenceSource(createdReferenceSource.referenceSource());
+		assertThat(retrievedReferenceSource, notNullValue());
+		assertThat(createdReferenceSource.referenceSource(), equalTo(retrievedReferenceSource.referenceSource()));
+		assertThat(createdReferenceSource.referenceSourceID(), equalTo(retrievedReferenceSource.referenceSourceID()));
+		
+		//cleanup
+		referenceSourceRepository.delete(retrievedReferenceSource.referenceSourceID());
+	}
+	
+	@Test 
 	public void testFindByIDWithInvalidIDReturnsNull() {
 		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(testDataHelper.getRandomAlphabeticString());
 		assertThat(retrievedReferenceSource, nullValue());
 	}
 	
+	@Test
+	public void testFindByreferenceSourceNameWithInValidReferenceSourceReturnsNull() {
+		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findByReferenceSource(testDataHelper.getRandomAlphabeticString());
+		assertThat(retrievedReferenceSource, nullValue());
+	
+		
+	}
 	//Find All
 	@Test 
 	public void testFindAll() {
@@ -180,5 +202,6 @@ public class ReferenceSourceRepositoryTest {
 		}
 		assert(false);
 	}
+	
 }
 
