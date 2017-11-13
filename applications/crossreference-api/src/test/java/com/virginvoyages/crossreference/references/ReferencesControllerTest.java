@@ -153,7 +153,7 @@ public class ReferencesControllerTest {
 		        .andExpect(status().isOk());
 	}
 */	
-	@Test 
+	/*@Test 
 	public void givenInValidReferenceDeleteReferenceByIDShouldThrowDataNotFoundException() throws Exception {
 		
 		String InvalidReferenceID = testDataHelper.getRandomAlphanumericString();
@@ -162,7 +162,7 @@ public class ReferencesControllerTest {
 				 get("/references/"+InvalidReferenceID)
 				.contentType("application/json"))
 		        .andExpect(status().isOk());
-	}
+	}*/
 	
 	
 	@Test 

@@ -68,7 +68,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	}
 	
 	@Test
-	public void givenInvalidReferenceIDInRequestDeleteReferenceByIdShouldThrowSomeException() {
+	public void givenInvalidReferenceIDInRequestDeleteReferenceByIdShouldThrowDataNotFoundException() {
 
 		//Test invalid ReferenceTypeId Delete
 		given().
@@ -76,7 +76,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				delete("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();	
 	}
@@ -205,7 +205,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				get("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.crossreference.exceptions.DataNotFoundException")).	
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).	
 				log().
 				all();
 				
@@ -276,7 +276,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.shared.exceptions.MandatoryFieldsMissingException"))
+				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 				.log()
 				.all();
 		

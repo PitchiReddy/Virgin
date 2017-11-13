@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
@@ -132,7 +133,7 @@ public class ReferenceRepositoryTest {
 
 
 	@Test 
-	public void testDelete() {
+	public void testSuccessfulDelete() {
 		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
 		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
@@ -155,6 +156,11 @@ public class ReferenceRepositoryTest {
 		
 		ReferenceData deletedReference = referenceRepository.findOne(createdReference.referenceID());
 		assertThat(deletedReference, nullValue());
+	}
+	
+	@Test(expected = EmptyResultDataAccessException.class) 
+	public void testDeleteWithInvalidReferenceID() {
+		referenceRepository.delete(testDataHelper.getRandomAlphabeticString());
 	}
 
 	/*@Test 
