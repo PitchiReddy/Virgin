@@ -59,8 +59,7 @@ public class ReferenceTypesController {
 	@ApiOperation(value = "", notes = "Add a new `ReferenceType`.", response = Void.class, tags = { "ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
-	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.POST)
+	@RequestMapping(value = "/types", produces = { "application/json" },  method = RequestMethod.POST)
 	public ResponseEntity<ReferenceType> addReferenceType(
 			@ApiParam(value = "Reference Type object that needs to be created", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
@@ -165,8 +164,7 @@ public class ReferenceTypesController {
 	@ApiOperation(value = "", notes = "Gets `ReferenceType` objects.", response = ReferenceType.class, responseContainer = "List", tags = {
 			"ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = ReferenceType.class) })
-	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/types", produces = { "application/json" },  method = RequestMethod.GET)
 	public ResponseEntity<List<ReferenceType>> findTypes(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
@@ -190,8 +188,7 @@ public class ReferenceTypesController {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
 			@ApiResponse(code = 404, message = "ReferenceType not found", response = Void.class),
 			@ApiResponse(code = 405, message = "Validation exception", response = Void.class) })
-	@RequestMapping(value = "/types", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.PUT)
+	@RequestMapping(value = "/types", produces = { "application/json" },  method = RequestMethod.PUT)
 	public ResponseEntity<ReferenceType> updateReferenceType(
 			@ApiParam(value = "ReferenceType object that needs to be updated", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
