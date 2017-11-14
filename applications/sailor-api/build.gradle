@@ -19,6 +19,7 @@ dependencies {
     compile project(":components:logging-starter")
     compile project(":components:hbase-starter")
     compile project(":components:shared-code")
+    compile project(":components:seaware-bindings")
     runtime group: 'com.netflix.feign', name: 'feign-core', version: '8.18.0'
     compile group: 'com.netflix.feign', name: 'feign-okhttp', version: '8.18.0'
     compile group: 'com.netflix.feign', name: 'feign-jaxb', version: '8.18.0'
