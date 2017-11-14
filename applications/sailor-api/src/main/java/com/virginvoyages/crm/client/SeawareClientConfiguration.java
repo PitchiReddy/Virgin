@@ -23,9 +23,9 @@ public class SeawareClientConfiguration {
 		return new feign.Contract.Default();
 	}
 
-	@Bean
+	//@Bean
 	//@Profile("local")
-	public Client feignClient() {
+	/*public Client feignClient() {
 		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 		Proxy proxyTest = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.2", 9999));
@@ -35,7 +35,7 @@ public class SeawareClientConfiguration {
 				 .writeTimeout(60, TimeUnit.SECONDS)
 				.addInterceptor(interceptor).build();
 		return new OkHttpClient(client);
-	}
+	}*/
 
 	@Bean
 	public Retryer retryer() {
