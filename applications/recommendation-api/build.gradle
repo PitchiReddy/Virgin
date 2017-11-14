@@ -90,6 +90,8 @@ jacocoTestReport {
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
+   excludeFilter=file("spotBugsExclude.xml")
+    
     reports {
         xml.enabled false
         html.enabled true

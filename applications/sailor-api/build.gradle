@@ -3,7 +3,7 @@ apply plugin: "org.springframework.boot"
 apply plugin: "docker"
 apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
-//apply plugin: "com.github.spotbugs"
+apply plugin: "com.github.spotbugs"
 
 group = "com.virginvoyages"
 version = '1.0'
@@ -125,31 +125,10 @@ jacocoTestReport {
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    excludeFilter=file("spotBugsExclude.xml")
     reports {
         xml.enabled false
         html.enabled true
     }
 }
 
-
-
-
-/*task pathingJar(type: Jar) {
-    dependsOn configurations.runtime
-    appendix = 'pathing'
- 
-    doFirst {
-        manifest {
-            attributes "Class-Path": configurations.runtime.files.collect {
-                it.toURL().toString().replaceFirst(/file:\/+/, '/')
-            }.join(' ')
-        }
-    }
-}
- 
-bootRun {
-    dependsOn pathingJar
-    doFirst {
-        classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
-    }
-}*/
