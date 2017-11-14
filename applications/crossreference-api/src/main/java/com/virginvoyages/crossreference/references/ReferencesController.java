@@ -205,11 +205,11 @@ public class ReferencesController {
 	public ResponseEntity<List<Reference>> findReferencesType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference) {
+			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 		
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
+		List<Reference> referenceData = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
 		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 

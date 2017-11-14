@@ -98,7 +98,7 @@ public class TestDataHelper {
 		return " ";
 	}
 	
-	public Reference generateReferenceSource() {
+	public Reference getReferenceMockObject() {
 		Reference referenceData = new Reference();
 		referenceData.masterID("M1");
 		referenceData.nativeSourceIDValue("NSID1");

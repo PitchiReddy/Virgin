@@ -27,17 +27,15 @@ public class CrossreferenceClientTest {
 	private TestDataHelper testDataHelper;
 	
 	@Test
-    public void findBySourceTest() {
+    public void findByTypeTestForExistingReferenceTypeID() {
     	
-		Reference referenceData = testDataHelper.generateReferenceSource();
-    	List<Reference> listOfReference = referenceClient.findBySource(referenceData);
-	    for(Reference reference: listOfReference) {
-	    	assertThat(reference, is(notNullValue()));
-	    	assertThat(reference.masterID(), equalTo(referenceData.masterID()));
-	    	assertThat(reference.nativeSourceIDValue(), equalTo(referenceData.nativeSourceIDValue()));
-	    	
+		Reference reference = testDataHelper.getReferenceMockObject();
+    	List<Reference> listOfReference = referenceClient.findByType(reference);
+    	assertThat(listOfReference, is(notNullValue()));
+    	for(Reference ref: listOfReference) {
+	    	assertThat(ref, is(notNullValue()));
+	    	assertThat(ref.referenceTypeID(), equalTo(reference.referenceTypeID()));
+	    	    	
 	    }
-    	
-  }  
-  
-}
+     }  
+  }
