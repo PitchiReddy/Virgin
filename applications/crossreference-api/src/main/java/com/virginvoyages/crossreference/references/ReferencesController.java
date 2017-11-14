@@ -209,7 +209,7 @@ public class ReferencesController {
 		
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		List<Reference> referenceData = mockAPI.findReferencesBySource("NSID1",null,null,null);
+		List<Reference> referenceData = mockAPI.findReferencesBySource(null,null,null,null);
 		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
 	}
 

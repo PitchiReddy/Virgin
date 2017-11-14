@@ -104,7 +104,7 @@ public class MockCrossReferenceAPI {
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
+                //.filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
                 .collect(Collectors.toList());
 	}
 	
