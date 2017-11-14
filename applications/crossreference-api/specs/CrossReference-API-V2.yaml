@@ -476,9 +476,9 @@ paths:
           description: The master ID to search with.
           required: true
           type: string
-        - name: targetSourceID
+        - name: targetTypeID
           in: query
-          description: The optional target source identifier.  Supplying this narrows the results to return only the matching target type.
+          description: The optional target type identifier.  Supplying this narrows the results to return only the matching target type.
           required: false
           type: string
       responses:
