@@ -144,7 +144,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	@Test
 	public void givenDeleteOnRepositoryDoesNotThrowAnyExceptionDeleteReferenceSourceByIDShouldReturnTrue() {
 		//Do nothing for refereenceSourceRepository.delete
-		doNothing().when(referenceSourceRepository).delete(testDataHelper.getReferenceSourceDataEntity());
+		doNothing().when(referenceSourceRepository).delete(testDataHelper.getRandomAlphabeticString());
 		assert(referenceSourcesAssemblyImpl.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString()));
 		
 	}
@@ -169,6 +169,7 @@ public class ReferenceSourcesAssemblyImplTest {
 		referenceSourcesAssemblyImpl.deleteReferenceSourceByID((testDataHelper.getRandomAlphabeticString()));
 	}
 	
+	// Update
 	@Test(expected=DataUpdationException.class)
 	public void givenRepositoryReturnsFalseForExistsUpdateReferenceSourcesShouldThrowDataUpdateException() {
 		when(referenceSourceRepository.exists(testDataHelper.getRandomAlphabeticString())).thenReturn(false);

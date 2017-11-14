@@ -7,6 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -21,12 +23,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.exceptions.DataAccessException;
 import com.virginvoyages.exceptions.DataInsertionException;
+import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
@@ -48,44 +53,48 @@ public class ReferenceTypesAssemblyImplTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	//Add
+	// Add
 	@Test
 	public void givenRepositoryReturnsSavedEntityAddReferenceTypeShouldReturnSavedEntity() {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
-		ReferenceType createdReferenceType = referenceTypesAssemblyImpl.addReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
+				.addReferenceType(mockReferenceTypeData.convertToBusinessEntity());
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
 		assertThat(createdReferenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsNullAddReferenceTypeShouldReturnNull() {
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(null);
-		assertThat(referenceTypesAssemblyImpl.addReferenceType(testDataHelper.getReferenceTypeBusinessEntity()), nullValue());
+		assertThat(referenceTypesAssemblyImpl.addReferenceType(testDataHelper.getReferenceTypeBusinessEntity()),
+				nullValue());
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsReferenceTypeDataWithBlankReferenceTypeIDAddReferenceTypeShouldReturnNull() {
-		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(new ReferenceTypeData().referenceTypeID(null));
-		assertThat(referenceTypesAssemblyImpl.addReferenceType(
-				testDataHelper.getReferenceTypeBusinessEntity()), nullValue());
+		when(referenceTypeRepository.save((any(ReferenceTypeData.class))))
+				.thenReturn(new ReferenceTypeData().referenceTypeID(null));
+		assertThat(referenceTypesAssemblyImpl.addReferenceType(testDataHelper.getReferenceTypeBusinessEntity()),
+				nullValue());
 	}
-	
+
 	@Test(expected = DataInsertionException.class)
 	public void givenRepositoryThrowsDataIntegrityViolationExceptionAddReferenceTypeShouldThrowDataInsertException() {
-		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenThrow(new DataIntegrityViolationException("test"));
+		when(referenceTypeRepository.save(any(ReferenceTypeData.class)))
+				.thenThrow(new DataIntegrityViolationException("test"));
 		referenceTypesAssemblyImpl.addReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
 	}
-	
+
 	@Test(expected = UnknownException.class)
 	public void givenRepositoryThrowsAnyExceptionAddReferenceSourcesShouldThrowUnknownException() {
 		when(referenceTypeRepository.save(new ReferenceTypeData())).thenThrow(new RuntimeException());
 		referenceTypesAssemblyImpl.addReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
 	}
-	
-	//Find By ID
+
+	// Find By ID
 	@Test
 	public void givenRepositoryReturnsValidReferenceTypeDatafindReferenceTypeByIDShouldReturnReferenceType() {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
@@ -95,81 +104,90 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
 		assertThat(referenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
 	}
-	
-	@Test
-	public void givenRepositoryReturnsValidReferenceTypeDatafindByReferenceTypeNameShouldReturnReferenceType() {
-		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
-		when(referenceTypeRepository.findByReferenceType((any(String.class)))).thenReturn(mockReferenceTypeData);
-		ReferenceType referenceType = referenceTypesAssemblyImpl
-				.findReferenceTypeByName(testDataHelper.getRandomAlphabeticString());
-		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
-		assertThat(referenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
-		assertThat(referenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
-	}
-	
-	@Test
-	public void givenRepositoryReturnsNullInvalidReferenceTypeNameInfindByReferenceType() {
-		when(referenceTypeRepository.findByReferenceType((any(String.class)))).thenReturn(null);
-		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByName(
-				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
-	
-	}
-	
+
 	public void givenRepositoryReturnsNullfindReferenceTypeByIDShouldReturnNull() {
 		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(null);
-		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(
-				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
-	
+		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(testDataHelper.getRandomAlphabeticString()),
+				is(nullValue()));
+
 	}
-	
-	@Test(expected = UnknownException.class)
-	public void givenRepositoryThrowsAnyExceptionFindReferenceTypeByNameShouldThrowUnknownException() {
-		when(referenceTypeRepository.findByReferenceType(any(String.class))).thenThrow(new RuntimeException());
-		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByName(
-				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
-	}
-	
+
 	@Test(expected = UnknownException.class)
 	public void givenRepositoryThrowsAnyExceptionFindReferenceByIDShouldThrowUnknownException() {
 		when(referenceTypeRepository.findOne((any(String.class)))).thenThrow(new RuntimeException());
 		referenceTypesAssemblyImpl.findReferenceTypeByID((testDataHelper.getRandomAlphabeticString()));
 	}
-	
-	//Update
-	
+
+	// Delete
+	@Test
+	public void givenDeleteOnRepositoryDoesNotThrowAnyExceptionDeleteReferenceTypeByIDShouldReturnTrue() {
+		doNothing().when(referenceTypeRepository).delete(testDataHelper.getRandomAlphabeticString());
+		assert (referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.getRandomAlphanumericString()));
+
+	}
+
+	@Test(expected = DataNotFoundException.class)
+	public void givenDeleteOnRepositoryThrowsEmptyResultDataAccessExceptionDeleteReferenceTypeByIDShouldThrowDataNotFoundException() {
+		doThrow(new EmptyResultDataAccessException(1)).when(referenceTypeRepository).delete(any(String.class));
+		referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.getRandomAlphanumericString());
+
+	}
+
+	@Test(expected = DataAccessException.class)
+	public void givenDeleteOnRepositoryThrowsDataIntegrityViolationExceptionDeleteReferenceTypeByIDShouldThrowDataAccessException() {
+		doThrow(new DataIntegrityViolationException("test")).when(referenceTypeRepository).delete(any(String.class));
+		referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.getRandomAlphanumericString());
+
+	}
+
+	@Test(expected = UnknownException.class)
+	public void givenDeleteOnRepositoryThrowsAnyExceptionDeleteReferenceTypeByIDShouldThrowUnknownException() {
+		doThrow(new RuntimeException()).when(referenceTypeRepository).delete(any(String.class));
+		referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.getRandomAlphanumericString());
+	}
+
+	// Update
+
 	@Test
 	public void givenRepositoryReturnsUpdatedReferenceTypeDataUpdateReferenceTypeShouldReturnUpdatedEntity() {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(mockReferenceTypeData);
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
-		ReferenceType updatedReferenceType = referenceTypesAssemblyImpl.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+		ReferenceType updatedReferenceType = referenceTypesAssemblyImpl
+				.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
 		assertThat(updatedReferenceType, notNullValue());
 		assertThat(updatedReferenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
 	}
-	
-	/*@Test //TODO XREF TESTS
-	public void givenFineOneReturnsNoReferenceTypeDataUpdateReferenceTypeShouldThrowDataUpdationException() {
-		
-	}*/
-	
+
+	/*
+	 * @Test //TODO XREF TESTS public void
+	 * givenFineOneReturnsNoReferenceTypeDataUpdateReferenceTypeShouldThrowDataUpdationException
+	 * () {
+	 * 
+	 * }
+	 */
+
 	@Test
 	public void givenRepositoryReturnsListOfReferenceTypesDataFindTypesShouldReturnCorrespondingReferenceTypes() {
 		List<ReferenceTypeData> mockReferenceTypeDataList = new ArrayList<ReferenceTypeData>();
 		mockReferenceTypeDataList.add(testDataHelper.getReferenceTypeDataEntity());
 		mockReferenceTypeDataList.add(testDataHelper.getReferenceTypeDataEntity());
-		
+
 		when(referenceTypeRepository.findAll()).thenReturn(mockReferenceTypeDataList);
 		assertThat(referenceTypesAssemblyImpl.findTypes(), hasSize(equalTo(mockReferenceTypeDataList.size())));
-		
+
 	}
-	
-	/*@Test(expected=DataNotFoundException.class)
-	public void givenRepositoryReturnsValidReferenceTypeDataDeleteReferenceTypeByIDShouldReturnEmptyReferenceType() {
-		Mockito.spy(ReferenceTypeData.class);
-		referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.getRandomAlphabeticString());
-		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(
-				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
-	
-		
-	}*/
+
+	/*
+	 * @Test(expected=DataNotFoundException.class) public void
+	 * givenRepositoryReturnsValidReferenceTypeDataDeleteReferenceTypeByIDShouldReturnEmptyReferenceType
+	 * () { Mockito.spy(ReferenceTypeData.class);
+	 * referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.
+	 * getRandomAlphabeticString());
+	 * assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(
+	 * testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	 * 
+	 * 
+	 * }
+	 */
 }

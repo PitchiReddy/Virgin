@@ -96,7 +96,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("deleting Reference Type");
-		if(StringUtils.isEmpty(referenceTypeID)||referenceTypeID.trim().length()==0) {
+		if(StringUtils.isBlank(referenceTypeID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referenceTypesAssembly.deleteReferenceTypeByID(referenceTypeID);

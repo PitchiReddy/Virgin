@@ -91,7 +91,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(referenceSourceID)) {
+		if(StringUtils.isBlank(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSourceID);

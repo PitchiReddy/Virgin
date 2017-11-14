@@ -189,7 +189,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	public void givenNoReferenceTypeIDInRequestGetReferenceTypeByIdShouldThrowSomeException() {
+	public void givenNoReferenceTypeIDInRequestGetReferenceTypeByIdShouldThrowMissingServletRequestParameterException() {
 		
 		//Test
 		given().
@@ -203,8 +203,9 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				
 	}
 	
+	//Delete
 	@Test
-	public void givenValidReferenceTypeDeleteReferenceTypeByIdShouldDeleteReferenceType() {
+	public void givenValidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldDeleteReferenceType() {
 		
 		//Create test reference
 		JsonPath referenceTypeJson = createTestReferenceType();
@@ -232,7 +233,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowSomeException() {
+	public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowDataNotFoundException() {
 
 		//Test invalid ReferenceTypeId Delete
 		given().
@@ -245,7 +246,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				all();	
 	}
 	
-	
+	//Update
 	@Test
 	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {
 		
