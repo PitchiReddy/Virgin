@@ -27,7 +27,7 @@ public interface ReferencesAssembly {
 
 	public Reference updateReference(Reference body);
 
-	public List<Reference> findReferencesBySource(Reference reference);
+	public List<Reference> findReferencesByType(Reference reference);
 
-	public List<Reference> findReferencesSourceAndTargetSource(Reference reference);
+	public List<Reference> findReferencesTypeAndTargetType(Reference reference);
 }
