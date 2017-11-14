@@ -88,23 +88,23 @@ public class MockCrossReferenceAPI {
                 .collect(Collectors.toList());
     }
 	
-	public List<Reference> findReferencesBySource(String nativeSourceID,String sourceID,String typeID,String targetSourceID){
+	public List<Reference> findReferencesByType(String nativeSourceIDValue,String typeID,String targetTypeID){
 		
 		/*if(StringUtils.isNotEmpty(typeID)) {
 			return findReferencesSourceAndTypeID(nativeSourceID,sourceID,typeID);
 		}*/
 		references.put("R1", new Reference()
 				.referenceID("R1")
-				.masterID("M1")
+				.referenceTypeID(typeID)
 				.nativeSourceIDValue("NSID1"));
 		references.put("R2", new Reference()
 				.referenceID("R2")
-				.masterID("M1")
+				.referenceTypeID(typeID)
 				.nativeSourceIDValue("NSID2"));
 		return references
 				.values()
 				.stream()
-                .filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
+                //.filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
                 .collect(Collectors.toList());
 	}
 	
