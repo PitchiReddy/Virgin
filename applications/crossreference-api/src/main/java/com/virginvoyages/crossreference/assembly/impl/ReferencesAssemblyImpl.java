@@ -156,16 +156,15 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	}
 
 	@Override
-	public List<Reference> findReferencesBySource(Reference reference) {
-		log.debug("Entering findReferencesBySource method in ReferencesAssemblyImpl");
+	public List<Reference> findReferencesByType(Reference reference) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Reference> findReferencesSourceAndTargetSource(Reference reference) {
-		log.debug("Entering findReferencesSourceAndTargetSource method in ReferencesAssemblyImpl");
+	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
+		// TODO Auto-generated method stub
 		return null;
-	
 	}
 
 }
