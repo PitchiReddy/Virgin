@@ -2,11 +2,13 @@ package com.virginvoyages.assembly.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.assembly.BookingAssembly;
 import com.virginvoyages.booking.BookingsEmbedded;
 import com.virginvoyages.crm.data.BookingData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.dao.BookingsDAO;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
