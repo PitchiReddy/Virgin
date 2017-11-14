@@ -209,6 +209,18 @@ public class ReferenceSourcesControllerTest {
 	}
 	
 	@Test
+	public void givenAssemblyReturnsNullGetReferenceSourceByNameShouldThrowDataNotFoundException() throws Exception {
+		String testReferenceSource = testDataHelper.getRandomAlphanumericString();
+		given(referenceSourcesAssembly.findReferenceSourceByName(testReferenceSource))
+			.willReturn(null);
+		 
+		mvc.perform(
+				 get("/sources/findByName/"+testReferenceSource)
+				.contentType("application/json"))
+		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+	}
+	
+	@Test
 	public void givenPathVariableContainsEmptySpaceGetReferenceSourceByIdShouldThrowMandatoryFieldsMissingException() throws Exception {
 		
 		String testReferenceSourceID = testDataHelper.getRandomAlphanumericString();
@@ -221,6 +233,17 @@ public class ReferenceSourcesControllerTest {
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
 	
+	@Test
+	public void givenPathVariableContainsEmptySpaceGetReferenceSourceByNameIdShouldThrowMandatoryFieldsMissingException() throws Exception {
+		String testReferenceSource = testDataHelper.getRandomAlphanumericString();
+		given(referenceSourcesAssembly.findReferenceSourceByName(testReferenceSource))
+			.willReturn(null);
+		 
+		mvc.perform(
+				 get("/sources/  ")
+				.contentType("application/json"))
+		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
 	@Test 
 	public void givenAssemblyReturnsValidReferenceSourceGetReferenceSourceByIdShouldSetReferenceSourceDetailsInResponse() throws Exception {
 		
@@ -238,6 +261,24 @@ public class ReferenceSourcesControllerTest {
 				.andExpect(jsonPath("inActive",equalTo(referenceSource.inActive())))
 		 		.andExpect(status().isOk());
 	}	
+	
+	@Test 
+	public void givenAssemblyReturnsValidReferenceSourceNameGetReferenceSourceByNameShouldSetReferenceSourceDetailsInResponse() throws Exception {
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		 
+		 given(referenceSourcesAssembly.findReferenceSourceByName(referenceSource.referenceSource()))
+			.willReturn(referenceSource);
+		
+		 //Test
+		 mvc.perform(
+				 get("/sources/findByName/" + referenceSource.referenceSource())
+				.contentType("application/json"))
+				.andExpect(jsonPath("referenceSourceID",equalTo(referenceSource.referenceSourceID())))
+				.andExpect(jsonPath("referenceSource",equalTo(referenceSource.referenceSource())))
+				.andExpect(jsonPath("inActive",equalTo(referenceSource.inActive())))
+		 		.andExpect(status().isOk());
+	}	
+	
 	
 	//Update Source
 	@Test

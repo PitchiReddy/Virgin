@@ -128,7 +128,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	}
 	
 	@Test(expected = UnknownException.class)
-	public void givenRepositoryThrowsAnyExceptionFindReferenceByNameShouldThrowUnknownException() {
+	public void givenRepositoryThrowsAnyExceptionFindReferenceSourceByNameShouldThrowUnknownException() {
 		when(referenceSourceRepository.findByReferenceSource((any(String.class)))).thenThrow(new RuntimeException());
 		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByName(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));

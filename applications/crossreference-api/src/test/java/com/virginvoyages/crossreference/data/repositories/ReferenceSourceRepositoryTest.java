@@ -52,7 +52,7 @@ public class ReferenceSourceRepositoryTest {
 		assertThat(createdReferenceSource.referenceSourceID(), equalTo(retrievedReferenceSource.referenceSourceID()));
 		
 		//cleanup
-		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+	//	referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
 	}
 	

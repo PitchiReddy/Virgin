@@ -114,15 +114,35 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	}
 	
 	//find by Reference source name
-	
 	@Test
 	public void givenValidReferenceSourceNameGetReferenceSourceByNameShouldReturnReferenceSource() {
-		//TO DO
+		// Create test reference source
+		JsonPath createdReferenceJson = createTestReferenceSource();
+
+		// Test by find
+		given().contentType("application/json")
+				.get("/xref-api/v1/sources/findByName/" + createdReferenceJson.getString("referenceSource")).
+		then()  .assertThat()
+				.statusCode(200).
+				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID")))
+				.assertThat().body("referenceSource", equalTo(createdReferenceJson.getString("referenceSource")))
+				.log()
+				.all();
+
+		// cleanup
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
 	}
 	
 	@Test
 	public void givenInvalidReferenceSourceNameGetReferenceSourceByNameShouldThrowDataNotFoundException() {
-	//TODO
+		 given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/findByName/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				log().
+				all();
 
 	}
 	
@@ -141,8 +161,15 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	}
 	
 	@Test
-	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowBadRequestException() {
-	//	TODO
+	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowSomeException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/findByName/").
+        then().
+                assertThat().statusCode(404).
+                assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+		        log().
+		   		all();
 	}
 	
 	

@@ -90,8 +90,14 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Override
 	public ReferenceType findReferenceTypeByName(String referenceTypeName) {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("Entering findReferenceTypeByName method in ReferenceTypesAssemblyImpl");
+		try {
+			ReferenceTypeData referenceTypeData = referenceTypeRepository.findByReferenceType(referenceTypeName);
+			return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+		}catch(Exception ex) {
+			log.error("Reference Type ID ==>"+referenceTypeName+"\nException encountered in findReferenceTypeByID",ex);
+			throw new UnknownException();
+		}
 	}
 	
 	/**

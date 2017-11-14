@@ -124,9 +124,9 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
 	
-	@Test(expected= DataNotFoundException.class)
+	@Test
 	public void givenInValidReferenceSourceNameFindByReferenceSourceShouldReturnNull() {
-		assertThat(referenceSourcesAssembly.findReferenceSourceByID(	
+		assertThat(referenceSourcesAssembly.findReferenceSourceByName(	
 		        testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
 

@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +27,6 @@ import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
@@ -98,12 +96,37 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(referenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
 	}
 	
+	@Test
+	public void givenRepositoryReturnsValidReferenceTypeDatafindByReferenceTypeNameShouldReturnReferenceType() {
+		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		when(referenceTypeRepository.findByReferenceType((any(String.class)))).thenReturn(mockReferenceTypeData);
+		ReferenceType referenceType = referenceTypesAssemblyImpl
+				.findReferenceTypeByName(testDataHelper.getRandomAlphabeticString());
+		assertThat(referenceType.referenceTypeID(), is(notNullValue()));
+		assertThat(referenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
+		assertThat(referenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
+	}
+	
+	@Test
+	public void givenRepositoryReturnsNullInvalidReferenceTypeNameInfindByReferenceType() {
+		when(referenceTypeRepository.findByReferenceType((any(String.class)))).thenReturn(null);
+		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByName(
+				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
+	
+	}
 	
 	public void givenRepositoryReturnsNullfindReferenceTypeByIDShouldReturnNull() {
 		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(null);
 		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(
 				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
 	
+	}
+	
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferenceTypeByNameShouldThrowUnknownException() {
+		when(referenceTypeRepository.findByReferenceType(any(String.class))).thenThrow(new RuntimeException());
+		assertThat(referenceTypesAssemblyImpl.findReferenceTypeByName(
+				testDataHelper.getRandomAlphabeticString()), is(nullValue()));
 	}
 	
 	@Test(expected = UnknownException.class)
