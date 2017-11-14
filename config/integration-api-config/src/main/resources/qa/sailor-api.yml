@@ -1,4 +1,3 @@
-#**PLACEHOLDERS** need to update with QA configuration.
 crm:
   service:
     url: https://virginvoyages--qa.cs67.my.salesforce.com
