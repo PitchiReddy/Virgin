@@ -17,8 +17,6 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
-import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.crossreference.client.Reference;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -46,9 +44,6 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	private QueryClient queryClient;
 	
 	@Autowired
-	private CrossreferenceClient referenceClient;
-	
-	@Autowired
 	private SailorQueryHelper sailorQueryHelper;
 	
 	@Autowired
@@ -69,9 +64,8 @@ public class SailorAssemblyImpl implements SailorAssembly {
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}
-		
 		return convertAccountDataToSailor(accountData, loadPreferences(sailorID), null);
-		
+
 	}
 
 	@Override
@@ -128,22 +122,14 @@ public class SailorAssemblyImpl implements SailorAssembly {
 				
  	}
 	
-	public PreferencesEmbedded loadPreferences(String sailorID) {
+	private PreferencesEmbedded loadPreferences(String sailorID) {
 		return preferenceAssembly.findSailorPreferences(sailorID);
 	}
 	
-	public Sailor convertAccountDataToSailor(AccountData accountData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
-		return accountData.convertToSailorObject()
-								.associatePreferences(preferencesEmbedded)
-								.associateSailingHistory(bookingsEmbedded)
-								.seawareClientID(getSeawareClientIDForSailor(accountData.id()));
-		
+	private Sailor convertAccountDataToSailor(AccountData accoundData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
+		return accoundData.convertToSailorObject()
+				.associatePreferences(preferencesEmbedded)
+				.associateSailingHistory(bookingsEmbedded);
 	}
-		
-	public String getSeawareClientIDForSailor(String sailorID) {
-		List<Reference> listofReference = referenceClient.findBySource(
-				new Reference().nativeSourceIDValue(sailorID));
-		return (null != listofReference && listofReference.size() > 0) ? listofReference.get(0).nativeSourceIDValue():null;
-	}
-	
+
 }
