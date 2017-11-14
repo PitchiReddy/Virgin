@@ -205,14 +205,12 @@ public class ReferencesController {
 	public ResponseEntity<References> findReferencesType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference,
-			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
+			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
 		
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
-		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(referenceList));
+		References references = new References().page(new Page().size(1)).embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
