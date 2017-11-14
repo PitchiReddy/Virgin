@@ -100,17 +100,24 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	 *            - input referenceType.
 	 * @return
 	 */
-	public void deleteReferenceTypeByID(String referenceTypeID) {
+	public boolean deleteReferenceTypeByID(String referenceTypeID) {
 		log.debug("Entering deleteReferenceTypeByID method in ReferenceTypesAssemblyImpl");
+		boolean deleted = false;
 		try {
 			referenceTypeRepository.delete(referenceTypeID);
-		}
-		catch(EmptyResultDataAccessException erdae) {
+			deleted = true;
+			
+		}catch(EmptyResultDataAccessException dax) {
+			log.error("Reference Type ID ==>"+referenceTypeID+"\nEmptyResultDataAccessException encountered in deleteReferenceTypeByID",dax);
 			throw new DataNotFoundException();
-		}
-		catch(DataIntegrityViolationException die) {
+		}catch(DataIntegrityViolationException dex) {
+			log.error("Reference Type ID ==>"+referenceTypeID+"\nDataIntegrityViolationException encountered in deleteReferenceTypeByID",dex);
 			throw new DataAccessException();
+		}catch(Exception ex) {
+			log.error("Reference Type ID ==>"+referenceTypeID+"\nUnknown Exception encountered in deleteReferenceTypeByID",ex);
+			throw new UnknownException();
 		}
+		return deleted;
 
 	}
 

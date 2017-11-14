@@ -154,10 +154,11 @@ public class ReferenceTypesAssemblyImplIT {
 	
 
 	@Test(expected = DataNotFoundException.class)
-	public void givenInvalidReferenceTypeIDDeleteReferenceTypeShouldThrowEmptyDataNotFoundException() {
+	public void givenInvalidReferenceTypeIDDeleteReferenceTypeShouldThrowDataNotFoundException() {
 		referenceTypesAssembly.deleteReferenceTypeByID(testDataHelper.getRandomAlphanumericString());
 	}
 	
+	//Update
 	@Test
 	public void givenValidReferenceTypeUpdateReferenceTypeShouldUpdateReferenceType() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(

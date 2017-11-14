@@ -116,6 +116,7 @@ public class ReferenceSourcesAssemblyImplIT {
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
 
+	//Delete
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
@@ -132,6 +133,7 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(testDataHelper.getRandomAlphanumericString());
 	}
 
+	//Update
 	@Test
 	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateReferenceSource() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
