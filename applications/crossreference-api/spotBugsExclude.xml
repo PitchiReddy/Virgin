@@ -1,0 +1,11 @@
+<FindBugsFilter>
+	<Match>
+		<Class name="com.virginvoyages.CrossReferenceFunctionalTestSupport" />
+		<Bug code="UrF" />
+	</Match>
+
+	<Match>
+		<Class name="com.virginvoyages.FunctionalTestSupport" />
+		<Bug code="ST" />
+	</Match>
+</FindBugsFilter>
