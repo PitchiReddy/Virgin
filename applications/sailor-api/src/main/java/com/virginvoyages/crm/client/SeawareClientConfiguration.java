@@ -1,12 +1,7 @@
 package com.virginvoyages.crm.client;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.context.annotation.Bean;
 
-import feign.Client;
 import feign.Contract;
 import feign.RetryableException;
 import feign.Retryer;
@@ -14,8 +9,6 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.jaxb.JAXBContextFactory;
 import feign.jaxb.JAXBEncoder;
-import feign.okhttp.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class SeawareClientConfiguration {
 
@@ -23,9 +16,8 @@ public class SeawareClientConfiguration {
 		return new feign.Contract.Default();
 	}
 
-	//@Bean
-	//@Profile("local")
-	/*public Client feignClient() {
+	/*@Bean
+	public Client feignClient() {
 		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 		Proxy proxyTest = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.2", 9999));
