@@ -27,6 +27,7 @@ import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
+import com.virginvoyages.crossreference.client.CrossreferenceClient;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
@@ -66,6 +67,9 @@ public class SailorAssemblyImplTest {
 
 	@Autowired
 	private MockDataHelper mockDataHelper;
+	
+	@Mock 
+	private CrossreferenceClient xrefClient;
 	
 	@Before
     public void setUp() throws Exception {
@@ -164,5 +168,5 @@ public class SailorAssemblyImplTest {
 		sailorAssembly.createSailor(accountData);
 		
 	}
-
+	
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.OTAReadRQ;
@@ -103,6 +104,14 @@ public class TestDataHelper {
 		return " ";
 	}
 	
+	public Reference getReferenceMockObject() {
+		Reference referenceData = new Reference();
+		referenceData.masterID("M1");
+		referenceData.nativeSourceIDValue("NSID1");
+		referenceData.referenceTypeID("8acdcfb55f9185fa015f918615c20004");
+		System.out.println("ReferenceData    " + referenceData);
+		return referenceData;
+}
 
 	public OTAReadRQ genarateSeawaredataToCreate() {
 		

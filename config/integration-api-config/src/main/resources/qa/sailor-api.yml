@@ -7,3 +7,7 @@ crm:
   password: cVmlyZ2luNDU2
   client-id: 3MVG99E3Ry5mh4zp6SqQPRH4bTr4uZmiKRagoBIZeRyJ55Df0TNBRNq7w_RrX6O9wLcqUP4YHj6m.5PFB3vr6
   client-secret: 2739124206139488478
+
+crossreference:
+  service:
+    url: https://vv.q-aws-vxp.com/svc/xref-api/v1/
