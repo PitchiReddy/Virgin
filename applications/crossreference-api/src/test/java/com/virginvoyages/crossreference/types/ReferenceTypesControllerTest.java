@@ -1,6 +1,5 @@
 package com.virginvoyages.crossreference.types;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -199,44 +198,30 @@ public class ReferenceTypesControllerTest {
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 
 	}
-			
-	/*@Test 
-	public void  givenInValidReferenceTypeIDShouldThrowDataNotFoundException() throws Exception {
 		
-		String invalidReferenceTypeID= mockDataHelper.getInvalidReferenceTypeByID();
-		//Test
+	//Delete
+	@Test
+	public void givenAssemblyMethodDoesNotThrowAnyExceptionDeleteReferenceTypeByIdShouldReturnHttpStatusOK() throws Exception {
+		given(referenceTypesAssembly.deleteReferenceTypeByID(testDataHelper.getRandomAlphabeticString()))
+											.willReturn(true);
 		mvc.perform(
-				get("/types/" + invalidReferenceTypeID)
+				 delete("/types/"+testDataHelper.getRandomAlphabeticString())
 				.contentType("application/json"))
-		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
-	}*/
-	
-	@Test 
-	public void givenvalidReferenceTypeByIDShouldDeleteReferenceTypes() throws Exception {
-		
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
-		mvc.perform(
-				delete("/types/"+ referenceType.referenceTypeID())
-				.contentType("application/json")
-		        .content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+"\"}"))
 		        .andExpect(status().isOk());
 		
 	}
 	
 	@Test 
-	public void givenInvalidReferenceTypeByIDShouldDeleteReferenceTypes() throws Exception {
-		
-		String invalidReferenceTypeID= testDataHelper.getRandomAlphabeticString();
-		
+	public void givenNoReferenceTypeIDInRequestBodyDeleteReferenceTypeIDShouldThrowMandatoryFieldsMissingException() throws Exception{
 		mvc.perform(
-				delete("/types/"+invalidReferenceTypeID)
-				.contentType("application/json")
-		        .content("{ \"referenceTypeID\" : \""+invalidReferenceTypeID+"\"}"))
-		        .andExpect(status().isOk());
-		
+			 	delete("/types/")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
 	
+	
+	
+	//Update
 	@Test 
 	public void givenValidReferenceTypeUpdateReferenceTypeByIDShouldUpdateReferenceType() throws Exception {
 			

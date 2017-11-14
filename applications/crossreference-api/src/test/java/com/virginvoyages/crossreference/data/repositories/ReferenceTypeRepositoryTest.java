@@ -19,10 +19,9 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
-import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
-import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 
@@ -38,6 +37,9 @@ public class ReferenceTypeRepositoryTest {
 	
 	@Autowired
 	private ReferenceSourceRepository referenceSourceRepository;
+	
+	@Autowired
+	private ReferenceRepository referenceRepository;
 	
 	//Add/Update
 	@Test 
@@ -210,8 +212,32 @@ public class ReferenceTypeRepositoryTest {
 		assertThat(referenceTypeRepository.findOne(createdReferenceType.referenceTypeID()), nullValue());
 	}
 
-	/*@Test TODO - XREF TESTS
+	@Test
 	public void testDeleteOfTypeLinkedToReference() {
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
+				testDataHelper.getReferenceSourceDataEntity());
 		
-	}*/
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(
+				testDataHelper.getReferenceTypeDataEntity(createdReferenceSource));
+		
+		ReferenceData createdReference = referenceRepository.save(testDataHelper.getReferenceDataEntity(createdReferenceType));
+		assertThat(createdReference.referenceID(),notNullValue());
+		
+		try {	
+			//deleting type that is linked to Reference
+			referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
+			
+		}catch(DataIntegrityViolationException dex) {
+			assert(true);
+			return;
+		}finally {
+			//cleanup
+			referenceRepository.delete(createdReference.referenceID());
+			referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
+			referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+			
+		}
+		assert(false);
+			
+	}
 }

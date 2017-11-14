@@ -18,7 +18,7 @@ public interface ReferenceTypesAssembly {
 	
 	public ReferenceType findReferenceTypeByName(String referenceTypeName);
 
-	public void deleteReferenceTypeByID(String referenceTypeID);
+	public boolean deleteReferenceTypeByID(String referenceTypeID);
 
 	public ReferenceType updateReferenceType(ReferenceType body);
 
