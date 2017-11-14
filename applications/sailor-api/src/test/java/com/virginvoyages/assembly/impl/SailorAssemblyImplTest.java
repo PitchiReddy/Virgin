@@ -3,14 +3,12 @@ package com.virginvoyages.assembly.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -30,7 +28,6 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.crossreference.client.Reference;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
@@ -172,24 +169,4 @@ public class SailorAssemblyImplTest {
 		
 	}
 	
-	@Test
-	public void givenCrossReferenceClientReturnsAReferenceListWithReferencesGetSeawareClientIDForSailorShouldReturnNativeSourceIDValOfFirstReference() {
-		Reference reference = new Reference().nativeSourceIDValue("NSID1");
-		List<Reference> references = new ArrayList<Reference>();
-		references.add(reference);
-		when(xrefClient.findBySource(any(Reference.class))).thenReturn(references);
-		
-		String seawareClientID = sailorAssembly.getSeawareClientIDForSailor("123");
-		assertThat(seawareClientID, equalTo(reference.nativeSourceIDValue()));
-	}
-	
-	@Test
-	public void givenCrossReferenceClientReturnsEmptyReferenceListGetSeawareClientIDForSailorShouldReturnNull() {
-		List<Reference> references = new ArrayList<Reference>();
-		when(xrefClient.findBySource(any(Reference.class))).thenReturn(references);
-		
-		String seawareClientID = sailorAssembly.getSeawareClientIDForSailor("123");
-		assertThat(seawareClientID, nullValue());
-	}
-
 }

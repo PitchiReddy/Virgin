@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.crm.data.ReferenceData;
-import com.virginvoyages.crossreference.client.Reference;
+import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.sailor.Sailor;
 
 @Service
