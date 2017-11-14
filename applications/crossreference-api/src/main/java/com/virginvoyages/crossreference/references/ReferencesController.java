@@ -1,8 +1,7 @@
 package com.virginvoyages.crossreference.references;
 
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
@@ -28,7 +26,6 @@ import com.virginvoyages.model.Page;
 import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.model.crossreference.References;
 import com.virginvoyages.model.crossreference.ReferencesEmbedded;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -188,36 +185,42 @@ public class ReferencesController {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
 	@RequestMapping(value = "/references/search/findByMaster", method = RequestMethod.GET)
-	public ResponseEntity<List<Reference>> findReferencesMaster(
+	public ResponseEntity<References> findReferencesMaster(
 			@ApiParam(value = "The master ID to search with.", required = true) @RequestParam(value = "masterID", required = true) String masterID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
-			final Pageable pageable ) {
-		
-		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferenceByMasterId(masterID, pageable),HttpStatus.OK);
+		    final Pageable pageable ) {
+	
+		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,pageable);
+		log.debug("Returns one or more references ====>{}",listOfReference);
+		References references = new References().page(new Page().size(1)).embedded(new ReferencesEmbedded().references(listOfReference));
+		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
 	@RequestMapping(value = "/references/search/findByType", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> findReferencesType(
+	public ResponseEntity<References> findReferencesType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
+			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference,
+			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
 		
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		List<Reference> referenceData = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
-		return new ResponseEntity<List<Reference>>(referenceData,HttpStatus.OK);
+		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
+		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(referenceList));
+		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
 	@RequestMapping(value = "/references/search/findByTypeAndTargetType", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> findReferencesTypeAndTargetType(
+	public ResponseEntity<References> findReferencesTypeAndTargetType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
@@ -225,34 +228,34 @@ public class ReferencesController {
 		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		return new ResponseEntity<List<Reference>>(new ArrayList<Reference>(),HttpStatus.OK);
+		return new ResponseEntity<References>(HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
 	@RequestMapping(value = "/references/merge/mergeByMaster", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> mergeReferencesMaster(
+	public ResponseEntity<References> mergeReferencesMaster(
 			@ApiParam(value = "The master ID to merge from.", required = true) @RequestParam(value = "fromMasterID", required = true) String fromMasterID,
 			@ApiParam(value = "The master ID to merge towards.", required = true) @RequestParam(value = "toMasterID", required = true) String toMasterID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		// do some magic!
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		return new ResponseEntity<References>(HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
 	@RequestMapping(value = "/references/merge/mergeBySource", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> mergeReferencesSource(
+	public ResponseEntity<References> mergeReferencesSource(
 			@ApiParam(value = "The source ID of the source.", required = true) @RequestParam(value = "sourceID", required = true) String sourceID,
 			@ApiParam(value = "The native source ID to merge from.", required = true) @RequestParam(value = "fromNativeID", required = true) String fromNativeID,
 			@ApiParam(value = "The native source ID to merge towards.", required = true) @RequestParam(value = "toNativeID", required = true) String toNativeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		// do some magic!
-		return new ResponseEntity<List<Reference>>(HttpStatus.OK);
+		return new ResponseEntity<References>(HttpStatus.OK);
 	}
 	
 	/**
