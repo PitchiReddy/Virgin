@@ -16,11 +16,13 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+import com.virginvoyages.seaware.data.OTAProfileReadRS;
 
 import feign.FeignException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+
 public class AccountClientTest {
 
 	
@@ -28,7 +30,11 @@ public class AccountClientTest {
 	private AccountClient accountClient;
 	
 	@Autowired
+	private SeawareClient seawareClient;
+	
+	@Autowired
 	private TestDataHelper testDataHelper;
+	
 	
 	@Test
     public void createAccountCreatesNewAccount() {
@@ -73,11 +79,16 @@ public class AccountClientTest {
     	try {
     		accountClient.findAccount(testSailor.id());
     	}catch(FeignException fe) {
-    		assertThat(fe.status(),equalTo(HttpStatus.NOT_FOUND.value()));
+    		assertThat(fe.getMessage(),equalTo(HttpStatus.NOT_FOUND.value()));
     		return;
     	}
         assert(false);
     }
-   
+    
+    @Test
+    public void findSeawareData() throws Exception {
+    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
+    	System.out.println("Data is ::::" + otaProfileReadRS.getProfiles());
+    }
   
 }

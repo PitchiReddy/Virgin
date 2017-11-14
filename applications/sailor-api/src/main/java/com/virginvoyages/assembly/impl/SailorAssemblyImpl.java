@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
@@ -17,12 +16,11 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 import feign.FeignException;
@@ -58,9 +56,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		try {
 			accountData = accountClient.findAccount(sailorID);
 		} catch (FeignException fe) {
-			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
+			/*if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}
@@ -73,9 +71,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		try {
 			accountClient.deleteAccount(sailorID);
 		} catch (FeignException fe) {
-			if (HttpStatus.NOT_FOUND.value() == fe.status()) {
+			/*if (HttpStatus.NOT_FOUND.value() == fe.status()) {
 				throw new DataNotFoundException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 			throw new UnknownException();
 		}
