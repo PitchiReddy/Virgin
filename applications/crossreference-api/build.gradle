@@ -70,7 +70,7 @@ jacocoTestReport {
                     //'**/*Data**',
                     // TODO Refactor to use naming (package or class) and regular expression
                     // Exclude Stub code
-                    'com/virginvoyages/api/MockCrossReferenceAPI.class'
+                    'com/virginvoyages/crossreference/api/MockCrossReferenceAPI.class'
             ])
         })
     }

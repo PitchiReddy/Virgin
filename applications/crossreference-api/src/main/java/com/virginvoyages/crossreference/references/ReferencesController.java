@@ -72,15 +72,14 @@ public class ReferencesController {
 	@ApiOperation(value = "", notes = "Add a new `Reference`.", response = Void.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = Void.class),
 			@ApiResponse(code = 405, message = "Invalid input", response = Void.class) })
-	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.POST)
+	@RequestMapping(value = "/references", produces = { "application/json" },  method = RequestMethod.POST)
 	public ResponseEntity<Reference> addReference(
 			@ApiParam(value = "Reference object that needs to be created", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 		log.debug("Adding Reference");
-		if(StringUtils.isEmpty(body.referenceTypeID())||body.nativeSourceIDValue().trim().length()==0||body.masterID().trim().length()==0) {
+		if(StringUtils.isBlank(body.referenceTypeID())||StringUtils.isBlank(body.nativeSourceIDValue())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		Reference reference = referencesAssembly.addReference(body);
@@ -162,8 +161,7 @@ public class ReferencesController {
 	 */
 	@ApiOperation(value = "", notes = "Gets `Reference` objects.", response = References.class, tags = { "Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = References.class) })
-	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/references", produces = { "application/json" },  method = RequestMethod.GET)
 	public ResponseEntity<References> findReferences(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
@@ -194,7 +192,7 @@ public class ReferencesController {
 			@ApiParam(value = "The master ID to search with.", required = true) @RequestParam(value = "masterID", required = true) String masterID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "The optional target source identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetSourceID", required = false) String targetSourceID,
+			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
 			final Pageable pageable ) {
 		
 		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferenceByMasterId(masterID, pageable),HttpStatus.OK);
@@ -218,8 +216,8 @@ public class ReferencesController {
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
-	@RequestMapping(value = "/references/search/findReferencesTypeAndTargetType", method = RequestMethod.POST)
-	public ResponseEntity<List<Reference>> findByTypeAndTargetType(
+	@RequestMapping(value = "/references/search/findByTypeAndTargetType", method = RequestMethod.POST)
+	public ResponseEntity<List<Reference>> findReferencesTypeAndTargetType(
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
@@ -271,8 +269,7 @@ public class ReferencesController {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
 			@ApiResponse(code = 404, message = "Reference not found", response = Void.class),
 			@ApiResponse(code = 405, message = "Validation exception", response = Void.class) })
-	@RequestMapping(value = "/references", produces = { "application/json" }, consumes = {
-			"application/json" }, method = RequestMethod.PUT)
+	@RequestMapping(value = "/references", produces = { "application/json" }, method = RequestMethod.PUT)
 	public ResponseEntity<Reference> updateReference(
 			@ApiParam(value = "Reference object that needs to be updated", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
