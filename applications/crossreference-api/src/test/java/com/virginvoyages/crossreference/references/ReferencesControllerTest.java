@@ -3,7 +3,6 @@ package com.virginvoyages.crossreference.references;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +27,6 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.DataUpdationException;
 import com.virginvoyages.model.crossreference.Reference;
 
