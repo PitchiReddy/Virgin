@@ -34,6 +34,7 @@ public class Reference   {
 	  return new ReferenceData()
 			  .nativeSourceIDValue(this.nativeSourceIDValue())
 			  .masterID(this.masterID())
+			  .targetTypeID(this.targetReferenceTypeID())
 			  .referenceTypeData(new ReferenceTypeData().referenceTypeID(this.referenceTypeID()));
 			  
   }

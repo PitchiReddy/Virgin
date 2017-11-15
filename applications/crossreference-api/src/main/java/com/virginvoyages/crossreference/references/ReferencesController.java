@@ -195,7 +195,7 @@ public class ReferencesController {
 			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
 			final Pageable pageable ) {
 		
-		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferenceByMasterId(masterID, pageable),HttpStatus.OK);
+		return new ResponseEntity<List<Reference>>(referencesAssembly.findReferenceByMasterId(masterID, targetTypeID, pageable),HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {

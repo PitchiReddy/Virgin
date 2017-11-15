@@ -125,8 +125,8 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	}
 	
 	@Override
-	public List<Reference> findReferenceByMasterId(String masterId, Pageable pageable) {
-		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterID(masterId,pageable);
+	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
+		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterIDAndTargetTypeID(masterId,targetTypeID,pageable);
 	return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
 	  stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}

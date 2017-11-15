@@ -23,7 +23,7 @@ public interface ReferencesAssembly {
 
 	public List<Reference> findReferences();
 
-	public List<Reference> findReferenceByMasterId(String masterID, Pageable pageable);
+	public List<Reference> findReferenceByMasterId(String masterID, String targetTypeID, Pageable pageable);
 
 	public Reference updateReference(Reference body);
 
