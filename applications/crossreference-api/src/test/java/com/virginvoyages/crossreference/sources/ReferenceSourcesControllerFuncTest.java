@@ -157,20 +157,24 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
-		
+	 
 	}
 	
-	@Test
-	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowSomeException() {
-		given().
+	/*@Test
+	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowMandatoryFieldsMissingException() {
+	
+		//create reference source
+		 given().
 				contentType("application/json").
-				get("/xref-api/v1/sources/findByName/").
-        then().
-                assertThat().statusCode(404).
-                assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
-		        log().
-		   		all();
-	}
+				get("/xref-api/v1/sources/findByName/")
+		
+		.then()
+		.assertThat().statusCode(HttpStatus.SC_NOT_FOUND)
+		.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+		.log()
+		.all();
+		
+	}*/
 	
 	
 	@Test
