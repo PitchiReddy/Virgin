@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,21 +36,25 @@ public class PreferenceAssemblyImplTest  {
 	@Autowired
 	private MockDataHelper mockDataHelper;
 	
+	@Mock
+	private SailorQueryHelper sailorQueryHelper;
+	
 	@Before
     public void setUp() throws Exception {
          MockitoAnnotations.initMocks(this);
     }
 	
 	@Test
-	public void givenValidSailorIdWithPreferencesFindSailorPreferencesShouldReturnPreferences() {
-		when(queryClientMock.getSailorPreferences(any(String.class))).thenReturn(mockDataHelper.getPreferenceDataQueryResultsData(true));
+	public void givenCRMQueryClientReturnsQueryResultsWithListOfPreferenceDataFindSailorPreferencesShouldReturnPreferences() {
+		when(sailorQueryHelper.generateGetSailorPreferencesQuery(any(String.class))).thenReturn(new String());
+		when(queryClientMock.getSailorPreferences(new String())).thenReturn(mockDataHelper.getPreferenceDataQueryResultsData(true));
 		PreferencesEmbedded preferencesEmbedded = preferenceAssembly.findSailorPreferences(mockDataHelper.getSailorId());
 		assertThat(preferencesEmbedded.preferences(), is(notNullValue()));
         assertThat(preferencesEmbedded.preferences().size(), equalTo(1));
 	}
 	
 	@Test
-	public void givenValidSailorIdWithoutPreferencesFindSailorPreferencesShouldReturnEmptyList() {
+	public void givenCRMQueryClientReturnsQueryResultsWithEmptyListFindSailorPreferencesShouldReturnEmptyList() {
 		when(queryClientMock.getSailorPreferences(any(String.class))).thenReturn(mockDataHelper.getPreferenceDataQueryResultsData(false));
 		PreferencesEmbedded preferencesEmbedded = preferenceAssembly.findSailorPreferences(mockDataHelper.getSailorId());
 		assertThat(preferencesEmbedded.preferences(), is(notNullValue()));

@@ -1,7 +1,6 @@
 package com.virginvoyages.preference;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.hasSize;
@@ -54,15 +53,14 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 	}
 	
 	@Test
-	public void givenInvalidSailorFindSailorPreferencesShouldReturnInvalidQueryFilterException() throws Exception {
+	public void givenInvalidSailorFindSailorPreferencesShouldReturnEmptyList() throws Exception {
 		
         String sailorID = testDataHelper.getInvalidSailorID();
 		
-		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
+        given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
-	       .assertThat().statusCode(400)
-	       .assertThat().body("status",equalTo(400))
-	       .assertThat().body("exception", equalTo("com.virginvoyages.sailor.exceptions.InvalidQueryFilterException"))
+	       .assertThat().statusCode(200)
+	       .assertThat().body("_embedded.preferences",hasSize(0))
 	       .log()
 	       .all();
 		

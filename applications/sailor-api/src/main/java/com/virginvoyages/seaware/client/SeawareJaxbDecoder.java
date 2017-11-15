@@ -1,4 +1,4 @@
-package com.virginvoyages.crm.client;
+package com.virginvoyages.seaware.client;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
