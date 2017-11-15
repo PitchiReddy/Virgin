@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 
+import com.virginvoyages.JacksonEncoder;
 import com.virginvoyages.crm.SecretsUtility;
 
 import feign.RequestInterceptor;

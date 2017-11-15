@@ -1,4 +1,4 @@
-package com.virginvoyages.crm.client;
+package com.virginvoyages;
 
 import java.lang.reflect.Type;
 
