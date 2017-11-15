@@ -1,6 +1,5 @@
 package com.virginvoyages.sailor.helper;
 
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import com.virginvoyages.crm.data.AccountData;
@@ -65,6 +64,11 @@ public class SailorQueryHelper {
 		String query = queryString.toString();
 		return query;
 
+	}
+	
+	public String generateGetSailorPreferencesQuery(String sailorID) {
+		return "SELECT Id,Category__c,Preference_Options__c,Sailor_ID__c,Sub_Category__c FROM Sailor_Preference__c WHERE Sailor_ID__c = '"
+				+ sailorID + "'";
 	}
 
 }

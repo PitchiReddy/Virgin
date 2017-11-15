@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.preference.PreferencesEmbedded;
-import com.virginvoyages.sailor.exceptions.InvalidQueryFilterException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
@@ -43,8 +42,10 @@ public class PreferenceAssemblyImplIT  {
         assertThat(preferencesEmbedded.preferences().size(), equalTo(0));
 	}
 
-	@Test(expected=InvalidQueryFilterException.class)
-	public void givenInValidSailorIdFindSailorPreferencesShouldThrowInvalidQueryFilterException() {
-		preferenceAssembly.findSailorPreferences(testDataHelper.getInvalidSailorID());
+	@Test
+	public void givenInValidSailorIdFindSailorPreferencesShouldReturnEmptyPreferencesList() {
+		PreferencesEmbedded preferencesEmbedded = preferenceAssembly.findSailorPreferences("1");
+		assertThat(preferencesEmbedded.preferences(), is(notNullValue()));
+        assertThat(preferencesEmbedded.preferences().size(), equalTo(0));
 	}
 }

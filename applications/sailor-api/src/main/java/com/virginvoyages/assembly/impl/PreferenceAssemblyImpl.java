@@ -1,6 +1,7 @@
 package com.virginvoyages.assembly.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
@@ -8,6 +9,7 @@ import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.preference.PreferencesEmbedded;
+import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,26 +26,29 @@ public class PreferenceAssemblyImpl implements PreferenceAssembly {
 
 	@Autowired
 	private QueryClient queryClient;
+	
+	@Autowired
+	private SailorQueryHelper sailorQueryHelper;
 
 	@Override
 	public PreferencesEmbedded findSailorPreferences(String sailorID) {
-
-		String query = "SELECT Id,Category__c,Preference_Options__c,Sailor_ID__c,Sub_Category__c FROM Sailor_Preference__c WHERE Sailor_ID__c = '"
-				+ sailorID + "'";
 		
 		PreferencesEmbedded preferencesEmbedded = new PreferencesEmbedded();
 		
 		try {
-			QueryResultsData<PreferenceData> queryResultsData = queryClient.getSailorPreferences(query);
+			QueryResultsData<PreferenceData> queryResultsData = queryClient.getSailorPreferences(
+					sailorQueryHelper.generateGetSailorPreferencesQuery(sailorID));
 			for (PreferenceData preferenceData : queryResultsData.records()) {
 				preferencesEmbedded.addPreferencesItem(preferenceData.convertToPreferenceObject());
 			}
-			
+				
 		} catch (FeignException fe) {
-			/*if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
-				throw new InvalidQueryFilterException();
-			}*/
-			log.error("FeignException encountered - to be handled ",fe.getMessage());
+			if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
+				log.debug("Invalid sailorID used ==> "+sailorID);
+			}
+			log.error("FeignException encountered for sailor ==>  "+sailorID,fe);
+		} catch (Exception ex) {
+			log.error("Unknown Exception encountered in findSailorPreferences for sailor ==> "+sailorID,ex);
 		}
 		return preferencesEmbedded;
 	}
