@@ -117,6 +117,7 @@ public class ReferencesControllerTest {
 			 		.content("{ \"masterID\" : \""+reference.masterID()+
 					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
 					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"targetReferenceTypeID\" : \""+reference.targetReferenceTypeID()+
 					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
        }

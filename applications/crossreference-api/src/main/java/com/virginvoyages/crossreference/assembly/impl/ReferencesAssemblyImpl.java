@@ -124,11 +124,26 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		
 	}
 	
+	/**
+	 * Finding one or more references
+	 * @param masterId
+	 *            - input masterId.
+	 * @param targetTypeID
+	 *            - input targetTypeID.
+	 * @param pageable
+	 *            - input pageable.
+	
+	 * @return List Of Reference
+	 */
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
-		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,targetTypeID,pageable);
-	return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
-	  stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		Page<ReferenceData> referenceDataPage = null;
+		if (targetTypeID != null) {
+			referenceDataPage = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
+					targetTypeID, pageable);
+		}
+		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
+				stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}
 	
 	/**
