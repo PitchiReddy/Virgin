@@ -81,8 +81,15 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	
 	@Override
 	public ReferenceSource findReferenceSourceByName(String referenceSourceName) {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("Entering findReferenceSourceByName method in ReferenceSourcesAssemblyImpl for referenceSourceName ==> "+referenceSourceName);
+		try {
+		ReferenceSourceData referenceSourceData=  referenceSourceRepository.findByReferenceSource(referenceSourceName);
+		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
+		}
+		catch(Exception ex) {
+			log.error("Reference Source Name ==>"+referenceSourceName+"\nException encountered in findReferenceSourceByName",ex);
+			throw new UnknownException();
+		}
 	}
 
 	/**

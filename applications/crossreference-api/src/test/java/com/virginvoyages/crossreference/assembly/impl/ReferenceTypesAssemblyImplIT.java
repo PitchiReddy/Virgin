@@ -135,6 +135,30 @@ public class ReferenceTypesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	
 	}
+	// find by referenceType
+	@Test
+	public void givenValidReferenceTypeNameFindByReferenceTypeShouldReturnReferenceType() {
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
+
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+
+		ReferenceType findReferenceType = referenceTypesAssembly.findReferenceTypeByName(createdReferenceType.referenceType());
+		assertThat(findReferenceType.referenceTypeID(), is(notNullValue()));
+		assertThat(findReferenceType.referenceType(), equalTo(createdReferenceType.referenceType()));
+		assertThat(findReferenceType.referenceType(),is(notNullValue()));
+		
+		//cleanup
+		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+	}
+	
+	@Test
+	public void givenInValidReferenceTypeNameInFindByReferenceTypeShouldReturnNull() {
+		assertThat(referenceTypesAssembly.findReferenceTypeByName(
+				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	}
 	
 	//Delete
 	public void givenValidReferenceTypeDeleteReferenceTypeShouldDeleteReferenceType() {
