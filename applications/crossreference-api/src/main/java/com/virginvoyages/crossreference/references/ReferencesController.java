@@ -106,7 +106,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
 
-		if(StringUtils.isEmpty(referenceID)||referenceID.trim().length()==0) {
+		if(StringUtils.isBlank(referenceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referencesAssembly.deleteReferenceByID(referenceID);
@@ -133,7 +133,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
 	
 		log.debug("Find reference by ID");
-		if (StringUtils.isBlank(referenceID) || (referenceID.trim().length() == 0))
+		if (StringUtils.isBlank(referenceID))
 			throw new MandatoryFieldsMissingException();
 		if (referenceID.trim().length() >= 33) {
 			throw new ReferenceIDMaxRequestSizeException();
@@ -276,8 +276,8 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		if(StringUtils.isEmpty(body.referenceTypeID())||body.nativeSourceIDValue().trim().length()==0
-				||body.masterID().trim().length()==0||body.referenceTypeID().trim().length()==0) {
+		if(StringUtils.isBlank(body.referenceID()) || StringUtils.isBlank(body.referenceTypeID())
+				|| StringUtils.isBlank(body.nativeSourceIDValue())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		Reference reference =	referencesAssembly.updateReference(body);
