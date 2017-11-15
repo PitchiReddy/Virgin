@@ -194,7 +194,7 @@ public class ReferencesController {
 	
 		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,pageable);
 		log.debug("Returns one or more references ====>{}",listOfReference);
-		References references = new References().page(new Page().size(1)).embedded(new ReferencesEmbedded().references(listOfReference));
+		References references = new References().embedded(new ReferencesEmbedded().references(listOfReference));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
@@ -210,7 +210,7 @@ public class ReferencesController {
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
-		References references = new References().page(new Page().size(1)).embedded(new ReferencesEmbedded().references(referenceList));
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
