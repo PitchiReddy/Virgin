@@ -163,7 +163,14 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		return new ResponseEntity<ReferenceSource>(referenceSourcesAssembly.findReferenceSourceByName(referenceSourceName),HttpStatus.OK);
+		if(StringUtils.isBlank(referenceSourceName)) {
+			throw new MandatoryFieldsMissingException();
+		}
+		ReferenceSource referenceSource = referenceSourcesAssembly.findReferenceSourceByName(referenceSourceName);
+		if(null == referenceSource) {
+			throw new DataNotFoundException();
+		}
+		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
 
 	/**

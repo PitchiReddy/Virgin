@@ -185,6 +185,32 @@ public class ReferenceTypesControllerTest {
 		 		.andExpect(status().isOk());
 
 	}	
+	// find by reference Type by name
+	@Test 
+	public void givenAssemblyMethodReturnsValidReferenceTypeGetReferenceTypeByNameShouldSetReferenceTypeDetailsInReponse() throws Exception {
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		 
+		 given(referenceTypesAssembly.findReferenceTypeByName(referenceType.referenceType()))
+			.willReturn(referenceType);
+		//Test
+		 mvc.perform(
+				get("/types/findByName/" + referenceType.referenceType())
+				.contentType("application/json"))
+				.andExpect(jsonPath("referenceTypeID",equalTo(referenceType.referenceTypeID())))
+				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
+		 		.andExpect(status().isOk());
+	}
+	
+	@Test 
+	public void givenAssemblyMethodReturnsNullGetReferenceTypeByNameShouldSetDataNotFoundExceptionInReponse() throws Exception {
+		 given(referenceTypesAssembly.findReferenceTypeByName(testDataHelper.getRandomAlphabeticString()))
+			.willReturn(null);
+		//Test
+		 mvc.perform(
+				get("/types/findByName/" + testDataHelper.getRandomAlphabeticString())
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+	}
 	
 	@Test 
 	public void givenAssemblyMethodReturnsNullGetReferenceTypeByIdShouldSetDataNotFoundExceptionInReponse() throws Exception {
@@ -241,5 +267,6 @@ public class ReferenceTypesControllerTest {
 			        .andExpect(status().isOk());
 			
 	}
+	
 }
 

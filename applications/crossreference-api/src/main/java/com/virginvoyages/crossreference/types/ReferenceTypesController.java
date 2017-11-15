@@ -144,12 +144,18 @@ public class ReferenceTypesController {
 			@ApiResponse(code = 200, message = "Successful response", response = ReferenceSource.class) })
 	@RequestMapping(value = "/types/findByName/{referenceTypeName}", produces = {
 			"application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<ReferenceType> getReferenceSourceByName(
+	public ResponseEntity<ReferenceType> getReferenceTypeByName(
 			@ApiParam(value = "The reference type name", required = true) @PathVariable("referenceTypeName") String referenceTypeName,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
-		return new ResponseEntity<ReferenceType>(referenceTypesAssembly.findReferenceTypeByName(referenceTypeName),HttpStatus.OK);
+		if(StringUtils.isBlank(referenceTypeName)) {
+			throw new MandatoryFieldsMissingException();
+		}
+		ReferenceType referenceType = referenceTypesAssembly.findReferenceTypeByName(referenceTypeName);
+		if(null == referenceType) {
+			throw new DataNotFoundException();
+		}
+		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 	/**
 	 * find types by using below parameters
