@@ -30,7 +30,7 @@ public class CrossreferenceClientTest {
     public void findByTypeTestForExistingReferenceTypeID() {
     	
 		Reference reference = testDataHelper.getReferenceMockObject();
-    	List<Reference> listOfReference = referenceClient.findByType(reference);
+    	List<Reference> listOfReference = referenceClient.findByType(reference).embedded().references();
     	assertThat(listOfReference, is(notNullValue()));
     	for(Reference ref: listOfReference) {
 	    	assertThat(ref, is(notNullValue()));

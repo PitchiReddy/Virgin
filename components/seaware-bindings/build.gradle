@@ -1,6 +1,5 @@
 apply from: '../../java.gradle'
 apply plugin: "jacoco"
-//apply plugin: "com.github.spotbugs"
 
 group = 'com.virginvoyages.seaware.bindings'
 version = '0.0.1-SNAPSHOT'
@@ -47,9 +46,4 @@ jacocoTestReport {
 }
 
 
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    reports {
-        xml.enabled false
-        html.enabled true
-    }
-}
+
