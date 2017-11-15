@@ -34,8 +34,6 @@ public class ReferenceData {
 	@Column(name="MASTER_ID")
 	private String masterID;
 	
-	private String targetTypeID;
-
 	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REFERENCE_TYPE_ID")
 	private ReferenceTypeData referenceTypeData;

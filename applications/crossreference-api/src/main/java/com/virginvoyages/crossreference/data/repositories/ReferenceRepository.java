@@ -12,7 +12,7 @@ import com.virginvoyages.crossreference.data.entities.ReferenceData;
 @Repository
 public interface ReferenceRepository extends PagingAndSortingRepository<ReferenceData, Serializable>{
 
-	Page<ReferenceData> findByMasterIDAndTargetTypeID(String masterID, String targetTypeID, Pageable pageable);
+	Page<ReferenceData> findByMasterIDAndReferenceTypeDataReferenceTypeID(String masterID, String targetTypeID, Pageable pageable);
 	
 	
 }
