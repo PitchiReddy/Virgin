@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.exceptions.DataAccessException;
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
@@ -40,6 +41,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 
 	@Autowired
 	private ReferenceRepository referenceRepository;
+	
+	@Autowired
+	private ReferenceTypeRepository  referenceTypeRepository;
 	
 
 	/**
@@ -139,7 +143,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
 		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
 		Page<ReferenceData> referenceDataPage = null;
-		if (!referenceRepository.exists(targetTypeID)) {
+		if (!referenceTypeRepository.exists(targetTypeID)) {
 			referenceDataPage = referenceRepository.findByMasterID(masterId, pageable);
 
 		} else {
