@@ -1,4 +1,4 @@
-package com.virginvoyages.crm.client;
+package com.virginvoyages.seaware.client;
 
 import org.springframework.context.annotation.Bean;
 

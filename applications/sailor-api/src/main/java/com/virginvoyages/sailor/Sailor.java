@@ -136,7 +136,7 @@ public class Sailor implements Identifiable<String> {
     }
     
     public Sailor associatePreferences(PreferencesEmbedded preferencesEmbedded) {    	
-    	return preferencesEmbedded == null ? this : this.preferences(preferencesEmbedded.preferences());
+    	return preferencesEmbedded == null || preferencesEmbedded.preferences().isEmpty() ? this : this.preferences(preferencesEmbedded.preferences());
     }
     
     public Sailor associateSailingHistory(BookingsEmbedded bookingsEmbedded) {

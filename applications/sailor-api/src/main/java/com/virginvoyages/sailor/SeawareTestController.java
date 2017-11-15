@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.virginvoyages.crm.client.SeawareClient;
+import com.virginvoyages.seaware.client.SeawareClient;
 import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.OTAProfileReadRS;
 import com.virginvoyages.seaware.data.OTAReadRQ;
