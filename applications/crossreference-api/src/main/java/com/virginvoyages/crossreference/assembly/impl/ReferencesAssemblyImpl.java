@@ -137,13 +137,17 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 */
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
+		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
 		Page<ReferenceData> referenceDataPage = null;
-		if (targetTypeID != null) {
+		if (!referenceRepository.exists(targetTypeID)) {
+			referenceDataPage = referenceRepository.findByMasterID(masterId, pageable);
+
+		} else {
 			referenceDataPage = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
 					targetTypeID, pageable);
 		}
-		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
-				stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}
 	
 	/**
