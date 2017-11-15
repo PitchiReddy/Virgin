@@ -1,7 +1,6 @@
 package com.virginvoyages.assembly.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
@@ -9,7 +8,6 @@ import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.preference.PreferencesEmbedded;
-import com.virginvoyages.sailor.exceptions.InvalidQueryFilterException;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +40,9 @@ public class PreferenceAssemblyImpl implements PreferenceAssembly {
 			}
 			
 		} catch (FeignException fe) {
-			if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
+			/*if (HttpStatus.BAD_REQUEST.value() == fe.status()) {
 				throw new InvalidQueryFilterException();
-			}
+			}*/
 			log.error("FeignException encountered - to be handled ",fe.getMessage());
 		}
 		return preferencesEmbedded;

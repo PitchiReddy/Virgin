@@ -109,6 +109,26 @@ public class ReferenceSourcesAssemblyImplIT {
 		// cleanup
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
+	
+	//Find By ReferenceSource Name
+	@Test
+	public void givenValidReferenceSourceNameFindByReferenceSourceShouldReturnReferenceSource() {
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly
+				.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
+
+		ReferenceSource findReferenceSource = referenceSourcesAssembly.findReferenceSourceByName(createdReferenceSource.referenceSource());
+		assertThat(findReferenceSource.referenceSourceID(), is(notNullValue()));
+		assertThat(findReferenceSource.referenceSource(), equalTo(createdReferenceSource.referenceSource()));
+
+		// cleanup
+		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
+	}
+	
+	@Test
+	public void givenInValidReferenceSourceNameFindByReferenceSourceShouldReturnNull() {
+		assertThat(referenceSourcesAssembly.findReferenceSourceByName(	
+		        testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	}
 
 	@Test
 	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldReturnNull() {
@@ -118,7 +138,7 @@ public class ReferenceSourcesAssemblyImplIT {
 
 	//Delete
 	@Test
-	public void givenValidReferenceSourceDeleteReferenceSourceShouldDeleteReferenceSource() {
+	public void givenValidReferenceSourceIDDeleteReferenceSourceShouldDeleteReferenceSource() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
 

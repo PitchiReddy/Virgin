@@ -3,4 +3,9 @@
        <Class name="com.virginvoyages.FunctionalTestSupport" />
        <Bug code="ST" />
      </Match>
+     
+     <Match>
+       <Class name="com.virginvoyages.sailor.helper.TestDataCleaner" />
+       <Bug code="UC" />
+     </Match>
 </FindBugsFilter>

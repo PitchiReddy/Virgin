@@ -19,6 +19,13 @@ dependencies {
     compile project(":components:logging-starter")
     compile project(":components:hbase-starter")
     compile project(":components:shared-code")
+    compile project(":components:seaware-bindings")
+    runtime group: 'com.netflix.feign', name: 'feign-core', version: '8.18.0'
+    compile group: 'com.netflix.feign', name: 'feign-okhttp', version: '8.18.0'
+    compile group: 'com.netflix.feign', name: 'feign-jaxb', version: '8.18.0'
+    
+    compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-xml-provider', version: '2.8.10'
+    compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.9.0'
     
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
@@ -119,7 +126,7 @@ jacocoTestReport {
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
     excludeFilter=file("spotBugsExclude.xml")
-	reports {
+    reports {
         xml.enabled false
         html.enabled true
     }
