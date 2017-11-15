@@ -101,12 +101,37 @@ public class ReferenceSourcesAssemblyImplTest {
 		assertThat(referenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
 	}
 	
+	// Find By Reference Source Name
+	@Test
+	public void givenRepositoryReturnsValidReferenceSourceDatafindByReferenceSourceNameShouldReturnReferenceSource() {
+		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		when(referenceSourceRepository.findByReferenceSource((any(String.class)))).thenReturn(mockReferenceSourceData);
+		ReferenceSource referenceSource = referenceSourcesAssemblyImpl
+				.findReferenceSourceByName(testDataHelper.getRandomAlphabeticString());
+		assertThat(referenceSource.referenceSourceID(), is(notNullValue()));
+		assertThat(referenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
+	}
 	
-	public void givenRepositoryReturnsNullfindReferenceSourceByIDShouldReturnNull() {
+	@Test
+	public void givenRepositoryReturnsNullInvalidSourceIDInfindReferenceSourceByID() {
 		when(referenceSourceRepository.findOne((any(String.class)))).thenReturn(null);
 		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByID(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	
+	}
+	
+	@Test
+	public void givenRepositoryReturnsNullInvalidReferenceSourceNameInfindByReferenceSource() {
+		when(referenceSourceRepository.findByReferenceSource((any(String.class)))).thenReturn(null);
+		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByName(
+				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
+	}
+	
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferenceSourceByNameShouldThrowUnknownException() {
+		when(referenceSourceRepository.findByReferenceSource((any(String.class)))).thenThrow(new RuntimeException());
+		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByName(
+				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
 	
 	@Test(expected = UnknownException.class)

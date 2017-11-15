@@ -167,6 +167,28 @@ public class ReferenceTypeRepositoryTest {
 	}
 	
 	@Test 
+	public void testFindByreferenceTypeNameWithValidReferenceTypeShouldReturnsReferenceType() {
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
+				testDataHelper.getReferenceSourceDataEntity());
+		
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(
+				testDataHelper.getReferenceTypeDataEntity(createdReferenceSource));
+		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findByReferenceType(createdReferenceType.referenceType());
+		assertThat(retrievedReferenceType, notNullValue());
+		assertThat(createdReferenceType.referenceType(), equalTo(retrievedReferenceType.referenceType()));
+		assertThat(createdReferenceType.referenceTypeID(), equalTo(retrievedReferenceType.referenceTypeID()));
+		
+		//cleanup
+		referenceTypeRepository.delete(retrievedReferenceType.referenceTypeID());
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+	}
+	
+	@Test
+	public void testFindByreferenceTypeNameWithInValidReferenceTypeShouldReturnsNull() {
+		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findByReferenceType(testDataHelper.getRandomAlphabeticString());
+		assertThat(retrievedReferenceType, nullValue());
+	}
+	@Test 
 	public void testFindByIDWithInvalidIDReturnsNull() {
 		ReferenceTypeData retrievedReferenceType = referenceTypeRepository.findOne(testDataHelper.getRandomAlphabeticString());
 		assertThat(retrievedReferenceType, nullValue());

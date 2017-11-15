@@ -103,7 +103,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 			
 	}
 	
-	//Find By ID
+	//Find By Reference TypeID
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() {
 
@@ -126,6 +126,28 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
+	//find by valid referenceType name
+	@Test
+	public void givenValidReferenceTypeNameGetReferenceTypeByNameShouldReturnReferenceType() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+		
+		//Test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/findByName/" + referenceTypeJson.getString("referenceType")).
+		then().
+				assertThat().statusCode(200).
+				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+				assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
+				log().
+				all();
+		   
+		//cleanup
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+	}
+	
+	//find by invalid referenceTypeID
 	@Test
 	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowDataNotFoundException() {
 		
@@ -139,6 +161,31 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				log().
 				all();
 		   
+	}
+	//find by invalid reference type
+	@Test
+	public void givenInvalidReferenceTypeNameGetReferenceTypeByNameShouldThrowDataNotFoundException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/findByName/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				log().
+				all();		
+	}
+	
+	@Test
+	public void givenNoReferenceTypeNameInRequestGetReferenceTypeByNameShouldThrowSomeException() {
+		//Test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/findByName/"+" ").
+		then().
+				assertThat().statusCode(404).
+				body("exception",equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				log().
+				all();
 	}
 	
 	@Test
