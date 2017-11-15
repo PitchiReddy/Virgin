@@ -43,6 +43,7 @@ public class ReferenceData {
 				.referenceID(String.valueOf(this.referenceID()))
 				.nativeSourceIDValue(String.valueOf(this.nativeSourceIDValue()))
 				.masterID(String.valueOf(this.masterID()))
+				.targetReferenceTypeID(this.referenceTypeData().referenceTypeID())
 				.referenceTypeID(String.valueOf(this.referenceTypeData().referenceTypeID()));
 				
 				
