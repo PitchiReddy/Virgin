@@ -124,8 +124,8 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		return preferenceAssembly.findSailorPreferences(sailorID);
 	}
 	
-	private Sailor convertAccountDataToSailor(AccountData accoundData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
-		return accoundData.convertToSailorObject()
+	private Sailor convertAccountDataToSailor(AccountData accountData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
+		return accountData.convertToSailorObject()
 				.associatePreferences(preferencesEmbedded)
 				.associateSailingHistory(bookingsEmbedded);
 	}
