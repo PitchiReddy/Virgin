@@ -102,6 +102,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
+		parameters.put("targetReferenceTypeID", reference.referenceID());
 		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 
 		
