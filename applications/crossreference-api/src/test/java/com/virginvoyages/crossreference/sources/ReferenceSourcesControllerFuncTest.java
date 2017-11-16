@@ -90,28 +90,6 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		.all();
 		
 	}
-
-	//Get reference source by ID
-	@Test
-	public void givenValidReferenceSourceIDGetReferenceSourceByIdShouldReturnReferenceSource() {
-
-		//Create test reference source
-		JsonPath createdReferenceJson = createTestReferenceSource();
-			
-		//Test by find
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
-		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID"))).
-				assertThat().body("referenceSource", equalTo(createdReferenceJson.getString("referenceSource"))).
-				log().
-				all();
-		   
-		//cleanup
-		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
-	}
 	
 	//find by Reference source name
 	@Test
@@ -139,13 +117,46 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				contentType("application/json").
 				get("/xref-api/v1/sources/findByName/" + testDataHelper.getRandomAlphanumericString()).
 		then().
-				assertThat().statusCode(404).
+				assertThat().statusCode(HttpStatus.SC_NOT_FOUND).
 				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 
 	}
 	
+	//Get reference source by ID
+	@Test
+	public void givenValidReferenceSourceIDGetReferenceSourceByIdShouldReturnReferenceSource() {
+
+		//Create test reference source
+		JsonPath createdReferenceJson = createTestReferenceSource();
+				
+		//Test by find
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
+		then().
+				assertThat().statusCode(200).
+				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID"))).
+				assertThat().body("referenceSource", equalTo(createdReferenceJson.getString("referenceSource"))).
+				log().
+				all();
+			   
+		//cleanup
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));
+	}
+		
+	@Test
+	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowBadRequestException() {
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/sources/").
+		then().
+		        assertThat().statusCode(400).
+		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+	            log().
+	       		all();
+	}
 	
 	@Test
 	public void givenInValidReferenceSourceIDGetReferenceSourceByIdShouldThrowDataNotFoundException() {
@@ -159,36 +170,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				all();
 	 
 	}
-	
-	/*@Test
-	public void givenNoReferenceSourceNameInRequestGetReferenceSourceByNameShouldThrowMandatoryFieldsMissingException() {
-	
-		//create reference source
-		 given().
-				contentType("application/json").
-				get("/xref-api/v1/sources/findByName/")
 		
-		.then()
-		.assertThat().statusCode(HttpStatus.SC_NOT_FOUND)
-		.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
-		.log()
-		.all();
-		
-	}*/
-	
-	
-	@Test
-	public void givenNoReferenceSourceIDInRequestGetReferenceSourceByIdShouldThrowBadRequestException() {
-	 given().
-				contentType("application/json").
-				get("/xref-api/v1/sources/").
-		then().
-		        assertThat().statusCode(400).
-		        assertThat().body("exception", equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
-	            log().
-	       		all();
-	}
-	
 	//Delete Reference Source By ID
 	@Test
 	public void givenValidReferenceSourceDeleteReferenceSourceByIdShouldDeleteReferenceSource() {
@@ -299,7 +281,6 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	} 
 	
 	//Find sources
-	
 	@Test
 	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSources() {
 		

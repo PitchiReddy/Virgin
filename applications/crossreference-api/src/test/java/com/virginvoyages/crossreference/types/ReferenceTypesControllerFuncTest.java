@@ -126,7 +126,37 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
-	//find by valid referenceType name
+	@Test
+	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowDataNotFoundException() {
+			
+		//Test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
+		then().
+				assertThat().statusCode(404).
+				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				log().
+				all();
+			   
+	}
+		
+	@Test
+	public void givenNoReferenceTypeIDInRequestGetReferenceTypeByIdShouldThrowMissingServletRequestParameterException() {
+		
+		//Test
+		given().
+				contentType("application/json").
+				get("/xref-api/v1/types/"+" ").
+		then().
+				assertThat().statusCode(400).
+				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
+				log().
+				all();
+				
+	}
+	
+	//find by referenceType name
 	@Test
 	public void givenValidReferenceTypeNameGetReferenceTypeByNameShouldReturnReferenceType() {
 		JsonPath referenceTypeJson = createTestReferenceType();
@@ -147,22 +177,6 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
-	//find by invalid referenceTypeID
-	@Test
-	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowDataNotFoundException() {
-		
-		//Test
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
-		then().
-				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
-				log().
-				all();
-		   
-	}
-	//find by invalid reference type
 	@Test
 	public void givenInvalidReferenceTypeNameGetReferenceTypeByNameShouldThrowDataNotFoundException() {
 		given().
@@ -174,34 +188,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				log().
 				all();		
 	}
-	
-	@Test
-	public void givenNoReferenceTypeNameInRequestGetReferenceTypeByNameShouldThrowSomeException() {
-		//Test
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/types/findByName/"+" ").
-		then().
-				assertThat().statusCode(404).
-				body("exception",equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
-				log().
-				all();
-	}
-	
-	@Test
-	public void givenNoReferenceTypeIDInRequestGetReferenceTypeByIdShouldThrowMissingServletRequestParameterException() {
 		
-		//Test
-		given().
-				contentType("application/json").
-				get("/xref-api/v1/types/"+" ").
-		then().
-				assertThat().statusCode(400).
-				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
-				log().
-				all();
-				
-	}
 	
 	//Delete
 	@Test
