@@ -113,7 +113,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	}
 	
 	@Test
-	public void givenRepositoryReturnsNullInvalidSourceIDInfindReferenceSourceByID() {
+	public void givenRepositoryReturnsNullfindReferenceSourceByIDShouldReturnNull() {
 		when(referenceSourceRepository.findOne((any(String.class)))).thenReturn(null);
 		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByID(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
@@ -121,7 +121,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	}
 	
 	@Test
-	public void givenRepositoryReturnsNullInvalidReferenceSourceNameInfindByReferenceSource() {
+	public void givenRepositoryReturnsNullfindReferenceSourceByNameShouldReturnNull() {
 		when(referenceSourceRepository.findByReferenceSource((any(String.class)))).thenReturn(null);
 		assertThat(referenceSourcesAssemblyImpl.findReferenceSourceByName(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));

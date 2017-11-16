@@ -52,7 +52,7 @@ public class ReferenceSourceRepositoryTest {
 		assertThat(createdReferenceSource.referenceSourceID(), equalTo(retrievedReferenceSource.referenceSourceID()));
 		
 		//cleanup
-	//	referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
 	}
 	
@@ -118,6 +118,13 @@ public class ReferenceSourceRepositoryTest {
 	}
 	
 	@Test 
+	public void testFindByIDWithInvalidIDReturnsNull() {
+		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(testDataHelper.getRandomAlphabeticString());
+		assertThat(retrievedReferenceSource, nullValue());
+	}
+	
+	//Find By Name
+	@Test 
 	public void testFindByreferenceSourceNameWithValidReferenceSource() {
 		ReferenceSourceData referenceSourceDataToCreate = testDataHelper.getReferenceSourceDataEntity();
 		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceDataToCreate);
@@ -132,19 +139,12 @@ public class ReferenceSourceRepositoryTest {
 		referenceSourceRepository.delete(retrievedReferenceSource.referenceSourceID());
 	}
 	
-	@Test 
-	public void testFindByIDWithInvalidIDReturnsNull() {
-		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findOne(testDataHelper.getRandomAlphabeticString());
-		assertThat(retrievedReferenceSource, nullValue());
-	}
-	
 	@Test
 	public void testFindByreferenceSourceNameWithInValidReferenceSourceReturnsNull() {
 		ReferenceSourceData retrievedReferenceSource = referenceSourceRepository.findByReferenceSource(testDataHelper.getRandomAlphabeticString());
 		assertThat(retrievedReferenceSource, nullValue());
-	
-		
 	}
+		
 	//Find All
 	@Test 
 	public void testFindAll() {

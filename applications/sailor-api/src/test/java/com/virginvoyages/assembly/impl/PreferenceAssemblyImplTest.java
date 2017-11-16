@@ -46,8 +46,8 @@ public class PreferenceAssemblyImplTest  {
 	
 	@Test
 	public void givenCRMQueryClientReturnsQueryResultsWithListOfPreferenceDataFindSailorPreferencesShouldReturnPreferences() {
-		when(sailorQueryHelper.generateGetSailorPreferencesQuery(any(String.class))).thenReturn(new String());
-		when(queryClientMock.getSailorPreferences(new String())).thenReturn(mockDataHelper.getPreferenceDataQueryResultsData(true));
+		when(sailorQueryHelper.generateGetSailorPreferencesQuery(any(String.class))).thenReturn("");
+		when(queryClientMock.getSailorPreferences("")).thenReturn(mockDataHelper.getPreferenceDataQueryResultsData(true));
 		PreferencesEmbedded preferencesEmbedded = preferenceAssembly.findSailorPreferences(mockDataHelper.getSailorId());
 		assertThat(preferencesEmbedded.preferences(), is(notNullValue()));
         assertThat(preferencesEmbedded.preferences().size(), equalTo(1));
