@@ -148,6 +148,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type name", required = true) @PathVariable("referenceTypeName") String referenceTypeName,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
+		
 		if(StringUtils.isBlank(referenceTypeName)) {
 			throw new MandatoryFieldsMissingException();
 		}

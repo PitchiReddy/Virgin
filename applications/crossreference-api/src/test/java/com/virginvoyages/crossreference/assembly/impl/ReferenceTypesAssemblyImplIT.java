@@ -137,7 +137,7 @@ public class ReferenceTypesAssemblyImplIT {
 	}
 	// find by referenceType
 	@Test
-	public void givenValidReferenceTypeNameFindByReferenceTypeShouldReturnReferenceType() {
+	public void givenValidReferenceTypeNameFindByReferenceTypeNameShouldReturnReferenceType() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
 
@@ -155,7 +155,7 @@ public class ReferenceTypesAssemblyImplIT {
 	}
 	
 	@Test
-	public void givenInValidReferenceTypeNameInFindByReferenceTypeShouldReturnNull() {
+	public void givenInValidReferenceTypeNameFindByReferenceTypeNameShouldReturnNull() {
 		assertThat(referenceTypesAssembly.findReferenceTypeByName(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
