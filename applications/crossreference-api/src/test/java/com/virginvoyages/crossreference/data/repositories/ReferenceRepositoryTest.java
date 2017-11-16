@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
@@ -190,6 +192,29 @@ public class ReferenceRepositoryTest {
 	
 	@Test
 	public void testFindReferenceByMaster() {
+		Page<ReferenceData> retrievedReference = null;
+		final Pageable pageable = null;
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(referenceSourceData);
+
+		ReferenceTypeData referenceTypeDataToCreate = testDataHelper.getReferenceTypeDataEntity(createdReferenceSource);
+		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeDataToCreate);
+
+		ReferenceData referenceData = testDataHelper.getReferenceDataEntity(createdReferenceType);
+		ReferenceData createdReference = referenceRepository.save(referenceData);
+		if (!referenceTypeRepository.exists(testDataHelper.getTargetTypeID())) {
+			retrievedReference = referenceRepository.findByMasterID(createdReference.masterID(), pageable);
+
+		} else {
+			retrievedReference = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(
+					createdReference.masterID(), testDataHelper.getTargetTypeID(), pageable);
+		}
+		assertThat(retrievedReference, notNullValue());
+
+		// cleanup
+		referenceRepository.delete(createdReference.referenceID());
+		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
+		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 
 	}
 	

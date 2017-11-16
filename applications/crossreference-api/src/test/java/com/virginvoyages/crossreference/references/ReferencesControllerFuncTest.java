@@ -2,20 +2,13 @@ package com.virginvoyages.crossreference.references;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.hasSize;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
@@ -299,6 +292,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 						+ createdReferenceJson.getString("targetReferenceTypeID"))
 				.then().assertThat().statusCode(200).log().all();
 
+		//cleanup
 		deleteTestReference(createdReferenceJson.getString("referenceID"));
 		deleteTestReferenceType(createdReferenceJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
