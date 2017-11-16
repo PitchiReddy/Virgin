@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +32,10 @@ import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.exceptions.DataAccessException;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.DataUpdationException;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.Reference;
 
 @RunWith(SpringRunner.class)
@@ -179,4 +182,13 @@ public class ReferencesAssemblyImplTest {
 		assertThat(references.get(0).referenceTypeID() , equalTo(pagedReferenceData.getContent().get(0).referenceTypeData().referenceTypeID()));
 
 	}
+	
+	@Test(expected=DataAccessException.class)
+	public void deleteReferenceByIDDataIntegrityViolationException() {
+		doThrow(new DataIntegrityViolationException("Wrong reference ID")).when(referenceRepository).delete(any(String.class));
+		referencesAssemblyImpl.deleteReferenceByID(testDataHelper.getRandomAlphabeticString());
+
+	}
+	
+
 }
