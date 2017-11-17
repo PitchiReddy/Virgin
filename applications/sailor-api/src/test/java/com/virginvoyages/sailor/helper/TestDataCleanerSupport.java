@@ -21,7 +21,7 @@ import com.virginvoyages.sailor.SailorMapper;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestDataCleaner {
+public class TestDataCleanerSupport {
 	
 	@Autowired
 	private QueryClient queryClient;
