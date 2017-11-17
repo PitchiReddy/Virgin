@@ -21,7 +21,7 @@ import com.virginvoyages.sailor.helper.MockDataHelper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BookingAssemblyImplITest {
+public class BookingAssemblyImplTest {
 
 	@Mock
     private BookingsDAOImpl bookingsDAOImpl;

@@ -5,7 +5,7 @@
      </Match>
      
      <Match>
-       <Class name="com.virginvoyages.sailor.helper.TestDataCleaner" />
+       <Class name="com.virginvoyages.sailor.helper.TestDataCleanerSupport" />
        <Bug code="UC" />
      </Match>
 </FindBugsFilter>
