@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataUpdationException;
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
@@ -135,7 +136,7 @@ public class ReferenceTypesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	
 	}
-	// find by referenceType
+	//Find By Name
 	@Test
 	public void givenValidReferenceTypeNameFindByReferenceTypeNameShouldReturnReferenceType() {
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
@@ -202,6 +203,80 @@ public class ReferenceTypesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 	}
 	
+	@Test
+	public void givenValidReferenceTypeAndValidSourceIDUpdateReferenceTypeShouldUpdateAssociatedSourceID() {
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+								testDataHelper.getReferenceSourceBusinessEntity());
+		
+		ReferenceSource createdReferenceSource1 = referenceSourcesAssembly.addReferenceSource(
+				testDataHelper.getReferenceSourceBusinessEntity());
+		
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+		
+		createdReferenceType.referenceSourceID(createdReferenceSource1.referenceSourceID());
+		ReferenceType updatedReferenceType = referenceTypesAssembly.updateReferenceType(createdReferenceType);
+		assertThat(updatedReferenceType.referenceTypeID(), equalTo(createdReferenceType.referenceTypeID()));
+		assertThat(updatedReferenceType.referenceSourceID(), equalTo(createdReferenceSource1.referenceSourceID()));
+		
+		//cleanup
+		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource1.referenceSourceID());
+	}
+	
+	@Test
+	public void givenValidReferenceTypeAndInvalidSourceIDUpdateReferenceTypeShouldThrowDataUpdationException() {
+			
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
+								testDataHelper.getReferenceSourceBusinessEntity());
+			
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+		
+		createdReferenceType.referenceSourceID("1");
+		
+		try {
+			referenceTypesAssembly.updateReferenceType(createdReferenceType);
+		}catch(DataUpdationException duex) {
+			assert(true);
+			return;
+		}finally {
+			referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+			referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		}		
+		
+	}
+	
+	@Test(expected = DataUpdationException.class)
+	public void givenInvalidTypeIDUpdateReferenceTypeShouldThrowDataUpdationException() {
+		referenceTypesAssembly.updateReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
+	}
+
+	/*@Test
+	public void givenReferenceTypeNameToUpdateToAlreadyExistsUpdateReferenceTypeShouldThrowDataUpdationException() {
+		
+		ReferenceSource createdReferenceSource = referenceSourcesAssembly
+				.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
+		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+		ReferenceType createdReferenceType1 = referenceTypesAssembly.addReferenceType(
+				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
+		try {
+			referenceTypesAssembly.updateReferenceType(
+					createdReferenceType.referenceType(createdReferenceType1.referenceType()));
+		} catch (DataUpdationException duex) {
+			assert (true);
+			return;
+		} finally {
+			referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType1.referenceTypeID());
+			referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
+			referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+		}
+		assert (false);
+	}*/
+
+	//Find All
 	@Test
 	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
 		

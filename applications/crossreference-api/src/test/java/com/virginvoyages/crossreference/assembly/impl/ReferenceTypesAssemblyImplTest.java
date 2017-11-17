@@ -32,6 +32,7 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.exceptions.DataAccessException;
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataUpdationException;
 import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
@@ -147,25 +148,58 @@ public class ReferenceTypesAssemblyImplTest {
 	}
 
 	// Update
-
-	@Test
-	public void givenRepositoryReturnsUpdatedReferenceTypeDataUpdateReferenceTypeShouldReturnUpdatedEntity() {
-		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
-		when(referenceTypeRepository.findOne((any(String.class)))).thenReturn(mockReferenceTypeData);
-		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
-		ReferenceType updatedReferenceType = referenceTypesAssemblyImpl
-				.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
-		assertThat(updatedReferenceType, notNullValue());
-		assertThat(updatedReferenceType.referenceTypeID(), equalTo(mockReferenceTypeData.referenceTypeID()));
+	
+	@Test(expected = DataUpdationException.class)
+	public void givenRepositoryReturnsFalseForExistsUpdateReferenceTypeShouldThrowDataUpdateException() {
+		when(referenceTypeRepository.exists(testDataHelper.getRandomAlphabeticString())).thenReturn(false);
+		referenceTypesAssemblyImpl.updateReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
 	}
 
-	/*
-	 * @Test //TODO XREF TESTS public void
-	 * givenFineOneReturnsNoReferenceTypeDataUpdateReferenceTypeShouldThrowDataUpdationException
-	 * () {
-	 * 
-	 * }
-	 */
+	@Test(expected = DataUpdationException.class)
+	public void givenRepositoryThrowsDataIntegrityViolationExceptionUpdateReferenceTypeShouldThrowDataUpdateException() {
+		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
+		when(referenceTypeRepository.save(testDataHelper.getReferenceTypeDataEntity()))
+				.thenThrow(new DataIntegrityViolationException("test"));
+		referenceTypesAssemblyImpl.updateReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
+	}
+
+	@Test(expected=UnknownException.class)
+    public void givenRepositoryThrowsAnyOtherExceptionUpdateReferenceTypesShouldThrowUnknownException() {
+		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
+		when(referenceTypeRepository.save(testDataHelper.getReferenceTypeDataEntity()))
+				.thenThrow(new RuntimeException());
+		referenceTypesAssemblyImpl.updateReferenceType(testDataHelper.getReferenceTypeBusinessEntity());
+	}
+	@Test
+	public void givenRepositoryReturnsTrueForExistsAndRepositoryReturnsUpdatedTypeUpdateReferenceTypeShouldReturnUpdatedEntity() {
+		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
+		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenReturn(mockReferenceTypeData);
+		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
+				.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+		assertThat(createdReferenceType, notNullValue());
+		assertThat(createdReferenceType.referenceTypeID(), notNullValue());
+		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
+	}
+	
+	@Test
+	public void givenRepositoryReturnsTrueForExistsAndRepositoryReturnsNullUpdateReferenceTypeShouldReturnNull() {
+		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
+		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenReturn(null);
+		assertThat(referenceTypesAssemblyImpl
+				.updateReferenceType(testDataHelper.getEmptyReferenceTypeBusinessEntity()), nullValue());
+	}
+	
+	@Test
+	public void givenRepositoryReturnsTrueForExistsAndRepositoryReturnsEntityWithNullIDUpdateReferenceTypeShouldReturnNull() {
+		//ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
+		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenReturn(testDataHelper.getReferenceTypeDataEntity().referenceTypeID(null));
+		assertThat(referenceTypesAssemblyImpl
+				.updateReferenceType(testDataHelper.getEmptyReferenceTypeBusinessEntity()), nullValue());
+	}
+	
+	//Find All
 
 	@Test
 	public void givenRepositoryReturnsListOfReferenceTypesDataFindTypesShouldReturnCorrespondingReferenceTypes() {
