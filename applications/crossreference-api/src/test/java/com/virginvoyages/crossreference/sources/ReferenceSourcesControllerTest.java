@@ -208,19 +208,7 @@ public class ReferenceSourcesControllerTest {
 				.contentType("application/json"))
 		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
-	
-	@Test
-	public void givenAssemblyReturnsNullGetReferenceSourceByNameShouldThrowDataNotFoundException() throws Exception {
-		String testReferenceSource = testDataHelper.getRandomAlphanumericString();
-		given(referenceSourcesAssembly.findReferenceSourceByName(testReferenceSource))
-			.willReturn(null);
-		 
-		mvc.perform(
-				 get("/sources/findByName/"+testReferenceSource)
-				.contentType("application/json"))
-		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
-	}
-	
+		
 	@Test
 	public void givenPathVariableContainsEmptySpaceGetReferenceSourceByIdShouldThrowMandatoryFieldsMissingException() throws Exception {
 		
@@ -234,17 +222,7 @@ public class ReferenceSourcesControllerTest {
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
 	
-	@Test
-	public void givenPathVariableContainsEmptySpaceGetReferenceSourceByNameIdShouldThrowMandatoryFieldsMissingException() throws Exception {
-		String testReferenceSource = testDataHelper.getRandomAlphanumericString();
-		given(referenceSourcesAssembly.findReferenceSourceByName(testReferenceSource))
-			.willReturn(null);
-		 
-		mvc.perform(
-				 get("/sources/  ")
-				.contentType("application/json"))
-		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
-	}
+	
 	@Test 
 	public void givenAssemblyReturnsValidReferenceSourceGetReferenceSourceByIdShouldSetReferenceSourceDetailsInResponse() throws Exception {
 		
@@ -263,6 +241,7 @@ public class ReferenceSourcesControllerTest {
 		 		.andExpect(status().isOk());
 	}	
 	
+	// Find By Name
 	@Test 
 	public void givenAssemblyReturnsValidReferenceSourceNameGetReferenceSourceByNameShouldSetReferenceSourceDetailsInResponse() throws Exception {
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
@@ -280,6 +259,16 @@ public class ReferenceSourcesControllerTest {
 		 		.andExpect(status().isOk());
 	}	
 	
+	@Test
+	public void givenAssemblyReturnsNullGetReferenceSourceByNameShouldThrowDataNotFoundException() throws Exception {
+		String testReferenceSource = testDataHelper.getRandomAlphanumericString();
+		given(referenceSourcesAssembly.findReferenceSourceByName(testReferenceSource)).willReturn(null);
+
+		mvc.perform(
+				get("/sources/findByName/" + testReferenceSource)
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+	}
 	
 	//Update Source
 	@Test
@@ -354,6 +343,22 @@ public class ReferenceSourcesControllerTest {
 				.content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+
 						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
 		        .andExpect(status().isOk());
+	}
+	
+	@Test
+	public void givenAssemblyMethodReturnsNullUpdateReferenceSourceShouldSetDataUpdationExceptionToResponse() throws Exception {
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		
+		given(referenceSourcesAssembly.updateReferenceSource(testDataHelper.getReferenceSourceBusinessEntity()))
+		.willReturn(null);
+		
+		//Test
+		mvc.perform(
+				put("/sources/")
+				.contentType("application/json")
+				.content("{ \"referenceSourceID\" : \""+referenceSource.referenceSourceID()+
+						"\",\"referenceSource\" : \""+referenceSource.referenceSource()+"\"}"))
+		        .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
 		
 }
