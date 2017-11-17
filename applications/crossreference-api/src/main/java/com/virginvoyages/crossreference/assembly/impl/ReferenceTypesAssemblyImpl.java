@@ -114,13 +114,13 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 			deleted = true;
 			
 		}catch(EmptyResultDataAccessException dax) {
-			log.error("Reference Type ID ==>"+referenceTypeID+"\nEmptyResultDataAccessException encountered in deleteReferenceTypeByID",dax);
+			log.error("Reference Type ID ==>"+referenceTypeID+"\n EmptyResultDataAccessException encountered in deleteReferenceTypeByID",dax);
 			throw new DataNotFoundException();
 		}catch(DataIntegrityViolationException dex) {
-			log.error("Reference Type ID ==>"+referenceTypeID+"\nDataIntegrityViolationException encountered in deleteReferenceTypeByID",dex);
+			log.error("Reference Type ID ==>"+referenceTypeID+"\n DataIntegrityViolationException encountered in deleteReferenceTypeByID",dex);
 			throw new DataAccessException();
 		}catch(Exception ex) {
-			log.error("Reference Type ID ==>"+referenceTypeID+"\nUnknown Exception encountered in deleteReferenceTypeByID",ex);
+			log.error("Reference Type ID ==>"+referenceTypeID+"\n Unknown Exception encountered in deleteReferenceTypeByID",ex);
 			throw new UnknownException();
 		}
 		return deleted;
@@ -136,15 +136,27 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public ReferenceType updateReferenceType(ReferenceType referenceType) {
 		log.debug("Entering updateReferenceType method in ReferenceTypesAssemblyImpl");
-		ReferenceTypeData referenceTypeData = null;
-		ReferenceTypeData findReferenceTypeData = referenceTypeRepository.findOne(referenceType.referenceTypeID());
-		if(null!=findReferenceTypeData) {
-			referenceTypeData = referenceTypeRepository.save(referenceType.convertToDataEntity());
-		}
-		else {
+		
+		if(!referenceTypeRepository.exists(referenceType.referenceTypeID())){
+			log.error("Reference type does not exist with ID ==> "+referenceType.referenceTypeID());
 			throw new DataUpdationException();
 		}
-		return referenceTypeData.convertToBusinessEntity();
+		try {
+			ReferenceTypeData referenceTypeData = referenceTypeRepository.save(referenceType.convertToDataEntity());
+			return (null == referenceTypeData || StringUtils.isBlank(referenceTypeData.referenceTypeID())) ? null : referenceTypeData.convertToBusinessEntity();
+		}catch(DataIntegrityViolationException dex) {	
+			log.error("DataIntegrityViolationException encountered while updating reference type",dex);
+			throw new DataUpdationException();
+		}catch(JpaObjectRetrievalFailureException jex) {
+			log.error("DataIntegrityViolationException encountered while updating reference type",jex);
+			//String errorMessage = null != jex.getRootCause() ? jex.getRootCause().getMessage():jex.getMessage();
+			throw new DataUpdationException();
+		}
+		catch(Exception ex) {
+			log.error("Exception encountered while updating reference type",ex);
+			throw new UnknownException();
+		}
+		
 	}
 
 	/**

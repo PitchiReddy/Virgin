@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exceptions.DataUpdationException;
 import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
@@ -201,11 +202,17 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 		
-		if(StringUtils.isEmpty(body.referenceTypeID())||body.referenceType().trim().length()==0||body.referenceSourceID().trim().length()==0
-				                      ||body.referenceTypeID().trim().length()==0) {
+		if(StringUtils.isBlank(body.referenceTypeID())||
+				StringUtils.isBlank(body.referenceSourceID()) ||
+				StringUtils.isBlank(body.referenceType())) {
+			
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType = referenceTypesAssembly.updateReferenceType(body);
+		if(null == referenceType) {
+			log.error("ReferenceType Not saved due to unknown reasons ==> "+body.referenceTypeID());
+			throw new DataUpdationException();
+		}
 		return new ResponseEntity<ReferenceType>(referenceType,HttpStatus.OK);
 	}
 }

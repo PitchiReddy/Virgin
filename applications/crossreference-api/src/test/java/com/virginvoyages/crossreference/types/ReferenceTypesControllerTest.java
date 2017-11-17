@@ -248,24 +248,91 @@ public class ReferenceTypesControllerTest {
 	
 	
 	//Update
-	@Test 
-	public void givenValidReferenceTypeUpdateReferenceTypeByIDShouldUpdateReferenceType() throws Exception {
-			
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-			
-		given(referenceTypesAssembly.updateReferenceType(referenceType))
-		.willReturn(referenceType);
+	@Test
+	public void givenRequestBodyHasNoReferenceTypeUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
 		
-			//Test
-			mvc.perform(
-					put("/types/")
-	  			    .contentType("application/json")
-			        //.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+"\"}"))
-	  			    .content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
-							"\",\"referenceType\" : \""+referenceType.referenceType()+
-							"\",\"referenceSourceID\" : \""+referenceType.referenceSourceID()+"\"}"))
-			        .andExpect(status().isOk());
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		
+		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
+				
+		//Test
+		mvc.perform(
+				put("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \"anyid\","
+						+ "\"referenceSourceID\" : \"anyid\"}"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+	
+	@Test
+	public void givenRequestBodyHasNoReferenceSourceIDUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		
+		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
+				
+				
+		//Test
+		mvc.perform(
+				put("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+"\","
+						+ "\"referenceType\" : \"\"}"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+	
+	@Test
+	public void givenRequestBodyHasEmptyReferenceTypeIDUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
+		
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		
+		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
+		//Test
+		mvc.perform(
+				put("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \"\","
+						+ "\"referenceType\" : \"dummy\","
+						+ "\"referenceSourceID\" : \"dummy\"}"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
+	
+	/*@Test
+	public void givenAssemblyMethodReturnsUpdatedTypeUpdateReferenceTypeShouldSetUpdatedTypeDetailsToResponse() throws Exception {
 			
+		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
+		
+		//given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
+		
+		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(referenceType);
+		
+		//Test
+		mvc.perform(
+				put("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+
+						"\",\"referenceSourceID\" : \"dummy\"}"))
+				.andExpect(jsonPath("referenceTypeID",equalTo(referenceType.referenceTypeID())))
+				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
+				.andExpect(jsonPath("referenceSourceID",equalTo(referenceType.referenceSourceID())))
+				.andExpect(status().isOk());
+    }
+	*/
+	@Test
+	public void givenAssemblyMethodReturnsNullUpdateReferenceTypeShouldSetDataUpdationExceptionToResponse() throws Exception {
+		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
+		
+		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
+		
+		//Test
+		mvc.perform(
+				put("/types/")
+				.contentType("application/json")
+				.content("{ \"referenceTypeID\" : \""+referenceType.referenceTypeID()+
+						"\",\"referenceType\" : \""+referenceType.referenceType()+
+						"\",\"referenceSourceID\" : \"dummy\"}"))
+		        .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
 	
 }

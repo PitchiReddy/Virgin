@@ -326,7 +326,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	public void givenInvalidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldThrowSomeException() {
+	public void givenInvalidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldThrowDataUpdationException() {
 		
 		JsonPath referenceTypeJson = createTestReferenceType();
 		
@@ -341,7 +341,8 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.put("/xref-api/v1/types")
 		
 		.then()
-				.assertThat().statusCode(500)
+				.assertThat().statusCode(HttpStatus.SC_NOT_MODIFIED)
+				//.assertThat().body("exception",equalTo("com.virginvoyages.exceptions.DataUpdationException"))
 				.log()
 				.all()
 				.extract()

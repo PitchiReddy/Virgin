@@ -261,6 +261,85 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	} 
 	
 	@Test
+	public void givenUpdateToExistingReferenceSourceNameUpdateReferenceSourceShouldSetDataUpdationExceptionInResponse() {
+		JsonPath createdReferenceSourceJson = createTestReferenceSource();
+		JsonPath createdReferenceSourceJson1 = createTestReferenceSource();
+		
+			
+		//update source name
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", createdReferenceSourceJson.getString("referenceSourceID"));
+		parameters.put("referenceSource", createdReferenceSourceJson1.getString("referenceSource"));
+		
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/sources")
+		
+		.then()
+		.assertThat().statusCode(HttpStatus.SC_NOT_MODIFIED)
+		//.assertThat().body("exception",equalTo("com.virginvoyages.exceptions.DataUpdationException"))
+		.log()
+		.all();
+				
+		//cleanup
+		deleteTestReferenceSource(createdReferenceSourceJson.getString("referenceSourceID"));		
+		deleteTestReferenceSource(createdReferenceSourceJson1.getString("referenceSourceID"));
+	}
+	
+	@Test
+	public void givenInvalidSourceIdInBodyUpdateReferenceSourceShouldSetDataUpdationExceptionInResponse() {
+					
+		//update source name
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", "1");
+		parameters.put("referenceSource", testDataHelper.getRandomAlphabeticString());
+		
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/sources")
+		
+		.then()
+		.assertThat().statusCode(HttpStatus.SC_NOT_MODIFIED)
+		//.assertThat().body("exception",equalTo("com.virginvoyages.exceptions.DataUpdationException"))
+		.log()
+		.all();
+		
+		
+	}
+		
+	@Test
+	public void givenValidReferenceSourceUpdateReferenceSourceShouldUpdateInactiveField() {
+		
+		JsonPath createdReferenceJson = createTestReferenceSource();
+	
+		//update source name
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceSourceID", createdReferenceJson.getString("referenceSourceID"));
+		parameters.put("referenceSource", createdReferenceJson.getString("referenceSource"));
+		parameters.put("inActive", !createdReferenceJson.getBoolean("inActive"));
+		
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.put("/xref-api/v1/sources")
+		
+		.then()
+				.assertThat().statusCode(200).
+				assertThat().body("referenceSourceID", equalTo(createdReferenceJson.getString("referenceSourceID"))).
+				assertThat().body("referenceSource", equalTo(createdReferenceJson.getString("referenceSource"))).
+				assertThat().body("inActive", not(createdReferenceJson.getBoolean("inActive"))).
+				log().
+				all();
+							
+			
+		//cleanup
+		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
+	} 
+	
+	
+	@Test
 	public void givenEmptyReferenceSourceIdUpdateReferenceSourceShouldThrowMandatoryFieldsMissingException() {
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();

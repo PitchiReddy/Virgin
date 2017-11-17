@@ -51,6 +51,7 @@ public class ReferenceTypeRepositoryTest {
 		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(referenceTypeData);
 		
 		assertThat(referenceTypeData.referenceType(), equalTo(createdReferenceType.referenceType()));
+		//ID should be auto generated, ignore invalid id in request
 		assertThat(referenceTypeData.referenceTypeID(), not(equalTo(createdReferenceType.referenceTypeID())));
 		
 		//Assert by find
