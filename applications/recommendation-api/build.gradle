@@ -97,3 +97,19 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
         html.enabled true
     }
 }
+
+test {
+	exclude '**/*IT*', '**/*FuncTest*', '**/*RepositoryTest*', '**/*TestSupport*'
+}
+
+task integrationTests(type: Test){
+	include '**/*IT*', '**/*RepositoryTest*'
+}
+
+task functionalTests(type: Test){
+	include '**/*FuncTest*'
+}
+
+task testAll(type: Test){
+	exclude '**/*TestSupport*'
+}

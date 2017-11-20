@@ -132,3 +132,18 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
     }
 }
 
+test {
+	exclude '**/*IT*', '**/*FuncTest*', '**/*ClientTest*', '**/*Support*'
+}
+
+task integrationTests(type: Test){
+	include '**/*IT*', '**/*ClientTest*'
+}
+
+task functionalTests(type: Test){
+	include '**/*FuncTest*'
+}
+
+task testAll(type: Test){
+	exclude '**/*Support*'
+}

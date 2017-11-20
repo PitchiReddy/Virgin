@@ -17,7 +17,6 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.seaware.client.SeawareClient;
-import com.virginvoyages.seaware.data.OTAProfileReadRS;
 
 import feign.FeignException;
 
@@ -29,14 +28,10 @@ public class AccountClientTest {
 	
 	@Autowired
 	private AccountClient accountClient;
-	
-	@Autowired
-	private SeawareClient seawareClient;
-	
+		
 	@Autowired
 	private TestDataHelper testDataHelper;
-	
-	
+		
 	@Test
     public void createAccountCreatesNewAccount() {
     	
