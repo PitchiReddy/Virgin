@@ -161,9 +161,10 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	}
 
 	/**
-	 * Finding reference Type.  
-	 * @return
-	 */
+	 * Finding reference Type. 
+	 * @param Pageable pageable
+	 * @return List<ReferenceType>
+	 */ 
 	@Override
 	public List<ReferenceType> findTypes(Pageable pageable) {
 		log.debug("Entering findTypes method in ReferenceTypesAssemblyImpl");

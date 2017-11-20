@@ -1,23 +1,35 @@
 package com.virginvoyages.crossreference.types;
 
+
+import static org.mockito.Matchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
@@ -48,6 +60,9 @@ public class ReferenceTypesControllerTest {
 		
 	@MockBean(name="referenceRepository")
     private ReferenceRepository referenceRepository;
+	
+	@InjectMocks
+	private ReferenceTypesController referenceTypesController;
 	
 	//Add
 	@Test
@@ -335,5 +350,27 @@ public class ReferenceTypesControllerTest {
 		        .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
 	
+	@Test
+	public void givenAssemblyMethodReturnsListOfReferenceTypesFindTypesShouldSetListInResponse() throws Exception {
+		List<ReferenceType> referenceTypeList = new ArrayList<ReferenceType>();
+		referenceTypeList.add(testDataHelper.getReferenceTypeBusinessEntity());
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypeList);
+		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referenceTypesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					public View resolveViewName(String viewName, Locale locale) throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+		//Test
+		mvc.perform(
+				get("/types?page=1&size=10")
+				.contentType("application/json"))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+	}
 }
 

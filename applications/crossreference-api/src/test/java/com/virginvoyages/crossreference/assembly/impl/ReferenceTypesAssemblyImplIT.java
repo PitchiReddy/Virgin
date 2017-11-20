@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -280,14 +281,13 @@ public class ReferenceTypesAssemblyImplIT {
 	//Find All
 	@Test
 	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
-		Pageable pageable = null;
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
 		
 		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
 				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
 		
-		assertThat(referenceTypesAssembly.findTypes(pageable), hasSize(greaterThan(0)));
+		assertThat(referenceTypesAssembly.findTypes(new PageRequest(0, 10)), hasSize(greaterThan(0)));
 		
 		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());

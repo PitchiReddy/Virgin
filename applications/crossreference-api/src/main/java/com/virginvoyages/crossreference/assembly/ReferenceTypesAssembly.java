@@ -3,7 +3,6 @@ package com.virginvoyages.crossreference.assembly;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-
 import com.virginvoyages.model.crossreference.ReferenceType;
 
 /**
