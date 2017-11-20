@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -59,9 +58,6 @@ public class ReferenceSourcesControllerTest {
 	
 	@MockBean(name="referenceRepository")
     private ReferenceRepository referenceRepository;
-	
-	@MockBean(name="pageable")
-	private Pageable pageable;
 	
 	@InjectMocks
 	private ReferenceSourcesController referenceSourcesController;
@@ -171,7 +167,7 @@ public class ReferenceSourcesControllerTest {
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
-		given(referenceSourcesAssembly.findSources(pageable)).willReturn(referenceSourceList);
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
 		
 		mvc.perform(
 				 get("/sources/?size=10")
@@ -185,7 +181,7 @@ public class ReferenceSourcesControllerTest {
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
-		given(referenceSourcesAssembly.findSources(pageable)).willReturn(referenceSourceList);
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
 		
 		mvc.perform(
 				 get("/sources/?page=1")
