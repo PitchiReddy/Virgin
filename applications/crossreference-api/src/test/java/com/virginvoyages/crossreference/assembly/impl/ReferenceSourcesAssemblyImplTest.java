@@ -24,6 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
@@ -219,12 +222,11 @@ public class ReferenceSourcesAssemblyImplTest {
 	//Find All
 	@Test
 	public void givenRepositoryReturnsListOfReferenceSourceDataFindSourcesShouldReturnCorrespondingReferenceSources() {
+		Page<ReferenceSourceData> pagedReferenceSourceData = testDataHelper.getPagedReferenceSourceDataEntity();
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceSourceData);
 		List<ReferenceSourceData> mockReferenceSourceDataList = new ArrayList<ReferenceSourceData>();
 		mockReferenceSourceDataList.add(testDataHelper.getReferenceSourceDataEntity());
-		mockReferenceSourceDataList.add(testDataHelper.getReferenceSourceDataEntity());
-		
-		when(referenceSourceRepository.findAll()).thenReturn(mockReferenceSourceDataList);
-		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources();
+		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 10));
 		assertThat(referenceSourceList, hasSize(equalTo(mockReferenceSourceDataList.size())));
 	}
 		

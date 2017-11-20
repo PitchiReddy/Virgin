@@ -1,8 +1,8 @@
 package com.virginvoyages.crossreference.data.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import java.io.Serializable;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.repository.PagingAndSortingRepository;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 
 /**
@@ -11,7 +11,7 @@ import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
  *
  */
 @Repository
-public interface ReferenceSourceRepository extends CrudRepository<ReferenceSourceData, String> {
+public interface ReferenceSourceRepository extends PagingAndSortingRepository<ReferenceSourceData, Serializable> {
 
 	ReferenceSourceData findByReferenceSource(String referenceSourceName);
 	

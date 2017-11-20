@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
@@ -215,10 +216,11 @@ public class ReferenceSourcesAssemblyImplIT {
 	//Find All
 	@Test
 	public void givenValidReferenceSourceFindSourcesShouldRetunsReferenceSources() {
+		Pageable pageable = null;
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
 
-		assertThat(referenceSourcesAssembly.findSources(), hasSize(greaterThan(0)));
+		assertThat(referenceSourcesAssembly.findSources(pageable), hasSize(greaterThan(0)));
 
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 

@@ -1,13 +1,17 @@
 package com.virginvoyages.crossreference.assembly.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
@@ -156,15 +160,11 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	 * @return List<ReferenceSource>
 	 */
 	@Override
-	public List<ReferenceSource> findSources() {
+	public List<ReferenceSource> findSources(Pageable pageable) {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		List<ReferenceSourceData> listOfReferenceSourceData = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
-		List<ReferenceSource> listOfReferenceSource = new ArrayList<>();
-		if(null != listOfReferenceSourceData && listOfReferenceSourceData.size() > 0 ) {
-			listOfReferenceSource = listOfReferenceSourceData.stream().map(referenceSourceData -> referenceSourceData.convertToBusinessEntity()).collect(Collectors.toList());
-		}
-		return listOfReferenceSource;
-		
+		Page<ReferenceSourceData> referenceSourceDataPage = referenceSourceRepository.findAll(pageable);
+		return Optional.ofNullable(referenceSourceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
 	}
 
 }
