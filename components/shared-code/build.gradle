@@ -1,4 +1,5 @@
 apply from: '../../java.gradle'
+apply plugin: "jacoco"
 apply plugin: "com.github.spotbugs"
 
 group = 'com.virginvoyages.shared'
@@ -19,6 +20,23 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    //'**/*Data**',
+                    // TODO Refactor to use naming (package or class) and regular expression
+                    // Exclude Lombok generated code.
+                    '**/model/**/*.class',
+                    '**/entities/*.class',
+                    'com/virginvoyages/crossreference/data/entities/ReferenceTypeData.class',
+                                        
+            ])
+        })
+    }
+}
+
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
