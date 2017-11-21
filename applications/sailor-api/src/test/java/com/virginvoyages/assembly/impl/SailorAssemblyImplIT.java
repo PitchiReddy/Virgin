@@ -196,5 +196,73 @@ public class SailorAssemblyImplIT {
 		testDataHelper.deleteSailor(sailor.id());
 		
 	}
+	
+	//Orchestration tests
+	
+	/* Tests for getOrchestratedSailorData
+	@Test
+	public void givenSeawareClientIDExistsForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSeaware() {
+		
+	}
+	
+	@Test
+	public void givenSeawareClientIDDoesNotExistForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSalesforce() {
+		
+	} */
+	
+	/* Tests for getSeawareClientIDForSalesforceID
+	@Test
+	public void givenSeawareClientIDExistsForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnSeawareClientID() {
+		
+	}
+	
+	@Test
+	public void givenSeawareClientIDDoesNotExistForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnNull() {
+		
+	} */
+	
+	/*  Test for getReferenceTypeIDForName
+	@Test
+	public void givenReferenceTypeExistsInDBGetReferenceTypeIDForNameShouldReturnID() {
+		
+	}
+	
+	@Test
+	public void givenReferenceTypeDoesNotExistInDBGetReferenceTypeIDForNameShouldNull() {
+		
+	} */
+	
+	/* Tests for getTargetRecordID
+	@Test
+	public void givenReferenceExistsForParametersGetTargetRecordIDShouldReturnNativeSourceIDValueOfReference() {
+		
+	}
+	
+	@Test
+	public void givenReferenceDoesNotExistForParametersGetTargetRecordIDShouldReturnNull() {
+		
+	} */
+	
+	/* Tests for getSalesforceAccountData
+	@Test
+	public void givenValidSalesforceIDGetSalesforceAccountDataShouldReturnAccountData() {
+		
+	}
+	
+	@Test
+	public void givenInvalidSalesforceIDGetSalesforceAccountDataShouldReturnNull() {
+		
+	} */
+	
+	/* Tests for getSeawareClientData
+	@Test
+	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnClientData() {
+		
+	}
+	
+	@Test
+	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnNull() {
+		
+	}*/
 
 }

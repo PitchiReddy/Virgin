@@ -1,5 +1,8 @@
 package com.virginvoyages.assembly.impl;
 
+import static com.virginvoyages.crossreference.constants.CrossReferenceConstants.REFERENCE_TYPE_CLIENT;
+import static com.virginvoyages.crossreference.constants.CrossReferenceConstants.REFERENCE_TYPE_PERSON;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,11 +22,14 @@ import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
+import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.seaware.dao.SeawareDAO;
+import com.virginvoyages.seaware.data.ClientData;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +57,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	
 	@Autowired
 	private PreferenceAssembly preferenceAssembly;
+	
+	@Autowired
+	private SeawareDAO seawareDAO;
     
 	@Override
 	public Sailor getSailorById(String sailorID) {
@@ -130,6 +139,57 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		return accountData.convertToSailorObject()
 				.associatePreferences(preferencesEmbedded)
 				.associateSailingHistory(bookingsEmbedded);
+	}
+	
+	public Sailor getOrchestratedSailorData(String salesforceID) {
+		AccountData salesforceData = getSalesforceAccountData(salesforceID);
+		ClientData seawareClientData = getSeawareClientData(getSeawareClientIDForSalesforceID(salesforceID));
+		if(null == seawareClientData && null != salesforceData) {
+			//If not in seaware use salesforceData 
+			return convertAccountDataToSailor(salesforceData, loadPreferences(salesforceData.id()), null);
+		}
+		//Replace with logic to merge data between salesforce and seaware. - It should be a combination of seaware and salesforce data
+		return new Sailor();
+	}
+	
+	public String getSeawareClientIDForSalesforceID(String salesforceID) {
+		return getTargetRecordID(salesforceID,
+									getReferenceTypeIDForName(REFERENCE_TYPE_PERSON),
+									getReferenceTypeIDForName(REFERENCE_TYPE_CLIENT)); 
+	}
+	
+	/**
+	 * 
+	 * @param referenceTypeName - ReferenceType name whose ID is 
+	 * @return
+	 */
+	public String getReferenceTypeIDForName(String referenceTypeName) {
+		String referenceTypeID = null;
+		// Call CrossReference -> Types - > findbyname -> name = referenceTypeName
+		return referenceTypeID;
+	}
+	
+	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {
+		Reference reference = null;
+		/*For reference Call CrossReference -> References - > findbytypeandtargetType - >
+		nativesourceid = sourcerecordid
+		typeid = sourcetypeid
+		targettypeid = targettypeid
+		*/
+		return reference != null ? reference.nativeSourceIDValue() : null;
+	}
+	
+	public AccountData getSalesforceAccountData(String sailorID) {
+		try {
+			return accountClient.findAccount(sailorID);
+		} catch (Exception fe) {
+			log.error("Exception encountered - to be handled ",fe);
+			return null;
+		} 
+	}
+	
+	public ClientData getSeawareClientData(String seawareClientID) {
+		return StringUtils.isNotEmpty(seawareClientID) ? seawareDAO.getSeawareClientData(seawareClientID) : null;
 	}
 
 }
