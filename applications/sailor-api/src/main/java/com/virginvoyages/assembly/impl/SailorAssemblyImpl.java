@@ -22,7 +22,6 @@ import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -170,13 +169,14 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	}
 	
 	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {
-		Reference reference = null;
+		return "dummy";
+		//Reference reference = null;
 		/*For reference Call CrossReference -> References - > findbytypeandtargetType - >
 		nativesourceid = sourcerecordid
 		typeid = sourcetypeid
 		targettypeid = targettypeid
 		*/
-		return reference != null ? reference.nativeSourceIDValue() : null;
+		//return reference != null ? reference.nativeSourceIDValue() : null;
 	}
 	
 	public AccountData getSalesforceAccountData(String sailorID) {
