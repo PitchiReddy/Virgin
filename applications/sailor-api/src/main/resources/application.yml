@@ -39,3 +39,7 @@ logging:
   level:
     org.springframework.web.client: DEBUG
     com.virginvoyages: DEBUG
+---
+swagger:
+  security:
+    enabled: true
