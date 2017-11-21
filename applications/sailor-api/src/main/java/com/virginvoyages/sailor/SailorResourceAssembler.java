@@ -5,6 +5,8 @@ import com.virginvoyages.contact.ContactMethodController;
 import com.virginvoyages.household.HouseholdController;
 import com.virginvoyages.identification.IdentificationController;
 import com.virginvoyages.loyalty.LoyaltyController;
+import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.sailor.model.SailorLinks;
 import com.virginvoyages.visa.VisaController;
 import com.virginvoyages.wearable.WearableController;
 import org.springframework.hateoas.EntityLinks;

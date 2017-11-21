@@ -3,6 +3,7 @@ package com.virginvoyages.assembly.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -28,11 +29,13 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.seaware.dao.SeawareDAO;
+import com.virginvoyages.seaware.data.ClientData;
 
 /**
  * @author rpraveen 
@@ -52,9 +55,6 @@ public class SailorAssemblyImplTest {
 	@Mock
     private SailorQueryHelper sailorQueryHelper;
 	
-	/*@Mock
-	private SailorMapper sailorMapperMock;*/
-	
 	@Autowired
 	@Spy
 	private SailorMapper sailorMapper;
@@ -70,6 +70,10 @@ public class SailorAssemblyImplTest {
 	
 	@Mock 
 	private CrossreferenceClient xrefClient;
+	
+	@Mock 
+	private SeawareDAO seawareDAO;
+	
 	
 	@Before
     public void setUp() throws Exception {
@@ -167,6 +171,31 @@ public class SailorAssemblyImplTest {
 
 		sailorAssembly.createSailor(accountData);
 		
+	}
+		
+	//Orchestration tests
+	
+	/*@Test
+	public void givenAccountClientFindAccountReturnsAccountDataGetSalesforceAccountDataShouldReturnAccountData() {
+		
+	}
+	
+	@Test
+	public void givenAccountClientFindAccountThrowsExceptionGetSalesforceAccountDataShouldReturnNull() {
+		
+	}*/
+	
+	//tests for getSeawareClientData
+	@Test
+	public void givenSeawareClientIDIsNullGetSeawareClientDataShouldReturnNull() {
+		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData());
+		assertThat(sailorAssembly.getSeawareClientData(null),nullValue());
+		
+	}
+	
+	public void givenSeawareDAOGetSeawareClientDataClientIDReturnsClientDataGetSeawareClientDataShouldReturnClientData() {
+		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData());
+		assertThat(sailorAssembly.getSeawareClientData(any(String.class)),notNullValue());
 	}
 	
 }

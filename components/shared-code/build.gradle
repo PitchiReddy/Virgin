@@ -32,19 +32,10 @@ jacocoTestReport {
                     //'**/*Data**',
                     // TODO Refactor to use naming (package or class) and regular expression
                     // Exclude Lombok generated code.
-                    'com/virginvoyages/model/crossreference/Reference.class',
-                    'com/virginvoyages/model/crossreference/References.class',
-                    'com/virginvoyages/model/crossreference/ReferencesEmbedded.class',
-                    'com/virginvoyages/model/crossreference/ReferenceSource.class',
-                    'com/virginvoyages/model/crossreference/ReferenceType.class',
-                    'com/virginvoyages/crossreference/data/entities/ReferenceSourceData.class',
+                    '**/model/**/*.class',
+                    '**/entities/*.class',
                     'com/virginvoyages/crossreference/data/entities/ReferenceTypeData.class',
-                    'com/virginvoyages/crossreference/data/entities/ReferenceData.class',
-                    // Exclude POJO
-                    'com/virginvoyages/model/Link.class',
-                    'com/virginvoyages/model/Links.class',
-                    'com/virginvoyages/model/Page.class',
-                    
+                                        
             ])
         })
     }
