@@ -206,12 +206,12 @@ public class ReferenceTypesAssemblyImplTest {
 
 	@Test
 	public void givenRepositoryReturnsListOfReferenceTypesDataFindTypesShouldReturnCorrespondingReferenceTypes() {
-		Page<ReferenceTypeData> pagedReferenceSourceData = testDataHelper.getPagedReferenceTypeDataEntity();
+		Page<ReferenceTypeData> pagedReferenceTypeData = testDataHelper.getPagedReferenceTypeDataEntity();
 		List<ReferenceTypeData> mockReferenceTypeDataList = new ArrayList<ReferenceTypeData>();
 		mockReferenceTypeDataList.add(testDataHelper.getReferenceTypeDataEntity());
-		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceSourceData);
-		List<ReferenceType> referenceSourceList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 10));
- 		assertThat(referenceSourceList, hasSize(equalTo(mockReferenceTypeDataList.size())));
+		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceTypeData);
+		List<ReferenceType> referenceTypeList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 10));
+ 		assertThat(referenceTypeList, hasSize(equalTo(mockReferenceTypeDataList.size())));
 
 
 	}
