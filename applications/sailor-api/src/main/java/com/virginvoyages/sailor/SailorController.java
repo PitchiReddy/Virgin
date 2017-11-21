@@ -25,6 +25,8 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
 import com.virginvoyages.sailor.api.MockSailorAPI;
+import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.sailor.model.Sailors;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

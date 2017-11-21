@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.recommendations.api.MockRecommendationAPI;
+import com.virginvoyages.recommendations.tribes.model.Tribe;
+import com.virginvoyages.recommendations.tribes.model.Tribes;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

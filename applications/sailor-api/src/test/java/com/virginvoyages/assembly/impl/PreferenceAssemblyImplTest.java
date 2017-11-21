@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crm.client.QueryClient;
-import com.virginvoyages.preference.PreferencesEmbedded;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 import com.virginvoyages.sailor.helper.MockDataHelper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
 

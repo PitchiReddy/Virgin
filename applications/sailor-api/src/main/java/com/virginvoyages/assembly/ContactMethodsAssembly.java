@@ -1,6 +1,6 @@
 package com.virginvoyages.assembly;
 
-import com.virginvoyages.contact.ContactMethodsEmbedded;
+import com.virginvoyages.contact.model.ContactMethodsEmbedded;
 
 
 /**
