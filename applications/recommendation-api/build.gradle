@@ -65,23 +65,10 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                     //'**/*Data**',
                     // TODO Refactor to use naming (package or class) and regular expression
+                
                     // Exclude Lombok generated code.
-                    'com/virginvoyages/recommendations/calendar/model/CalendarRecommendations.class',
-                    'com/virginvoyages/recommendations/calendar/model/CalendarRecommendation.class',
-                    'com/virginvoyages/recommendations/content/model/ContentRecommendations.class',
-                    'com/virginvoyages/recommendations/content/model/ContentRecommendation.class',
-                    'com/virginvoyages/recommendations/herenow/model/HereNowRecommendations.class',
-                    'com/virginvoyages/recommendations/herenow/model/HereNowRecommendation.class',
-                    'com/virginvoyages/recommendations/marketing/model/MarketingRecommendations.class',
-                    'com/virginvoyages/recommendations/marketing/model/MarketingRecommendation.class',
-                    'com/virginvoyages/recommendations/shipnews/model/ShipNewsRecommendations.class',
-                    'com/virginvoyages/recommendations/shipnews/model/ShipNewsRecommendation.class',
-                    'com/virginvoyages/recommendations/tribes/model/Tribe.class',
-                    'com/virginvoyages/recommendations/tribes/model/Tribes.class',
-                    
-                    // Exclude POJO
-                    'com/virginvoyages/recommendations/model/KeyValue.class',
-                    'com/virginvoyages/recommendations/model/Recommendation.class',
+                    '**/model/*.class',
+                
                     // Exclude Stub code
                     'com/virginvoyages/api/MockRecommendationAPI.class'
             ])
