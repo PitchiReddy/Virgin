@@ -2,6 +2,7 @@ package com.virginvoyages.contact;
 
 
 import com.virginvoyages.assembly.ContactMethodsAssembly;
+import com.virginvoyages.contact.model.ContactMethods;
 import com.virginvoyages.model.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;

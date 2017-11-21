@@ -2,6 +2,8 @@ package com.virginvoyages.booking;
 
 import org.junit.Test;
 
+import com.virginvoyages.booking.model.Booking;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
