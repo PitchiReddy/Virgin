@@ -7,20 +7,20 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.booking.Booking;
-import com.virginvoyages.booking.BookingsEmbedded;
-import com.virginvoyages.contact.ContactMethod;
-import com.virginvoyages.contact.ContactMethodsEmbedded;
+import com.virginvoyages.booking.model.Booking;
+import com.virginvoyages.booking.model.BookingsEmbedded;
+import com.virginvoyages.contact.model.ContactMethod;
+import com.virginvoyages.contact.model.ContactMethodsEmbedded;
 import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.BookingData;
 import com.virginvoyages.crm.data.ContactMethodsData;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
-import com.virginvoyages.preference.Preference;
-import com.virginvoyages.preference.PreferencesEmbedded;
-import com.virginvoyages.sailor.Sailor;
+import com.virginvoyages.preference.model.Preference;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 import com.virginvoyages.sailor.api.MockSailorAPI;
+import com.virginvoyages.sailor.model.Sailor;
 
 @Component
 public class MockDataHelper {

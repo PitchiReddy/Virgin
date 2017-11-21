@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.model.Sailor;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SailorController.class)

@@ -1,6 +1,6 @@
 package com.virginvoyages.assembly;
 
-import com.virginvoyages.booking.BookingsEmbedded;
+import com.virginvoyages.booking.model.BookingsEmbedded;
 
 /**
  * {@code Interface} for assembly tasks for find sailor bookings

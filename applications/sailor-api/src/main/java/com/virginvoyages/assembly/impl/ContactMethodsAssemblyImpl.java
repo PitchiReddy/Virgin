@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.ContactMethodsAssembly;
-import com.virginvoyages.contact.ContactMethodsEmbedded;
+import com.virginvoyages.contact.model.ContactMethodsEmbedded;
 import com.virginvoyages.crm.data.ContactMethodsData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.dao.ContactMethodsDAO;

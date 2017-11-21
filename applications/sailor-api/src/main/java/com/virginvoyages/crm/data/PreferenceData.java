@@ -1,7 +1,7 @@
 package com.virginvoyages.crm.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.preference.Preference;
+import com.virginvoyages.preference.model.Preference;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
