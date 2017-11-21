@@ -15,7 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.virginvoyages.booking.BookingsEmbedded;
+
+import com.virginvoyages.booking.model.BookingsEmbedded;
 import com.virginvoyages.dao.impl.BookingsDAOImpl;
 import com.virginvoyages.sailor.helper.MockDataHelper;
 

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.assembly.SailorAssembly;
-import com.virginvoyages.booking.BookingsEmbedded;
+import com.virginvoyages.booking.model.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
@@ -22,11 +22,11 @@ import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.preference.PreferencesEmbedded;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorMapper;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
+import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.seaware.dao.SeawareDAO;
 import com.virginvoyages.seaware.data.ClientData;
 
