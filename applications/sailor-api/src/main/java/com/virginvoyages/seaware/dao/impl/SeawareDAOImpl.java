@@ -20,11 +20,16 @@ public class SeawareDAOImpl implements SeawareDAO {
 	}
 	
 	private OTAReadRQ convertToSeawareProfileReadRequest(String clientID) {
-		return new OTAReadRQ();
+		return createBaseSeawareReadRequest();
+		//set value specific to profile read - like client ID etc.
 	}
 	
 	private ClientData convertResponseToSeawareClientDataObject(OTAProfileReadRS profileResponse) {
 		return new ClientData();
+	}
+	
+	private OTAReadRQ createBaseSeawareReadRequest() {
+		return new OTAReadRQ();
 	}
 	
 
