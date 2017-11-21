@@ -1,4 +1,4 @@
-package com.virginvoyages.configuration;
+package com.virginvoyages.oauth2.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

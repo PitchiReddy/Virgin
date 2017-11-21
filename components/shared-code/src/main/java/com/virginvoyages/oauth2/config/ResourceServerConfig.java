@@ -1,4 +1,4 @@
-package com.virginvoyages.configuration;
+package com.virginvoyages.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -22,14 +22,25 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	JwtAccessTokenConverter tokenConverter;
 
-	@Override
+	/*@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 		.authorizeRequests()
 		.antMatchers("/**")
-		.authenticated();
-	}
+		.authenticated()
+		.and()
+		.authorizeRequests()
+        .antMatchers("/v1/swagger-ui.html").permitAll();
+}*/
 
+	@Override
+    public void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/sailors**", "/references**"
+                		, "/sources**","/types**" )
+               .authenticated();
+    }
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		log.info("Configuring ResourceServerSecurityConfigurer ");

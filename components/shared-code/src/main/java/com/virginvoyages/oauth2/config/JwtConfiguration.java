@@ -1,4 +1,4 @@
-package com.virginvoyages.configuration;
+package com.virginvoyages.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
