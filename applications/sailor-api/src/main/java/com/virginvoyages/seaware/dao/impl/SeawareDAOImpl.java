@@ -1,6 +1,7 @@
 package com.virginvoyages.seaware.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.virginvoyages.seaware.client.SeawareClient;
 import com.virginvoyages.seaware.dao.SeawareDAO;
@@ -8,6 +9,7 @@ import com.virginvoyages.seaware.data.ClientData;
 import com.virginvoyages.seaware.data.OTAProfileReadRS;
 import com.virginvoyages.seaware.data.OTAReadRQ;
 
+@Service
 public class SeawareDAOImpl implements SeawareDAO {
 
 	@Autowired
