@@ -28,11 +28,11 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorMapper;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.sailor.model.Sailor;
 
 /**
  * @author rpraveen 

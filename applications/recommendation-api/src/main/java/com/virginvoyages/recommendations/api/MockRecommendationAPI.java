@@ -9,13 +9,13 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.recommendations.content.ContentRecommendation;
-import com.virginvoyages.recommendations.content.ContentRecommendations;
 import com.virginvoyages.exceptions.InvalidSailorIdException;
+import com.virginvoyages.recommendations.content.model.ContentRecommendation;
+import com.virginvoyages.recommendations.content.model.ContentRecommendations;
 import com.virginvoyages.recommendations.exceptions.TribeNotFoundException;
 import com.virginvoyages.recommendations.model.RecommendationResponse;
-import com.virginvoyages.recommendations.tribes.Tribe;
-import com.virginvoyages.recommendations.tribes.Tribes;
+import com.virginvoyages.recommendations.tribes.model.Tribe;
+import com.virginvoyages.recommendations.tribes.model.Tribes;
 
 /**
  * Mock implementation of Recommendation API to return mock responses to validate deployment
