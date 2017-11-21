@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
@@ -227,7 +228,7 @@ public class ReferencesAssemblyImplIT {
 			createdReference = referencesAssembly.addReference(reference);
 
 		}
-		List<Reference> listOfReferences = referencesAssembly.findReferences();
+		List<Reference> listOfReferences = referencesAssembly.findReferences(new PageRequest(0, 10));
 		assertThat(listOfReferences, hasSize(greaterThan(0)));
 		
 		//cleanup

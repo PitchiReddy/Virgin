@@ -7,26 +7,23 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import com.virginvoyages.crossreference.assembly.impl.ReferencesAssemblyImpl;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
@@ -121,13 +118,11 @@ public class ReferencesAssemblyImplTest {
 
 	@Test
 	public void givenRepositoryReturnsListOfReferenceDataFindReferencesShouldReturnCorrespondingReferences() {
-
+		Page<ReferenceData> pagedReferenceData = testDataHelper.getPagedReferenceDataEntity();
 		List<ReferenceData> mockReferenceList = new ArrayList<ReferenceData>();
 		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
-		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
-
-		when(referenceRepository.findAll()).thenReturn(mockReferenceList);
-		List<Reference> referenceList = referencesAssemblyImpl.findReferences();
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceData);
+		List<Reference> referenceList = referencesAssemblyImpl.findReferences(new PageRequest(0, 10));
 		assertThat(referenceList, hasSize(equalTo(mockReferenceList.size())));
 	}
 
