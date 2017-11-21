@@ -8,7 +8,7 @@ import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
-import com.virginvoyages.preference.PreferencesEmbedded;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
 
 import feign.FeignException;
