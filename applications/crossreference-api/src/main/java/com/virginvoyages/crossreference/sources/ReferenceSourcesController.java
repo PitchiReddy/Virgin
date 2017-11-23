@@ -116,7 +116,9 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
 			final Pageable pageable) {
-		
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
 		List<ReferenceSource> listOfReferenceSources = referenceSourcesAssembly.findSources(pageable);
 		return new ResponseEntity<List<ReferenceSource>>(listOfReferenceSources,HttpStatus.OK);
 	}

@@ -120,5 +120,9 @@ public class TestDataHelper {
 		final Page<ReferenceSourceData> page = new PageImpl<>(referenceSourceDataList);
 		return page;
 	}
+	
+	public Page<ReferenceSourceData> getPagedReferenceSourceDataEntity(List<ReferenceSourceData> referenceSources) {
+		return new PageImpl<>(referenceSources);
+	}
 
 }

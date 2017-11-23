@@ -11,9 +11,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,14 +29,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 
 @RunWith(SpringRunner.class)
@@ -195,25 +198,41 @@ public class ReferenceSourcesControllerTest {
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
 		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
+	
+		ReflectionTestUtils.setField(referenceSourcesController, "referenceSourcesAssembly", referenceSourcesAssembly);
+		mvc=MockMvcBuilders.standaloneSetup(referenceSourcesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+	            .setViewResolvers(new ViewResolver() {
+	                @Override
+	                public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale) throws Exception {
+	                    return new MappingJackson2JsonView();
+	                }
+	            }).build();
+		
+		mvc.perform(
+				 get("/sources/?page=1&size=1")
+				.contentType("application/json"))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(status().is(HttpStatus.OK.value()));
+	}
+	
+	@Test
+	public void givenAssemblyMethodThrowsUnknownExceptionFindSourcesShouldSetInternalServerErrorInResponse() throws Exception {
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willThrow(new UnknownException());
 		
 		ReflectionTestUtils.setField(referenceSourcesController, "referenceSourcesAssembly", referenceSourcesAssembly);
 		mvc=MockMvcBuilders.standaloneSetup(referenceSourcesController)
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
 	            .setViewResolvers(new ViewResolver() {
 	                @Override
-	                public View resolveViewName(String viewName, Locale locale) throws Exception {
+	                public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale) throws Exception {
 	                    return new MappingJackson2JsonView();
 	                }
 	            }).build();
-
-		
 		mvc.perform(
-				 get("/sources/?page=1&size=10")
+				 get("/sources/?page=1&size=1")
 				.contentType("application/json"))
-				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(status().is(HttpStatus.OK.value()));
-
-		
+				.andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
 	}
 
 	//Get Reference Source By ID	

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,15 +12,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
-import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.exceptions.DataAccessException;
 import com.virginvoyages.exceptions.DataInsertionException;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.DataUpdationException;
 import com.virginvoyages.exceptions.UnknownException;
+import com.virginvoyages.model.crossreference.ReferenceSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -159,9 +161,16 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 	@Override
 	public List<ReferenceSource> findSources(Pageable pageable) {
 		log.debug("Entering findSources method in ReferenceSourcesAssemblyImpl");
-		Page<ReferenceSourceData> referenceSourceDataPage = referenceSourceRepository.findAll(pageable);
-		return Optional.ofNullable(referenceSourceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		try {
+			Page<ReferenceSourceData> referenceSourceDataPage = referenceSourceRepository.findAll(pageable);
+			return null == referenceSourceDataPage ? Collections.emptyList() : 
+				Optional.ofNullable(referenceSourceDataPage.getContent()).orElseGet(Collections::emptyList)
+			    .stream().map(referenceData ->	referenceData.convertToBusinessEntity())
+																	.collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findSources",ex);
+			throw new UnknownException();
+		}
 	}
 
 }

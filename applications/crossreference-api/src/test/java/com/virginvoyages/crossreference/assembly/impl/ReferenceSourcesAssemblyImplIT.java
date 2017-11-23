@@ -6,14 +6,13 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
@@ -215,14 +214,7 @@ public class ReferenceSourcesAssemblyImplIT {
 
 	//Find All
 	@Test
-	public void givenValidReferenceSourceFindSourcesShouldRetunsReferenceSources() {
-		Pageable pageable = null;
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
-				testDataHelper.getReferenceSourceBusinessEntity());
-
-		assertThat(referenceSourcesAssembly.findSources(pageable), hasSize(greaterThan(0)));
-
-		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
-
+	public void givenReferenceSourcesExistFindSourcesShouldRetunsReferenceSourcesAsPerSizeParameter() {
+		assertThat(referenceSourcesAssembly.findSources(new PageRequest(0, 4)), hasSize(4));
 	}
 }
