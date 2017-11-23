@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.model.Page;
+import com.virginvoyages.preference.model.Preferences;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
