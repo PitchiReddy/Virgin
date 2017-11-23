@@ -16,9 +16,9 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-      url: jdbc:mysql://vvapidevmysqldb.cbduemg5i5w8.us-east-1.rds.amazonaws.com:3306/XREF
-      username: admin
-      password: Welcome123
+      url: jdbc:mysql://localhost:3306/crossreference
+      username: root
+      password: root
 
 management:
   security:

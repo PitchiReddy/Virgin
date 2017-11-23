@@ -158,8 +158,4 @@ public class TestDataHelper {
 		return "UT_data_mSdpK";
 	}
 
-	public ReferenceType getReferenceTypeMockObject() {
-		ReferenceType referenceType = new ReferenceType();
-		return referenceType;
-	}
 }
