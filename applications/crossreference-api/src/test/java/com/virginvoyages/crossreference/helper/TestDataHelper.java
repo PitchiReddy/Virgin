@@ -114,14 +114,10 @@ public class TestDataHelper {
 
 	}
 	
-<<<<<<< HEAD
 	public Page<ReferenceData> getPagedReferenceDataEntity() {
 		final List<ReferenceData> referenceDataList = new ArrayList<>();
 		referenceDataList.add(getReferenceDataEntity());
 		final Page<ReferenceData> page = new PageImpl<>(referenceDataList);
 		return page;
 	}
-=======
->>>>>>> refs/remotes/origin/master
-
 }

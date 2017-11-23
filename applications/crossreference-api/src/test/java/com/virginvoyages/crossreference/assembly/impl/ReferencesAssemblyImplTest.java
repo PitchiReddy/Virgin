@@ -24,11 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
-<<<<<<< HEAD
 import com.virginvoyages.crossreference.assembly.impl.ReferencesAssemblyImpl;
-=======
-
->>>>>>> refs/remotes/origin/master
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
