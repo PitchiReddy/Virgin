@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
@@ -168,9 +170,16 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	@Override
 	public List<ReferenceType> findTypes(Pageable pageable) {
 		log.debug("Entering findTypes method in ReferenceTypesAssemblyImpl");
-		Page<ReferenceTypeData> referenceTypeDataPage = referenceTypeRepository.findAll(pageable);
-			return Optional.ofNullable(referenceTypeDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-		.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		try {
+			Page<ReferenceTypeData> referenceTypeDataPage = referenceTypeRepository.findAll(pageable);
+			return null == referenceTypeDataPage ? Collections.emptyList() : 
+				Optional.ofNullable(referenceTypeDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceTypeData -> referenceTypeData.convertToBusinessEntity()).collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findTypes",ex);
+			throw new UnknownException();
+		}
+		
 	}
 
 }

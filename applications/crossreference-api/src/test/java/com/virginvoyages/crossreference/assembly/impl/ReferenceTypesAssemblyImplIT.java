@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
 import org.junit.Test;
@@ -279,17 +278,8 @@ public class ReferenceTypesAssemblyImplIT {
 
 	//Find All
 	@Test
-	public void givenValidReferenceTypeFindTypesShouldRetunsReferenceTypes() {
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
-				testDataHelper.getReferenceSourceBusinessEntity());
-		
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(
-				testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource));
-		
-		assertThat(referenceTypesAssembly.findTypes(new PageRequest(0, 10)), hasSize(greaterThan(0)));
-		
-		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
-		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
+	public void givenReferenceTypesExistFindTypeesShouldRetunsReferenceTypeesAsPerSizeParameter() {
+		assertThat(referenceTypesAssembly.findTypes(new PageRequest(0, 4)), hasSize(4));
 	}
 
 }

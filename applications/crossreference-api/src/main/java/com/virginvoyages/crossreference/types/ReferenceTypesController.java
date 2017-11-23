@@ -181,6 +181,9 @@ public class ReferenceTypesController {
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
 			final Pageable pageable) {
 		
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
 		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(pageable), HttpStatus.OK);
 	}
 

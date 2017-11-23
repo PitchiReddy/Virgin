@@ -4,11 +4,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
@@ -196,29 +203,36 @@ public class ReferenceTypesAssemblyImplTest {
 	}
 	
 	//Find All
-/*
 	@Test
-	public void givenRepositoryReturnsListOfReferenceTypesDataFindTypesShouldReturnCorrespondingReferenceTypes() {
-		Page<ReferenceTypeData> pagedReferenceTypeData = testDataHelper.getPagedReferenceTypeDataEntity();
-		List<ReferenceTypeData> mockReferenceTypeDataList = new ArrayList<ReferenceTypeData>();
-		mockReferenceTypeDataList.add(testDataHelper.getReferenceTypeDataEntity());
-		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceTypeData);
-		List<ReferenceType> referenceTypeList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 10));
- 		assertThat(referenceTypeList, hasSize(equalTo(mockReferenceTypeDataList.size())));
-
-
+	public void givenRepositoryReturnsNonEmptyPagedReferenceTypeDataFindTypesShouldReturnCorrespondingReferenceTypesList() {
+		List<ReferenceTypeData> referenceTypesDataList = new ArrayList<>();
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity();
+		referenceTypesDataList.add(referenceTypeData);
+				
+		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(referenceTypesDataList));
+		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
+		assertThat(referenceTypesList, hasSize(equalTo(referenceTypesDataList.size())));
+		assertThat(referenceTypesList.get(0).referenceType(), equalTo(referenceTypeData.referenceType()));
 	}
-*/
-	/*
-	 * @Test(expected=DataNotFoundException.class) public void
-	 * givenRepositoryReturnsValidReferenceTypeDataDeleteReferenceTypeByIDShouldReturnEmptyReferenceType
-	 * () { Mockito.spy(ReferenceTypeData.class);
-	 * referenceTypesAssemblyImpl.deleteReferenceTypeByID(testDataHelper.
-	 * getRandomAlphabeticString());
-	 * assertThat(referenceTypesAssemblyImpl.findReferenceTypeByID(
-	 * testDataHelper.getRandomAlphanumericString()), is(nullValue()));
-	 * 
-	 * 
-	 * }
-	 */
+	
+	@Test
+	public void givenRepositoryReturnsEmptyPagedReferenceTypeDataFindTypesShouldReturnEmptyReferenceTypesList() {
+		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
+		assertThat(referenceTypesList, hasSize(equalTo(0)));
+	}
+	
+	@Test
+	public void givenRepositoryReturnsNullFindTypeesShouldReturnEmptyReferenceTypesList() {
+		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(null);
+		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
+		assertThat(referenceTypesList, hasSize(equalTo(0)));
+	}
+	
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindTypesShouldThrowUnknownException() {
+		when(referenceTypeRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
+		referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
+	}
+		
 }

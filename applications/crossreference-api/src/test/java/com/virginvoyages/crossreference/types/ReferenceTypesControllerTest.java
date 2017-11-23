@@ -1,19 +1,21 @@
 package com.virginvoyages.crossreference.types;
 
 
-import static org.mockito.Matchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.BDDMockito.given;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,14 +29,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
@@ -350,27 +353,81 @@ public class ReferenceTypesControllerTest {
 		        .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
 	
+	//Find reference types
+	@Test
+	public void givenNoValueForPageInRequestParamsFindTypesShouldSetBadRequestCodeInResponse() throws Exception {
+		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
+		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
+
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypesList);
+
+		mvc.perform(
+				get("/types/?size=10")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+
+	@Test
+	public void givenNoValueForSizeInRequestParamsFindTypesShouldSetBadRequestCodeInResponse() throws Exception {
+
+		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
+		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
+
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypesList);
+
+		mvc.perform(
+				get("/types/?page=1")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+		
+	}
+	
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceTypesFindTypesShouldSetListInResponse() throws Exception {
-		List<ReferenceType> referenceTypeList = new ArrayList<ReferenceType>();
-		referenceTypeList.add(testDataHelper.getReferenceTypeBusinessEntity());
-		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypeList);
+		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
+		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
+		
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypesList);
+
 		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
 		mvc = MockMvcBuilders.standaloneSetup(referenceTypesController)
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
 				.setViewResolvers(new ViewResolver() {
-					public View resolveViewName(String viewName, Locale locale) throws Exception {
+					@Override
+					public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale)
+							throws Exception {
 						return new MappingJackson2JsonView();
 					}
 				}).build();
 
-		//Test
 		mvc.perform(
-				get("/types?page=1&size=10")
+				get("/types/?page=0&size=1")
 				.contentType("application/json"))
 				.andExpect(jsonPath("$", hasSize(1)))
 				.andExpect(status().is(HttpStatus.OK.value()));
+	}
 
+	@Test
+	public void givenAssemblyMethodThrowsUnknownExceptionFindTypesShouldSetInternalServerErrorInResponse()
+			throws Exception {
+		
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willThrow(new UnknownException());
+
+		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referenceTypesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					@Override
+					public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale)
+							throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+		
+		mvc.perform(
+				get("/types/?page=1&size=1")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
 	}
 }
 

@@ -165,7 +165,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			Page<ReferenceSourceData> referenceSourceDataPage = referenceSourceRepository.findAll(pageable);
 			return null == referenceSourceDataPage ? Collections.emptyList() : 
 				Optional.ofNullable(referenceSourceDataPage.getContent()).orElseGet(Collections::emptyList)
-			    .stream().map(referenceData ->	referenceData.convertToBusinessEntity())
+			    .stream().map(referenceSourceData ->referenceSourceData.convertToBusinessEntity())
 																	.collect(Collectors.toList());
 		}catch(Exception ex) {
 			log.error("Exception encountered in findSources",ex);
