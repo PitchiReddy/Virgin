@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
@@ -37,5 +38,13 @@ public class CrossreferenceClientTest {
 	    	assertThat(ref.referenceTypeID(), equalTo(reference.referenceTypeID()));
 	    	    	
 	    }
-     }  
+     } 
+	@Test
+    public void findByReferenceTypeNameTestForExistingReferenceTypeName() {
+		String referenceTypeName = testDataHelper.getReferenceTypeByName();
+	//	ReferenceType referenceType = testDataHelper.getReferenceTypeMockObject();
+		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
+		System.out.println("============="+referenceType);
+	}
+	
   }

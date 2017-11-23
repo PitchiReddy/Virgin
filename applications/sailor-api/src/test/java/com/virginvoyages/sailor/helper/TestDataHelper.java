@@ -10,6 +10,7 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.OTAReadRQ;
@@ -151,5 +152,14 @@ public class TestDataHelper {
 		//otaReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
 		otaReadRQ.setReadRequests(readRequests);
 		return otaReadRQ;
+	}
+
+	public String getReferenceTypeByName() {
+		return "UT_data_mSdpK";
+	}
+
+	public ReferenceType getReferenceTypeMockObject() {
+		ReferenceType referenceType = new ReferenceType();
+		return referenceType;
 	}
 }
