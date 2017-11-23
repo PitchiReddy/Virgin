@@ -3,6 +3,7 @@ package com.virginvoyages.crossreference.sources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -113,9 +114,12 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
-		
-		List<ReferenceSource> listOfReferenceSources = referenceSourcesAssembly.findSources();
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
+			final Pageable pageable) {
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<ReferenceSource> listOfReferenceSources = referenceSourcesAssembly.findSources(pageable);
 		return new ResponseEntity<List<ReferenceSource>>(listOfReferenceSources,HttpStatus.OK);
 	}
 

@@ -1,6 +1,11 @@
 package com.virginvoyages.crossreference.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
@@ -107,6 +112,17 @@ public class TestDataHelper {
 		return new ReferenceTypeData().referenceType("").referenceTypeID("to_be_ignored")
 				.referenceSourceData(referenceSourceData);
 
+	}
+	
+	public Page<ReferenceSourceData> getPagedReferenceSourceDataEntity() {
+		final List<ReferenceSourceData> referenceSourceDataList = new ArrayList<>();
+		referenceSourceDataList.add(getReferenceSourceDataEntity());
+		final Page<ReferenceSourceData> page = new PageImpl<>(referenceSourceDataList);
+		return page;
+	}
+	
+	public Page<ReferenceSourceData> getPagedReferenceSourceDataEntity(List<ReferenceSourceData> referenceSources) {
+		return new PageImpl<>(referenceSources);
 	}
 
 }
