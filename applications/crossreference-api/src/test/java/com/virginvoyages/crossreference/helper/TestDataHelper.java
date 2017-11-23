@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.helper.RandomDataGenerator;
 import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
-import com.virginvoyages.helper.RandomDataGenerator;
 
 /**
  * Helper class for testcases
@@ -114,11 +114,14 @@ public class TestDataHelper {
 
 	}
 	
+<<<<<<< HEAD
 	public Page<ReferenceData> getPagedReferenceDataEntity() {
 		final List<ReferenceData> referenceDataList = new ArrayList<>();
 		referenceDataList.add(getReferenceDataEntity());
 		final Page<ReferenceData> page = new PageImpl<>(referenceDataList);
 		return page;
 	}
+=======
+>>>>>>> refs/remotes/origin/master
 
 }

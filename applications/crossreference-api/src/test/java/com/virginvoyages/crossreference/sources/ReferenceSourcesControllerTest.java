@@ -4,6 +4,7 @@ package com.virginvoyages.crossreference.sources;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,21 +14,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 
 @RunWith(SpringRunner.class)
@@ -51,6 +61,9 @@ public class ReferenceSourcesControllerTest {
 	
 	@MockBean(name="referenceRepository")
     private ReferenceRepository referenceRepository;
+	
+	@InjectMocks
+	private ReferenceSourcesController referenceSourcesController;
 	
 	
 	//Add Reference Source
@@ -154,14 +167,13 @@ public class ReferenceSourcesControllerTest {
 	//Find reference sources
 	@Test
 	public void givenNoValueForPageInRequestParamsFindSourcesShouldSetBadRequestCodeInResponse() throws Exception {
-		
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
-		given(referenceSourcesAssembly.findSources()).willReturn(referenceSourceList);
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
 		
 		mvc.perform(
-				 get("/sources/?size=1")
+				 get("/sources/?size=10")
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
@@ -172,29 +184,58 @@ public class ReferenceSourcesControllerTest {
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
-		given(referenceSourcesAssembly.findSources()).willReturn(referenceSourceList);
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
 		
 		mvc.perform(
 				 get("/sources/?page=1")
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
+
 	
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceSourcesFindSourcesShouldSetListInResponse() throws Exception {
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 		
-		given(referenceSourcesAssembly.findSources()).willReturn(referenceSourceList);
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
+	
+		ReflectionTestUtils.setField(referenceSourcesController, "referenceSourcesAssembly", referenceSourcesAssembly);
+		mvc=MockMvcBuilders.standaloneSetup(referenceSourcesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+	            .setViewResolvers(new ViewResolver() {
+	                @Override
+	                public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale) throws Exception {
+	                    return new MappingJackson2JsonView();
+	                }
+	            }).build();
 		
 		mvc.perform(
-				 get("/sources/?page=1&size=10")
+				 get("/sources/?page=1&size=1")
 				.contentType("application/json"))
 				.andExpect(jsonPath("$", hasSize(1)))
-		        .andExpect(status().is(HttpStatus.OK.value()));
-		
+				.andExpect(status().is(HttpStatus.OK.value()));
 	}
 	
+	@Test
+	public void givenAssemblyMethodThrowsUnknownExceptionFindSourcesShouldSetInternalServerErrorInResponse() throws Exception {
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willThrow(new UnknownException());
+		
+		ReflectionTestUtils.setField(referenceSourcesController, "referenceSourcesAssembly", referenceSourcesAssembly);
+		mvc=MockMvcBuilders.standaloneSetup(referenceSourcesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+	            .setViewResolvers(new ViewResolver() {
+	                @Override
+	                public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale) throws Exception {
+	                    return new MappingJackson2JsonView();
+	                }
+	            }).build();
+		mvc.perform(
+				 get("/sources/?page=1&size=1")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+	}
+
 	//Get Reference Source By ID	
 	@Test
 	public void givenAssemblyReturnsNullGetReferenceSourceByIdShouldThrowDataNotFoundException() throws Exception {

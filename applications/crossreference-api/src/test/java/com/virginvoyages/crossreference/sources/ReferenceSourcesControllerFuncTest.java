@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,6 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	private TestDataHelper testDataHelper;
 	
 	//Add Reference
-	
 	@Test
 	public void givenValidReferenceSourceInRequestBodyAddReferenceSourceShouldCreateReferenceSourceAndSetInResponse() {
 		
@@ -361,17 +359,13 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	
 	//Find sources
 	@Test
-	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSources() {
+	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSourcesAsPerSizeParameter() {
 		
-		//create reference source
-		JsonPath createdReferenceJson = createTestReferenceSource();
-		
-		
-	    ValidatableResponse response = 
+		ValidatableResponse response = 
 	    given()
 				.contentType("application/json")
 				.param("page", 1)
-				.param("size", 10)
+				.param("size", 4)
 				.get("/xref-api/v1/sources/")
 		
 	    .then()
@@ -379,10 +373,59 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				.log()
 				.all();
 	    
-	    assertThat(response.extract().jsonPath().getList("$").size(), greaterThan(0));
-	  
-		//cleanup
-		deleteTestReferenceSource(createdReferenceJson.getString("referenceSourceID"));		
+	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
 	} 
+	
+	@Test
+	public void givenValidReferenceSourcesExistFindSourcesShouldReturnEmptyListIfNoDataOnGivenPage() {
 		
+		ValidatableResponse response = 
+	    given()
+				.contentType("application/json")
+				.param("page", 100)
+				.param("size", 4)
+				.get("/xref-api/v1/sources/")
+		
+	    .then()
+				.assertThat().statusCode(200)
+				.log()
+				.all();
+	    
+	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(0));
+	} 
+	
+	@Test
+	public void givenSizeIsZeroFindSourcesShouldThrowMandatoryFieldsMissingException() {
+		
+		given()
+				.contentType("application/json")
+				.param("page", 0)
+				.param("size", 0)
+				.get("/xref-api/v1/sources/")
+		
+	    .then()
+	    		.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+	    		.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+	} 
+	
+	@Test
+	public void givenPageIsZeroAndSizeHasValueFindSourcesShouldReturnListOfSize() {
+		
+		ValidatableResponse response = 
+	    given()
+				.contentType("application/json")
+				.param("page", 0)
+				.param("size", 4)
+				.get("/xref-api/v1/sources/")
+		
+	    .then()
+				.assertThat().statusCode(200)
+				.log()
+				.all();
+	    
+	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
+	} 
+			
 }
