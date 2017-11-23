@@ -16,7 +16,6 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
-import com.virginvoyages.seaware.client.SeawareClient;
 
 import feign.FeignException;
 

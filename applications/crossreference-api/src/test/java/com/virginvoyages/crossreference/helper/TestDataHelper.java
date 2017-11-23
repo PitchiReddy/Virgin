@@ -1,20 +1,15 @@
 package com.virginvoyages.crossreference.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.helper.RandomDataGenerator;
 import com.virginvoyages.model.crossreference.Reference;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
-import com.virginvoyages.helper.RandomDataGenerator;
 
 /**
  * Helper class for testcases
@@ -114,11 +109,5 @@ public class TestDataHelper {
 
 	}
 	
-	public Page<ReferenceTypeData> getPagedReferenceTypeDataEntity() {
-		final List<ReferenceTypeData> referenceTypeDataList = new ArrayList<>();
-		referenceTypeDataList.add(getReferenceTypeDataEntity());
-		final Page<ReferenceTypeData> page = new PageImpl<>(referenceTypeDataList);
-		return page;
-	}
 
 }

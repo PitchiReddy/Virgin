@@ -24,6 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
@@ -216,16 +219,38 @@ public class ReferenceSourcesAssemblyImplTest {
 		assertThat(referenceSourcesAssemblyImpl
 				.updateReferenceSource(testDataHelper.getReferenceSourceBusinessEntity()), nullValue());
 	}
+	
 	//Find All
 	@Test
-	public void givenRepositoryReturnsListOfReferenceSourceDataFindSourcesShouldReturnCorrespondingReferenceSources() {
-		List<ReferenceSourceData> mockReferenceSourceDataList = new ArrayList<ReferenceSourceData>();
-		mockReferenceSourceDataList.add(testDataHelper.getReferenceSourceDataEntity());
-		mockReferenceSourceDataList.add(testDataHelper.getReferenceSourceDataEntity());
-		
-		when(referenceSourceRepository.findAll()).thenReturn(mockReferenceSourceDataList);
-		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources();
-		assertThat(referenceSourceList, hasSize(equalTo(mockReferenceSourceDataList.size())));
+	public void givenRepositoryReturnsNonEmptyPagedReferenceSourceDataFindSourcesShouldReturnCorrespondingReferenceSourcesList() {
+		List<ReferenceSourceData> referenceSourceDataList = new ArrayList<>();
+		ReferenceSourceData referenceSourceData = testDataHelper.getReferenceSourceDataEntity();
+		referenceSourceDataList.add(referenceSourceData);
+				
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(referenceSourceDataList));
+		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
+		assertThat(referenceSourceList, hasSize(equalTo(referenceSourceDataList.size())));
+		assertThat(referenceSourceList.get(0).referenceSource(), equalTo(referenceSourceData.referenceSource()));
+	}
+	
+	@Test
+	public void givenRepositoryReturnsEmptyPagedReferenceSourceDataFindSourcesShouldReturnEmptyReferenceSourcesList() {
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
+		assertThat(referenceSourceList, hasSize(equalTo(0)));
+	}
+	
+	@Test
+	public void givenRepositoryReturnsNullFindSourcesShouldReturnEmptyReferenceSourcesList() {
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(null);
+		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
+		assertThat(referenceSourceList, hasSize(equalTo(0)));
+	}
+	
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindSourcesShouldThrowUnknownException() {
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
+		referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
 	}
 		
 }

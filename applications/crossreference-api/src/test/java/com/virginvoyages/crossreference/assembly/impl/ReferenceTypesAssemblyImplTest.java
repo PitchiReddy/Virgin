@@ -4,15 +4,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
@@ -203,7 +196,7 @@ public class ReferenceTypesAssemblyImplTest {
 	}
 	
 	//Find All
-
+/*
 	@Test
 	public void givenRepositoryReturnsListOfReferenceTypesDataFindTypesShouldReturnCorrespondingReferenceTypes() {
 		Page<ReferenceTypeData> pagedReferenceTypeData = testDataHelper.getPagedReferenceTypeDataEntity();
@@ -215,7 +208,7 @@ public class ReferenceTypesAssemblyImplTest {
 
 
 	}
-
+*/
 	/*
 	 * @Test(expected=DataNotFoundException.class) public void
 	 * givenRepositoryReturnsValidReferenceTypeDataDeleteReferenceTypeByIDShouldReturnEmptyReferenceType
