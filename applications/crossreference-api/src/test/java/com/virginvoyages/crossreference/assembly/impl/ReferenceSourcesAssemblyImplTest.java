@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -236,8 +235,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	
 	@Test
 	public void givenRepositoryReturnsEmptyPagedReferenceSourceDataFindSourcesShouldReturnEmptyReferenceSourcesList() {
-		Page<ReferenceSourceData> pagedReferenceSourceData = testDataHelper.getPagedReferenceSourceDataEntity();
-		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(pagedReferenceSourceData);
+		when(referenceSourceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
 		List<ReferenceSource> referenceSourceList = referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
 		assertThat(referenceSourceList, hasSize(equalTo(0)));
 	}
@@ -252,7 +250,7 @@ public class ReferenceSourcesAssemblyImplTest {
 	@Test(expected = UnknownException.class)
 	public void givenRepositoryThrowsAnyExceptionFindSourcesShouldThrowUnknownException() {
 		when(referenceSourceRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
-		
+		referenceSourcesAssemblyImpl.findSources(new PageRequest(0, 5));
 	}
 		
 }
