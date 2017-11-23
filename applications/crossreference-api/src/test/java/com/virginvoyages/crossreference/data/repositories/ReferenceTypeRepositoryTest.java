@@ -5,10 +5,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -198,20 +197,13 @@ public class ReferenceTypeRepositoryTest {
 	
 	//Find All
 	@Test 
-	public void testFindAll() {
-		
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
-				testDataHelper.getReferenceSourceDataEntity());
-		
-		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(
-					testDataHelper.getReferenceTypeDataEntity(createdReferenceSource));
-		
-		List<ReferenceTypeData> referenceTypes = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
+	public void testFindAllWithSizeAndPage() {
+	
+		Page<ReferenceTypeData> referenceTypes = (Page<ReferenceTypeData>)referenceTypeRepository.findAll(new PageRequest(2, 2));
 		assertThat(referenceTypes, notNullValue());
-		assertThat(referenceTypes, hasSize(greaterThan(0)));
+		assertThat(referenceTypes.getNumber(), equalTo(2));
+		assertThat(referenceTypes.getContent(), hasSize(2));
 		
-		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
-		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 	}
 	
 	//Delete

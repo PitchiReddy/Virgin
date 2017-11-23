@@ -4,16 +4,19 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 
@@ -353,31 +356,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
 	
-	@Test
-	public void givenValidReferenceTypesExistFindTypesShouldReturnListOfReferenceTypes() {
 		
-		//create reference Type
-		JsonPath referenceTypeJson = createTestReferenceType();
-				
-	    ValidatableResponse response = 
-	    given()
-				.contentType("application/json")
-				.param("page", 1)
-				.param("size", 10)
-				.get("/xref-api/v1/types/")
-		
-	    .then()
-				.assertThat().statusCode(200)
-				.log()
-				.all();
-	    
-	    assertThat(response.extract().jsonPath().getList("$").size(), greaterThan(0));
-		
-		//cleanup
-		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));	
-		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
-	} 
-	
 	@Test
 	public void givenEmptyReferenceTypeBodyInUpdateReferenceTypeShouldThrowMandatoryFieldsMissingException() {
 		
@@ -395,5 +374,83 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.all();
 		
 	}
-		
+	
+	// Find types
+	@Test
+	public void givenValidReferenceTypesExistFindTypesShouldReturnListOfReferenceTypesAsPerSizeParameter() {
+
+		ValidatableResponse response = 
+				
+				given()
+					.contentType("application/json")
+					.param("page", 1)
+					.param("size", 4)
+					.get("/xref-api/v1/types/")
+
+				.then()
+					.assertThat()
+					.statusCode(200)
+					.log()
+					.all();
+
+		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
+	}
+
+	@Test
+	public void givenValidReferenceTypesExistFindTypesShouldReturnEmptyListIfNoDataOnGivenPage() {
+
+		ValidatableResponse response = 
+				
+				given()
+					.contentType("application/json")
+					.param("page", 100)
+					.param("size", 4)
+					.get("/xref-api/v1/types/")
+
+			   .then()
+			   		.assertThat()
+			   		.statusCode(200)
+			   		.log()
+			   		.all();
+
+		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(0));
+	}
+
+	@Test
+	public void givenSizeIsZeroFindSourcesShouldThrowMandatoryFieldsMissingException() {
+
+		given()
+			.contentType("application/json")
+			.param("page", 0)
+			.param("size", 0)
+			.get("/xref-api/v1/types/")
+
+		.then()
+			.assertThat()
+			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+			.body("exception", equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+			.log()
+			.all();
+	}
+
+	@Test
+	public void givenPageIsZeroAndSizeHasValueFindSourcesShouldReturnListOfSize() {
+
+		ValidatableResponse response = 
+				
+				given()
+					.contentType("application/json")
+					.param("page", 0)
+					.param("size", 4)
+					.get("/xref-api/v1/sources/")
+
+				.then()
+					.assertThat()
+					.statusCode(200)
+					.log()
+					.all();
+
+		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
+	}
+	
 }

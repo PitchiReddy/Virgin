@@ -395,7 +395,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	} 
 	
 	@Test
-	public void givenPageAndSizeIsZeroFindSourcesShouldReturnEmptyList() {
+	public void givenSizeIsZeroFindSourcesShouldThrowMandatoryFieldsMissingException() {
 		
 		given()
 				.contentType("application/json")
@@ -427,21 +427,5 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	    
 	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
 	} 
-	
-	@Test
-	public void givenSizeIsZeroAndPageHasValueFindSourcesShouldReturnEmptyList() {
-		
-		given()
-				.contentType("application/json")
-				.param("page", 1)
-				.param("size", 0)
-				.get("/xref-api/v1/sources/")
-		
-	    .then()
-				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
-				.log()
-				.all();
-	} 
-		
+			
 }
