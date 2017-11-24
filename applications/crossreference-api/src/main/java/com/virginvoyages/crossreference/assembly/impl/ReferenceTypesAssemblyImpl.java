@@ -1,13 +1,16 @@
 package com.virginvoyages.crossreference.assembly.impl;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
@@ -160,18 +163,23 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 	}
 
 	/**
-	 * Finding reference Type.  
-	 * @return
-	 */
+	 * Finding reference Type. 
+	 * @param Pageable pageable
+	 * @return List<ReferenceType>
+	 */ 
 	@Override
-	public List<ReferenceType> findTypes() {
+	public List<ReferenceType> findTypes(Pageable pageable) {
 		log.debug("Entering findTypes method in ReferenceTypesAssemblyImpl");
-		List<ReferenceTypeData> listOfReferenceTypeData = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
-		List<ReferenceType> listOfReferenceType = new ArrayList<>();
-		if(null != listOfReferenceTypeData && listOfReferenceTypeData.size() > 0 ) {
-			listOfReferenceType = listOfReferenceTypeData.stream().map(referenceTypeData -> referenceTypeData.convertToBusinessEntity()).collect(Collectors.toList());
+		try {
+			Page<ReferenceTypeData> referenceTypeDataPage = referenceTypeRepository.findAll(pageable);
+			return null == referenceTypeDataPage ? Collections.emptyList() : 
+				Optional.ofNullable(referenceTypeDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceTypeData -> referenceTypeData.convertToBusinessEntity()).collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findTypes",ex);
+			throw new UnknownException();
 		}
-		return listOfReferenceType;
+		
 	}
 
 }

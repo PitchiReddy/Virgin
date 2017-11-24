@@ -191,6 +191,7 @@ public class ReferenceSourcesControllerTest {
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
+
 	
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceSourcesFindSourcesShouldSetListInResponse() throws Exception {
