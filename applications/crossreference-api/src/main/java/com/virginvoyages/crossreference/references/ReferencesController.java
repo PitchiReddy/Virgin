@@ -224,9 +224,10 @@ public class ReferencesController {
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 		
 		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
-		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
+		List<Reference> referenceList =mockAPI.findReferenceTypeAndTargetType(reference.nativeSourceIDValue(),reference.referenceTypeID(),reference.targetReferenceTypeID());
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		return new ResponseEntity<References>(HttpStatus.OK);
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
+		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {

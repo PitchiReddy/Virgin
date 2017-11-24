@@ -193,4 +193,25 @@ public class MockCrossReferenceAPI {
 				.masterID("M1")
 				.nativeSourceIDValue("NSID1");
 	}
+
+	public List<Reference> findReferenceTypeAndTargetType(String nativeSourceIDValue,String referenceTypeID, String targetReferenceTypeID) {
+		
+		references.put("R1", new Reference()
+				.referenceID("R1")
+				.referenceTypeID(referenceTypeID)
+				.nativeSourceIDValue("NSID1"))
+				.targetReferenceTypeID("TRTYPE1");
+		references.put("R2", new Reference()
+				.referenceID("R2")
+				.referenceTypeID(referenceTypeID)
+				.nativeSourceIDValue("NSID2"))
+				.targetReferenceTypeID("TRTYPE2");
+		return references
+				.values()
+				.stream()
+                //.filter(e -> e.nativeSourceIDValue().equals(nativeSourceID))
+                .collect(Collectors.toList());
+	}
+
+	
 }
