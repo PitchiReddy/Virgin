@@ -20,9 +20,11 @@ import com.virginvoyages.crm.data.AccountCreateStatus;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
+import com.virginvoyages.crossreference.client.CrossreferenceClient;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.preference.PreferencesEmbedded;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.SailorMapper;
@@ -48,6 +50,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	
 	@Autowired
 	private QueryClient queryClient;
+	
+	@Autowired
+	private CrossreferenceClient referenceClient;
 	
 	@Autowired
 	private SailorQueryHelper sailorQueryHelper;
@@ -161,12 +166,12 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	/**
 	 * 
 	 * @param referenceTypeName - ReferenceType name whose ID is 
-	 * @return
+	 * @return referenceTypeID
 	 */
 	public String getReferenceTypeIDForName(String referenceTypeName) {
-		String referenceTypeID = null;
-		// Call CrossReference -> Types - > findbyname -> name = referenceTypeName
-		return referenceTypeID;
+		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
+		log.debug("connecting to crossreference getReferenceTypeByName", referenceType);
+		return referenceType.referenceTypeID();
 	}
 	
 	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {

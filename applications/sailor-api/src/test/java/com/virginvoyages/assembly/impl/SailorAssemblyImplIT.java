@@ -1,10 +1,12 @@
 package com.virginvoyages.assembly.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-
+import static org.hamcrest.core.IsNull.notNullValue;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -18,7 +20,10 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.model.crossreference.ReferenceType;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+
+import feign.FeignException;
 
 /**
  * @author rpraveen 
@@ -221,15 +226,21 @@ public class SailorAssemblyImplIT {
 		
 	} */
 	
-	/*  Test for getReferenceTypeIDForName
+	//  Test for getReferenceTypeIDForName
 	@Test
 	public void givenReferenceTypeExistsInDBGetReferenceTypeIDForNameShouldReturnID() {
-		
+		ReferenceType referenceType = testDataHelper.getReferenceTypeData();
+		String referenceTypeID = sailorAssembly.getReferenceTypeIDForName(referenceType.referenceType());
+		assertThat(referenceTypeID, is(notNullValue()));
+		assertThat(referenceType.referenceTypeID(), equalTo(referenceTypeID));
 	}
 	
-	@Test
+/*	@Test(expected = FeignException.class)
 	public void givenReferenceTypeDoesNotExistInDBGetReferenceTypeIDForNameShouldNull() {
 		
+		String referenceTypeName = testDataHelper.getInvalidReferenceTypeByName();
+		String referenceTypeID = sailorAssembly.getReferenceTypeIDForName(referenceTypeName);
+		assertThat(referenceTypeID, is(nullValue()));
 	} */
 	
 	/* Tests for getTargetRecordID

@@ -41,10 +41,12 @@ public class CrossreferenceClientTest {
      } 
 	@Test
     public void findByReferenceTypeNameTestForExistingReferenceTypeName() {
-		String referenceTypeName = testDataHelper.getReferenceTypeByName();
-		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
+		
+		ReferenceType referenceTypeData = testDataHelper.getReferenceTypeData();
+		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeData.referenceType());
 		assertThat(referenceType, is(notNullValue()));
-		assertThat(referenceType.referenceType(), equalTo(referenceTypeName));
+		assertThat(referenceType.referenceType(), equalTo(referenceTypeData.referenceType()));
+		assertThat(referenceType.referenceTypeID(), equalTo(referenceTypeData.referenceTypeID()));
 	}
 	
   }

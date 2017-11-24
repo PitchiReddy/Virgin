@@ -154,8 +154,17 @@ public class TestDataHelper {
 		return otaReadRQ;
 	}
 
-	public String getReferenceTypeByName() {
-		return "UT_data_mSdpK";
+	public String getInvalidReferenceTypeByName() {
+		return "UT_data";
+	}
+
+	public ReferenceType getReferenceTypeData() {
+		ReferenceType referenceTypeData = new ReferenceType();
+		referenceTypeData.referenceType("UT_data_mSdpK");
+		referenceTypeData.referenceTypeID("8acdf5ff5fb95536015fb9554f080001");
+		referenceTypeData.referenceSourceID("8acdf5ff5fb95536015fb9554e9d0000");
+		System.out.println("referenceTypeData    " + referenceTypeData);
+		return referenceTypeData;
 	}
 
 }
