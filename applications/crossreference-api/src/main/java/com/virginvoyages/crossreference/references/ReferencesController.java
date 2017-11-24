@@ -167,9 +167,12 @@ public class ReferencesController {
 			final Pageable pageable) {
 		
 		log.debug("Find reference objects");
-		List<Reference> listOfReference = referencesAssembly.findReferences(pageable);
-		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
-		return new ResponseEntity<References>(references, HttpStatus.OK);
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferences(pageable);
+		return new ResponseEntity<References>(new References().page(new Page().size(pageable.getPageSize()).number(pageable.getPageNumber()))
+				.embedded(new ReferencesEmbedded().references(referenceList)), HttpStatus.OK);
 	}
 	
 	/**

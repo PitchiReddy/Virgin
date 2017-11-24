@@ -3,7 +3,7 @@ package com.virginvoyages.crossreference.types;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,6 @@ import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
 public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTestSupport {
@@ -93,7 +92,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		.then()
 				.assertThat()
 				.statusCode(200)
-				.assertThat().body("referenceTypeID", not(equalTo(parameters.get("referenceTypeID"))))
+				.body("referenceTypeID", not(equalTo(parameters.get("referenceTypeID"))))
 				.log()
 				.all().extract()
 				.response()
@@ -119,8 +118,8 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
 		then().
 				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
+				body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+				body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
 				log().
 				all();
 		   
@@ -137,8 +136,9 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				get("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
 		then().
-				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				assertThat().
+				statusCode(404).
+				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();
 			   
@@ -152,7 +152,8 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				get("/xref-api/v1/types/"+" ").
 		then().
-				assertThat().statusCode(400).
+				assertThat().
+				statusCode(400).
 				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
 				log().
 				all();
@@ -169,9 +170,10 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				get("/xref-api/v1/types/findByName/" + referenceTypeJson.getString("referenceType")).
 		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
+				assertThat().
+				statusCode(200).
+				body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+				body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
 				log().
 				all();
 		   
@@ -186,8 +188,9 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				get("/xref-api/v1/types/findByName/" + testDataHelper.getRandomAlphanumericString()).
 		then().
-				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				assertThat().
+				statusCode(404).
+				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();		
 	}
@@ -230,8 +233,9 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				delete("/xref-api/v1/types/" + testDataHelper.getRandomAlphanumericString()).
 		then().
-				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				assertThat().
+				statusCode(404).
+				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();	
 	}
@@ -259,10 +263,11 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.put("/xref-api/v1/types")
 		
 		.then()
-				.assertThat().statusCode(200)
-				.assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID")))
-				.assertThat().body("referenceType", equalTo(referenceTypeJson.getString("referenceType")))
-				.assertThat().body("referenceSourceID", equalTo(referenceSourceToUpdateJson.getString("referenceSourceID")))
+				.assertThat().
+				statusCode(200).
+				body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
+			    body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
+				body("referenceSourceID", equalTo(referenceSourceToUpdateJson.getString("referenceSourceID")))
 				.log()
 				.all()
 				.extract()
@@ -304,9 +309,10 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.put("/xref-api/v1/types")
 		
 		.then()
-				.assertThat().statusCode(200)
-				.assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID")))
-				.assertThat().body("referenceSourceID", equalTo(referenceSourceJson.getString("referenceSourceID")))
+				.assertThat()
+				.statusCode(200)
+				.body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID")))
+				.body("referenceSourceID", equalTo(referenceSourceJson.getString("referenceSourceID")))
 				.extract()
 				.response()
 				.jsonPath();
@@ -315,9 +321,10 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				contentType("application/json").
 				get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
 		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID"))).
-				assertThat().body("referenceType", equalTo(updatedReferenceTypeJson.getString("referenceType"))).
+				assertThat()
+				.statusCode(200)
+				.body("referenceTypeID", equalTo(referenceTypeJson.getString("referenceTypeID")))
+				.body("referenceType", equalTo(updatedReferenceTypeJson.getString("referenceType"))).
 				log().
 				all();
 		
@@ -347,9 +354,8 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.assertThat().statusCode(HttpStatus.SC_NOT_MODIFIED)
 				//.assertThat().body("exception",equalTo("com.virginvoyages.exceptions.DataUpdationException"))
 				.log()
-				.all()
-				.extract()
-				.jsonPath();
+				.all();
+				
 		
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
@@ -379,45 +385,37 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	@Test
 	public void givenValidReferenceTypesExistFindTypesShouldReturnListOfReferenceTypesAsPerSizeParameter() {
 
-		ValidatableResponse response = 
-				
-				given()
-					.contentType("application/json")
-					.param("page", 1)
-					.param("size", 4)
-					.get("/xref-api/v1/types/")
+		given()
+			.contentType("application/json")
+			.param("page", 1)
+			.param("size", 4)
+			.get("/xref-api/v1/types/")
 
-				.then()
-					.assertThat()
-					.statusCode(200)
-					.log()
-					.all();
-
-		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
+		.then()
+			.assertThat()
+			.statusCode(200)
+			.body("$", hasSize(4))
+			.log()
+			.all();
 	}
 
 	@Test
 	public void givenValidReferenceTypesExistFindTypesShouldReturnEmptyListIfNoDataOnGivenPage() {
-
-		ValidatableResponse response = 
-				
-				given()
-					.contentType("application/json")
-					.param("page", 100)
-					.param("size", 4)
-					.get("/xref-api/v1/types/")
-
-			   .then()
-			   		.assertThat()
-			   		.statusCode(200)
-			   		.log()
-			   		.all();
-
-		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(0));
+		given()
+			.contentType("application/json")
+			.param("page", 100)
+			.param("size", 4)
+			.get("/xref-api/v1/types/")
+	   .then()
+	   		.assertThat()
+	   		.statusCode(200)
+	   		.body("$", hasSize(0))
+	   		.log()
+	   		.all();
 	}
 
 	@Test
-	public void givenSizeIsZeroFindSourcesShouldThrowMandatoryFieldsMissingException() {
+	public void givenSizeIsZeroFindTypesShouldThrowMandatoryFieldsMissingException() {
 
 		given()
 			.contentType("application/json")
@@ -431,26 +429,6 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 			.body("exception", equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
 			.log()
 			.all();
-	}
-
-	@Test
-	public void givenPageIsZeroAndSizeHasValueFindSourcesShouldReturnListOfSize() {
-
-		ValidatableResponse response = 
-				
-				given()
-					.contentType("application/json")
-					.param("page", 0)
-					.param("size", 4)
-					.get("/xref-api/v1/sources/")
-
-				.then()
-					.assertThat()
-					.statusCode(200)
-					.log()
-					.all();
-
-		assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
 	}
 	
 }

@@ -37,6 +37,7 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceSourceReposit
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.exceptions.DataUpdationException;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.Reference;
 
 
@@ -94,33 +95,7 @@ public class ReferencesControllerTest {
 				.contentType("application/json"))
 		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
-	
-	
-	@Test 
-	public void givenValidReferenceExistFindReferencesShouldReturnListOfReferences() throws Exception {
 		
-		List<Reference> referenceList = new ArrayList<Reference>();
-		referenceList.add(testDataHelper.getReferenceBusinessEntity());
-		referenceList.add(testDataHelper.getReferenceBusinessEntity());
-		given(referencesAssembly.findReferences(new PageRequest(1, 10))).willReturn(referenceList);
-		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
-		mvc = MockMvcBuilders.standaloneSetup(referencesController)
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-				.setViewResolvers(new ViewResolver() {
-					public View resolveViewName(String viewName, Locale locale) throws Exception {
-						return new MappingJackson2JsonView();
-					}
-				}).build();
-
-		 //Test
-		 mvc.perform(
-				get("/references?page=1&size=10")
-				.contentType("application/json"))
-		        .andExpect(jsonPath("$._embedded.references", hasSize(2)))
-				.andExpect(status().isOk())
-				.andReturn();
-	}		
-	
 	@Test 
 	public void givenValidReferenceAddReferenceAndShouldReturnReference() throws Exception {
 			
@@ -137,7 +112,7 @@ public class ReferencesControllerTest {
 					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
 					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
-       }
+    }
 	
 	@Test 
 	public void givenValidReferenceDeleteReferenceByIDShouldDeleteReference() throws Exception {
@@ -253,7 +228,7 @@ public class ReferencesControllerTest {
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
 	
-	
+	//Find All
 	@Test
 	public void givenNoValueForPageInRequestParamsFindReferencesShouldSetBadRequestCodeInResponse() throws Exception {
 		
@@ -282,5 +257,53 @@ public class ReferencesControllerTest {
 				 get("/references/?page=1")
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+		
+	@Test
+	public void givenAssemblyMethodReturnsListOfReferencesFindReferencesShouldSetReferencesInResponse() throws Exception {
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		given(referencesAssembly.findReferences(new PageRequest(1, 10))).willReturn(referenceList);
+
+		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referencesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					public View resolveViewName(String viewName, Locale locale) throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+
+		mvc.perform(
+				get("/references?page=1&size=10")
+				.contentType("application/json"))
+		        .andExpect(jsonPath("$._embedded.references", hasSize(2)))
+		        .andExpect(jsonPath("$.page.size", equalTo(10)))
+		        .andExpect(jsonPath("$.page.number", equalTo(1)))
+				.andExpect(status().isOk())
+				.andReturn();
+	}
+
+	@Test
+	public void givenAssemblyMethodThrowsUnknownExceptionFindTypesShouldSetInternalServerErrorInResponse()
+			throws Exception {
+		
+		given(referencesAssembly.findReferences(new PageRequest(1, 10))).willThrow(new UnknownException());
+
+		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referencesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					public View resolveViewName(String viewName, Locale locale) throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+		mvc.perform(
+				get("/references?page=1&size=10")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
 	}
 }

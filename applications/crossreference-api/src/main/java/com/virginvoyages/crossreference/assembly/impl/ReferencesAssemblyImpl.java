@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
@@ -115,9 +117,16 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public List<Reference> findReferences(Pageable pageable) {
 		log.debug("Entering findReferences method in ReferencesAssemblyImpl");
-		Page<ReferenceData> referenceDataPage = referenceRepository.findAll(pageable);
-		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				
+		try {
+			Page<ReferenceData> referenceDataPage = referenceRepository.findAll(pageable);
+			return null == referenceDataPage ? Collections.emptyList() : 
+				Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
 				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findReferences",ex);
+			throw new UnknownException();
+		}
 	}
 
 	@Override
