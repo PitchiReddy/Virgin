@@ -3,7 +3,7 @@ package com.virginvoyages.crossreference.sources;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,6 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
 public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctionalTestSupport {
@@ -361,8 +360,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	@Test
 	public void givenValidReferenceSourcesExistFindSourcesShouldReturnListOfReferenceSourcesAsPerSizeParameter() {
 		
-		ValidatableResponse response = 
-	    given()
+		given()
 				.contentType("application/json")
 				.param("page", 1)
 				.param("size", 4)
@@ -370,17 +368,17 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 	    .then()
 				.assertThat().statusCode(200)
+				.body("$", hasSize(4))
 				.log()
 				.all();
 	    
-	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
+	    
 	} 
 	
 	@Test
 	public void givenValidReferenceSourcesExistFindSourcesShouldReturnEmptyListIfNoDataOnGivenPage() {
 		
-		ValidatableResponse response = 
-	    given()
+		 given()
 				.contentType("application/json")
 				.param("page", 100)
 				.param("size", 4)
@@ -388,10 +386,10 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 		
 	    .then()
 				.assertThat().statusCode(200)
+				.body("$", hasSize(0))
 				.log()
 				.all();
 	    
-	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(0));
 	} 
 	
 	@Test
@@ -409,23 +407,5 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 				.log()
 				.all();
 	} 
-	
-	@Test
-	public void givenPageIsZeroAndSizeHasValueFindSourcesShouldReturnListOfSize() {
-		
-		ValidatableResponse response = 
-	    given()
-				.contentType("application/json")
-				.param("page", 0)
-				.param("size", 4)
-				.get("/xref-api/v1/sources/")
-		
-	    .then()
-				.assertThat().statusCode(200)
-				.log()
-				.all();
-	    
-	    assertThat(response.extract().jsonPath().getList("$").size(), equalTo(4));
-	} 
-			
+				
 }

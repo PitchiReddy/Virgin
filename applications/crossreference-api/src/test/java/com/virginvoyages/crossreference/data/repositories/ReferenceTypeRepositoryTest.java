@@ -65,6 +65,27 @@ public class ReferenceTypeRepositoryTest {
 		
 	}
 	
+	@Test
+	public void testSuccessfulCreateTwoTypesWithSameSource() {
+		
+		ReferenceSourceData referenceSourceData = ((Page<ReferenceSourceData>)referenceSourceRepository.findAll(new PageRequest(1, 1))).getContent().get(0);
+		
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(referenceSourceData);
+		ReferenceTypeData createdReferenceType1 = referenceTypeRepository.save(referenceTypeData);
+		assertThat(createdReferenceType1.referenceTypeID(), notNullValue());
+		assertThat(createdReferenceType1.referenceType(), equalTo(referenceTypeData.referenceType()));
+		
+		ReferenceTypeData createdReferenceType2 = referenceTypeRepository.save(
+				testDataHelper.getReferenceTypeDataEntity(referenceSourceData));
+		
+		assertThat(createdReferenceType1.referenceTypeID(), not(equalTo(createdReferenceType2.referenceTypeID())));
+		assertThat(createdReferenceType1.referenceSourceData().referenceSourceID(), equalTo(createdReferenceType2.referenceSourceData().referenceSourceID()));
+		
+		referenceTypeRepository.delete(createdReferenceType1.referenceTypeID());
+		referenceTypeRepository.delete(createdReferenceType2.referenceTypeID());
+			
+	}
+	
 	@Test(expected = InvalidDataAccessApiUsageException.class)
 	public void testDataIntegrityViolationOnSaveWithNoReferenceSourceDataID() {
 		referenceTypeRepository.save(testDataHelper.getReferenceTypeDataEntity(new ReferenceSourceData()));

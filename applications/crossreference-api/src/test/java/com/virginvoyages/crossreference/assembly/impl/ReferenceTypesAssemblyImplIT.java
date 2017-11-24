@@ -278,7 +278,7 @@ public class ReferenceTypesAssemblyImplIT {
 
 	//Find All
 	@Test
-	public void givenReferenceTypesExistFindTypeesShouldRetunsReferenceTypeesAsPerSizeParameter() {
+	public void givenReferenceTypesExistFindTypeesShouldReturnReferenceTypeesAsPerSizeParameter() {
 		assertThat(referenceTypesAssembly.findTypes(new PageRequest(0, 4)), hasSize(4));
 	}
 

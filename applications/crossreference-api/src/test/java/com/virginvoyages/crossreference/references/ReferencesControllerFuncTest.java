@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.references;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
-		parameters.put("referenceID", reference.referenceID());
+		//parameters.put("referenceID", reference.referenceID());
 		
 		JsonPath createdReferenceJson=given()
 				.contentType("application/json")
@@ -54,17 +55,18 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				contentType("application/json").
 				get("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
 		then().
-				assertThat().statusCode(200).
-				assertThat().body("referenceID", equalTo(createdReferenceJson.getString("referenceID"))).
-				assertThat().body("masterID", equalTo(createdReferenceJson.getString("masterID"))).
-				assertThat().body("nativeSourceIDValue", equalTo(createdReferenceJson.getString("nativeSourceIDValue"))).
+				assertThat().
+				statusCode(200).
+				body("referenceID", equalTo(createdReferenceJson.getString("referenceID"))).
+				body("masterID", equalTo(createdReferenceJson.getString("masterID"))).
+				body("nativeSourceIDValue", equalTo(createdReferenceJson.getString("nativeSourceIDValue"))).
 				log().
 				all();
 		
 		deleteTestReference(createdReferenceJson.getString("referenceID"));
-		deleteTestReferenceType(createdReferenceJson.getString("referenceTypeID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
-		
+			
 	}
 	
 	@Test
@@ -75,8 +77,9 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				contentType("application/json").
 				delete("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
 		then().
-				assertThat().statusCode(404).
-				assertThat().body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				assertThat().
+				statusCode(404).
+				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
 				log().
 				all();	
 	}
@@ -84,10 +87,12 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Test
 	public void givenValidReferenceDeleteReferenceByIdShouldDeleteReference() {
 		
-		JsonPath referenceTypeJson = createTestReferenceType();
-		
 		//Create test reference
-		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+				
+		JsonPath testReferenceSource = createTestReferenceSource();
+		JsonPath testReferenceType = createTestReferenceType(testReferenceSource);
+		
+		JsonPath createdReferenceJson = createTestReference(testReferenceType);
 		
 		//Test successfuly created
 		given().
@@ -112,9 +117,10 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		then().
 				assertThat().statusCode(404);
 		
-		
-		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
-		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+		//cleanup
+		deleteTestReferenceType(testReferenceType.getString("referenceTypeID"));
+		deleteTestReferenceSource(testReferenceSource.getString("referenceSourceID"));
+				
 	}
 	
 	@Test
@@ -285,9 +291,10 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Test
 	public void givenValidReferenceFindReferencesMasterShouldReturnOneorMoreReferences() {
 		
-		JsonPath referenceTypeJson = createTestReferenceType();
+		JsonPath testReferenceSource = createTestReferenceSource();
+		JsonPath testReferenceType = createTestReferenceType(testReferenceSource);
 		
-		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+		JsonPath createdReferenceJson = createTestReference(testReferenceType);
 		
 		given().
 				contentType("application/json").
@@ -296,6 +303,88 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				assertThat().statusCode(200).
 				log().
 			    all();
-			}
+	
+		//cleanup
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(testReferenceType.getString("referenceTypeID"));
+		deleteTestReferenceSource(testReferenceSource.getString("referenceSourceID"));
+	}
+	
+	// Find References
+	@Test
+	public void givenValidReferencesExistFindReferencesShouldReturnListOfReferencesAsPerSizeParameter() {
+		
+		JsonPath testReferenceSource = createTestReferenceSource();
+		JsonPath testReferenceType = createTestReferenceType(testReferenceSource);
+		
+		JsonPath createdReferenceJson1 = createTestReference(testReferenceType);
+		JsonPath createdReferenceJson2 = createTestReference(testReferenceType);
+		JsonPath createdReferenceJson3 = createTestReference(testReferenceType);
+		
+		given()
+			.contentType("application/json")
+			.param("page", 0)
+			.param("size", 2)
+			.get("/xref-api/v1/references/")
+       .then()
+			.assertThat()
+			.statusCode(200)
+			.body("_embedded.references", hasSize(2))
+			.body("page.size", equalTo(2))
+			.log()
+			.all();
+
+		//cleanup
+		deleteTestReference(createdReferenceJson1.getString("referenceID"));
+		deleteTestReference(createdReferenceJson2.getString("referenceID"));
+		deleteTestReference(createdReferenceJson3.getString("referenceID"));
+		deleteTestReferenceType(testReferenceType.getString("referenceTypeID"));
+		deleteTestReferenceSource(testReferenceSource.getString("referenceSourceID"));
+	}
+
+	@Test
+	public void givenValidReferencessExistFindReferencesShouldReturnEmptyListIfNoDataOnGivenPage() {
+
+		JsonPath testReferenceSource = createTestReferenceSource();
+		JsonPath testReferenceType = createTestReferenceType(testReferenceSource);
+		
+		JsonPath createdReferenceJson = createTestReference(testReferenceType);
+		
+		given()
+			.contentType("application/json")
+			.param("page", 100)
+			.param("size", 1)
+			.get("/xref-api/v1/references/")
+	   .then()
+	   		.assertThat()
+	   		.body("_embedded.references", hasSize(0))
+			.statusCode(200)
+	   		.log()
+	   		.all();
+		
+		//cleanup
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(testReferenceType.getString("referenceTypeID"));
+		deleteTestReferenceSource(testReferenceSource.getString("referenceSourceID"));
+
+	}
+
+	@Test
+	public void givenSizeIsZeroFindReferencesShouldThrowMandatoryFieldsMissingException() {
+
+		given()
+			.contentType("application/json")
+			.param("page", 0)
+			.param("size", 0)
+			.get("/xref-api/v1/references/")
+
+		.then()
+			.assertThat()
+			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+			.body("exception", equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+			.log()
+			.all();
+	}
+	
 		
 }

@@ -3,7 +3,7 @@
  */
 package com.virginvoyages.crossreference.assembly.impl;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -108,22 +108,27 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		}
 		log.debug("Exiting deleteReferenceByID method in ReferencesAssemblyImpl");
 	}
+
 	/**
 	 * Finding references
-	 * @return List Of Reference
-	 */
+	 * @param Pageable pageable
+	 * @return List<Reference>
+	 */ 
 	@Override
-	public List<Reference> findReferences() {
+	public List<Reference> findReferences(Pageable pageable) {
 		log.debug("Entering findReferences method in ReferencesAssemblyImpl");
-		List<ReferenceData> listOfReferenceData = (List<ReferenceData>)referenceRepository.findAll();
-		List<Reference> listOfReference = new ArrayList<>();
-		if(null != listOfReferenceData && listOfReferenceData.size() > 0 ) {
-			listOfReference = listOfReferenceData.stream().map(referenceData->referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+				
+		try {
+			Page<ReferenceData> referenceDataPage = referenceRepository.findAll(pageable);
+			return null == referenceDataPage ? Collections.emptyList() : 
+				Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findReferences",ex);
+			throw new UnknownException();
 		}
-		return listOfReference;
-		
 	}
-	
+
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId, Pageable pageable) {
 		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterID(masterId,pageable);
