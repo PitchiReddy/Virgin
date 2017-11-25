@@ -39,3 +39,6 @@ logging:
   level:
     org.springframework.web.client: DEBUG
     com.virginvoyages: DEBUG
+swagger:
+  oauth2:
+    url: ${swagger.ouath2.url}
