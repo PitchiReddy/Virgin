@@ -38,7 +38,7 @@ public class JwtConfiguration {
 		Resource resource = new ClassPathResource("pubkey.txt");
 		String publicKey = null;
 		try {
-			publicKey = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
+			publicKey = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()), "UTF-8");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

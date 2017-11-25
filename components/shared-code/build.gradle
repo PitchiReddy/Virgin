@@ -1,6 +1,6 @@
 apply from: '../../java.gradle'
 apply plugin: "jacoco"
-//apply plugin: "com.github.spotbugs"
+apply plugin: "com.github.spotbugs"
 
 group = 'com.virginvoyages.shared'
 version = '0.0.1-SNAPSHOT'

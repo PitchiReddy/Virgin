@@ -5,4 +5,4 @@ xref:
     password: Welcome123
 api:
   security:
-    enabled: false
+    enabled: true
