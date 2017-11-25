@@ -1,0 +1,18 @@
+apply from: '../../java.gradle'
+apply plugin: "com.github.spotbugs"
+
+group = 'com.virginvoyages.api'
+version = '0.0.1-SNAPSHOT'
+
+description = "security"
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}

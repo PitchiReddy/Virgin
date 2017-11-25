@@ -64,7 +64,7 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getReferenceTypeDataEntity(referenceSource.convertToDataEntity()).convertToBusinessEntity();
+		return getReferenceTypeDataEntity(ReferenceSourceData.convertToDataEntity(referenceSource)).convertToBusinessEntity();
 	}
 
 	public ReferenceData getReferenceDataEntity() {
@@ -84,7 +84,7 @@ public class TestDataHelper {
 	}
 
 	public Reference getReferenceBusinessEntity(ReferenceType referenceType) {
-		return getReferenceDataEntity(referenceType.convertToDataEntity()).convertToBusinessEntity();
+		return getReferenceDataEntity(ReferenceTypeData.convertToDataEntity(referenceType)).convertToBusinessEntity();
 	}
 
 	public String getRandomAlphabeticString() {
@@ -105,7 +105,7 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getEmptyReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getEmptyReferenceTypeDataEntity(referenceSource.convertToDataEntity()).convertToBusinessEntity();
+		return getEmptyReferenceTypeDataEntity(ReferenceSourceData.convertToDataEntity(referenceSource)).convertToBusinessEntity();
 	}
 
 	public ReferenceTypeData getEmptyReferenceTypeDataEntity(ReferenceSourceData referenceSourceData) {

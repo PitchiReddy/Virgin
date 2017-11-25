@@ -1,0 +1,12 @@
+apply from: '../../java.gradle'
+
+group = 'com.virginvoyages.api'
+version = '0.0.1-SNAPSHOT'
+
+description = "seaware"
+
+dependencies {
+}
+
+
+

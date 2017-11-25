@@ -37,7 +37,7 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.UnknownException;
+import com.virginvoyages.exception.UnknownException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 import com.virginvoyages.model.crossreference.ReferenceType;
 
@@ -48,34 +48,34 @@ public class ReferenceTypesControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
-	
+
 	@Autowired
 	private TestDataHelper testDataHelper;
-	
+
 	@MockBean(name="referenceTypesAssembly")
     private ReferenceTypesAssembly referenceTypesAssembly;
-	
+
 	@MockBean(name="referenceTypeRepository")
     private ReferenceTypeRepository referenceTypeRepository;
-		
+
 	@MockBean(name="referenceSourceRepository")
     private ReferenceSourceRepository referenceSourceRepository;
-		
+
 	@MockBean(name="referenceRepository")
     private ReferenceRepository referenceRepository;
-	
+
 	@InjectMocks
 	private ReferenceTypesController referenceTypesController;
-	
+
 	//Add
 	@Test
 	public void givenRequestBodyHasEmptyReferenceTypeAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
-		
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-				
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -85,15 +85,15 @@ public class ReferenceTypesControllerTest {
 						+ "\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasNoReferenceTypeAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
-		
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-		
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -102,15 +102,15 @@ public class ReferenceTypesControllerTest {
 							"\",\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasEmptyReferenceSourceIDAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
-		
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-		
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -119,16 +119,16 @@ public class ReferenceTypesControllerTest {
 						"\",\"referenceType\" : \""+referenceType.referenceType()+
 						"\",\"referenceSourceID\" : \"\"}"))
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
-		        		
+
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasNoReferenceSourceIDAddReferenceTypeShouldSetMethodNotAllowedStatusToResponse() throws Exception {
-		
+
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -137,16 +137,16 @@ public class ReferenceTypesControllerTest {
 						"\",\"referenceType\" : \""+referenceType.referenceType()+"\"}"))
 		        .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-		
-	
+
+
 	@Test
 	public void givenAssemblyMethodReturnsNullAddReferenceTypeShouldSetDataInsertExceptionToResponse () throws Exception {
-		
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-		
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(null);
-		
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -156,15 +156,15 @@ public class ReferenceTypesControllerTest {
 						"\",\"referenceSourceID\" : \""+referenceSource.referenceSourceID()+"\"}"))
 				.andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
-	
+
 	@Test
 	public void givenAssemblyMethodReturnsReferenceTypeWithIDAddReferenceTypeShouldSetAddedReferenceTypeDetailsToResponse () throws Exception {
-		
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-		
+
 		given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-				
+
 		//Test
 		mvc.perform(
 				post("/types/")
@@ -177,7 +177,7 @@ public class ReferenceTypesControllerTest {
 				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
 				.andExpect(status().is(HttpStatus.OK.value()));
 	}
-	
+
 	// Find By ID
 	@Test
 	public void givenReferenceTypeIDNotPresentInPathVariableGetReferenceTypeByIDShouldThrowMandatoryFieldsMissingException() throws Exception {
@@ -186,12 +186,12 @@ public class ReferenceTypesControllerTest {
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
-	
-	@Test 
+
+	@Test
 	public void givenAssemblyMethodReturnsValidReferenceTypeGetReferenceTypeByIdShouldSetReferenceTypeDetailsInReponse() throws Exception {
-		
+
 		 ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		 
+
 		 given(referenceTypesAssembly.findReferenceTypeByID(referenceType.referenceTypeID()))
 			.willReturn(referenceType);
 		//Test
@@ -202,12 +202,12 @@ public class ReferenceTypesControllerTest {
 				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
 		 		.andExpect(status().isOk());
 
-	}	
+	}
 	// find by reference Type by name
-	@Test 
+	@Test
 	public void givenAssemblyMethodReturnsValidReferenceTypeGetReferenceTypeByNameShouldSetReferenceTypeDetailsInReponse() throws Exception {
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		 
+
 		 given(referenceTypesAssembly.findReferenceTypeByName(referenceType.referenceType()))
 			.willReturn(referenceType);
 		//Test
@@ -218,8 +218,8 @@ public class ReferenceTypesControllerTest {
 				.andExpect(jsonPath("referenceType",equalTo(referenceType.referenceType())))
 		 		.andExpect(status().isOk());
 	}
-	
-	@Test 
+
+	@Test
 	public void givenAssemblyMethodReturnsNullGetReferenceTypeByNameShouldSetDataNotFoundExceptionInReponse() throws Exception {
 		 given(referenceTypesAssembly.findReferenceTypeByName(testDataHelper.getRandomAlphabeticString()))
 			.willReturn(null);
@@ -229,10 +229,10 @@ public class ReferenceTypesControllerTest {
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
-	
-	@Test 
+
+	@Test
 	public void givenAssemblyMethodReturnsNullGetReferenceTypeByIdShouldSetDataNotFoundExceptionInReponse() throws Exception {
-		
+
 		 given(referenceTypesAssembly.findReferenceTypeByID(testDataHelper.getRandomAlphabeticString()))
 			.willReturn(null);
 		//Test
@@ -242,7 +242,7 @@ public class ReferenceTypesControllerTest {
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 
 	}
-		
+
 	//Delete
 	@Test
 	public void givenAssemblyMethodDoesNotThrowAnyExceptionDeleteReferenceTypeByIdShouldReturnHttpStatusOK() throws Exception {
@@ -252,27 +252,27 @@ public class ReferenceTypesControllerTest {
 				 delete("/types/"+testDataHelper.getRandomAlphabeticString())
 				.contentType("application/json"))
 		        .andExpect(status().isOk());
-		
+
 	}
-	
-	@Test 
+
+	@Test
 	public void givenNoReferenceTypeIDInRequestBodyDeleteReferenceTypeIDShouldThrowMandatoryFieldsMissingException() throws Exception{
 		mvc.perform(
 			 	delete("/types/")
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
-	
-	
+
+
+
 	//Update
 	@Test
 	public void givenRequestBodyHasNoReferenceTypeUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
-		
+
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
+
 		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
-				
+
 		//Test
 		mvc.perform(
 				put("/types/")
@@ -281,14 +281,14 @@ public class ReferenceTypesControllerTest {
 						+ "\"referenceSourceID\" : \"anyid\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasNoReferenceSourceIDUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
+
 		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
-				
-				
+
+
 		//Test
 		mvc.perform(
 				put("/types/")
@@ -297,12 +297,12 @@ public class ReferenceTypesControllerTest {
 						+ "\"referenceType\" : \"\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasEmptyReferenceTypeIDUpdateReferenceTypeShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
-		
+
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
+
 		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
 		//Test
 		mvc.perform(
@@ -313,17 +313,17 @@ public class ReferenceTypesControllerTest {
 						+ "\"referenceSourceID\" : \"dummy\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	/*@Test
 	public void givenAssemblyMethodReturnsUpdatedTypeUpdateReferenceTypeShouldSetUpdatedTypeDetailsToResponse() throws Exception {
-			
+
 		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(referenceSource);
-		
+
 		//given(referenceTypesAssembly.addReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(referenceType);
-		
+
 		//Test
 		mvc.perform(
 				put("/types/")
@@ -340,9 +340,9 @@ public class ReferenceTypesControllerTest {
 	@Test
 	public void givenAssemblyMethodReturnsNullUpdateReferenceTypeShouldSetDataUpdationExceptionToResponse() throws Exception {
 		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity();
-		
+
 		given(referenceTypesAssembly.updateReferenceType(referenceType)).willReturn(null);
-		
+
 		//Test
 		mvc.perform(
 				put("/types/")
@@ -352,7 +352,7 @@ public class ReferenceTypesControllerTest {
 						"\",\"referenceSourceID\" : \"dummy\"}"))
 		        .andExpect(status().is(HttpStatus.NOT_MODIFIED.value()));
 	}
-	
+
 	//Find reference types
 	@Test
 	public void givenNoValueForPageInRequestParamsFindTypesShouldSetBadRequestCodeInResponse() throws Exception {
@@ -379,14 +379,14 @@ public class ReferenceTypesControllerTest {
 				get("/types/?page=1")
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
-		
+
 	}
-	
+
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceTypesFindTypesShouldSetListInResponse() throws Exception {
 		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
 		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
-		
+
 		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypesList);
 
 		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
@@ -410,7 +410,7 @@ public class ReferenceTypesControllerTest {
 	@Test
 	public void givenAssemblyMethodThrowsUnknownExceptionFindTypesShouldSetInternalServerErrorInResponse()
 			throws Exception {
-		
+
 		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willThrow(new UnknownException());
 
 		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
@@ -423,7 +423,7 @@ public class ReferenceTypesControllerTest {
 						return new MappingJackson2JsonView();
 					}
 				}).build();
-		
+
 		mvc.perform(
 				get("/types/?page=1&size=1")
 				.contentType("application/json"))

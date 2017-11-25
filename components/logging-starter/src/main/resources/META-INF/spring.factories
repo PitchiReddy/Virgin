@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.virginvoyages.logging.starter.config.LogbackAutoConfiguration

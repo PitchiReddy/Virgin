@@ -30,25 +30,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.UnknownException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.UnknownException;
 import com.virginvoyages.model.crossreference.Reference;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ReferencesAssemblyImplTest {
-	
+
 
 	@Mock
 	private ReferenceRepository referenceRepository;
-	
+
 	@InjectMocks
 	private ReferencesAssemblyImpl referencesAssemblyImpl;
-	
+
 	@Autowired
 	private TestDataHelper testDataHelper;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
@@ -64,7 +64,7 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
 	}
-	
+
 	/*@Test
 	public void givenRepositorySavesReferenceDataUpdateReferenceShouldReturnSavedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
@@ -75,13 +75,13 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
 	}*/
-	
+
 	@Test(expected = DataNotFoundException.class)
 	public void givenRepositoryThrowsEmptyResultDataAccessExceptionDeleteReferenceByIDShouldThrowDataNotFoundException() {
 		doThrow(new EmptyResultDataAccessException(0)).when(referenceRepository).delete(any(String.class));
 		referencesAssemblyImpl.deleteReferenceByID(testDataHelper.getRandomAlphabeticString());
 	}
-	
+
 	/*@Test(expected = DataNotFoundException.class)
 	public void givenRepositoryvalidReferenceIDInDeleteReferenceByIDShouldReturnEmptyReference() {
 		Mockito.spy(ReferenceData.class);
@@ -91,9 +91,9 @@ public class ReferencesAssemblyImplTest {
 		doThrow(new DataNotFoundException()).when(referenceRepository).findOne(mockReferenceData.referenceID());
 		Reference findReference = referencesAssemblyImpl.findReferenceByID(mockReferenceData.referenceID());
 		assertThat(findReference, is(nullValue()));
-		
+
 	}*/
-	
+
 	@Test(expected = DataUpdationException.class)
 	public void givenRepositorySavesReferenceDataWithInvalidReferenceIDInUpdateReferenceItShouldThrowDataUpdationException() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
@@ -103,7 +103,7 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsValidReferenceDatafindReferenceByIDShouldReturnReference() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
@@ -154,7 +154,7 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
-	
+
 	//Find All
 	@Test
 	public void givenRepositoryReturnsNonEmptyPagedReferenceDataFindTypesShouldReturnCorrespondingReferencesList() {

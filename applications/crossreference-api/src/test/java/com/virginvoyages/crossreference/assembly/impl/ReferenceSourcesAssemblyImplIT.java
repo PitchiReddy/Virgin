@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.model.crossreference.ReferenceSource;
 
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
@@ -39,10 +39,10 @@ public class ReferenceSourcesAssemblyImplIT {
 	public void givenValidReferenceSourceDataAddReferenceSourceShouldCreateAndReturnReferenceSource() {
 		ReferenceSource referenceSourceToCreate = testDataHelper.getReferenceSourceBusinessEntity();
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSourceToCreate);
-		
+
 		//ID from request should be ignored and auto generated ID used
 		assertThat(createdReferenceSource.referenceSourceID(), not(equalTo(referenceSourceToCreate.referenceSourceID())));
-		
+
 		// Assert by find
 		ReferenceSource retrievedReferenceSource = referenceSourcesAssembly
 				.findReferenceSourceByID(createdReferenceSource.referenceSourceID());
@@ -54,35 +54,35 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 
 	}
-	
+
 	@Test(expected = DataInsertionException.class)
 	public void givenEmptyReferenceSourceNameAddReferenceSourceShouldThrowDataInsertionException() {
 		referenceSourcesAssembly.addReferenceSource(
-				testDataHelper.getReferenceSourceBusinessEntity().referenceSource(StringUtils.EMPTY));		
+				testDataHelper.getReferenceSourceBusinessEntity().referenceSource(StringUtils.EMPTY));
 	}
-	
-	@Test 
+
+	@Test
 	public void givenReferenceSourceIDHasValidSourceIDAddReferenceSourceShouldIgnoreIDAndCreateSourceWithUUID() {
-		
+
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
-		
+
 		ReferenceSource createdReferenceSourceWithExistingID = referenceSourcesAssembly.addReferenceSource(
 																	testDataHelper.getReferenceSourceBusinessEntity().referenceSourceID(createdReferenceSource.referenceSourceID()));
 		assertThat(createdReferenceSource.referenceSourceID(), not(equalTo(createdReferenceSourceWithExistingID.referenceSourceID())));
-		
+
 		//cleanup
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSourceWithExistingID.referenceSourceID());
-				
+
 	}
-	
+
 	@Test
 	public void givenReferenceSourceNameAlreadyExistsAddReferenceSourceShouldThrowDataInsertionException() {
-		
+
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 														testDataHelper.getReferenceSourceBusinessEntity());
-		
+
 		try {
 			referenceSourcesAssembly.addReferenceSource(testDataHelper.getReferenceSourceBusinessEntity()
 					.referenceSource(createdReferenceSource.referenceSource()));
@@ -93,7 +93,7 @@ public class ReferenceSourcesAssemblyImplIT {
 			referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
 		}
 		assert(false);
-		
+
 	}
 
 	//Find By ID
@@ -110,13 +110,13 @@ public class ReferenceSourcesAssemblyImplIT {
 		// cleanup
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
-	
+
 	@Test
 	public void givenInvalidReferenceSourceIDFindReferenceSourceByIDShouldReturnNull() {
 		assertThat(referenceSourcesAssembly.findReferenceSourceByID(
 				testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
-	
+
 	//Find By ReferenceSource Name
 	@Test
 	public void givenValidReferenceSourceNameFindByReferenceSourceShouldReturnReferenceSource() {
@@ -130,10 +130,10 @@ public class ReferenceSourcesAssemblyImplIT {
 		// cleanup
 		referenceSourcesAssembly.deleteReferenceSourceByID(findReferenceSource.referenceSourceID());
 	}
-	
+
 	@Test
 	public void givenInValidReferenceSourceNameFindByReferenceSourceShouldReturnNull() {
-		assertThat(referenceSourcesAssembly.findReferenceSourceByName(	
+		assertThat(referenceSourcesAssembly.findReferenceSourceByName(
 		        testDataHelper.getRandomAlphanumericString()), is(nullValue()));
 	}
 
@@ -145,7 +145,7 @@ public class ReferenceSourcesAssemblyImplIT {
 				testDataHelper.getReferenceSourceBusinessEntity());
 
 		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
-		
+
 		assertThat(referenceSourcesAssembly
 				.findReferenceSourceByID(createdReferenceSource.referenceSourceID()), is(nullValue()));
 	}
@@ -162,7 +162,7 @@ public class ReferenceSourcesAssemblyImplIT {
 				testDataHelper.getReferenceSourceBusinessEntity());
 
 		String referenceSourceUpdateString = testDataHelper.getRandomAlphabeticString();
-		
+
 		ReferenceSource updatedReferenceSource = referenceSourcesAssembly.updateReferenceSource(
 				createdReferenceSource.referenceSource(referenceSourceUpdateString));
 
@@ -171,7 +171,7 @@ public class ReferenceSourcesAssemblyImplIT {
 
 		referenceSourcesAssembly.deleteReferenceSourceByID(updatedReferenceSource.referenceSourceID());
 	}
-	
+
 	public void givenvalidSourceIDUpdateReferenceTypeShouldUpdateInactive() {
 
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly
@@ -186,20 +186,20 @@ public class ReferenceSourcesAssemblyImplIT {
 		referenceSourcesAssembly.deleteReferenceSourceByID(updatedReferenceSource.referenceSourceID());
 
 	}
-	
+
 	@Test(expected = DataUpdationException.class)
 	public void givenInvalidSourceIDUpdateReferenceSourceShouldThrowDataUpdationException() {
 		referenceSourcesAssembly.updateReferenceSource(testDataHelper.getReferenceSourceBusinessEntity());
 	}
-	
+
 	@Test
 	public void givenReferenceSourceNameToUpdateToAlreadyExistsUpdateReferenceSourceShouldThrowDataUpdationException() {
 		ReferenceSource createdReferenceSource1 = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
-		
+
 		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(
 				testDataHelper.getReferenceSourceBusinessEntity());
-		
+
 		try {
 			referenceSourcesAssembly.updateReferenceSource(createdReferenceSource.referenceSource(createdReferenceSource1.referenceSource()));
 		}catch(DataUpdationException duex){
