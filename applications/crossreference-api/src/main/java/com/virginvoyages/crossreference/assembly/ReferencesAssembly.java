@@ -21,7 +21,7 @@ public interface ReferencesAssembly {
 
 	public void deleteReferenceByID(String referenceID);
 
-	public List<Reference> findReferences();
+	public List<Reference> findReferences(Pageable pageable);
 
 	public List<Reference> findReferenceByMasterId(String masterID, Pageable pageable);
 

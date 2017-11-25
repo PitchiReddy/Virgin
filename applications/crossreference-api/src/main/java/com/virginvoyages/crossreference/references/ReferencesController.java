@@ -163,12 +163,16 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
+			final Pageable pageable) {
 		
 		log.debug("Find reference objects");
-		List<Reference> listOfReference = referencesAssembly.findReferences();
-		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
-		return new ResponseEntity<References>(references, HttpStatus.OK);
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferences(pageable);
+		return new ResponseEntity<References>(new References().page(new Page().size(pageable.getPageSize()).number(pageable.getPageNumber()))
+				.embedded(new ReferencesEmbedded().references(referenceList)), HttpStatus.OK);
 	}
 	
 	/**

@@ -22,6 +22,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
@@ -29,6 +32,7 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.exceptions.DataNotFoundException;
 import com.virginvoyages.exceptions.DataUpdationException;
+import com.virginvoyages.exceptions.UnknownException;
 import com.virginvoyages.model.crossreference.Reference;
 
 @RunWith(SpringRunner.class)
@@ -50,6 +54,7 @@ public class ReferencesAssemblyImplTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
+	//Add Reference
 	@Test
 	public void givenRepositorySavesReferenceTypeDataAddReferenceTypeShouldReturnSavedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
@@ -116,18 +121,6 @@ public class ReferencesAssemblyImplTest {
 	}
 
 	@Test
-	public void givenRepositoryReturnsListOfReferenceDataFindReferencesShouldReturnCorrespondingReferences() {
-
-		List<ReferenceData> mockReferenceList = new ArrayList<ReferenceData>();
-		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
-		mockReferenceList.add(testDataHelper.getReferenceDataEntity());
-
-		when(referenceRepository.findAll()).thenReturn(mockReferenceList);
-		List<Reference> referenceList = referencesAssemblyImpl.findReferences();
-		assertThat(referenceList, hasSize(equalTo(mockReferenceList.size())));
-	}
-
-	@Test
 	public void givenRepositoryReturnsTrueForExistsAndRepositoryUpdatessuccessfullyUpdateReferenceShouldReturnUpdatedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.exists((any(String.class)))).thenReturn(true);
@@ -161,4 +154,38 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
+	
+	//Find All
+	@Test
+	public void givenRepositoryReturnsNonEmptyPagedReferenceDataFindTypesShouldReturnCorrespondingReferencesList() {
+		List<ReferenceData> referencesDataList = new ArrayList<>();
+		ReferenceData referenceData = testDataHelper.getReferenceDataEntity();
+		referencesDataList.add(referenceData);
+
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(referencesDataList));
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(referencesDataList.size())));
+		assertThat(referencesList.get(0).nativeSourceIDValue(), equalTo(referenceData.nativeSourceIDValue()));
+	}
+
+	@Test
+	public void givenRepositoryReturnsEmptyPagedReferenceDataFindTypesShouldReturnEmptyReferencesList() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(0)));
+	}
+
+	@Test
+	public void givenRepositoryReturnsNullFindTypeesShouldReturnEmptyReferenceTypesList() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(null);
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(0)));
+	}
+
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindTypesShouldThrowUnknownException() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+	}
+
 }
