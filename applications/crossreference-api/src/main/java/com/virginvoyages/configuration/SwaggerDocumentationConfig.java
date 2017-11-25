@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.virginvoyages.oauth2.config.SwaggerProperties;
+
 import io.swagger.annotations.Api;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -31,7 +33,7 @@ import springfox.documentation.swagger.web.SecurityConfiguration;
 public class SwaggerDocumentationConfig {
 
 	public static final String securitySchemaOAuth2 = "oauth2Scheme";
-
+	
 	@Autowired
 	private SwaggerProperties swaggerProperties;
 	ApiInfo apiInfo() {
