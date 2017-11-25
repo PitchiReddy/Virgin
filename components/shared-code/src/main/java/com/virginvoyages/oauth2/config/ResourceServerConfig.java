@@ -1,6 +1,7 @@
 package com.virginvoyages.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableResourceServer
+@ConditionalOnProperty(name = "api.security.enabled", havingValue = "true")
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Autowired
@@ -21,17 +23,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	JwtAccessTokenConverter tokenConverter;
-
-	/*@Override
-	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		.authorizeRequests()
-		.antMatchers("/**")
-		.authenticated()
-		.and()
-		.authorizeRequests()
-        .antMatchers("/v1/swagger-ui.html").permitAll();
-}*/
 
 	@Override
     public void configure(HttpSecurity http) throws Exception {

@@ -5,6 +5,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,8 @@ public class SwaggerDocumentationConfig {
 
 	public static final String securitySchemaOAuth2 = "oauth2Scheme";
 
+	@Autowired
+	private SwaggerProperties swaggerProperties;
 	ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("CrossReference API").description(
 				"CrossReference API provides light weight orchestration services around CrossReference Data between different SORs.")
@@ -48,13 +51,13 @@ public class SwaggerDocumentationConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "swagger.security.enabled", havingValue = "false")
+	@ConditionalOnProperty(name = "api.security.enabled", havingValue = "false")
 	public Docket unsecuredDocket() {
 		return customImplementation();
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "swagger.security.enabled", havingValue = "true")
+	@ConditionalOnProperty(name = "api.security.enabled", havingValue = "true")
 	public Docket securedDocket() {
 
 		return customImplementation().securitySchemes(Collections.singletonList(securitySchema()))
@@ -80,7 +83,7 @@ public class SwaggerDocumentationConfig {
 
 		List<GrantType> grantTypes = newArrayList();
 		GrantType creGrant = new ClientCredentialsGrant(
-				"http://10.3.100.88:31362/identityaccessmanagement-service/oauth/token");
+				swaggerProperties.getUrl());
 
 		grantTypes.add(creGrant);
 
@@ -94,7 +97,7 @@ public class SwaggerDocumentationConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "swagger.security.enabled", havingValue = "true")
+	@ConditionalOnProperty(name = "api.security.enabled", havingValue = "true")
 	public SecurityConfiguration securityInfo() {
 		return new SecurityConfiguration("", "", "", "", "", ApiKeyVehicle.HEADER, "", " ");
 	}

@@ -3,3 +3,6 @@ xref:
     url: jdbc:mysql://vvapidevmysqldb.cbduemg5i5w8.us-east-1.rds.amazonaws.com:3306/XREF
     username: admin
     password: Welcome123
+api:
+  security:
+    enabled: false

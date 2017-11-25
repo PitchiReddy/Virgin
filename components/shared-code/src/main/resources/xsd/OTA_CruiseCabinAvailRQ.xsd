@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="4.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruiseCabinAvailRQ">
+		<xs:annotation>
+            <xs:documentation xml:lang="en">The Cabin Availability Request message requests Cabin Availability for a given sailing with a specific Mode of Transportation/GatewayCity pair and currency and for a selected fare/category pair. Optional request information can include: Guest city and Inclusive package.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">Cruise Cabin Availability message pair provides a list of available cabins for a selected category on a voyage.
+                The voyage information is defined by the Seaware sail package ID (VoyageID - mandatory) and the category (SelectedCategory). Party size and details are defined  by Guests or GuestCounts.
+                Promotion (or "best fare") is defined by the SelectedFare.
+                If Reservation ID is defined then the availability search is performed for the specified reservation (and the POS elment then must have agency that can access that reservation).
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">GetAvailCabinsIN</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking which is used to search for availability.
+                            Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally) agency is identified by PseudoCityCode.
+                            Agent ID is taken from AgentSine.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+                    </xs:annotation>
+				</xs:element>
+				<xs:element name="Guest" type="GuestType" minOccurs="0" maxOccurs="9">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies guest names and/or their transportation regarding the guest staying in the cabin.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines reservation guests for the temporary booking that is used to perform availability search.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResGuests</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="GuestCounts">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies guest quantity and guest types.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines reservation guests for the temporary booking that is used to perform availability search.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResGuests</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GuestCount" maxOccurs="9">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Categorization of all guests in the request. The sum of the Quantity attribute will provide you with the total number of guests.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attributeGroup ref="TravelerCountGroup"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SailingInfo" type="SailingCategoryInfoType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains information related to the selected sailing. Typically the selected sailing is one of the sailings returned in the previous sailing availability response. Used to request a package option that the cruise might offer with the sailing. It is quite common to request, at this stage, packages that are included in the cruise sailing offering (inclusive packages).</xs:documentation>
+                        <xs:documentation source="Versonix" xml:lang="en">Specifies sailing search criteria. VoyageID attribute is mandatory here.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests, ResShell.ResPromotions</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SearchQualifiers" minOccurs="0">
+					<xs:annotation>
+                        <xs:documentation xml:lang="en">Used to further qualify the cabin availability search.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Contains reservation ID or optionally filter availability results by
+                            MaxOccupancy, SharedCabinGender, DeckNumber, CategoryLocation, CabinNumber, PricedCategoryCode.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">GetAvailCabinsIN.SearchOptions, GetAvailCabinsIN.SearchParams</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="SearchQualifierType">
+								<xs:attributeGroup ref="DeckGroup">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">Provides the ability to search on deck number or name.</xs:documentation>
+                                        <xs:documentation xml:lang="en" source="Versonix">Optionally filter availability results by DeckNumber.</xs:documentation>
+									</xs:annotation>
+								</xs:attributeGroup>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SelectedFare">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies the fare code and the group code if any. Fare codes are specific to cruise lines.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPromotions</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attributeGroup ref="FareGroup"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="TPA_Extensions" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attributeGroup ref="ResponseGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Provides the echo token to be used to retrieve additional records.</xs:documentation>
+                    <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

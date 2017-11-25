@@ -2,7 +2,7 @@ spring:
   application:
     name: crossreference-api
   config:
-      location: ${application_properties_path},${service_properties_path}
+      location: ${application_properties_path},${crossreference_service_properties_path}
   
 server:
   port: 8435

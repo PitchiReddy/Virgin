@@ -2,6 +2,7 @@ package com.virginvoyages.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -19,6 +20,7 @@ import java.io.IOException;
  *
  */
 @Configuration
+@ConditionalOnProperty(name = "api.security.enabled", havingValue = "true")
 public class JwtConfiguration {
 	@Autowired
 	JwtAccessTokenConverter jwtAccessTokenConverter;

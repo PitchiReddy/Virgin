@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="4.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruiseCabinUnholdRQ">
+		<xs:annotation>
+            <xs:documentation xml:lang="en">The Cabin Unhold Request message requests that the specified cabin, currently held for a given sailing, be released back into inventory by the sailing vendor.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Cabin Unhold message pair is used to release a hold that was previously put on a cabin, allowing Seaware to release the cabin back into its available inventory.</p>
+                <p>The request message allows the user to release multiple cabins - from multiple voyages - to address situations where the same cabin is currently held for back-to-back cruises.</p>
+                <p>The cabin(s) to release is(are) identified by the agency id (POS/Source), package id (VoyageID) and cabin number.</p>
+                <p>The cabin lock uses a temporary booking to hold the cabin. When the Unhold requests comes, the temporary booking is identified by the StateKey that contains agency id, package id(s) and cabin number(s). It then is destroyed thus allowing Seaware to release the cabin back into inventory.</p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">LoadBooking, UnlockBooking</xs:appinfo>
+            <xs:appinfo source="Versonix" xml:lang="en">LoadBookingIN.StateKey = AgencyId__PackageId1_CabinNumber1__PackageId2_CabinNumber2...__PackageIdN_CabinNumberN</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking.
+                            Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally) agency is identified by PseudoCityCode.
+                            Agent ID is taken from AgentSine.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SelectedSailing" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Identifies the voyage(s) where the cabin is to be released</xs:documentation>
+                        <xs:documentation source="Versonix" xml:lang="en">Contains mandatory elements: packageIDs (VoyageIDs) and cabin numbers.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SelectedCabin" maxOccurs="4">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Identifies the currently held cabins for the given sailing, for which release is being requested.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attributeGroup ref="CruiseCabinGroup"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attributeGroup ref="SelectedSailingGroup"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages. </xs:documentation>
+                    <xs:documentation xml:lang="en">NOT SUPPORTED</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

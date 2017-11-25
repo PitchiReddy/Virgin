@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="4.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_Profile.xsd"/>
+	<xs:element name="OTA_ProfileCreateRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides the ability to create a new profile.</xs:documentation>
+			<xs:documentation xml:lang="en" source="Versonix">
+				<p>Cruise profile create message pair is used to create client or travel agent in Seaware, for a specified Customer in Profile.</p>
+			</xs:documentation>
+			<xs:appinfo xml:lang="en" source="Versonix">Creates and stores client. <br/> Load and locks new household. <br/> Loads and locks client. <br/> Fill household, updates, stores and unlocks it. <br/> Unlocks client.</xs:appinfo>
+			<xs:appinfo xml:lang="en" source="Versonix">ManageClientsIN.Load, ManageClientsIN.Lock, ManageClientsIN.Update, ManageClientsIN.Store, ManageClientsIN.Unlock</xs:appinfo>
+			<xs:appinfo xml:lang="en" source="Versonix">Creates travel agent.</xs:appinfo>
+			<xs:appinfo xml:lang="en" source="Versonix">UpdateAgentIN.Agent</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Defines agency used for initialize the session context. Mandatory node.
+							Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+							ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+							Alternatively (or additionally) agency will be identified by PseudoCityCode.</xs:documentation>
+						<xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="UniqueID" type="UniqueID_Type" maxOccurs="99">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Used to convey the identity of the profile, the owner of the profile, or an id provided by the client.</xs:documentation>
+						<xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Profile" type="ProfileType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Details of the profile.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">The information from Customer and UserID is used.</xs:documentation>
+						<xs:appinfo source="Versonix" xml:lang="en">Client, Household, TravelAgent</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
