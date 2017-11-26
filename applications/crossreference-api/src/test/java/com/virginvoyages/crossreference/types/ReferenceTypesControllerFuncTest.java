@@ -24,27 +24,27 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-	
+
 	//Add
-	
+
 	@Test
 	public void givenAllRequiredDataInRequestBodyAddReferenceTypeShouldAddReferenceType() {
-		
-		//Create Reference Source 
+
+		//Create Reference Source
 		JsonPath referenceSourceJson = createTestReferenceSource();
-		
+
 		String testReferenceTypeName = testDataHelper.getRandomAlphabeticString();
-		
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceType", testReferenceTypeName);
 		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
-		
+
 		//create reference type
 		JsonPath createdReferenceTypeJson = given()
 				.contentType("application/json")
 				.body(parameters)
 				.post("/xref-api/v1/types/")
-		
+
 		.then()
 				.assertThat()
 				.statusCode(200)
@@ -53,8 +53,8 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.extract()
 				.response()
 				.jsonPath();
-		
-			
+
+
         //find with ID and test
 		given().
 				contentType("application/json").
@@ -65,30 +65,30 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				assertThat().body("referenceType", equalTo(createdReferenceTypeJson.getString("referenceType"))).
 				log().
 				all();
-		   
+
 		//cleanup
 		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(createdReferenceTypeJson.getString("referenceSourceID"));
-	
-	} 
-	
+
+	}
+
 	@Test
 	public void givenReferenceTypeIDInRequestBodyAddReferenceTypeShouldNOTUseTheIDToCreateReferenceType() {
-		
-		//Create Reference Source 
+
+		//Create Reference Source
 		JsonPath referenceSourceJson = createTestReferenceSource();
-	
+
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceTypeID", testDataHelper.getRandomAlphanumericString());
 		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
-		
+
 		//create reference type
 		JsonPath createdReferenceTypeJson =  given()
 				.contentType("application/json")
 				.body(parameters)
 				.post("/xref-api/v1/types/")
-		
+
 		.then()
 				.assertThat()
 				.statusCode(200)
@@ -97,21 +97,21 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.all().extract()
 				.response()
 				.jsonPath();
-		
-		
+
+
 		//cleanup
 		deleteTestReferenceType(createdReferenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceSourceJson.getString("referenceSourceID"));
-			
+
 	}
-	
+
 	//Find By Reference TypeID
 	@Test
 	public void givenValidReferenceTypeIDGetReferenceTypeByIdShouldReturnReferenceType() {
 
 		//Create test reference Type
 		JsonPath referenceTypeJson = createTestReferenceType();
-				
+
 		//Test
 		given().
 				contentType("application/json").
@@ -122,15 +122,15 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
 				log().
 				all();
-		   
+
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
-	
+
 	@Test
 	public void givenInValidReferenceTypeIDGetReferenceTypeByIdShouldThrowDataNotFoundException() {
-			
+
 		//Test
 		given().
 				contentType("application/json").
@@ -138,15 +138,15 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		then().
 				assertThat().
 				statusCode(404).
-				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException")).
 				log().
 				all();
-			   
+
 	}
-		
+
 	@Test
 	public void givenNoReferenceTypeIDInRequestGetReferenceTypeByIdShouldThrowMissingServletRequestParameterException() {
-		
+
 		//Test
 		given().
 				contentType("application/json").
@@ -157,14 +157,14 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				body("exception",equalTo("org.springframework.web.bind.MissingServletRequestParameterException")).
 				log().
 				all();
-				
+
 	}
-	
+
 	//find by referenceType name
 	@Test
 	public void givenValidReferenceTypeNameGetReferenceTypeByNameShouldReturnReferenceType() {
 		JsonPath referenceTypeJson = createTestReferenceType();
-		
+
 		//Test
 		given().
 				contentType("application/json").
@@ -176,12 +176,12 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				body("referenceType", equalTo(referenceTypeJson.getString("referenceType"))).
 				log().
 				all();
-		   
+
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
-	
+
 	@Test
 	public void givenInvalidReferenceTypeNameGetReferenceTypeByNameShouldThrowDataNotFoundException() {
 		given().
@@ -190,19 +190,19 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		then().
 				assertThat().
 				statusCode(404).
-				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException")).
 				log().
-				all();		
+				all();
 	}
-		
-	
+
+
 	//Delete
 	@Test
 	public void givenValidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldDeleteReferenceType() {
-		
+
 		//Create test reference
 		JsonPath referenceTypeJson = createTestReferenceType();
-				
+
 	    //Test Delete
 		given().
 				contentType("application/json").
@@ -211,7 +211,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				assertThat().statusCode(200).
 				log().
 				all();
-		
+
 		//Test that deleted ID does not exist.
 		given().
 				contentType("application/json").
@@ -220,11 +220,11 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				assertThat().statusCode(HttpStatus.SC_NOT_FOUND).
 				log().
 				all();
-		
+
 		//cleanup
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
-	
+
 	@Test
 	public void givenInvalidReferenceTypeIDInRequestDeleteReferenceTypeByIdShouldThrowDataNotFoundException() {
 
@@ -235,33 +235,33 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		then().
 				assertThat().
 				statusCode(404).
-				body("exception", equalTo("com.virginvoyages.exceptions.DataNotFoundException")).
+				body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException")).
 				log().
-				all();	
+				all();
 	}
-	
+
 	//Update
 	@Test
 	public void givenValidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeWithNewSourceID() {
-		
+
 		/*Response referenceSource = createTestReferenceSource();
 		String responseBody  = referenceSource.getBody().asString();
 		JsonPath jsonPath = new JsonPath(responseBody);*/
-		
+
 		JsonPath referenceTypeJson = createTestReferenceType();
-		
+
 		JsonPath referenceSourceToUpdateJson = createTestReferenceSource();
-	
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
 		parameters.put("referenceType", referenceTypeJson.getString("referenceType"));
 		parameters.put("referenceSourceID", referenceSourceToUpdateJson.getString("referenceSourceID"));
-		
+
 		given()
 				.contentType("application/json")
 				.body(parameters)
 				.put("/xref-api/v1/types")
-		
+
 		.then()
 				.assertThat().
 				statusCode(200).
@@ -272,7 +272,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.all()
 				.extract()
 				.jsonPath();
-		
+
 		/*//Test that updated name is reflecting
 		given().
 				contentType("application/json").
@@ -284,30 +284,30 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				assertThat().body("referenceSourceID", equalTo(referenceSourceToUpdateJson.getString("referenceSourceID"))).
 				log().
 				all();*/
-			
+
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 		deleteTestReferenceSource(referenceSourceToUpdateJson.getString("referenceSourceID"));
-	} 
-	
+	}
+
 	@Test
 	public void givenValidReferenceTypeNameInRequestBodyUpdateReferenceTypeShouldUpdateReferenceTypeString() {
-		
+
 		JsonPath referenceTypeJson = createTestReferenceType();
-		
+
 		JsonPath referenceSourceJson = createTestReferenceSource();
-	
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
 		parameters.put("referenceType", testDataHelper.getRandomAlphabeticString());
 		parameters.put("referenceSourceID", referenceSourceJson.getString("referenceSourceID"));
-		
+
 		JsonPath updatedReferenceTypeJson = given()
 				.contentType("application/json")
 				.body(parameters)
 				.put("/xref-api/v1/types")
-		
+
 		.then()
 				.assertThat()
 				.statusCode(200)
@@ -316,7 +316,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.extract()
 				.response()
 				.jsonPath();
-		
+
 		given().
 				contentType("application/json").
 				get("/xref-api/v1/types/" + referenceTypeJson.getString("referenceTypeID")).
@@ -327,60 +327,60 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 				.body("referenceType", equalTo(updatedReferenceTypeJson.getString("referenceType"))).
 				log().
 				all();
-		
+
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 		deleteTestReferenceSource(updatedReferenceTypeJson.getString("referenceSourceID"));
-		
+
 	}
-	
+
 	@Test
 	public void givenInvalidReferenceSourceIDInRequestBodyUpdateReferenceTypeShouldThrowDataUpdationException() {
-		
+
 		JsonPath referenceTypeJson = createTestReferenceType();
-		
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
 		parameters.put("referenceType", referenceTypeJson.getString("referenceType"));
 		parameters.put("referenceSourceID", testDataHelper.getRandomAlphabeticString());
-		
+
 		given()
 				.contentType("application/json")
 				.body(parameters)
 				.put("/xref-api/v1/types")
-		
+
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_NOT_MODIFIED)
-				//.assertThat().body("exception",equalTo("com.virginvoyages.exceptions.DataUpdationException"))
+				//.assertThat().body("exception",equalTo("com.virginvoyages.exception.DataUpdationException"))
 				.log()
 				.all();
-				
-		
+
+
 		//cleanup
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 	}
-	
-		
+
+
 	@Test
 	public void givenEmptyReferenceTypeBodyInUpdateReferenceTypeShouldThrowMandatoryFieldsMissingException() {
-		
+
 		//Update ReferenceType without passing body
-		Map<String, Object> parameters = new HashMap<String, Object>();	
+		Map<String, Object> parameters = new HashMap<String, Object>();
 		given()
 				.contentType("application/json")
 				.body(parameters)
 				.put("/xref-api/v1/types/")
-		
+
 		.then()
 				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-				.body("exception",equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
 				.log()
 				.all();
-		
+
 	}
-	
+
 	// Find types
 	@Test
 	public void givenValidReferenceTypesExistFindTypesShouldReturnListOfReferenceTypesAsPerSizeParameter() {
@@ -426,9 +426,9 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		.then()
 			.assertThat()
 			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-			.body("exception", equalTo("com.virginvoyages.exceptions.MandatoryFieldsMissingException"))
+			.body("exception", equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
 			.log()
 			.all();
 	}
-	
+
 }

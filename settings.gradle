@@ -1,9 +1,13 @@
-
 rootProject.name = 'integration-api'
+
 include "applications:sailor-api"
 include "applications:crossreference-api"
 include "applications:recommendation-api"
-include "components:hbase-starter"
-include "components:logging-starter"
-include "components:shared-code"
-include "components:seaware-bindings"
+
+include "components:data"
+include "components:logging"
+include "components:exception"
+include "components:seaware"
+include "components:security"
+include "components:crossreference"
+include "components:core"

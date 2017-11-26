@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.exceptions.InvalidSailorIdException;
+import com.virginvoyages.exception.InvalidSailorIdException;
 import com.virginvoyages.recommendations.content.model.ContentRecommendation;
 import com.virginvoyages.recommendations.content.model.ContentRecommendations;
 import com.virginvoyages.recommendations.exceptions.TribeNotFoundException;
@@ -22,7 +22,7 @@ import com.virginvoyages.recommendations.tribes.model.Tribes;
  */
 @Component
 public class MockRecommendationAPI {
-	
+
 	private List<RecommendationResponse> recommendationResponses = new ArrayList<RecommendationResponse>();
 
 	private List<ContentRecommendation> contentRecommendationsData = new ArrayList<ContentRecommendation>();
@@ -43,33 +43,33 @@ public class MockRecommendationAPI {
 		addTribeData(new Tribe().tribe("Explorer"));
 		addTribeData(new Tribe().tribe("Sports"));*/
     }
-	
+
 	public void addRecommendationResponse(String nbxUniqueKey, String recommendation, String selectionSentiment) {
     	recommendationResponses
     		.add(new RecommendationResponse()
     				.nbxUniqueKey(nbxUniqueKey)
     				.recommedation(recommendation)
     				.selectionSentiment(selectionSentiment));
-    	
+
     }
-    
+
     public ContentRecommendations getContentRecommendations(String requestSource,String sailorID,
     		String channel,List<String> place) {
     	return new ContentRecommendations().contentReco(contentRecommendationsData);
     }
-    
+
     public void addContentRecommendation(ContentRecommendation contentRecommendation) {
     	contentRecommendationsData.add(contentRecommendation);
     }
-    
-   
+
+
     public Tribe getTribe(final String requestSource, final String sailorId) throws TribeNotFoundException, InvalidSailorIdException{
     	if(StringUtils.isBlank(sailorId)) {
     		throw new InvalidSailorIdException();
     	}
     	return tribesData.get(0).sailorId(sailorId);
     }
-    
+
     public Tribes getTribes(final String requestSource, final String sailorId) throws TribeNotFoundException, InvalidSailorIdException{
     	if(StringUtils.isBlank(sailorId)) {
     		throw new InvalidSailorIdException();
@@ -79,5 +79,5 @@ public class MockRecommendationAPI {
     private void addTribeData(final Tribe tribe) {
     	tribesData.add(tribe);
     }
-    
+
 }

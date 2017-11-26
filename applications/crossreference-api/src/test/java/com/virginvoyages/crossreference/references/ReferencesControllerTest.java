@@ -36,10 +36,9 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
-
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.UnknownException;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferencesController.class)
@@ -47,32 +46,32 @@ public class ReferencesControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
-	
+
 	@Autowired
 	private TestDataHelper testDataHelper;
-	
+
 	@MockBean(name="referencesAssembly")
 	ReferencesAssembly referencesAssembly;
-	
+
 	@MockBean(name="referenceRepository")
     private ReferenceRepository referenceRepository;
-	
+
 	@MockBean(name="referenceSourceRepository")
     private ReferenceSourceRepository referenceSourceRepository;
-	
+
 	@MockBean(name="referenceTypeRepository")
     private ReferenceTypeRepository referenceTypeRepository;
-	
+
 	@InjectMocks
 	private ReferencesController referencesController;
-	
-	@Test 
+
+	@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() throws Exception {
-		
+
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		 
+
 		given(referencesAssembly.findReferenceByID(reference.referenceID())).willReturn(reference);
-	
+
 		 //Test
 		 mvc.perform(
 				get("/references/" + reference.referenceID())
@@ -81,11 +80,11 @@ public class ReferencesControllerTest {
 				.andExpect(jsonPath("nativeSourceIDValue",equalTo(reference.nativeSourceIDValue())))
 		 		.andExpect(status().isOk());
 
-	}		
-	
+	}
+
 	@Test
 	public void givenAssemblyReturnsNullGetReferenceByIdShouldThrowDataNotFoundException() throws Exception {
-		
+
 		String testReferenceID = testDataHelper.getRandomAlphanumericString();
 		given(referencesAssembly.findReferenceByID(testReferenceID))
 			.willReturn(null);
@@ -95,14 +94,14 @@ public class ReferencesControllerTest {
 				.contentType("application/json"))
 		        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
-		
-	@Test 
+
+	@Test
 	public void givenValidReferenceAddReferenceAndShouldReturnReference() throws Exception {
-			
+
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		 
+
 		given(referencesAssembly.addReference(reference)).willReturn(reference);
-		
+
 			 //Test
 		     mvc.perform(
 					post("/references")
@@ -113,12 +112,12 @@ public class ReferencesControllerTest {
 					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
     }
-	
-	@Test 
+
+	@Test
 	public void givenValidReferenceDeleteReferenceByIDShouldDeleteReference() throws Exception {
-		
+
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		
+
 		//Test
 		mvc.perform(
 				delete("/references/"+ reference.referenceID())
@@ -126,15 +125,15 @@ public class ReferencesControllerTest {
 		        .content("{ \"referenceID\" : \""+reference.referenceID()+"\"}"))
 		        .andExpect(status().isOk());
 	}
-	
-/*	@Test 
+
+/*	@Test
 	public void givenValidReferenceUpdateReferenceByIDShouldUpdateReference() throws Exception {
-		
+
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
-		
+
 		given(referencesAssembly.updateReference(reference))
 		.willReturn(reference);
-		
+
 		//Test
 		mvc.perform(
 				put("/references/")
@@ -145,10 +144,10 @@ public class ReferencesControllerTest {
 						"\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+"\"}"))
 		        .andExpect(status().isOk());
 	}
-*/	
-	/*@Test 
+*/
+	/*@Test
 	public void givenInValidReferenceDeleteReferenceByIDShouldThrowDataNotFoundException() throws Exception {
-		
+
 		String InvalidReferenceID = testDataHelper.getRandomAlphanumericString();
 		doThrow(new DataNotFoundException()).when(referencesAssembly).deleteReferenceByID(InvalidReferenceID);
 		 mvc.perform(
@@ -156,40 +155,40 @@ public class ReferencesControllerTest {
 				.contentType("application/json"))
 		        .andExpect(status().isOk());
 	}*/
-	
-	
-	@Test 
+
+
+	@Test
 	public void givenInValidReferenceSourceIDInRequestBodyeUpdateReferenceSourceByIDShouldThrowbadRequestException() throws Exception {
-		
+
 		Reference reference= testDataHelper.getReferenceBusinessEntity();
 		given(referencesAssembly.updateReference(reference))
 		.willThrow(new DataUpdationException());
-		
+
 		mvc.perform(
 				put("/references")
 				.param("masterID", "Updated masterID")
 				.param("nativeSourceIDValue", "nativeSourceIDValue")
 				.contentType("application/json"))
 				.andExpect(status().isBadRequest());
-		
+
 	}
-	
-	@Test 
+
+	@Test
 	public void givenNoReferenceIDInRequestBodyDeleteReferenceIDShouldThrowMandatoryFieldsMissingException() throws Exception{
-		
+
 		mvc.perform(
 			 	delete("/references/")
 				.contentType("application/json")
 				.content("{ \"referenceID\" : \"referenceID\"}"))
 		 		.andExpect(status().isMethodNotAllowed());
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasEmptyNativeSourceIDValueUpdateReferenceShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
 		Reference reference= testDataHelper.getReferenceBusinessEntity();
-		
+
 		given(referencesAssembly.updateReference(reference)).willReturn(null);
-				
+
 		//Test
 		mvc.perform(
 				put("/references/")
@@ -198,13 +197,13 @@ public class ReferencesControllerTest {
 						+ "\"nativeSourceIDValue\" : \"\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasNoReferenceIDUpdateReferenceShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
 		Reference reference= testDataHelper.getReferenceBusinessEntity();
-		
+
 		given(referencesAssembly.updateReference(reference)).willReturn(null);
-				
+
 		//Test
 		mvc.perform(
 				put("/references/")
@@ -212,13 +211,13 @@ public class ReferencesControllerTest {
 				.content("{ \"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+"\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	@Test
 	public void givenRequestBodyHasEmptyReferenceIDUpdateReferenceShouldSetMandatoryFieldsMissingExceptionToResponse() throws Exception {
 		Reference reference= testDataHelper.getReferenceBusinessEntity();
-		
+
 		given(referencesAssembly.updateReference(reference)).willReturn(null);
-				
+
 		//Test
 		mvc.perform(
 				put("/sources/")
@@ -227,38 +226,38 @@ public class ReferencesControllerTest {
 						+ "\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+"\"}"))
 			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
-	
+
 	//Find All
 	@Test
 	public void givenNoValueForPageInRequestParamsFindReferencesShouldSetBadRequestCodeInResponse() throws Exception {
-		
+
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
-		
+
 		given(referencesAssembly.findReferences(new PageRequest(0, 10))).willReturn(referenceList);
-		
+
 		//Test
 		mvc.perform(
 				 get("/references/?size=1")
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
-	
+
 	@Test
 	public void givenNoValueForSizeInRequestParamsFindReferencesShouldSetBadRequestCodeInResponse() throws Exception {
-		
+
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
-		
+
 		given(referencesAssembly.findReferences(new PageRequest(0, 10))).willReturn(referenceList);
-		
-		//Test	
+
+		//Test
 		mvc.perform(
 				 get("/references/?page=1")
 				.contentType("application/json"))
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
-		
+
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferencesFindReferencesShouldSetReferencesInResponse() throws Exception {
 		List<Reference> referenceList = new ArrayList<Reference>();
@@ -289,7 +288,7 @@ public class ReferencesControllerTest {
 	@Test
 	public void givenAssemblyMethodThrowsUnknownExceptionFindTypesShouldSetInternalServerErrorInResponse()
 			throws Exception {
-		
+
 		given(referencesAssembly.findReferences(new PageRequest(1, 10))).willThrow(new UnknownException());
 
 		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);

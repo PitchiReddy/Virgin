@@ -18,25 +18,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import com.virginvoyages.assembly.BookingAssembly;
-import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookingController.class)
 @ImportAutoConfiguration({ FeignAutoConfiguration.class })
 public class BookingControllerTest {
-	
+
 	@Autowired
 	private MockMvc mvc;
 
 	@MockBean
 	BookingAssembly bookingAssembly;
-	
+
 	@Autowired
 	private MockDataHelper mockDataHelper;
 
 
-    @Test  
+    @Test
     public void givenSailorWithSailorIDHasSailorBookingsFindSailorBookingsShouldReturnSailorBookings() throws Exception {
         // Mock Setup
     	String sailorID = mockDataHelper.getSailorId();
@@ -49,10 +49,10 @@ public class BookingControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$._embedded.bookings", hasSize(greaterThan(0))))
 				.andExpect(jsonPath("$._embedded.bookings[*].status", hasItems("BOOK")));
-		
+
 	}
-    
-    @Test  
+
+    @Test
     public void givenSailorWithSailorIDHasSailorBookingsFindSailorBookingsShouldReturnEmptyList() throws Exception {
         // Mock Setup
     	String sailorID = mockDataHelper.getSailorId();
@@ -64,20 +64,20 @@ public class BookingControllerTest {
 		mvc.perform(get("/sailors/" + sailorID + "/sailingHistory").contentType("application/json"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$._embedded.bookings", hasSize(0)));
-		
+
 	}
-    
-    @Test 
+
+    @Test
     public void givenInvalidSailorIdFindSailorBookingsShouldThrowSomeException() throws Exception {
     	// Mock Setup
     	String inValidSailorID = mockDataHelper.getSailorId();
-  
+
     	given(bookingAssembly.getSailingHistory(inValidSailorID))
 		.willThrow(new DataNotFoundException());
-	
+
     	// Test
     	mvc.perform(get("/sailors/"+inValidSailorID +"/sailingHistory").contentType("application/json"))
 			.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
-  
+
 }

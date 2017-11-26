@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,13 +32,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataAccessException;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.ReferenceType;
+import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.exception.DataAccessException;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.UnknownException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -51,6 +53,9 @@ public class ReferenceTypesAssemblyImplTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Spy
+	private CrossReferenceEntityMapper entityMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -63,7 +68,7 @@ public class ReferenceTypesAssemblyImplTest {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
 		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
-				.addReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+				.addReferenceType(entityMapper.convertToReferenceTypeBusinessEntity(mockReferenceTypeData));
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
@@ -151,7 +156,7 @@ public class ReferenceTypesAssemblyImplTest {
 	}
 
 	// Update
-	
+
 	@Test(expected = DataUpdationException.class)
 	public void givenRepositoryReturnsFalseForExistsUpdateReferenceTypeShouldThrowDataUpdateException() {
 		when(referenceTypeRepository.exists(testDataHelper.getRandomAlphabeticString())).thenReturn(false);
@@ -179,12 +184,12 @@ public class ReferenceTypesAssemblyImplTest {
 		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
 		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenReturn(mockReferenceTypeData);
 		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
-				.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+				.updateReferenceType(entityMapper.convertToReferenceTypeBusinessEntity(mockReferenceTypeData));
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceTypeID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsTrueForExistsAndRepositoryReturnsNullUpdateReferenceTypeShouldReturnNull() {
 		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
@@ -192,7 +197,7 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(referenceTypesAssemblyImpl
 				.updateReferenceType(testDataHelper.getEmptyReferenceTypeBusinessEntity()), nullValue());
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsTrueForExistsAndRepositoryReturnsEntityWithNullIDUpdateReferenceTypeShouldReturnNull() {
 		//ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
@@ -201,38 +206,38 @@ public class ReferenceTypesAssemblyImplTest {
 		assertThat(referenceTypesAssemblyImpl
 				.updateReferenceType(testDataHelper.getEmptyReferenceTypeBusinessEntity()), nullValue());
 	}
-	
+
 	//Find All
 	@Test
 	public void givenRepositoryReturnsNonEmptyPagedReferenceTypeDataFindTypesShouldReturnCorrespondingReferenceTypesList() {
 		List<ReferenceTypeData> referenceTypesDataList = new ArrayList<>();
 		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		referenceTypesDataList.add(referenceTypeData);
-				
+
 		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(referenceTypesDataList));
 		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
 		assertThat(referenceTypesList, hasSize(equalTo(referenceTypesDataList.size())));
 		assertThat(referenceTypesList.get(0).referenceType(), equalTo(referenceTypeData.referenceType()));
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsEmptyPagedReferenceTypeDataFindTypesShouldReturnEmptyReferenceTypesList() {
 		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
 		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
 		assertThat(referenceTypesList, hasSize(equalTo(0)));
 	}
-	
+
 	@Test
 	public void givenRepositoryReturnsNullFindTypeesShouldReturnEmptyReferenceTypesList() {
 		when(referenceTypeRepository.findAll(any(Pageable.class))).thenReturn(null);
 		List<ReferenceType> referenceTypesList = referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
 		assertThat(referenceTypesList, hasSize(equalTo(0)));
 	}
-	
+
 	@Test(expected = UnknownException.class)
 	public void givenRepositoryThrowsAnyExceptionFindTypesShouldThrowUnknownException() {
 		when(referenceTypeRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
 		referenceTypesAssemblyImpl.findTypes(new PageRequest(0, 5));
 	}
-		
+
 }

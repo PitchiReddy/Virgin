@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 /**
  * Controller class to handle API requests for reference source methods.
- * 
+ *
  * @author pbovilla
  *
  */
@@ -46,8 +46,8 @@ public class ReferenceSourcesController {
 
 	@Autowired
 	private ReferenceSourcesAssembly referenceSourcesAssembly;
-	
-	
+
+
 	/**
 	 * @param ReferenceSource
 	 * @param xCorrelationID - Correlation ID across the enterprise application components.
@@ -63,7 +63,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "ReferenceSource object that needs to be created", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		log.debug("Adding Reference Source");
 		if(StringUtils.isBlank(body.referenceSource())) {
             throw new MandatoryFieldsMissingException();
@@ -91,13 +91,13 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "The reference source identifier", required = true) @PathVariable("referenceSourceID") String referenceSourceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
 		referenceSourcesAssembly.deleteReferenceSourceByID(referenceSourceID);
 		return new ResponseEntity<Void>(HttpStatus.OK);
-	
+
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
 			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
 			final Pageable pageable) {
-		
+
 		if(size == 0) {
 			throw new MandatoryFieldsMissingException();
 		}
@@ -139,7 +139,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "The reference source identifier", required = true) @PathVariable("referenceSourceID") String referenceSourceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(referenceSourceID)) {
 			throw new MandatoryFieldsMissingException();
 		}
@@ -149,7 +149,7 @@ public class ReferenceSourcesController {
 		}
 		return new ResponseEntity<ReferenceSource>(referenceSource,HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @param referenceSourceName
 	 * @param xCorrelationID - Correlation ID across the enterprise application components.
@@ -166,7 +166,7 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "The reference source name", required = true) @PathVariable("referenceSourceName") String referenceSourceName,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(referenceSourceName)) {
 			throw new MandatoryFieldsMissingException();
 		}
@@ -192,10 +192,10 @@ public class ReferenceSourcesController {
 			@ApiParam(value = "ReferenceSource object that needs to be updated", required = true) @RequestBody ReferenceSource body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(body.referenceSourceID())||StringUtils.isBlank(body.referenceSource())) {
 			throw new MandatoryFieldsMissingException();
-			
+
 		}
 		ReferenceSource referenceSource = referenceSourcesAssembly.updateReferenceSource(body);
 		if(null == referenceSource) {

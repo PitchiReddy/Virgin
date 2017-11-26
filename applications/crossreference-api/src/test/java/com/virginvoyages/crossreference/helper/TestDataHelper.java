@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.helper.RandomDataGenerator;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.ReferenceSource;
-import com.virginvoyages.model.crossreference.ReferenceType;
 
 /**
  * Helper class for testcases
@@ -34,6 +34,9 @@ public class TestDataHelper {
 
 	@Autowired
 	private RandomDataGenerator randomDataGenerator;
+	
+	@Autowired
+	private CrossReferenceEntityMapper entityMapper;
 
 	private static String TEST_DATA_INDICATOR = "UT_data";
 
@@ -44,7 +47,7 @@ public class TestDataHelper {
 	}
 
 	public ReferenceSource getReferenceSourceBusinessEntity() {
-		return getReferenceSourceDataEntity().convertToBusinessEntity();
+		return entityMapper.convertToReferenceSourceBusinessEntity(getReferenceSourceDataEntity());
 	}
 
 	public ReferenceTypeData getReferenceTypeDataEntity() {
@@ -64,7 +67,10 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getReferenceTypeDataEntity(referenceSource.convertToDataEntity()).convertToBusinessEntity();
+		
+		return entityMapper.convertToReferenceTypeBusinessEntity(getReferenceTypeDataEntity(
+				entityMapper.convertToReferenceSourceDataEntity(referenceSource)));
+		
 	}
 
 	public ReferenceData getReferenceDataEntity() {
@@ -84,7 +90,8 @@ public class TestDataHelper {
 	}
 
 	public Reference getReferenceBusinessEntity(ReferenceType referenceType) {
-		return getReferenceDataEntity(referenceType.convertToDataEntity()).convertToBusinessEntity();
+		return entityMapper.convertToReferenceBusinessEntity(getReferenceDataEntity(
+				entityMapper.convertToReferenceTypeDataEntity(referenceType)));
 	}
 
 	public String getRandomAlphabeticString() {
@@ -105,7 +112,10 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getEmptyReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getEmptyReferenceTypeDataEntity(referenceSource.convertToDataEntity()).convertToBusinessEntity();
+		return entityMapper.convertToReferenceTypeBusinessEntity(
+				getEmptyReferenceTypeDataEntity(
+						entityMapper.convertToReferenceSourceDataEntity(referenceSource)));
+				
 	}
 
 	public ReferenceTypeData getEmptyReferenceTypeDataEntity(ReferenceSourceData referenceSourceData) {

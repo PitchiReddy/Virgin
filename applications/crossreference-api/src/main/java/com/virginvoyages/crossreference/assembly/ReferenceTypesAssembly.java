@@ -3,7 +3,8 @@ package com.virginvoyages.crossreference.assembly;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import com.virginvoyages.model.crossreference.ReferenceType;
+
+import com.virginvoyages.crossreference.model.ReferenceType;
 
 /**
  * {@code Interface} for assembly tasks for ReferenceType
