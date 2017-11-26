@@ -3,6 +3,7 @@ package com.virginvoyages.crossreference.types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
-import com.virginvoyages.model.crossreference.ReferenceSource;
-import com.virginvoyages.model.crossreference.ReferenceType;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.MandatoryFieldsMissingException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +35,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 /**
  * Controller class to handle API requests for operations related to
  * ReferenceTypes.
- * 
+ *
  * @author snarthu
  *
  */
@@ -44,7 +45,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 @RequiredArgsConstructor
 @ExposesResourceFor(ReferenceType.class)
 public class ReferenceTypesController {
-	
+
 	@Autowired
 	private ReferenceTypesAssembly referenceTypesAssembly;
 
@@ -65,7 +66,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Reference Type object that needs to be created", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		log.debug("Adding Reference Type");
 		if(StringUtils.isBlank(body.referenceType()) || StringUtils.isBlank(body.referenceSourceID())){
 			throw new MandatoryFieldsMissingException();
@@ -85,7 +86,7 @@ public class ReferenceTypesController {
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
 	 *            - Application identifier of client.
-	 * @return 
+	 * @return
 	 */
 	@ApiOperation(value = "", notes = "Remove the ReferenceType", response = Void.class, tags = { "ReferenceType", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Void.class),
@@ -95,7 +96,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		log.debug("deleting Reference Type");
 		if(StringUtils.isBlank(referenceTypeID)) {
 			throw new MandatoryFieldsMissingException();
@@ -121,7 +122,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type identifier", required = true) @PathVariable("referenceTypeID") String referenceTypeID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		log.debug("finding Reference Type By referenceTypeID");
 		if(StringUtils.isBlank(referenceTypeID)) {
 			throw new MandatoryFieldsMissingException();
@@ -149,7 +150,7 @@ public class ReferenceTypesController {
 			@ApiParam(value = "The reference type name", required = true) @PathVariable("referenceTypeName") String referenceTypeName,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(referenceTypeName)) {
 			throw new MandatoryFieldsMissingException();
 		}
@@ -161,8 +162,8 @@ public class ReferenceTypesController {
 	}
 	/**
 	 * find types by using below parameters
-	 * @param page         
-	 * @param size        
+	 * @param page
+	 * @param size
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
@@ -177,13 +178,17 @@ public class ReferenceTypesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
-		
-		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(), HttpStatus.OK);
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
+			final Pageable pageable) {
+
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(pageable), HttpStatus.OK);
 	}
 
 	/**
-	 * Update reference Type     
+	 * Update reference Type
 	 * @param  body
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
@@ -201,11 +206,11 @@ public class ReferenceTypesController {
 			@ApiParam(value = "ReferenceType object that needs to be updated", required = true) @RequestBody ReferenceType body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		if(StringUtils.isBlank(body.referenceTypeID())||
 				StringUtils.isBlank(body.referenceSourceID()) ||
 				StringUtils.isBlank(body.referenceType())) {
-			
+
 			throw new MandatoryFieldsMissingException();
 		}
 		ReferenceType referenceType = referenceTypesAssembly.updateReferenceType(body);

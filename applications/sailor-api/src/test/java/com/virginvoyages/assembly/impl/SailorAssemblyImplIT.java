@@ -16,12 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.exceptions.DataNotFoundException;
+import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+import com.virginvoyages.sailor.model.Sailor;
 
 /**
- * @author rpraveen 
+ * @author rpraveen
  * Test Class for SailorAssembly Implementation
  */
 
@@ -49,7 +49,7 @@ public class SailorAssemblyImplIT {
 
 		testDataHelper.deleteSailor(testSailor.id());
 	}
-	
+
 	@Test
 	public void givenValidSailorIDWithPreferecesGetSailorbyIdShouldReturnSailorWithPreferences() {
 
@@ -194,75 +194,75 @@ public class SailorAssemblyImplIT {
 		assertThat(testDataHelper.getRecordTypeIdForSailor(), equalTo(sailor.recordTypeId()));
 
 		testDataHelper.deleteSailor(sailor.id());
-		
+
 	}
-	
+
 	//Orchestration tests
-	
+
 	/* Tests for getOrchestratedSailorData
 	@Test
 	public void givenSeawareClientIDExistsForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSeaware() {
-		
+
 	}
-	
+
 	@Test
 	public void givenSeawareClientIDDoesNotExistForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSalesforce() {
-		
+
 	} */
-	
+
 	/* Tests for getSeawareClientIDForSalesforceID
 	@Test
 	public void givenSeawareClientIDExistsForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnSeawareClientID() {
-		
+
 	}
-	
+
 	@Test
 	public void givenSeawareClientIDDoesNotExistForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnNull() {
-		
+
 	} */
-	
+
 	/*  Test for getReferenceTypeIDForName
 	@Test
 	public void givenReferenceTypeExistsInDBGetReferenceTypeIDForNameShouldReturnID() {
-		
+
 	}
-	
+
 	@Test
 	public void givenReferenceTypeDoesNotExistInDBGetReferenceTypeIDForNameShouldNull() {
-		
+
 	} */
-	
+
 	/* Tests for getTargetRecordID
 	@Test
 	public void givenReferenceExistsForParametersGetTargetRecordIDShouldReturnNativeSourceIDValueOfReference() {
-		
+
 	}
-	
+
 	@Test
 	public void givenReferenceDoesNotExistForParametersGetTargetRecordIDShouldReturnNull() {
-		
+
 	} */
-	
+
 	/* Tests for getSalesforceAccountData
 	@Test
 	public void givenValidSalesforceIDGetSalesforceAccountDataShouldReturnAccountData() {
-		
+
 	}
-	
+
 	@Test
 	public void givenInvalidSalesforceIDGetSalesforceAccountDataShouldReturnNull() {
-		
+
 	} */
-	
+
 	/* Tests for getSeawareClientData
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnClientData() {
-		
+
 	}
-	
+
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnNull() {
-		
+
 	}*/
 
 }

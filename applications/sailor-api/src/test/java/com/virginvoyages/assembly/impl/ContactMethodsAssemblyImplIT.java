@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.ContactMethodsAssembly;
-import com.virginvoyages.contact.ContactMethodsEmbedded;
+import com.virginvoyages.contact.model.ContactMethodsEmbedded;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)

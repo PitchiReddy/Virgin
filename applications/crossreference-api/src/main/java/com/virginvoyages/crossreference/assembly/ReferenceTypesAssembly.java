@@ -2,7 +2,9 @@ package com.virginvoyages.crossreference.assembly;
 
 import java.util.List;
 
-import com.virginvoyages.model.crossreference.ReferenceType;
+import org.springframework.data.domain.Pageable;
+
+import com.virginvoyages.crossreference.model.ReferenceType;
 
 /**
  * {@code Interface} for assembly tasks for ReferenceType
@@ -22,5 +24,5 @@ public interface ReferenceTypesAssembly {
 
 	public ReferenceType updateReferenceType(ReferenceType body);
 
-	public List<ReferenceType> findTypes();
+	public List<ReferenceType> findTypes(Pageable pageable);
 }

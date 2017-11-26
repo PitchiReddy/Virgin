@@ -7,6 +7,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.Buffer;
+
 @Slf4j
 class LoggingInterceptor implements Interceptor {
 	  @Override public Response intercept(Interceptor.Chain chain) throws IOException {

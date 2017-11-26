@@ -3,10 +3,11 @@ package com.virginvoyages.crm.data;
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.contact.ContactAddress;
-import com.virginvoyages.contact.ContactEmail;
-import com.virginvoyages.contact.ContactMethod;
-import com.virginvoyages.contact.ContactPhone;
+import com.virginvoyages.contact.model.ContactAddress;
+import com.virginvoyages.contact.model.ContactEmail;
+import com.virginvoyages.contact.model.ContactMethod;
+import com.virginvoyages.contact.model.ContactPhone;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -17,8 +17,8 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.PreferenceData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
-import com.virginvoyages.sailor.Sailor;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+import com.virginvoyages.sailor.model.Sailor;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

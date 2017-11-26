@@ -6,11 +6,11 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.booking.Booking;
-import com.virginvoyages.preference.Preference;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorLinks;
-import com.virginvoyages.sailor.SailorMapper;
+import com.virginvoyages.booking.model.Booking;
+import com.virginvoyages.preference.model.Preference;
+import com.virginvoyages.sailor.helper.SailorMapper;
+import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.sailor.model.SailorLinks;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

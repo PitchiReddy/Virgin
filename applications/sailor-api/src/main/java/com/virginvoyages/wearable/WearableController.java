@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.virginvoyages.sailor.api.MockSailorAPI;
+import com.virginvoyages.wearable.model.Wearables;
 
 @RestController
 @Api(value = "Wearable", description = "Wearable for a Sailor", tags = "Wearables")

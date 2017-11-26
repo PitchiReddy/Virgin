@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.References;
-import com.virginvoyages.model.crossreference.ReferencesEmbedded;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.References;
+import com.virginvoyages.crossreference.model.ReferencesEmbedded;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -163,12 +163,16 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
+			final Pageable pageable) {
 		
 		log.debug("Find reference objects");
-		List<Reference> listOfReference = referencesAssembly.findReferences();
-		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
-		return new ResponseEntity<References>(references, HttpStatus.OK);
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferences(pageable);
+		return new ResponseEntity<References>(new References().page(new Page().size(pageable.getPageSize()).number(pageable.getPageNumber()))
+				.embedded(new ReferencesEmbedded().references(referenceList)), HttpStatus.OK);
 	}
 	
 	/**
