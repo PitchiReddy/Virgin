@@ -3,10 +3,10 @@ package com.virginvoyages.assembly.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
+
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -18,12 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.model.crossreference.ReferenceType;
+import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
-
-import feign.FeignException;
+import com.virginvoyages.sailor.model.Sailor;
 
 /**
  * @author rpraveen 

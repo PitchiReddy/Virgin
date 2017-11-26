@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -98,11 +98,11 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("referenceID", reference.referenceID());
+		//parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
-		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
+		//referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 
 		
 		// create references 
@@ -124,7 +124,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	}
 	
 	public JsonPath createTestReference() {
-		return createTestReference(createTestReferenceType());
+		return createTestReference(getReferenceType());
 			
 	}
 	
@@ -136,5 +136,26 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		then()
 			.statusCode(200);
+	}
+	
+	public JsonPath getReferenceType() {
+		
+		Response response = 
+				given()
+				.contentType("application/json")
+				.param("page", 0)
+				.param("size", 1)
+				.get("/xref-api/v1/types/")
+
+			.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all()
+			 	.extract()
+			 	.response();
+					
+		return response.jsonPath();
+		
 	}
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.assembly.PreferenceAssembly;
 import com.virginvoyages.assembly.SailorAssembly;
-import com.virginvoyages.booking.BookingsEmbedded;
+import com.virginvoyages.booking.model.BookingsEmbedded;
 import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountCreateStatus;
@@ -21,15 +21,14 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.ReferenceType;
-import com.virginvoyages.preference.PreferencesEmbedded;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorMapper;
+import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.UnknownException;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
+import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.seaware.dao.SeawareDAO;
 import com.virginvoyages.seaware.data.ClientData;
 
@@ -170,18 +169,20 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	 */
 	public String getReferenceTypeIDForName(String referenceTypeName) {
 		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
-		log.debug("connecting to crossreference getReferenceTypeByName", referenceType);
-		return referenceType.referenceTypeID();
+		return null != referenceType ? referenceType.referenceTypeID() : null; 
 	}
 	
 	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {
-		Reference reference = null;
+		//Reference reference = null;
 		/*For reference Call CrossReference -> References - > findbytypeandtargetType - >
 		nativesourceid = sourcerecordid
 		typeid = sourcetypeid
 		targettypeid = targettypeid
 		*/
-		return reference != null ? reference.nativeSourceIDValue() : null;
+		//return reference != null ? reference.nativeSourceIDValue() : null;
+		
+		//temporary
+		return null;
 	}
 	
 	public AccountData getSalesforceAccountData(String sailorID) {

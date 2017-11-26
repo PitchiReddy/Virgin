@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.sailor.helper.SailorMapper;
+import com.virginvoyages.sailor.model.Sailor;
 
 /**
  * Test class for SailorMapper

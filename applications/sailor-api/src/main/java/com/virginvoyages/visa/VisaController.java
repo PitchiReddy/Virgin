@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.virginvoyages.sailor.api.MockSailorAPI;
+import com.virginvoyages.visa.model.Visas;
 
 @RestController
 @Api(value = "Visa", description = "Visa for a Sailor", tags = "Visa")

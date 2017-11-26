@@ -1,6 +1,7 @@
 package com.virginvoyages.booking;
 
 import com.virginvoyages.assembly.BookingAssembly;
+import com.virginvoyages.booking.model.Bookings;
 import com.virginvoyages.model.Page;
 import com.virginvoyages.sailor.api.MockSailorAPI;
 

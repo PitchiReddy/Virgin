@@ -12,7 +12,6 @@ import com.virginvoyages.crm.client.AccountClient;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
-import com.virginvoyages.sailor.SailorMapper;
 
 /**
  * Util class to remove test data

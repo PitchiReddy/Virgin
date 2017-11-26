@@ -5,7 +5,7 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "jacoco"
 apply plugin: "com.github.spotbugs"
 
-group = "com.virginvoyages"
+group = "com.virginvoyages.api"
 version = '1.0'
 description = "sailor-api"
 
@@ -16,16 +16,16 @@ dependencyManagement {
 }
 
 dependencies {
-    compile project(":components:logging-starter")
-    compile project(":components:hbase-starter")
-    compile project(":components:shared-code")
-    compile project(":components:seaware-bindings")
-    runtime group: 'com.netflix.feign', name: 'feign-core', version: '8.18.0'
-    compile group: 'com.netflix.feign', name: 'feign-okhttp', version: '8.18.0'
-    compile group: 'com.netflix.feign', name: 'feign-jaxb', version: '8.18.0'
+    compile project(":components:crossreference")
+    compile project(":components:data")
+    compile project(":components:seaware")
+
+    runtime "com.netflix.feign:feign-core:8.18.0"
+    compile "com.netflix.feign:feign-okhttp:8.18.0"
+    compile "com.netflix.feign:feign-jaxb:8.18.0"
     
-    compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-xml-provider', version: '2.8.10'
-    compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.9.0'
+    compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-xml-provider:2.8.10"
+    compile "com.squareup.okhttp3:logging-interceptor:3.9.0"
     
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
@@ -33,15 +33,13 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter-feign"
     compile "org.springframework.cloud:spring-cloud-starter-security"
     compile "org.springframework.security.oauth:spring-security-oauth2"
-    compile "ch.qos.logback:logback-core:1.2.3"
-    compile "net.logstash.logback:logstash-logback-encoder:$logbackVersion"
     compile "io.springfox:springfox-swagger2:$springFoxVersion"
     compile "io.springfox:springfox-swagger-ui:$springFoxVersion"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.8"
     compile "joda-time:joda-time:2.9.9"
     compile "org.projectlombok:lombok:1.16.16"
     compile "com.h2database:h2"
-    
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.8"
+
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "io.rest-assured:rest-assured:3.0.3"
 }
@@ -73,50 +71,8 @@ jacocoTestReport {
                     //'**/*Data**',
                     // TODO Refactor to use naming (package or class) and regular expression
                     // Exclude Lombok generated code.
-                    'com/virginvoyages/booking/Booking.class',
-                    'com/virginvoyages/booking/Bookings.class',
-                    'com/virginvoyages/booking/BookingsEmbedded.class',
-                    'com/virginvoyages/contact/ContactAddress.class',
-                    'com/virginvoyages/contact/ContactEmail.class',
-                    'com/virginvoyages/contact/ContactMethod.class',
-                    'com/virginvoyages/contact/ContactMethods.class',
-                    'com/virginvoyages/contact/ContactMethodsEmbedded.class',
-                    'com/virginvoyages/contact/ContactPhone.class',
-                    'com/virginvoyages/crm/MetaData.class',
-                    'com/virginvoyages/crm/data/AccountCreateStatus.class',
-                    'com/virginvoyages/crm/data/AccountData.class',
-                    'com/virginvoyages/crm/data/Attributes.class',
-                    'com/virginvoyages/crm/data/QueryResultsData.class',
-                    'com/virginvoyages/crm/data/RecordTypeData.class',
-                    'com/virginvoyages/crm/data/ContactMethodsData.class',
-                    'com/virginvoyages/crm/data/PreferenceData.class',
-                    'com/virginvoyages/crm/data/BookingData.class',
-                    'com/virginvoyages/household/Household.class',
-                    'com/virginvoyages/household/Households.class',
-                    'com/virginvoyages/household/HouseholdsEmbedded.class',
-                    'com/virginvoyages/identification/Identification.class',
-                    'com/virginvoyages/identification/Identifications.class',
-                    'com/virginvoyages/identification/IdentificationsEmbedded.class',
-                    'com/virginvoyages/loyalty/Loyalties.class',
-                    'com/virginvoyages/loyalty/LoyaltiesEmbedded.class',
-                    'com/virginvoyages/loyalty/Loyalty.class',
-                    'com/virginvoyages/preference/Preference.class',
-                    'com/virginvoyages/preference/Preferences.class',
-                    'com/virginvoyages/preference/PreferencesEmbedded.class',
-                    'com/virginvoyages/sailor/Sailor.class',
-                    'com/virginvoyages/sailor/SailorLinks.class',
-                    'com/virginvoyages/sailor/Sailors.class',
-                    'com/virginvoyages/sailor/SailorsEmbedded.class',
-                    'com/virginvoyages/sailor/exceptions/ErrorDetail.class',
-                    'com/virginvoyages/visa/Visa.class',
-                    'com/virginvoyages/visa/Visas.class',
-                    'com/virginvoyages/visa/VisasEmbedded.class',
-                    'com/virginvoyages/wearable/Wearable.class',
-                    'com/virginvoyages/wearable/Wearables.class',
-                    'com/virginvoyages/wearable/WearablesEmbedded.class',
-                    // Exclude POJO
-                    'com/virginvoyages/model/Links.class',
-                    'com/virginvoyages/model/Page.class',
+                    '**/model/*.class',
+                    '**/data/*.class',
                     // Exclude Stub code
                     'com/virginvoyages/sailor/api/MockSailorAPI.class'
             ])

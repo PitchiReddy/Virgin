@@ -9,4 +9,4 @@ crm:
   
 crossreference:
   service:
-    url: http://localhost:8435/xref-api/v1 
+    url: http://10.3.100.251:31435/xref-api/v1 

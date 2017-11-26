@@ -1,6 +1,6 @@
 package com.virginvoyages.assembly;
 
-import com.virginvoyages.preference.PreferencesEmbedded;
+import com.virginvoyages.preference.model.PreferencesEmbedded;
 
 /**
  * {@code Interface} for assembly tasks for Preference operations

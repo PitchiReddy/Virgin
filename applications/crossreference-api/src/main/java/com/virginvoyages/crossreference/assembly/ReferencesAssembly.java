@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
-import com.virginvoyages.model.crossreference.Reference;
-
+import com.virginvoyages.crossreference.model.Reference;
 
 /**
  * {@code Interface} for assembly tasks for References
@@ -21,7 +20,7 @@ public interface ReferencesAssembly {
 
 	public void deleteReferenceByID(String referenceID);
 
-	public List<Reference> findReferences();
+	public List<Reference> findReferences(Pageable pageable);
 
 	public List<Reference> findReferenceByMasterId(String masterID, Pageable pageable);
 

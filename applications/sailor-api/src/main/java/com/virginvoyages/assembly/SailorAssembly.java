@@ -3,7 +3,7 @@ package com.virginvoyages.assembly;
 import java.util.List;
 
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.sailor.Sailor;
+import com.virginvoyages.sailor.model.Sailor;
 
 /**
  * {@code Interface} for assembly tasks for Sailor operations
