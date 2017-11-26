@@ -19,11 +19,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -31,12 +33,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.exceptions.DataAccessException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.exception.DataAccessException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.UnknownException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -55,6 +58,9 @@ public class ReferencesAssemblyImplTest {
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
+	@Spy
+	private CrossReferenceEntityMapper entityMapper;
+	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
@@ -64,7 +70,7 @@ public class ReferencesAssemblyImplTest {
 	public void givenRepositorySavesReferenceTypeDataAddReferenceTypeShouldReturnSavedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save((any(ReferenceData.class)))).thenReturn(mockReferenceData);
-		Reference createdReference = referencesAssemblyImpl.addReference(mockReferenceData.convertToBusinessEntity());
+		Reference createdReference = referencesAssemblyImpl.addReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference, notNullValue());
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
@@ -103,7 +109,7 @@ public class ReferencesAssemblyImplTest {
 	public void givenRepositorySavesReferenceDataWithInvalidReferenceIDInUpdateReferenceItShouldThrowDataUpdationException() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
-		Reference createdReference = referencesAssemblyImpl.updateReference(mockReferenceData.convertToBusinessEntity());
+		Reference createdReference = referencesAssemblyImpl.updateReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference, notNullValue());
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
@@ -125,7 +131,7 @@ public class ReferencesAssemblyImplTest {
 		assertThat(referencesAssemblyImpl.findReferenceByID(testDataHelper.getRandomAlphabeticString()), is(nullValue()));
 	}
 
-	@Test
+	/*@Test
 	public void givenRepositoryReturnsListOfReferenceDataFindReferencesShouldReturnCorrespondingReferences() {
 
 		List<ReferenceData> mockReferenceList = new ArrayList<ReferenceData>();
@@ -136,14 +142,14 @@ public class ReferencesAssemblyImplTest {
 		List<Reference> referenceList = referencesAssemblyImpl.findReferences();
 		assertThat(referenceList, hasSize(equalTo(mockReferenceList.size())));
 	}
-
+	 */
 	@Test
 	public void givenRepositoryReturnsTrueForExistsAndRepositoryUpdatessuccessfullyUpdateReferenceShouldReturnUpdatedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.exists((any(String.class)))).thenReturn(true);
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
 		Reference createdReference = referencesAssemblyImpl
-				.updateReference(mockReferenceData.convertToBusinessEntity());
+				.updateReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
@@ -167,7 +173,7 @@ public class ReferencesAssemblyImplTest {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
 		Reference createdReference = referencesAssemblyImpl
-				.updateReference(mockReferenceData.convertToBusinessEntity());
+				.updateReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
@@ -189,6 +195,40 @@ public class ReferencesAssemblyImplTest {
 		referencesAssemblyImpl.deleteReferenceByID(testDataHelper.getRandomAlphabeticString());
 
 	}
+	
+	//Find All
+	@Test
+	public void givenRepositoryReturnsNonEmptyPagedReferenceDataFindTypesShouldReturnCorrespondingReferencesList() {
+		List<ReferenceData> referencesDataList = new ArrayList<>();
+		ReferenceData referenceData = testDataHelper.getReferenceDataEntity();
+		referencesDataList.add(referenceData);
+
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(referencesDataList));
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(referencesDataList.size())));
+		assertThat(referencesList.get(0).nativeSourceIDValue(), equalTo(referenceData.nativeSourceIDValue()));
+	}
+
+	@Test
+	public void givenRepositoryReturnsEmptyPagedReferenceDataFindTypesShouldReturnEmptyReferencesList() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(0)));
+	}
+
+	@Test
+	public void givenRepositoryReturnsNullFindTypeesShouldReturnEmptyReferenceTypesList() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenReturn(null);
+		List<Reference> referencesList = referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+		assertThat(referencesList, hasSize(equalTo(0)));
+	}
+
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindTypesShouldThrowUnknownException() {
+		when(referenceRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
+	}
+	
 	
 
 }

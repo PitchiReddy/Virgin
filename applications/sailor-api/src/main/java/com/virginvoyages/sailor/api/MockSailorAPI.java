@@ -1,9 +1,19 @@
 package com.virginvoyages.sailor.api;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.joda.time.LocalDate;
+import org.springframework.stereotype.Component;
+
 import com.virginvoyages.booking.model.Booking;
 import com.virginvoyages.booking.model.Bookings;
 import com.virginvoyages.booking.model.BookingsEmbedded;
-import com.virginvoyages.contact.*;
 import com.virginvoyages.contact.model.ContactAddress;
 import com.virginvoyages.contact.model.ContactEmail;
 import com.virginvoyages.contact.model.ContactMethod;
@@ -32,16 +42,6 @@ import com.virginvoyages.visa.model.VisasEmbedded;
 import com.virginvoyages.wearable.model.Wearable;
 import com.virginvoyages.wearable.model.Wearables;
 import com.virginvoyages.wearable.model.WearablesEmbedded;
-
-import org.joda.time.LocalDate;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * Mock implementation of SailorAPI to return mock responses to validate deployment

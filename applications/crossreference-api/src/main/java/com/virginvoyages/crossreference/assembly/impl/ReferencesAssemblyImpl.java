@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package com.virginvoyages.crossreference.assembly.impl;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +21,13 @@ import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
-import com.virginvoyages.exceptions.DataAccessException;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.exception.DataAccessException;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.UnknownException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,11 +44,14 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	private ReferenceRepository referenceRepository;
 	
 	@Autowired
-	private ReferenceTypeRepository  referenceTypeRepository;
+	private CrossReferenceEntityMapper entityMapper;
 	
+	@Autowired
+	private ReferenceTypeRepository  referenceTypeRepository;
+
 
 	/**
-	 * Create reference based on reference. 
+	 * Create reference based on reference.
 	 * @param reference
 	 *            - input reference.
 	 * @return Reference - returns a reference
@@ -60,9 +64,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			reference.nativeSourceIDValue(null);
 		}
 		try {
-			ReferenceData referenceData	= referenceRepository.save(reference.convertToDataEntity());
-			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
-		}catch(DataIntegrityViolationException dex) {	
+			ReferenceData referenceData	= referenceRepository.save(entityMapper.convertToReferenceDataEntity(reference));
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
+		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while adding reference ",dex);
 			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
 			throw new DataInsertionException(errorMessage);
@@ -73,7 +77,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	}
 
 	/**
-	 * Find reference by ID. 
+	 * Find reference by ID.
 	 * @param referenceID
 	 *            - input referenceID.
 	 * @return Reference - returns a reference
@@ -82,7 +86,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl for referenceID ==> " + referenceID);
 		try {
 			ReferenceData referenceData = referenceRepository.findOne(referenceID);
-			return null == referenceData ? null : referenceData.convertToBusinessEntity();
+			return null == referenceData ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
 		} catch (Exception ex) {
 			log.error("Find Reference ID ==>" + referenceID + "\nException encountered in findReferenceByID", ex);
 			throw new UnknownException();
@@ -90,10 +94,10 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	}
 
 	/**
-	 * delete reference by ID. 
+	 * delete reference by ID.
 	 * @param referenceID
 	 *            - input referenceID.
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public void deleteReferenceByID(String referenceID) {
@@ -112,33 +116,27 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		}
 		log.debug("Exiting deleteReferenceByID method in ReferencesAssemblyImpl");
 	}
+
 	/**
 	 * Finding references
-	 * @return List Of Reference
+	 * @param Pageable pageable
+	 * @return List<Reference>
 	 */
 	@Override
-	public List<Reference> findReferences() {
+	public List<Reference> findReferences(Pageable pageable) {
 		log.debug("Entering findReferences method in ReferencesAssemblyImpl");
-		List<ReferenceData> listOfReferenceData = (List<ReferenceData>)referenceRepository.findAll();
-		List<Reference> listOfReference = new ArrayList<>();
-		if(null != listOfReferenceData && listOfReferenceData.size() > 0 ) {
-			listOfReference = listOfReferenceData.stream().map(referenceData->referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+
+		try {
+			Page<ReferenceData> referenceDataPage = referenceRepository.findAll(pageable);
+			return null == referenceDataPage ? Collections.emptyList() :
+				Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
+		}catch(Exception ex) {
+			log.error("Exception encountered in findReferences",ex);
+			throw new UnknownException();
 		}
-		return listOfReference;
-		
 	}
-	
-	/**
-	 * Finding one or more references
-	 * @param masterId
-	 *            - input masterId.
-	 * @param targetTypeID
-	 *            - input targetTypeID.
-	 * @param pageable
-	 *            - input pageable.
-	
-	 * @return List Of Reference
-	 */
+
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
 		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
@@ -151,13 +149,13 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 					targetTypeID, pageable);
 		}
 		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
-	
+
 	/**
-	 * Update reference by ID. 
+	 * Update reference by ID.
 	 * @param reference
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public Reference updateReference(Reference reference) {
@@ -167,9 +165,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			throw new DataUpdationException();
 		}
 		try {
-			ReferenceData referenceData = referenceRepository.save(reference.convertToDataEntity());
-			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
-		}catch(DataIntegrityViolationException dex) {	
+			ReferenceData referenceData = referenceRepository.save(entityMapper.convertToReferenceDataEntity(reference));
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
+		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while updating reference ",dex);
 			throw new DataUpdationException();
 		}catch(Exception ex) {

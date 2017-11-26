@@ -5,10 +5,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -64,6 +63,27 @@ public class ReferenceTypeRepositoryTest {
 		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
 		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 		
+	}
+	
+	@Test
+	public void testSuccessfulCreateTwoTypesWithSameSource() {
+		
+		ReferenceSourceData referenceSourceData = ((Page<ReferenceSourceData>)referenceSourceRepository.findAll(new PageRequest(1, 1))).getContent().get(0);
+		
+		ReferenceTypeData referenceTypeData = testDataHelper.getReferenceTypeDataEntity(referenceSourceData);
+		ReferenceTypeData createdReferenceType1 = referenceTypeRepository.save(referenceTypeData);
+		assertThat(createdReferenceType1.referenceTypeID(), notNullValue());
+		assertThat(createdReferenceType1.referenceType(), equalTo(referenceTypeData.referenceType()));
+		
+		ReferenceTypeData createdReferenceType2 = referenceTypeRepository.save(
+				testDataHelper.getReferenceTypeDataEntity(referenceSourceData));
+		
+		assertThat(createdReferenceType1.referenceTypeID(), not(equalTo(createdReferenceType2.referenceTypeID())));
+		assertThat(createdReferenceType1.referenceSourceData().referenceSourceID(), equalTo(createdReferenceType2.referenceSourceData().referenceSourceID()));
+		
+		referenceTypeRepository.delete(createdReferenceType1.referenceTypeID());
+		referenceTypeRepository.delete(createdReferenceType2.referenceTypeID());
+			
 	}
 	
 	@Test(expected = InvalidDataAccessApiUsageException.class)
@@ -198,20 +218,13 @@ public class ReferenceTypeRepositoryTest {
 	
 	//Find All
 	@Test 
-	public void testFindAll() {
-		
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
-				testDataHelper.getReferenceSourceDataEntity());
-		
-		ReferenceTypeData createdReferenceType = referenceTypeRepository.save(
-					testDataHelper.getReferenceTypeDataEntity(createdReferenceSource));
-		
-		List<ReferenceTypeData> referenceTypes = (List<ReferenceTypeData>)referenceTypeRepository.findAll();
+	public void testFindAllWithSizeAndPage() {
+	
+		Page<ReferenceTypeData> referenceTypes = (Page<ReferenceTypeData>)referenceTypeRepository.findAll(new PageRequest(2, 2));
 		assertThat(referenceTypes, notNullValue());
-		assertThat(referenceTypes, hasSize(greaterThan(0)));
+		assertThat(referenceTypes.getNumber(), equalTo(2));
+		assertThat(referenceTypes.getContent(), hasSize(2));
 		
-		referenceTypeRepository.delete(createdReferenceType.referenceTypeID());
-		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
 	}
 	
 	//Delete

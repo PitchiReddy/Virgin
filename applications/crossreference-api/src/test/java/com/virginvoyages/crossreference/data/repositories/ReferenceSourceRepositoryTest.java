@@ -5,22 +5,19 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
-import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
-import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 
 @RunWith(SpringRunner.class)
@@ -147,16 +144,12 @@ public class ReferenceSourceRepositoryTest {
 		
 	//Find All
 	@Test 
-	public void testFindAll() {
-				
-		ReferenceSourceData createdReferenceSource = referenceSourceRepository.save(
-				testDataHelper.getReferenceSourceDataEntity());
-		
-		List<ReferenceSourceData> referenceSources = (List<ReferenceSourceData>)referenceSourceRepository.findAll();
+	public void testFindAllWithSizeAndPage() {
+	
+		Page<ReferenceSourceData> referenceSources = (Page<ReferenceSourceData>)referenceSourceRepository.findAll(new PageRequest(2, 2));
 		assertThat(referenceSources, notNullValue());
-		assertThat(referenceSources, hasSize(greaterThan(0)));
-		
-		referenceSourceRepository.delete(createdReferenceSource.referenceSourceID());
+		assertThat(referenceSources.getNumber(), equalTo(2));
+		assertThat(referenceSources.getContent(), hasSize(2));
 		
 	}
 	

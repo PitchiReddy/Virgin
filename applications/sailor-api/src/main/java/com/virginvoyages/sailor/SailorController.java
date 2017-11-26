@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.sailor.api.MockSailorAPI;
 import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.sailor.model.Sailors;
@@ -55,11 +55,11 @@ public class SailorController {
 
     @Autowired
     private MockSailorAPI mock;
- 
+
     @Autowired
     private SailorAssembly sailorAssembly;
-     
-  
+
+
     @ApiOperation(value = "", notes = "Add a new `Sailor` to the SORs.", response = Sailor.class, responseContainer = "List", tags = {"Sailor",})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful response", response = Sailor.class),
@@ -76,7 +76,7 @@ public class SailorController {
         mock.addSailor(body);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    
+
 
    /**
     * Returns Sailor Object based on sailor ID
@@ -95,16 +95,16 @@ public class SailorController {
             @ApiParam(value = "ID of Sailor that needs to be fetched", required = true) @PathVariable("sailorID") String sailorID,
             @ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
             @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-        
+
         log.debug("Request to return sailor with ID {}", sailorID);
-        if(StringUtils.isEmpty(sailorID)) 
+        if(StringUtils.isEmpty(sailorID))
         	throw new MandatoryFieldsMissingException();
-        
+
         Sailor sailor = sailorAssembly.getSailorById(sailorID);
-        
+
         return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(sailor, entityLinks), HttpStatus.OK);
     }
-    
+
     @ApiOperation(value = "", notes = "Remove the Sailor from the SORs", response = Void.class, tags = {"Sailor",})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful response", response = Void.class)})
@@ -113,9 +113,9 @@ public class SailorController {
     ResponseEntity<Void> deleteSailorById(@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
                                        @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
                                        @ApiParam(value = "ID of Sailor that needs to be removed", required = true) @PathVariable("sailorID") String sailorID) {
-    	
+
     	log.debug("Request to return sailor with ID {}", sailorID);
-        if(StringUtils.isEmpty(sailorID)) 
+        if(StringUtils.isEmpty(sailorID))
         	throw new MandatoryFieldsMissingException();
         sailorAssembly.deleteSailorById(sailorID);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -130,22 +130,22 @@ public class SailorController {
     ResponseEntity<Void> sailorsDelete(@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
                                        @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
                                        @ApiParam(value = "Sailor object that needs to be removed from the SORs") @RequestBody Sailor body) {
-    	
+
     	log.debug("Request to return sailor with ID {}", body.id());
-        if(StringUtils.isEmpty(body.id())) 
+        if(StringUtils.isEmpty(body.id()))
         	throw new MandatoryFieldsMissingException();
         sailorAssembly.deleteSailorById(body.id());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    
+
     /**
-     * Searching  sailor details  based on given parameters if sailor Id is not there it display no data in Response Body 
-     * @param firstName - First name to search Account with 
-     * @param lastName - Last name to search Account with 
-     * @param dateofBirth - Date of Birth to search Account with 
-     * @param email - email to search Account with 
-     * @param mobileNumber - Mobile Number to search Account with  
+     * Searching  sailor details  based on given parameters if sailor Id is not there it display no data in Response Body
+     * @param firstName - First name to search Account with
+     * @param lastName - Last name to search Account with
+     * @param dateofBirth - Date of Birth to search Account with
+     * @param email - email to search Account with
+     * @param mobileNumber - Mobile Number to search Account with
      * @returns List of sailors
     */
     @ApiOperation(value = "", notes = "Searches for one or more `Sailor` objects. Optional query param of **size** determines size of returned array", response = Sailor.class, responseContainer = "List", tags = {"Sailor",})
@@ -161,16 +161,16 @@ public class SailorController {
                                                 @ApiParam(value = "First Name of Sailor") @RequestParam(value = "firstName", required = false) String firstName,
                                                 @ApiParam(value = "Last Name of Sailor") @RequestParam(value = "lastName", required = false) String lastName,
                                                 @ApiParam(value = "Mobile number of Sailor") @RequestParam(value = "mobileNumber", required = false) String mobileNumber) {
-    
+
     	if (StringUtils.isEmpty(email) && dateofBirth == null && StringUtils.isEmpty(firstName)
 				&& StringUtils.isEmpty(lastName) && StringUtils.isEmpty(mobileNumber)) {
 			throw new MandatoryFieldsMissingException();
 		}
-		
+
     	AccountData accountData = setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber);
-    	
+
     	List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
-		
+
 		if(listOfSailors.size() == 0) {
 			throw new DataNotFoundException();
 		}
@@ -180,11 +180,11 @@ public class SailorController {
 
     /**
     * Fetching sailor details  based on given parameters if sailor Id is not there create new sailor Record
-    * @param firstName - First name to search Account with 
-    * @param lastName - Last name to search Account with 
-    * @param dateofBirth - Date of Birth to search Account with 
-    * @param email - email to search Account with 
-    * @param mobileNumber - Mobile Number to search Account with  
+    * @param firstName - First name to search Account with
+    * @param lastName - Last name to search Account with
+    * @param dateofBirth - Date of Birth to search Account with
+    * @param email - email to search Account with
+    * @param mobileNumber - Mobile Number to search Account with
     * @returns  Sailor
     */
     @ApiOperation(value = "", notes = "Searches for one or more `Sailor` objects. If the sailor is not found, the Sailor is created in the SORs and returned.  If there are multiple matches this operation returns the first Sailor.", response = Sailor.class, tags = {"Sailor",})
@@ -201,19 +201,19 @@ public class SailorController {
                                                   @ApiParam(value = "Last Name of Sailor") @RequestParam(value = "lastName", required = true) String lastName,
                                                   @ApiParam(value = "Mobile number of Sailor") @RequestParam(value = "mobileNumber", required = false) String mobileNumber) {
 
-		
+
 		if (StringUtils.isEmpty(email) || dateofBirth == null || StringUtils.isEmpty(firstName)
 				|| StringUtils.isEmpty(lastName)) {
 			throw new MandatoryFieldsMissingException();
 		}
-		
+
 		AccountData accountData = setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber);
 		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
-		
+
 		Sailor sailor = listOfSailors.isEmpty() ? sailorAssembly.createSailor(accountData):listOfSailors.get(0);
-		
+
 		return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(sailor, entityLinks), HttpStatus.OK);
-		
+
 	}
 
     @ApiOperation(value = "", notes = "Gets `Sailor` objects. Optional query param of **size** determines size of returned array", response = Sailors.class, tags = {"Sailor",})
@@ -243,8 +243,8 @@ public class SailorController {
         mock.updateSailor(body);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    
-         
+
+
     /**
      * Creates account data object with given values.
      * @param firstName
@@ -255,7 +255,7 @@ public class SailorController {
      * @return
      */
     private AccountData setRequestParamsInAccountData(String firstName,String lastName, LocalDate dob, String email,String mobileNumber) {
-    	
+
     	// TODO optimize with fluent, dynamic
     	AccountData accountData = new AccountData();
     	accountData.firstName(firstName);
@@ -264,7 +264,7 @@ public class SailorController {
     	accountData.primaryEmail(email);
     	accountData.mobileNumber(mobileNumber);
     	return accountData;
-    	
+
     }
-        
+
 }
