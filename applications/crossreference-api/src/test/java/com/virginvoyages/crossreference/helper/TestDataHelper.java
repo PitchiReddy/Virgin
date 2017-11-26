@@ -34,6 +34,9 @@ public class TestDataHelper {
 
 	@Autowired
 	private RandomDataGenerator randomDataGenerator;
+	
+	@Autowired
+	private CrossReferenceEntityMapper entityMapper;
 
 	private static String TEST_DATA_INDICATOR = "UT_data";
 
@@ -44,7 +47,7 @@ public class TestDataHelper {
 	}
 
 	public ReferenceSource getReferenceSourceBusinessEntity() {
-		return getReferenceSourceDataEntity().convertToBusinessEntity();
+		return entityMapper.convertToReferenceSourceBusinessEntity(getReferenceSourceDataEntity());
 	}
 
 	public ReferenceTypeData getReferenceTypeDataEntity() {
@@ -64,7 +67,10 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getReferenceTypeDataEntity(ReferenceSourceData.convertToDataEntity(referenceSource)).convertToBusinessEntity();
+		
+		return entityMapper.convertToReferenceTypeBusinessEntity(getReferenceTypeDataEntity(
+				entityMapper.convertToReferenceSourceDataEntity(referenceSource)));
+		
 	}
 
 	public ReferenceData getReferenceDataEntity() {
@@ -84,7 +90,8 @@ public class TestDataHelper {
 	}
 
 	public Reference getReferenceBusinessEntity(ReferenceType referenceType) {
-		return getReferenceDataEntity(ReferenceTypeData.convertToDataEntity(referenceType)).convertToBusinessEntity();
+		return entityMapper.convertToReferenceBusinessEntity(getReferenceDataEntity(
+				entityMapper.convertToReferenceTypeDataEntity(referenceType)));
 	}
 
 	public String getRandomAlphabeticString() {
@@ -105,7 +112,10 @@ public class TestDataHelper {
 	}
 
 	public ReferenceType getEmptyReferenceTypeBusinessEntity(ReferenceSource referenceSource) {
-		return getEmptyReferenceTypeDataEntity(ReferenceSourceData.convertToDataEntity(referenceSource)).convertToBusinessEntity();
+		return entityMapper.convertToReferenceTypeBusinessEntity(
+				getEmptyReferenceTypeDataEntity(
+						entityMapper.convertToReferenceSourceDataEntity(referenceSource)));
+				
 	}
 
 	public ReferenceTypeData getEmptyReferenceTypeDataEntity(ReferenceSourceData referenceSourceData) {

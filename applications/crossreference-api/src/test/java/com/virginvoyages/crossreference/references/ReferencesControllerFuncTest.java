@@ -264,7 +264,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				get("/xref-api/v1/references/" + testDataHelper.getInvalidReferenceID()).
 		then().
 				assertThat().statusCode(404).
-				body("exception",equalTo("com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException")).
+				body("exception",equalTo("com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException")).
 				log().
 				all();
 	}

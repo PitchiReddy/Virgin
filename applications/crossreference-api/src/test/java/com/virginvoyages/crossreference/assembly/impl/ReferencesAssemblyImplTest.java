@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataNotFoundException;
@@ -48,6 +50,9 @@ public class ReferencesAssemblyImplTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Spy
+	private CrossReferenceEntityMapper entityMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -59,7 +64,8 @@ public class ReferencesAssemblyImplTest {
 	public void givenRepositorySavesReferenceTypeDataAddReferenceTypeShouldReturnSavedEntity() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save((any(ReferenceData.class)))).thenReturn(mockReferenceData);
-		Reference createdReference = referencesAssemblyImpl.addReference(mockReferenceData.convertToBusinessEntity());
+		Reference createdReference = referencesAssemblyImpl.addReference(
+				entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference, notNullValue());
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
@@ -98,7 +104,8 @@ public class ReferencesAssemblyImplTest {
 	public void givenRepositorySavesReferenceDataWithInvalidReferenceIDInUpdateReferenceItShouldThrowDataUpdationException() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
-		Reference createdReference = referencesAssemblyImpl.updateReference(mockReferenceData.convertToBusinessEntity());
+		Reference createdReference = referencesAssemblyImpl.updateReference(
+				entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference, notNullValue());
 		assertThat(createdReference.referenceID(), notNullValue());
 		assertThat(createdReference.masterID(), equalTo(mockReferenceData.masterID()));
@@ -126,7 +133,7 @@ public class ReferencesAssemblyImplTest {
 		when(referenceRepository.exists((any(String.class)))).thenReturn(true);
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
 		Reference createdReference = referencesAssemblyImpl
-				.updateReference(mockReferenceData.convertToBusinessEntity());
+				.updateReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
@@ -150,7 +157,7 @@ public class ReferencesAssemblyImplTest {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
 		when(referenceRepository.save(any(ReferenceData.class))).thenReturn(mockReferenceData);
 		Reference createdReference = referencesAssemblyImpl
-				.updateReference(mockReferenceData.convertToBusinessEntity());
+				.updateReference(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(createdReference.referenceID(), equalTo(mockReferenceData.referenceID()));
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.exception.DataAccessException;
 import com.virginvoyages.exception.DataInsertionException;
@@ -36,6 +37,9 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 
 	@Autowired
 	private ReferenceSourceRepository referenceSourceRepository;
+	
+	@Autowired
+	private CrossReferenceEntityMapper entityMapper;
 
 	/**
 	 * Create reference source based on referenceSource.
@@ -52,8 +56,8 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			referenceSource.referenceSource(null);
 		}
 		try {
-			ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(ReferenceSourceData.convertToDataEntity(referenceSource));
-			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
+			ReferenceSourceData referenceSourceData	= referenceSourceRepository.save(entityMapper.convertToReferenceSourceDataEntity(referenceSource));
+			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : entityMapper.convertToReferenceSourceBusinessEntity(referenceSourceData);
 		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while adding reference source",dex);
 			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
@@ -75,7 +79,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 		log.debug("Entering findReferenceSourceByID method in ReferenceSourcesAssemblyImpl for referenceSourceID ==> "+referenceSourceID);
 		try {
 			ReferenceSourceData referenceSourceData = referenceSourceRepository.findOne(referenceSourceID);
-			return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
+			return null == referenceSourceData ? null : entityMapper.convertToReferenceSourceBusinessEntity(referenceSourceData);
 		}catch(Exception ex) {
 			log.error("Reference Source ID ==>"+referenceSourceID+"\nException encountered in findReferenceSourceByID",ex);
 			throw new UnknownException();
@@ -87,7 +91,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 		log.debug("Entering findReferenceSourceByName method in ReferenceSourcesAssemblyImpl for referenceSourceName ==> "+referenceSourceName);
 		try {
 		ReferenceSourceData referenceSourceData=  referenceSourceRepository.findByReferenceSource(referenceSourceName);
-		return null == referenceSourceData ? null : referenceSourceData.convertToBusinessEntity();
+		return null == referenceSourceData ? null : entityMapper.convertToReferenceSourceBusinessEntity(referenceSourceData);
 		}
 		catch(Exception ex) {
 			log.error("Reference Source Name ==>"+referenceSourceName+"\nException encountered in findReferenceSourceByName",ex);
@@ -141,8 +145,8 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			throw new DataUpdationException();
 		}
 		try {
-			ReferenceSourceData referenceSourceData = referenceSourceRepository.save(ReferenceSourceData.convertToDataEntity(referenceSource));
-			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : referenceSourceData.convertToBusinessEntity();
+			ReferenceSourceData referenceSourceData = referenceSourceRepository.save(entityMapper.convertToReferenceSourceDataEntity(referenceSource));
+			return (null == referenceSourceData || StringUtils.isBlank(referenceSourceData.referenceSourceID())) ? null : entityMapper.convertToReferenceSourceBusinessEntity(referenceSourceData);
 		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while updating reference source",dex);
 			throw new DataUpdationException();
@@ -165,7 +169,7 @@ public class ReferenceSourcesAssemblyImpl implements ReferenceSourcesAssembly {
 			Page<ReferenceSourceData> referenceSourceDataPage = referenceSourceRepository.findAll(pageable);
 			return null == referenceSourceDataPage ? Collections.emptyList() :
 				Optional.ofNullable(referenceSourceDataPage.getContent()).orElseGet(Collections::emptyList)
-			    .stream().map(referenceSourceData ->referenceSourceData.convertToBusinessEntity())
+			    .stream().map(referenceSourceData ->entityMapper.convertToReferenceSourceBusinessEntity(referenceSourceData))
 																	.collect(Collectors.toList());
 		}catch(Exception ex) {
 			log.error("Exception encountered in findSources",ex);

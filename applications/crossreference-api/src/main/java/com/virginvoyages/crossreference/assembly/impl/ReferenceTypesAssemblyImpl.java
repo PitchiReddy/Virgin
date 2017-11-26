@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataAccessException;
 import com.virginvoyages.exception.DataInsertionException;
@@ -39,6 +40,9 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 
 	@Autowired
 	private ReferenceTypeRepository referenceTypeRepository;
+	
+	@Autowired
+	private CrossReferenceEntityMapper entityMapper;
 
 	/**
 	 * Create reference Type based on referenceType.
@@ -55,8 +59,8 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 			referenceType.referenceType(null);
 		}
 		try {
-			ReferenceTypeData referenceTypeData = referenceTypeRepository.save(ReferenceTypeData.convertToDataEntity(referenceType));
-			return (null == referenceTypeData || StringUtils.isBlank(referenceTypeData.referenceTypeID())) ? null : referenceTypeData.convertToBusinessEntity();
+			ReferenceTypeData referenceTypeData = referenceTypeRepository.save(entityMapper.convertToReferenceTypeDataEntity(referenceType));
+			return (null == referenceTypeData || StringUtils.isBlank(referenceTypeData.referenceTypeID())) ? null : entityMapper.convertToReferenceTypeBusinessEntity(referenceTypeData);
 		}catch(JpaObjectRetrievalFailureException jex) {
 			log.error("DataIntegrityViolationException encountered while adding reference type",jex);
 			String errorMessage = null != jex.getRootCause() ? jex.getRootCause().getMessage():jex.getMessage();
@@ -83,7 +87,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 		log.debug("Entering findReferenceTypeByID method in ReferenceTypesAssemblyImpl");
 		try {
 			ReferenceTypeData referenceTypeData = referenceTypeRepository.findOne(referenceTypeID);
-			return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+			return null == referenceTypeData ? null : entityMapper.convertToReferenceTypeBusinessEntity(referenceTypeData);
 		}catch(Exception ex) {
 			log.error("Reference Type ID ==>"+referenceTypeID+"\nException encountered in findReferenceTypeByID",ex);
 			throw new UnknownException();
@@ -96,7 +100,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 		log.debug("Entering findReferenceTypeByName method in ReferenceTypesAssemblyImpl");
 		try {
 			ReferenceTypeData referenceTypeData = referenceTypeRepository.findByReferenceType(referenceTypeName);
-			return null == referenceTypeData ? null : referenceTypeData.convertToBusinessEntity();
+			return null == referenceTypeData ? null : entityMapper.convertToReferenceTypeBusinessEntity(referenceTypeData);
 		}catch(Exception ex) {
 			log.error("Reference Type ID ==>"+referenceTypeName+"\nException encountered in findReferenceTypeByID",ex);
 			throw new UnknownException();
@@ -145,8 +149,8 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 			throw new DataUpdationException();
 		}
 		try {
-			ReferenceTypeData referenceTypeData = referenceTypeRepository.save(ReferenceTypeData.convertToDataEntity(referenceType));
-			return (null == referenceTypeData || StringUtils.isBlank(referenceTypeData.referenceTypeID())) ? null : referenceTypeData.convertToBusinessEntity();
+			ReferenceTypeData referenceTypeData = referenceTypeRepository.save(entityMapper.convertToReferenceTypeDataEntity(referenceType));
+			return (null == referenceTypeData || StringUtils.isBlank(referenceTypeData.referenceTypeID())) ? null : entityMapper.convertToReferenceTypeBusinessEntity(referenceTypeData);
 		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while updating reference type",dex);
 			throw new DataUpdationException();
@@ -174,7 +178,7 @@ public class ReferenceTypesAssemblyImpl implements ReferenceTypesAssembly {
 			Page<ReferenceTypeData> referenceTypeDataPage = referenceTypeRepository.findAll(pageable);
 			return null == referenceTypeDataPage ? Collections.emptyList() :
 				Optional.ofNullable(referenceTypeDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-				.map(referenceTypeData -> referenceTypeData.convertToBusinessEntity()).collect(Collectors.toList());
+				.map(referenceTypeData -> entityMapper.convertToReferenceTypeBusinessEntity(referenceTypeData)).collect(Collectors.toList());
 		}catch(Exception ex) {
 			log.error("Exception encountered in findTypes",ex);
 			throw new UnknownException();

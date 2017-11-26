@@ -10,8 +10,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.virginvoyages.crossreference.model.ReferenceSource;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -39,23 +37,6 @@ public class ReferenceSourceData implements Serializable {
 
 	@Column(name="INACTIVE")
 	private Boolean inActive = false;
-
-    // TODO move to Mapper/Factory
-	public ReferenceSource convertToBusinessEntity() {
-		return new ReferenceSource()
-				.referenceSource(this.referenceSource())
-				.referenceSourceID(String.valueOf(this.referenceSourceID()))
-				.inActive(this.inActive());
-			
-	}
-
-    // TODO move to Mapper/Factory
-    public static ReferenceSourceData convertToDataEntity(ReferenceSource source) {
-        return new ReferenceSourceData()
-                .referenceSource(source.referenceSource())
-                .referenceSourceID(source.referenceSourceID())
-                .inActive(source.inActive());
-    }
 
     @Override
 	public boolean equals(Object obj) {

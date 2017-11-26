@@ -11,8 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.virginvoyages.crossreference.model.Reference;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -37,25 +35,6 @@ public class ReferenceData {
 	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REFERENCE_TYPE_ID")
 	private ReferenceTypeData referenceTypeData;
-
-	// TODO move to Mapper/Factory
-	public Reference convertToBusinessEntity() {
-		return new Reference()
-				.referenceID(String.valueOf(this.referenceID()))
-				.nativeSourceIDValue(String.valueOf(this.nativeSourceIDValue()))
-				.masterID(String.valueOf(this.masterID()))
-				.referenceTypeID(String.valueOf(this.referenceTypeData().referenceTypeID()));
-	}
-
-	// TODO move to Mapper/Factory
-	public static ReferenceData convertToDataEntity(Reference reference) {
-		return new ReferenceData()
-				.nativeSourceIDValue(reference.nativeSourceIDValue())
-				.masterID(reference.masterID())
-				.referenceTypeData(new ReferenceTypeData().referenceTypeID(reference.referenceTypeID()));
-
-	}
-
 	
 	@Override
 	public boolean equals(Object obj) {

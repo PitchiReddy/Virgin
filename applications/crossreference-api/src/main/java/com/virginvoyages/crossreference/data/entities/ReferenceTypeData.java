@@ -1,6 +1,5 @@
 package com.virginvoyages.crossreference.data.entities;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,8 +10,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.virginvoyages.crossreference.model.ReferenceType;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -40,24 +37,6 @@ public class ReferenceTypeData {
 	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REFERENCE_SOURCE_ID")
 	private ReferenceSourceData referenceSourceData;
-
-    // TODO move to Mapper/Factory
-	public ReferenceType convertToBusinessEntity() {
-		return new ReferenceType()
-				.referenceType(this.referenceType())
-				.referenceSourceID(this.referenceSourceData().referenceSourceID())
-				.referenceTypeID(this.referenceTypeID());
-				
-	}
-
-	// TODO move to Mapper/Factory
-	public static ReferenceTypeData convertToDataEntity(ReferenceType type) {
-		return new ReferenceTypeData()
-				.referenceType(type.referenceType())
-				.referenceTypeID(type.referenceTypeID())
-				.referenceSourceData(new ReferenceSourceData().referenceSourceID(type.referenceSourceID()));
-
-	}
 
 	@Override
 	public boolean equals(Object obj) {

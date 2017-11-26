@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataAccessException;
 import com.virginvoyages.exception.DataInsertionException;
@@ -40,6 +41,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 
 	@Autowired
 	private ReferenceRepository referenceRepository;
+	
+	@Autowired
+	private CrossReferenceEntityMapper entityMapper;
 
 
 	/**
@@ -56,8 +60,8 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			reference.nativeSourceIDValue(null);
 		}
 		try {
-			ReferenceData referenceData	= referenceRepository.save(ReferenceData.convertToDataEntity(reference));
-			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
+			ReferenceData referenceData	= referenceRepository.save(entityMapper.convertToReferenceDataEntity(reference));
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
 		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while adding reference ",dex);
 			String errorMessage = null != dex.getRootCause() ? dex.getRootCause().getMessage():dex.getMessage();
@@ -78,7 +82,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		log.debug("Entering findReferenceByID method in ReferencesAssemblyImpl for referenceID ==> " + referenceID);
 		try {
 			ReferenceData referenceData = referenceRepository.findOne(referenceID);
-			return null == referenceData ? null : referenceData.convertToBusinessEntity();
+			return null == referenceData ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
 		} catch (Exception ex) {
 			log.error("Find Reference ID ==>" + referenceID + "\nException encountered in findReferenceByID", ex);
 			throw new UnknownException();
@@ -122,7 +126,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			Page<ReferenceData> referenceDataPage = referenceRepository.findAll(pageable);
 			return null == referenceDataPage ? Collections.emptyList() :
 				Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-				.map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 		}catch(Exception ex) {
 			log.error("Exception encountered in findReferences",ex);
 			throw new UnknownException();
@@ -133,7 +137,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	public List<Reference> findReferenceByMasterId(String masterId, Pageable pageable) {
 		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterID(masterId,pageable);
 	return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
-	  stream().map(referenceData -> referenceData.convertToBusinessEntity()).collect(Collectors.toList());
+	  stream().map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
 
 	/**
@@ -149,8 +153,8 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			throw new DataUpdationException();
 		}
 		try {
-			ReferenceData referenceData = referenceRepository.save(ReferenceData.convertToDataEntity(reference));
-			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : referenceData.convertToBusinessEntity();
+			ReferenceData referenceData = referenceRepository.save(entityMapper.convertToReferenceDataEntity(reference));
+			return (null == referenceData || StringUtils.isBlank(referenceData.referenceID())) ? null : entityMapper.convertToReferenceBusinessEntity(referenceData);
 		}catch(DataIntegrityViolationException dex) {
 			log.error("DataIntegrityViolationException encountered while updating reference ",dex);
 			throw new DataUpdationException();

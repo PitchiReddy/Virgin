@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataAccessException;
@@ -51,6 +53,9 @@ public class ReferenceTypesAssemblyImplTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Spy
+	private CrossReferenceEntityMapper entityMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -63,7 +68,7 @@ public class ReferenceTypesAssemblyImplTest {
 		ReferenceTypeData mockReferenceTypeData = testDataHelper.getReferenceTypeDataEntity();
 		when(referenceTypeRepository.save((any(ReferenceTypeData.class)))).thenReturn(mockReferenceTypeData);
 		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
-				.addReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+				.addReferenceType(entityMapper.convertToReferenceTypeBusinessEntity(mockReferenceTypeData));
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));
@@ -179,7 +184,7 @@ public class ReferenceTypesAssemblyImplTest {
 		when(referenceTypeRepository.exists((any(String.class)))).thenReturn(true);
 		when(referenceTypeRepository.save(any(ReferenceTypeData.class))).thenReturn(mockReferenceTypeData);
 		ReferenceType createdReferenceType = referenceTypesAssemblyImpl
-				.updateReferenceType(mockReferenceTypeData.convertToBusinessEntity());
+				.updateReferenceType(entityMapper.convertToReferenceTypeBusinessEntity(mockReferenceTypeData));
 		assertThat(createdReferenceType, notNullValue());
 		assertThat(createdReferenceType.referenceTypeID(), notNullValue());
 		assertThat(createdReferenceType.referenceType(), equalTo(mockReferenceTypeData.referenceType()));

@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
+import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.exception.DataAccessException;
@@ -51,6 +53,9 @@ public class ReferenceSourcesAssemblyImplTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Spy
+	private CrossReferenceEntityMapper entityMapper;
 
 
 	@Before
@@ -63,7 +68,8 @@ public class ReferenceSourcesAssemblyImplTest {
 	public void givenRepositoryReturnsSavedEntityAddReferenceSourcesShouldReturnSavedReference() {
 		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
-		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.addReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
+		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.addReferenceSource(
+				entityMapper.convertToReferenceSourceBusinessEntity(mockReferenceSourceData));
 		assertThat(createdReferenceSource, notNullValue());
 		assertThat(createdReferenceSource.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
@@ -198,7 +204,8 @@ public class ReferenceSourcesAssemblyImplTest {
 		ReferenceSourceData mockReferenceSourceData = testDataHelper.getReferenceSourceDataEntity();
 		when(referenceSourceRepository.exists((any(String.class)))).thenReturn(true);
 		when(referenceSourceRepository.save(any(ReferenceSourceData.class))).thenReturn(mockReferenceSourceData);
-		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.updateReferenceSource(mockReferenceSourceData.convertToBusinessEntity());
+		ReferenceSource createdReferenceSource = referenceSourcesAssemblyImpl.updateReferenceSource(
+				entityMapper.convertToReferenceSourceBusinessEntity(mockReferenceSourceData));
 		assertThat(createdReferenceSource, notNullValue());
 		assertThat(createdReferenceSource.referenceSourceID(), notNullValue());
 		assertThat(createdReferenceSource.referenceSource(), equalTo(mockReferenceSourceData.referenceSource()));
