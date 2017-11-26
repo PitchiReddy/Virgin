@@ -1,6 +1,5 @@
 package com.virginvoyages.crossreference.types;
 
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
@@ -37,10 +36,9 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.UnknownException;
-import com.virginvoyages.model.crossreference.ReferenceSource;
-import com.virginvoyages.model.crossreference.ReferenceType;
-
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceTypesController.class)

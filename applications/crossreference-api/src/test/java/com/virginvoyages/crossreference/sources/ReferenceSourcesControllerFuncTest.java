@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
 

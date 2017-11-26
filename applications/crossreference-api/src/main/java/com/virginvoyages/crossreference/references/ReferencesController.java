@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.references;
 
 
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,17 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.References;
+import com.virginvoyages.crossreference.model.ReferencesEmbedded;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.References;
-import com.virginvoyages.model.crossreference.ReferencesEmbedded;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

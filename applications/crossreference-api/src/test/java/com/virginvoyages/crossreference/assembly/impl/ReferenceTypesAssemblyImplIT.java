@@ -18,11 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
-import com.virginvoyages.model.crossreference.ReferenceSource;
-import com.virginvoyages.model.crossreference.ReferenceType;
 
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.virginvoyages.model.crossreference;
+package com.virginvoyages.crossreference.model;
 
 import java.util.ArrayList;
 import java.util.List;

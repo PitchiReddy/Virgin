@@ -1,4 +1,4 @@
-package com.virginvoyages.configuration;
+package com.virginvoyages.api;
 
 import com.virginvoyages.api.OriginFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

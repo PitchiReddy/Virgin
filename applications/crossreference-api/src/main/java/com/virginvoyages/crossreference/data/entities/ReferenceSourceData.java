@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceSource;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

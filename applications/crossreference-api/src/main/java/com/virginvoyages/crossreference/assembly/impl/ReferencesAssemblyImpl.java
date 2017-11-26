@@ -20,12 +20,12 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataAccessException;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
 
 import lombok.extern.slf4j.Slf4j;
 

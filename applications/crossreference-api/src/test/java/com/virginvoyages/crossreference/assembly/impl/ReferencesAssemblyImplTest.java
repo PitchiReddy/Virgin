@@ -30,10 +30,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
-import com.virginvoyages.model.crossreference.Reference;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

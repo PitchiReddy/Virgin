@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.virginvoyages.crossreference.helper.TestDataHelper;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.ReferenceSource;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;

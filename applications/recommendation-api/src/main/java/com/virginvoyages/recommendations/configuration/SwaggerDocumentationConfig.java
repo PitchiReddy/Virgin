@@ -1,4 +1,4 @@
-package com.virginvoyages.configuration;
+package com.virginvoyages.recommendations.configuration;
 
 import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;

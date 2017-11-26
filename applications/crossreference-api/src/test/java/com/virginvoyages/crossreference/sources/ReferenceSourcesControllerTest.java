@@ -37,8 +37,8 @@ import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceSourceRepository;
 import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.exception.UnknownException;
-import com.virginvoyages.model.crossreference.ReferenceSource;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferenceSourcesController.class)
