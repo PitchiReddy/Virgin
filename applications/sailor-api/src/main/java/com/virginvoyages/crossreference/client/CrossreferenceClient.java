@@ -20,6 +20,6 @@ public interface CrossreferenceClient {
 	@RequestMapping(value = "/references/search/findByTypeAndTargetType", method = RequestMethod.POST, consumes = "application/json; charset=UTF-8", produces = "application/json")
 	References findByTypeAndTargetType(@RequestBody Reference reference);
 	
-	@RequestMapping(value = "/types/findByName/{referenceTypeName}", method = RequestMethod.GET, consumes = "application/json; charset=UTF-8", produces = "application/json")
+	@RequestMapping(value = "/types/findByName/{referenceTypeName}", method = RequestMethod.GET, produces = "application/json")
 	ReferenceType getReferenceTypeByName(@PathVariable("referenceTypeName") String referenceTypeName);
 }

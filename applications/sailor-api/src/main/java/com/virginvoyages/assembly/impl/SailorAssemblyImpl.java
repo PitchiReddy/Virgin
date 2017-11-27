@@ -168,8 +168,13 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	 * @return referenceTypeID
 	 */
 	public String getReferenceTypeIDForName(String referenceTypeName) {
-		ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
-		return null != referenceType ? referenceType.referenceTypeID() : null; 
+		try {
+			ReferenceType referenceType = referenceClient.getReferenceTypeByName(referenceTypeName);
+			return null != referenceType ? referenceType.referenceTypeID() : null;
+		}catch(FeignException fe) {
+			log.error("Feign Exception in getReferenceTypeIDForName for referenceTypeName ===>"+referenceTypeName, fe);
+			return null;
+		}
 	}
 	
 	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {

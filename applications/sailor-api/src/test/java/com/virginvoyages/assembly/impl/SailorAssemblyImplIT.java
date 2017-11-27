@@ -1,8 +1,9 @@
 package com.virginvoyages.assembly.impl;
 
+import static com.virginvoyages.crossreference.constants.CrossReferenceConstants.REFERENCE_TYPE_CLIENT;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -18,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
@@ -227,19 +227,13 @@ public class SailorAssemblyImplIT {
 	//  Test for getReferenceTypeIDForName
 	@Test
 	public void givenReferenceTypeExistsInDBGetReferenceTypeIDForNameShouldReturnID() {
-		ReferenceType referenceType = testDataHelper.getReferenceTypeData();
-		String referenceTypeID = sailorAssembly.getReferenceTypeIDForName(referenceType.referenceType());
-		assertThat(referenceTypeID, is(notNullValue()));
-		assertThat(referenceType.referenceTypeID(), equalTo(referenceTypeID));
+		assertThat(sailorAssembly.getReferenceTypeIDForName(REFERENCE_TYPE_CLIENT), notNullValue());
 	}
 	
-/*	@Test(expected = FeignException.class)
+	@Test 
 	public void givenReferenceTypeDoesNotExistInDBGetReferenceTypeIDForNameShouldNull() {
-		
-		String referenceTypeName = testDataHelper.getInvalidReferenceTypeByName();
-		String referenceTypeID = sailorAssembly.getReferenceTypeIDForName(referenceTypeName);
-		assertThat(referenceTypeID, is(nullValue()));
-	} */
+		assertThat(sailorAssembly.getReferenceTypeIDForName("random"), nullValue());
+	}
 	
 	/* Tests for getTargetRecordID
 	@Test
