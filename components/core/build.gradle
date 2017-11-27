@@ -20,8 +20,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
     
      
-    compile "org.springframework.cloud:spring-cloud-starter-security"
-    compile "org.springframework.cloud:spring-cloud-starter-oauth2:1.2.1.RELEASE"        
  
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
