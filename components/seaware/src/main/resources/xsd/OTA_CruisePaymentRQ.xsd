@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="3.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruisePaymentRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This message provides for payments to multiple reservations. It is also a request that can make a payment without needing to retrieve a reservation.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Booking Payment message pair provides the user with the ability to submit payments for an existing reservation.</p>
+                <p>The user can specify the reservation ID for which the payment is being submitted along with the details of the form of payment (e.g. credit card, voucher, etc.) and the amount.</p>
+                <p>Agency making the payment on behalf of the customer is identified by the AgentInfo.ContactID (PseudoCityCode) or by the POS element.</p>
+                <p>Client making the payment on behalf of the customer is identified by the POS element where RequestorID.Type=1.</p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">ManageAccTransIN</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines payment source entity for the payment transaction.
+                            <br/><br/>Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code (5).
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally agency is identified by PseudoCityCode.
+                            <br/><br/>Client ID is taken from RequestorID by ID, with Type as UIT CodeList Customer code (1).
+                        </xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine, Client by ID.</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReservationPayment" maxOccurs="9">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Payment information for a reservation.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Contains the ReservationID (mandatory) and the details of payments to be submitted.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ManageAccTransIN.Create.Payments.Payment</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ReservationID">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Specifies the reservation control information or the guest's booking ID.</xs:documentation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">Payment.DestPmntEntity.ResID</xs:appinfo>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="UniqueID_Type">
+											<xs:attribute name="SyncDateTime" type="xs:dateTime" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">Specifies the Synchronization date of the record between GDS's and Cruise Line Providers.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="Status" type="OTA_CodeType" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en"> Indicates the Reservation status. Refer to OpenTravel Code List Status (STS).</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PaymentDetail" type="PaymentDetailType" maxOccurs="9">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Payment details for the reservation.</xs:documentation>
+                                    <xs:documentation xml:lang="en" source="Versonix">Details for the payments to be submitted, e.g. amount, currency, form of payment, etc.</xs:documentation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">Payment.Amount, Payment.Currency, Payment.FormOfTrans, Payment.TransFormInfo</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Provides additional agent-level information when processing a cruise payment.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">If provided identifies agency (by PseudoCityCode) that makes a payment. If agency must de identified by some other means (IATA, ABTA, CLIA) used POS instead.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attributeGroup ref="AgentInfoGroup">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Additional agent-level information used when processing a cruise payment.</xs:documentation>
+							</xs:annotation>
+						</xs:attributeGroup>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attribute name="TransactionActionCode" type="TransactionActionType" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
