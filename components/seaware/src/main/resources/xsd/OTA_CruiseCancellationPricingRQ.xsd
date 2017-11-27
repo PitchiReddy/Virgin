@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="3.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CommonTypes.xsd"/>
+	<xs:element name="OTA_CruiseCancellationPricingRQ">
+		<xs:annotation>
+            <xs:documentation xml:lang="en">The cancellation pricing request message is used to price the cancellation penalties if a reservation were to be cancelled.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Cancellation Pricing message pair is sent to Seaware to request the penalties that would be charged if the requested reservation is canceled.</p>
+                <p>The reservation is identified by ReservationID.</p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">CancelBooking, UnlockBooking</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">Agency search by PseudoCityCode, ID and ID_Context, agent search by AgentID=AgentSine.</xs:appinfo>
+                        <xs:documentation xml:lang="en" source="Versonix">
+                            In order to get access and modify the booking it's primary or secondary agency must be referenced here.
+                            <br/>An agency that is registered in the backend Seaware system must be present here.
+                            <br/>Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally) agency is identified by PseudoCityCode.
+                            <br/>Agent ID is taken from AgentSine and if present this agent will be used for the booking.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReservationID">
+					<xs:annotation>
+                        <xs:documentation xml:lang="en">Specifies the guest's booking ID (e.g. Vendor Confirmation Number).</xs:documentation>
+						<xs:documentation source="Versonix" xml:lang="en">Contains the Reservation ID of a booking to calculation cancellation pricing. Mandatory node.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">CancelBookingIN.ResID</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="UniqueID_Type"/>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Currency" minOccurs="0">
+					<xs:annotation>
+                        <xs:documentation xml:lang="en">Currency in which the fees will be returned.</xs:documentation>
+                        <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attributeGroup ref="CurrencyCodeGroup"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
