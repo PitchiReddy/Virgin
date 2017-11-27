@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="4.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruiseBookRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The book request message requests booking creation on the cruise line system for a given sailing with a specific mode of transportation/ gateway city pair and currency and for a selected fare/category pair and a cabin number. It also integrates this booking into a GDS's PNR (Not Implemented) based on the cruise line reply. Optional request information can include: Guest city and Inclusive package.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Cruise Book message pair is used to create a reservation in Seaware, for a specific sailing, with a specified mode of transportation and currency, and a selected fare/category pair, for one or more passengers, in a specific cabin.</p>
+                <p>It is not required to hold the cabin prior to submitting a Cruise Book request message.</p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">When cabin number has provided it tries to load booking by stateKey (LoadBooking request). Otherwise (or when loading by stateKey fails) it creates new booking. Then update this booking (UpdateBooking request), update and store households and clients (ManageClients.Update request, ManageClients.Store request) and store booking (StoreBooking request)</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking.
+                            <br/>An agency that is registered in the backend Seaware system must be present here.
+                            <br/>Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally) agency is identified by PseudoCityCode.
+                            <br/>Agent ID is taken from AgentSine and if present this agent will be used for the booking.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+                    </xs:annotation>
+				</xs:element>
+				<xs:element name="AgentInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies the information of the an agent who is creating or modifying the booking.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResHeader.SecAgentID</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attributeGroup ref="AgentInfoGroup"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DeletedGuest" minOccurs="0" maxOccurs="9">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies the information of the deleted guest from the current booking. Normally used in Modification mode.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="DeletedGuestReference" type="Numeric1to99" use="required">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">The guest's reference number in the booking being modified.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SailingInfo" type="SailingCategoryInfoType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies the selected category to book.Contains information related to the selected sailing. Typically the selected sailing is one of the sailings returned in the previous sailing availability response. </xs:documentation>
+						<xs:documentation source="Versonix" xml:lang="en">Specifies sailing criteria. VoyageID attribute is mandatory here when ReservationInfo.ReservationID does not provided.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests, ResShell.ResPromotions</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReservationInfo" type="CruiseGuestInfoType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies information about the booking.</xs:documentation>
+						<xs:documentation source="Versonix" xml:lang="en">Specifies reservation and guest information. When ReservationID is not provided then the new booking will be created, in that case the guest information is mandatory here.</xs:documentation>
+						<xs:appinfo source="Versonix" xml:lang="en">Client, Household, ResShell.ResGuests, ResShell.ResPackages, ResShell.ResPromotions, ResShell.ResDining</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attribute name="TransactionActionCode" type="TransactionActionType" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
