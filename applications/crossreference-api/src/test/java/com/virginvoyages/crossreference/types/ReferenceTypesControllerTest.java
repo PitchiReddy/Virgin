@@ -381,6 +381,30 @@ public class ReferenceTypesControllerTest {
 	}
 
 	@Test
+	public void givenMaxSizeForSizeInRequestParamsFindTypesShouldSetMethodNotAllowedInResponse() throws Exception {
+		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
+		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
+
+		given(referenceTypesAssembly.findTypes(any(PageRequest.class))).willReturn(referenceTypesList);
+
+		ReflectionTestUtils.setField(referenceTypesController, "referenceTypesAssembly", referenceTypesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referenceTypesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					@Override
+					public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale)
+							throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+		mvc.perform(
+				get("/types/?page=1&size=21")
+				.contentType("application/json"))
+				.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+
+	}
+	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceTypesFindTypesShouldSetListInResponse() throws Exception {
 		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
 		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());

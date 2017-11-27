@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.constants.CrossReferenceConstants;
+import com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataInsertionException;
@@ -183,6 +185,10 @@ public class ReferenceTypesController {
 
 		if(size == 0) {
 			throw new MandatoryFieldsMissingException();
+		}
+		
+		if (size > CrossReferenceConstants.MAX_SIZE) {
+			throw new ReferencePaginationMaxSizeException();
 		}
 		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(pageable), HttpStatus.OK);
 	}
