@@ -192,6 +192,28 @@ public class ReferenceSourcesControllerTest {
 			    .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
 
+	@Test
+	public void givenMaxSizeForSizeInRequestParamsFindSourcesShouldSetMethodNotAllowedInResponse() throws Exception {
+		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
+		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
+
+		given(referenceSourcesAssembly.findSources(any(PageRequest.class))).willReturn(referenceSourceList);
+
+		ReflectionTestUtils.setField(referenceSourcesController, "referenceSourcesAssembly", referenceSourcesAssembly);
+		mvc=MockMvcBuilders.standaloneSetup(referenceSourcesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+	            .setViewResolvers(new ViewResolver() {
+	                @Override
+	                public org.springframework.web.servlet.View resolveViewName(String viewName, Locale locale) throws Exception {
+	                    return new MappingJackson2JsonView();
+	                }
+	            }).build();
+
+		mvc.perform(
+				 get("/sources/?page=1&size=21")
+				.contentType("application/json"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+	}
 
 	@Test
 	public void givenAssemblyMethodReturnsListOfReferenceSourcesFindSourcesShouldSetListInResponse() throws Exception {

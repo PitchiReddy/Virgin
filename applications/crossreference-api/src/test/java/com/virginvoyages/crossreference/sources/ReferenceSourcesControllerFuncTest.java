@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
+import com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 
@@ -406,6 +407,22 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 	    		.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
 				.log()
 				.all();
+	}
+	
+	@Test
+	public void givenSizeIsMaxSizeFindSourcesShouldThrowReferencePaginationMaxSizeException() {
+		given()
+				.contentType("application/json")
+				.param("page", 0)
+				.param("size", 21)
+				.get("/xref-api/v1/sources/")
+
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException"))
+				.log()
+				.all();
+
 	}
 
 }
