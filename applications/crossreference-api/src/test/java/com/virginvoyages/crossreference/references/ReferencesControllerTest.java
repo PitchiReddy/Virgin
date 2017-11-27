@@ -259,6 +259,29 @@ public class ReferencesControllerTest {
 	}
 
 	@Test
+	public void givenMaxSizeForSizeInRequestParamsFindReferencesShouldSetMethodNotAllowedInResponse() throws Exception {
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+
+		given(referencesAssembly.findReferences(new PageRequest(0, 10))).willReturn(referenceList);
+
+		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referencesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					public View resolveViewName(String viewName, Locale locale) throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+		//Test
+		mvc.perform(
+				 get("/references/?page=1&size=21")
+				.contentType("application/json"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+
+	}
+	@Test
 	public void givenAssemblyMethodReturnsListOfReferencesFindReferencesShouldSetReferencesInResponse() throws Exception {
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());

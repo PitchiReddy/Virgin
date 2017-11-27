@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
+import com.virginvoyages.crossreference.constants.CrossReferenceConstants;
 import com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.crossreference.model.References;
 import com.virginvoyages.crossreference.model.ReferencesEmbedded;
@@ -172,6 +174,9 @@ public class ReferencesController {
 		log.debug("Find reference objects");
 		if(size == 0) {
 			throw new MandatoryFieldsMissingException();
+		}
+		if (size > CrossReferenceConstants.MAX_SIZE) {
+			throw new ReferencePaginationMaxSizeException();
 		}
 		List<Reference> referenceList = referencesAssembly.findReferences(pageable);
 		return new ResponseEntity<References>(new References().page(new Page().size(pageable.getPageSize()).number(pageable.getPageNumber()))
