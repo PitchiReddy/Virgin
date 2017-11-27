@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="3.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruisePkgAvailRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The package availability request message handles pre, post, and inclusive package availability requests for a given sailing.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Package Availability message pair is used to request information about the available land packages associated with a sailing.</p>
+                <p>The availability is calculated for the specific booking in case ReservationID is provided.</p>
+                <p>Otherwise the availability is calculated for the sailing identified by VoyageID (mandatory in that case), fare code and category code.</p>
+                <p>Optionally, the guests and options can be specified (ignored if ReservationID is provided).</p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">GetAvailLandPackagesIN</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking which is used to search for availability.
+                            Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally) agency is identified by PseudoCityCode.
+                            Agent ID is taken from AgentSine.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="GuestInfos" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Collection of guest information.</xs:documentation>
+                        <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GuestInfo" maxOccurs="9">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Specifies the guest information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="SelectedFareCode" minOccurs="0" maxOccurs="2">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">Specifies the fare code and the group code if any. Fare codes are specific to cruise lines.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attributeGroup ref="FareGroup"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="GuestTransportation" type="GuestTransportationType" minOccurs="0" maxOccurs="2">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">Selected guest mode of transportation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GuestCounts" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies guest quantity and guest types.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines reservation guests for the temporary booking that is used to perform availability search.</xs:documentation>
+                        <xs:documentation xml:lang="en">ResShell.ResGuests</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Specify guest numbers and types.</xs:documentation>
+						</xs:annotation>
+						<xs:sequence>
+							<xs:element name="GuestCount" maxOccurs="9">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Categorization of all guests in the request. The sum of the Quantity attribute will provide you with the total number of guests.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attributeGroup ref="TravelerCountGroup"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SailingInfo" type="SailingCategoryInfoType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains information related to the selected sailing.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Sail can be specified by date range or VoyageID</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PackageOption" type="CruisePackageType" maxOccurs="8">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies the type of package options of interest.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Optionally specify the PackageTypeCode of the queried packages, filter by status, by date range, city, availabilityMode.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SearchQualifiers" type="SearchQualifierType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Used to further qualify the package availability search.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">May be used to pass package start\end date ranges, shared cabin, promotion code, price range, group id, allotment agreement id, reservation id.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">GetAvailLandPackagesIN.SearchParams.PackageStartRange,
+                            GetAvailLandPackagesIN.SearchParams.PackageEndRange, GetAvailLandPackagesIN.SearchParams.SharedCabin,
+                            GetAvailLandPackagesIN.SearchParams.Promotions, GetAvailLandPackagesIN.SearchParams.PriceRange,
+                            GetAvailLandPackagesIN.SearchParams.GroupID, AllotmentAgreementID</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReservationID" type="ReservationID_Type" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">A reference to a specific reservation which may limit the available packages.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">May be used to pass reservation id or allotment agreement id.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">GetAvailLandPackagesIN.ResShellRef</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attributeGroup ref="ResponseGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Provides the echo token to be used to retrieve additional records.</xs:documentation>
+                    <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
