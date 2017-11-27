@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ota="http://www.opentravel.org/OTA/2003/05" targetNamespace="http://www.versonix.com/ota" xmlns="http://www.versonix.com/ota" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0" id="VxOTA2015B">
+    <xs:annotation>
+        <xs:documentation xml:lang="en" source="Versonix">This file contains Versonix OTA extension types.</xs:documentation>
+    </xs:annotation>
+    <xs:import schemaLocation="OTA_CruiseCategoryAvailRS.xsd" namespace="http://www.opentravel.org/OTA/2003/05" />
+    <xs:attributeGroup name="SearchAttributes">
+        <xs:annotation>
+            <xs:documentation source="Versonix" xml:lang="en">The attributes to regulate the availability search.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="UseCacheInd" type="xs:boolean" use="optional">
+            <xs:annotation>
+                <xs:documentation source="Versonix" xml:lang="en">When true, availability search will use cache.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="IncludeCategoriesInd" type="xs:boolean" use="optional">
+            <xs:annotation>
+                <xs:documentation source="Versonix" xml:lang="en">When true, include information about available category options in the response.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:complexType name="CruiseSailAvailRQExtensionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en" source="Versonix">Extension for the OTA_CruiseSailAvailRQ element.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="SearchAttributes">
+            <xs:annotation>
+                <xs:documentation source="Versonix" xml:lang="en">Used to regulate search process and result: to cache or not, to return available category options.</xs:documentation>
+            </xs:annotation>
+        </xs:attributeGroup>
+    </xs:complexType>
+    <xs:complexType name="CruiseSailAvailRSSailingOptionExtensionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en" source="Versonix">Extension for the OTA_CruiseSailAvailRS.SailingOptions.SailingOption element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="CategoryOptions">
+                <xs:annotation>
+                    <xs:documentation source="Versonix" xml:lang="en">Contains the different categories found for the sailing and BESTPRICE fare code, or (if provided) for FareCode and GroupCode in request SearchQualifiers element.</xs:documentation>
+                    <xs:appinfo source="Versonix" xml:lang="en">GetAvailPrimPackagesOUT.AvailPackage.Categories</xs:appinfo>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="CategoryOption" type="ota:CategoryOptionType" maxOccurs="40">
+                            <xs:annotation>
+                                <xs:documentation source="Versonix" xml:lang="en">Contains available category information. Information relates to occupancy, category location on the ship, upgrade if available and the proposed price (Only common type of breakdown for the occupancy pricing. To get more types use OTA_CruiseCategoryAvailRQ).</xs:documentation>
+                                <xs:documentation source="Internal">maxOccurs set to 40 in CategoryOption just to generate list by jaxb.</xs:documentation>
+                                <xs:appinfo source="Versonix" xml:lang="en">AvailCategory, Category, Capacity</xs:appinfo>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="UniqueIDExtensionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en" source="Versonix">Extension for the UniqueID_Type element to be used mostly for ReservationID elements in responses providing header information on a booking - agency and agent details.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AgentInfo" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation source="Versonix" xml:lang="en">When used in ReservationID in response messages: specifies the information of the an agent who created or modified the booking.</xs:documentation>
+                    <xs:appinfo source="Versonix" xml:lang="en">ResHeader.SecAgentID or AgentID if the former is not defined</xs:appinfo>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="ota:AgentInfoGroup"/>
+                    <xs:attribute name="AgentSine" type="ota:StringLength1to16" use="optional">
+                        <xs:annotation>
+                            <xs:documentation source="Description" xml:lang="en">Identifies the party within the requesting entity.</xs:documentation>
+                            <xs:appinfo source="Versonix" xml:lang="en">Not supported</xs:appinfo>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="AgencyInfo" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation source="Versonix" xml:lang="en">When used in ReservationID in response messages: specifies the information of the an agency.</xs:documentation>
+                    <xs:appinfo source="Versonix" xml:lang="en">ResHeader.SecAgencyID or AgencyID if the former is not defined</xs:appinfo>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="ota:AgentInfoGroup"/>
+                    <xs:attribute name="PseudoCityCode" type="ota:StringLength1to16" use="optional">
+                        <xs:annotation>
+                            <xs:documentation source="Description" xml:lang="en">An identification code assigned to an office/agency by a reservation system.</xs:documentation>
+                            <xs:appinfo source="Versonix" xml:lang="en">Agency.ExternalLinks[ExtName='OPENTRAVEL'].PseudoCityCode, ResHistItem.ExtSystemInfo.ExternalUserID1</xs:appinfo>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
