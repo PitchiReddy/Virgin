@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.virginvoyages.hbase.starter.config.HbaseTemplateAutoConfiguration

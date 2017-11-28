@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="3.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+    <xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+    <xs:element name="OTA_CruiseFastSellRQ">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The Fast Sell Request message requests cabin hold, cabin availability, category availability, and optionally an inclusive package.</xs:documentation>
+            <xs:documentation source="Versonix" xml:lang="en">
+                <p>Fast Sell Request message requires the user to provide sail information, and optionally VoyageID, fare, category, cabin, secondary packages.</p>
+                <p>The Fast Sell message is a multipurpose request to access one of the following Seaware functions:
+                    <ul>
+                    <li> Cabin hold when a cabin number is provided and available,</li>
+                    <li> Cabin availability when a cabin number is not provided and a category is provided,</li>
+                    <li> Category availability when neither cabin, nor category is specified in the request,</li>
+                    <li> Fare availability when the fare code provided in the request is not available,</li>
+                    <li> Package availability when the package is specified, but not available for the sailing.</li>
+                    </ul>
+                </p>
+                <p>The response is conditional upon inventory availability for the requested function:
+                <ul>
+                    <li> If the cabin is available, the response will be the cabin hold message (OTA_CruiseCabinHoldRS). </li>
+                    <li> If cabin is unavailable for hold (or not provided), the response will be cabin availability (OTA_CruiseCabinAvailRS).</li>
+                    <li> If category is unavailable (or not provided), the response will be category availability (OTA_CruiseCategoryAvailRS).</li>
+                    <li> If the fare is not available the response will be fare availability (OTA_CruiseFareAvailRS).</li>
+                    <li> If the sailing or package is not available, the response will be sailing (OTA_CruiseSailAvailRS) or package availability (OTA_CruisePkgAvailRS).</li>
+                </ul></p>
+            </xs:documentation>
+            <xs:appinfo source="Versonix" xml:lang="en">UpdateBooking, UnlockBooking, GetAvailCabins, GetAvailCategories, GetAvailPromotions, GetAvailPrimPackages</xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="POS" type="POS_Type">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking.
+                            Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Alternatively (or additionally) agency will be identified by PseudoCityCode.
+                            Agent ID is taken from AgentSine.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="GuestCounts" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Specifies guest quantity and guest types.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResGuests</xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="GuestCount" maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">Categorization of all guests in the request. he total number of guests will equal the sum of the Quantity attribute of all GuestCount objects in this collection and assumes that the Guest Age or the Guest Code will be used to determine how each Guest should be fared.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="TravelerCountGroup">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">The quantity of guests of a category.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attributeGroup>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="SelectedSailing">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Contains information related to the selected sailing.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests, ResShell.ResPromotions</xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="SelectedFare" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">Specifies the fare code and the group code. Fare codes are specific to cruise lines.</xs:documentation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPromotions</xs:appinfo>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="FareGroup">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">Specifies the fare code and the group code. Fare codes are specific to cruise lines.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attributeGroup>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="SelectedCategory" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">Specifies the category for the Fast Sell.</xs:documentation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests</xs:appinfo>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="SelectedCabin" minOccurs="0" maxOccurs="4">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en">Specifies the selected Cabins.</xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:attributeGroup ref="CruiseCabinGroup"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attributeGroup ref="CruiseCategoryDetailGroup">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">Contains the berth and price category codes.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attributeGroup>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="InclusivePackageOption" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">Specifies the package for the Fast Sell. Usually the request will query for  packages that are included in the cruise sailing offering (inclusive packages).</xs:documentation>
+                                    <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="CruisePackageGroup">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">Specifies the package for this sailing.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attributeGroup>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attributeGroup ref="SelectedSailingGroup"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Guest" type="GuestType" minOccurs="0" maxOccurs="9">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Selected guest mode of transportation available for current sailing and current fares.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResGuests</xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Currency" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Currency in which the fare will be returned.</xs:documentation>
+                        <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResHeader.Currency</xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attributeGroup ref="CurrencyCodeGroup"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="SearchQualifiers" type="SearchQualifierType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">In this message Past Passenger Number and Residency can be used to hold the Cabin. NOTE: Other Fields may not be used in this message.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Contains filter availability results by PricedCategoryCode.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="TPA_Extensions" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="OTA_PayloadStdAttributes">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+                </xs:annotation>
+            </xs:attributeGroup>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

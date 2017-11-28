@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property resource="META-INF/build-info.properties" />
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <file>${log.file}</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"componentName":"${build.name}","componentVersion":"${build.version}"}</customFields>
+            <fieldNames>
+               <timestamp key="timestamp" datePattern="yyyy-MM-dd'_'HH-mm-ss.SSS">timestamp</timestamp>
+                <version>version</version>
+            </fieldNames>
+        </encoder>
+    </appender>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"componentName":"${build.name}","componentVersion":"${build.version}"}</customFields>
+            <fieldNames>
+                 <timestamp key="timestamp" datePattern="yyyy-MM-dd'_'HH-mm-ss.SSS">timestamp</timestamp>
+                <version>version</version>
+            </fieldNames>
+        </encoder>
+    </appender>
+    <logger name="jsonLogger" additivity="false" level="DEBUG">
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </root>
+</configuration>
