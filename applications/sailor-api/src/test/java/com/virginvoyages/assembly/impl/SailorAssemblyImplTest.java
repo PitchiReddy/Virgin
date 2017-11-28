@@ -29,11 +29,12 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
-import com.virginvoyages.sailor.Sailor;
-import com.virginvoyages.sailor.SailorMapper;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.helper.SailorQueryHelper;
+import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.seaware.dao.SeawareDAO;
 import com.virginvoyages.seaware.data.ClientData;
 
@@ -54,9 +55,6 @@ public class SailorAssemblyImplTest {
 	
 	@Mock
     private SailorQueryHelper sailorQueryHelper;
-	
-	/*@Mock
-	private SailorMapper sailorMapperMock;*/
 	
 	@Autowired
 	@Spy
@@ -175,12 +173,10 @@ public class SailorAssemblyImplTest {
 		sailorAssembly.createSailor(accountData);
 		
 	}
-	
-	
-	
+		
 	//Orchestration tests
 	
-	@Test
+	/*@Test
 	public void givenAccountClientFindAccountReturnsAccountDataGetSalesforceAccountDataShouldReturnAccountData() {
 		
 	}
@@ -188,7 +184,7 @@ public class SailorAssemblyImplTest {
 	@Test
 	public void givenAccountClientFindAccountThrowsExceptionGetSalesforceAccountDataShouldReturnNull() {
 		
-	}
+	}*/
 	
 	//tests for getSeawareClientData
 	@Test
@@ -198,9 +194,24 @@ public class SailorAssemblyImplTest {
 		
 	}
 	
+	/*@Test
 	public void givenSeawareDAOGetSeawareClientDataClientIDReturnsClientDataGetSeawareClientDataShouldReturnClientData() {
 		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData());
 		assertThat(sailorAssembly.getSeawareClientData(any(String.class)),notNullValue());
+	}*/
+	
+	//test for getReferenceTypeIDForName
+	@Test
+	public void givenCrossReferenceClientReturnsReferenceTypeGetReferenceTypeIDForNameShouldReturnReferenceTypeID() {
+		ReferenceType type = new ReferenceType().referenceTypeID("test_type");
+		when(xrefClient.getReferenceTypeByName(any(String.class))).thenReturn(type);
+		assertThat(sailorAssembly.getReferenceTypeIDForName("dummy"), equalTo(type.referenceTypeID()));
+	}
+	
+	@Test
+	public void givenCrossReferenceClientReturnsNullGetReferenceTypeIDForNameShouldReturnNull() {
+		when(xrefClient.getReferenceTypeByName(any(String.class))).thenReturn(null);
+		assertThat(sailorAssembly.getReferenceTypeIDForName("dummy"), nullValue());
 	}
 	
 }

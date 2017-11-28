@@ -2,6 +2,7 @@ package com.virginvoyages.crossreference.references;
 
 
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,17 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
-import com.virginvoyages.crossreference.exceptions.ReferenceIDMaxRequestSizeException;
-import com.virginvoyages.exceptions.DataInsertionException;
-import com.virginvoyages.exceptions.DataNotFoundException;
-import com.virginvoyages.exceptions.DataUpdationException;
-import com.virginvoyages.exceptions.MandatoryFieldsMissingException;
+import com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.References;
+import com.virginvoyages.crossreference.model.ReferencesEmbedded;
+import com.virginvoyages.exception.DataInsertionException;
+import com.virginvoyages.exception.DataNotFoundException;
+import com.virginvoyages.exception.DataUpdationException;
+import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.References;
-import com.virginvoyages.model.crossreference.ReferencesEmbedded;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Controller class to handle API requests for operations related to
  * ReferenceTypes.
- * 
+ *
  * @author snarthu
  *
  */
@@ -47,18 +50,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @ExposesResourceFor(References.class)
 public class ReferencesController {
-	
+
 	@Autowired
-	private ReferencesAssembly referencesAssembly; 
-	
-	
+	private ReferencesAssembly referencesAssembly;
+
+
 	@Autowired
-	private MockCrossReferenceAPI mockAPI; 
-	
-	
+	private MockCrossReferenceAPI mockAPI;
+
+
 	/**
 	 * It is adding new Reference
-	 * 
+	 *
 	 * @param Reference
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
@@ -74,7 +77,7 @@ public class ReferencesController {
 			@ApiParam(value = "Reference object that needs to be created", required = true) @RequestBody Reference body,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 		log.debug("Adding Reference");
 		if(StringUtils.isBlank(body.referenceTypeID())||StringUtils.isBlank(body.nativeSourceIDValue())) {
 			throw new MandatoryFieldsMissingException();
@@ -104,7 +107,7 @@ public class ReferencesController {
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
-		
+
 
 		if(StringUtils.isBlank(referenceID)) {
 			throw new MandatoryFieldsMissingException();
@@ -121,7 +124,7 @@ public class ReferencesController {
 	 * @param xVVClientID
 	 *            - Application identifier of client.
 	 * @return Reference - returns a reference
-	 * @throws MandatoryFieldsMissingException 
+	 * @throws MandatoryFieldsMissingException
 	 */
 	@ApiOperation(value = "Find reference by ID", notes = "Returns a reference for a specified reference identity.  This identity is a univeral reference identity.", response = Reference.class, tags = {
 			"Reference", })
@@ -131,7 +134,7 @@ public class ReferencesController {
 			@ApiParam(value = "The reference identifier", required = true) @PathVariable("referenceID") String referenceID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) throws MandatoryFieldsMissingException {
-	
+
 		log.debug("Find reference by ID");
 		if (StringUtils.isBlank(referenceID))
 			throw new MandatoryFieldsMissingException();
@@ -148,8 +151,8 @@ public class ReferencesController {
 
 	/**
 	 * Gets `Reference` objects
-	 * @param page         
-	 * @param size        
+	 * @param page
+	 * @param size
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.
 	 * @param xVVClientID
@@ -163,14 +166,18 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "") @RequestParam(value = "page", required = true) Integer page,
-			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size) {
-		
+			@ApiParam(value = "") @RequestParam(value = "size", required = true) Integer size,
+			final Pageable pageable) {
+
 		log.debug("Find reference objects");
-		List<Reference> listOfReference = referencesAssembly.findReferences();
-		References references = new References().page(new Page().size(size)).embedded(new ReferencesEmbedded().references(listOfReference));
-		return new ResponseEntity<References>(references, HttpStatus.OK);
+		if(size == 0) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferences(pageable);
+		return new ResponseEntity<References>(new References().page(new Page().size(pageable.getPageSize()).number(pageable.getPageNumber()))
+				.embedded(new ReferencesEmbedded().references(referenceList)), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @param masterID
 	 *            - Find reference type by masterID
@@ -191,8 +198,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
 		    final Pageable pageable ) {
-	
-		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,pageable);
+
+		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID,pageable);
 		log.debug("Returns one or more references ====>{}",listOfReference);
 		References references = new References().embedded(new ReferencesEmbedded().references(listOfReference));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
@@ -206,7 +213,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
-		
+
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
@@ -222,7 +229,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
-		
+
 		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
@@ -255,9 +262,9 @@ public class ReferencesController {
 		// do some magic!
 		return new ResponseEntity<References>(HttpStatus.OK);
 	}
-	
+
 	/**
-	 * Update reference      
+	 * Update reference
 	 * @param  body
 	 * @param xCorrelationID
 	 *            - Correlation ID across the enterprise application components.

@@ -3,7 +3,8 @@ package com.virginvoyages.crm.data;
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.virginvoyages.booking.Booking;
+import com.virginvoyages.booking.model.Booking;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 

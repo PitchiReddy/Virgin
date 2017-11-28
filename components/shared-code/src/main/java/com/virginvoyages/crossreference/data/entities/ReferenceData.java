@@ -33,7 +33,7 @@ public class ReferenceData {
 	
 	@Column(name="MASTER_ID")
 	private String masterID;
-
+	
 	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REFERENCE_TYPE_ID")
 	private ReferenceTypeData referenceTypeData;
@@ -43,6 +43,7 @@ public class ReferenceData {
 				.referenceID(String.valueOf(this.referenceID()))
 				.nativeSourceIDValue(String.valueOf(this.nativeSourceIDValue()))
 				.masterID(String.valueOf(this.masterID()))
+				.targetReferenceTypeID(this.referenceTypeData().referenceTypeID())
 				.referenceTypeID(String.valueOf(this.referenceTypeData().referenceTypeID()));
 				
 				

@@ -10,11 +10,11 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.virginvoyages.model.crossreference.Reference;
-import com.virginvoyages.model.crossreference.References;
-import com.virginvoyages.model.crossreference.ReferencesEmbedded;
-import com.virginvoyages.model.crossreference.ReferenceSource;
-import com.virginvoyages.model.crossreference.ReferenceType;
+import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.crossreference.model.References;
+import com.virginvoyages.crossreference.model.ReferencesEmbedded;
 import com.virginvoyages.model.Page;
 
 /**

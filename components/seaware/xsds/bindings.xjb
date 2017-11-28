@@ -1,0 +1,28 @@
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              jxb:version="2.0">
+
+        <jxb:bindings schemaLocation="OTA_CommonTypes.xsd" node="/xs:schema">
+           <jxb:bindings node="//xs:element[@name='CalculationMethod']/xs:complexType/xs:sequence/xs:element[@name='Duration']/xs:complexType">
+                <jxb:bindings node=".//xs:attribute[@name='Value']">
+                    <jxb:property name="ValueToFixError1"/>
+                </jxb:bindings>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:element[@name='MaximumDuration']/xs:complexType">
+                <jxb:bindings node=".//xs:attribute[@name='Value']">
+                    <jxb:property name="ValueToFixError2"/>
+                </jxb:bindings>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:element[@name='StartAndEnd']/xs:complexType/xs:choice/xs:element[@name='Duration']/xs:complexType">
+                <jxb:bindings node=".//xs:attribute[@name='Value']">
+                    <jxb:property name="ValueToFixError3"/>
+                </jxb:bindings>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='OntologyDistanceType']/xs:sequence/xs:element[@name='Distance']/xs:complexType">
+                <jxb:bindings node=".//xs:attribute[@name='Value']">
+                    <jxb:property name="ValueToFixError4"/>
+                </jxb:bindings>
+            </jxb:bindings> 
+        </jxb:bindings>
+</jxb:bindings>

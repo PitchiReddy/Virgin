@@ -1,16 +1,15 @@
 package com.virginvoyages;
 
-import java.lang.reflect.Type;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-
 import feign.RequestTemplate;
 import feign.codec.Encoder;
 import lombok.extern.slf4j.Slf4j;
+
+import java.lang.reflect.Type;
 
 @Slf4j
 public class JacksonEncoder implements Encoder {

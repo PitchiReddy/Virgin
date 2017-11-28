@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.virginvoyages.recommendations.assembly.RecommendationResponseAssembly;
 import com.virginvoyages.recommendations.data.repositories.RecommendationResponseRepository;
-import com.virginvoyages.exceptions.DataInsertionException;
+import com.virginvoyages.exception.DataInsertionException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RecommendationResponseAssemblyImpl implements RecommendationResponseAssembly {
 
-	@Autowired 
+	@Autowired
 	private RecommendationResponseRepository recommendationResponseRespository;
-	
+
 	@Override
 	public boolean addRecommendationResponse(String nbxUniqueKey, String sailorSelection, String selectionSentiment) throws DataInsertionException {
 		log.debug("Entering addRecommendationResponse");

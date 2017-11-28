@@ -2,7 +2,9 @@ package com.virginvoyages.crossreference.assembly;
 
 import java.util.List;
 
-import com.virginvoyages.model.crossreference.ReferenceSource;
+import org.springframework.data.domain.Pageable;
+
+import com.virginvoyages.crossreference.model.ReferenceSource;
 
 /**
  * {@code Interface} for assembly tasks for reference source
@@ -21,5 +23,5 @@ public interface ReferenceSourcesAssembly {
 	
 	public ReferenceSource updateReferenceSource(ReferenceSource referenceSource);
 	
-	public List<ReferenceSource> findSources();
+	public List<ReferenceSource> findSources(Pageable pageable);
 }

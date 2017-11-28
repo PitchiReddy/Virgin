@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.assembly.BookingAssembly;
-import com.virginvoyages.booking.BookingsEmbedded;
+import com.virginvoyages.booking.model.BookingsEmbedded;
 import com.virginvoyages.crm.data.BookingData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.dao.BookingsDAO;

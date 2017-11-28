@@ -1,6 +1,12 @@
-
 xref:
   datasource:
     url: jdbc:mysql://vvapidevmysqldb.cbduemg5i5w8.us-east-1.rds.amazonaws.com:3306/XREF
     username: admin
     password: Welcome123
+    
+api:
+  security:
+    enabled: true
+swagger:
+  oauth2:
+    url: http://10.3.100.88:31362/identityaccessmanagement-service/oauth/token
