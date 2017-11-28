@@ -17,7 +17,7 @@ dependencyManagement {
 
 dependencies {
     compile project(":components:crossreference")
-    
+    compile project(":components:security")
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
@@ -93,3 +93,10 @@ task functionalTests(type: Test){
 task testAll(type: Test){
 	exclude '**/*TestSupport*'
 }
+tasks.withType(Test) {
+   
+   def test_vars = ["crossreference_service_properties_path":"$rootDir/config/integration-api-config/src/main/resources/test/crossreference-api.yml"
+ , 'application_properties_path':'$rootDir/config/integration-api-config/src/main/resources/integration-api.yml'
+ , 'sailor_service_properties_path':'$rootDir/config/integration-api-config/src/main/resources/test/sailor-api.yml' ]
+ environment test_vars
+    }
