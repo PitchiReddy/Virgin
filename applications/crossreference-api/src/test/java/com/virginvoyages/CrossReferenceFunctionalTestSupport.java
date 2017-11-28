@@ -98,11 +98,12 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		Reference reference = testDataHelper.getReferenceBusinessEntity();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		//parameters.put("referenceID", reference.referenceID());
+		parameters.put("referenceID", reference.referenceID());
 		parameters.put("masterID", reference.masterID());
 		parameters.put("nativeSourceIDValue", reference.nativeSourceIDValue());
 		parameters.put("referenceTypeID", referenceTypeResponse.getString("referenceTypeID"));
-		//referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
+		parameters.put("targetReferenceTypeID", reference.referenceID());
+		referenceParam.put("referenceSourceID", referenceTypeResponse.getString("referenceSourceID"));
 
 		
 		// create references 

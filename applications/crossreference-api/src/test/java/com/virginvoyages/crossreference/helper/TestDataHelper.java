@@ -130,4 +130,8 @@ public class TestDataHelper {
 		final Page<ReferenceData> page = new PageImpl<>(referenceDataList);
 		return page;
 	}
+	
+	public String getTargetTypeID() {
+		return "to_be_ignored";
+	} 
 }
