@@ -3,7 +3,7 @@ package com.virginvoyages.crm.client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 
@@ -36,20 +36,19 @@ public class ClientConfiguration {
 
   
     @Bean
-    RequestInterceptor oauth2FeignRequestInterceptor(OAuth2ClientContext oAuth2ClientContext) {
-        String decodedUsername = secrets.decode(username);
-        ResourceOwnerPasswordResourceDetails resourceOwnerPasswordResourceDetails = new ResourceOwnerPasswordResourceDetails();
-        resourceOwnerPasswordResourceDetails.setAccessTokenUri(accessTokenUri);
-        resourceOwnerPasswordResourceDetails.setClientId(clientId);
-        resourceOwnerPasswordResourceDetails.setClientSecret(clientSecret);
-        resourceOwnerPasswordResourceDetails.setUsername(decodedUsername);
-        resourceOwnerPasswordResourceDetails.setPassword(secrets.decode(password));
-        resourceOwnerPasswordResourceDetails.setClientAuthenticationScheme(AuthenticationScheme.query);
+    RequestInterceptor oauth2FeignRequestInterceptor() {
+      String decodedUsername = secrets.decode(username);
+      ResourceOwnerPasswordResourceDetails resourceOwnerPasswordResourceDetails = new ResourceOwnerPasswordResourceDetails();
+              resourceOwnerPasswordResourceDetails.setAccessTokenUri(accessTokenUri);
+      resourceOwnerPasswordResourceDetails.setClientId(clientId);
+      resourceOwnerPasswordResourceDetails.setClientSecret(clientSecret);
+      resourceOwnerPasswordResourceDetails.setUsername(decodedUsername);
+      resourceOwnerPasswordResourceDetails.setPassword(secrets.decode(password));
+      resourceOwnerPasswordResourceDetails.setClientAuthenticationScheme(AuthenticationScheme.query);
 
-        log.debug("CRM User Name {}", decodedUsername);
-
-        return new OAuth2FeignRequestInterceptor(oAuth2ClientContext, resourceOwnerPasswordResourceDetails);
-    }
+      log.debug("CRM User Name {}", decodedUsername);
+     return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), resourceOwnerPasswordResourceDetails);
+  }
 
     
     
