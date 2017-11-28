@@ -148,17 +148,17 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 * @return List<Reference>
 	 */
 	@Override
-	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
+	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID) {
 		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
-		Page<ReferenceData> referenceDataPage = null;
+		List<ReferenceData> referenceDataList = null;
 		if (!referenceTypeRepository.exists(targetTypeID)) {
-			referenceDataPage = referenceRepository.findByMasterID(masterId, pageable);
+			referenceDataList = referenceRepository.findByMasterID(masterId);
 
 		} else {
-			referenceDataPage = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
-					targetTypeID, pageable);
+			referenceDataList = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
+					targetTypeID);
 		}
-		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+		return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).stream()
 				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
 
@@ -185,17 +185,20 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			throw new UnknownException();
 		}
 	}
-
-	@Override
-	public List<Reference> findReferencesByType(Reference reference) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
-		// TODO Auto-generated method stub
-		return null;
+		Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
+		return Optional.ofNullable(
+				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(),
+						reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
+		
+	}
+	
+	public Reference findReferenceByNativeSourceIDValueAndType(Reference reference) {
+		Reference referenceFound = null;
+		//Add code here to call repository method to findbasedon nativesourceidvalue
+		return referenceFound;
 	}
 
 }

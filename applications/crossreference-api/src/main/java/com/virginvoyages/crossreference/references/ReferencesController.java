@@ -196,10 +196,10 @@ public class ReferencesController {
 			@ApiParam(value = "The master ID to search with.", required = true) @RequestParam(value = "masterID", required = true) String masterID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
-		    final Pageable pageable ) {
+			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID
+		    ) {
 
-		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID,pageable);
+		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID);
 		log.debug("Returns one or more references ====>{}",listOfReference);
 		References references = new References().embedded(new ReferencesEmbedded().references(listOfReference));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
@@ -216,7 +216,7 @@ public class ReferencesController {
 
 		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
+		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
@@ -233,7 +233,9 @@ public class ReferencesController {
 		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		return new ResponseEntity<References>(HttpStatus.OK);
+		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
+		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {

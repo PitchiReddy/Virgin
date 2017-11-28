@@ -22,11 +22,9 @@ public interface ReferencesAssembly {
 
 	public List<Reference> findReferences(Pageable pageable);
 
-	public List<Reference> findReferenceByMasterId(String masterID, String targetTypeID, Pageable pageable);
+	public List<Reference> findReferenceByMasterId(String masterID, String targetTypeID);
 
 	public Reference updateReference(Reference body);
-
-	public List<Reference> findReferencesByType(Reference reference);
 
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference);
 }
