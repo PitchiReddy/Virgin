@@ -127,7 +127,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 			}
 			sailorID = status.id();
 		} catch (FeignException fe) {
-			log.error("FeignException encountered during account create ",fe.getMessage());
+			log.error("FeignException encountered during account create ",fe);
 			throw new AccountCreationException();
 		}
 		
