@@ -7,6 +7,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
@@ -184,19 +185,17 @@ public class ReferenceRepositoryTest {
 	
 	@Test
 	public void testFindReferenceByMaster() {
-		Page<ReferenceData> retrievedReference = null;
-		final Pageable pageable = null;
-		
+		List<ReferenceData> retrievedReference = null;
 		ReferenceTypeData referenceTypeData = ((Page<ReferenceTypeData>)referenceTypeRepository.findAll(new PageRequest(1, 1))).getContent().get(0);
 
 		ReferenceData referenceData = testDataHelper.getReferenceDataEntity(referenceTypeData);
 		ReferenceData createdReference = referenceRepository.save(referenceData);
 		if (!referenceTypeRepository.exists(testDataHelper.getTargetTypeID())) {
-			retrievedReference = referenceRepository.findByMasterID(createdReference.masterID(), pageable);
+			retrievedReference = referenceRepository.findByMasterID(createdReference.masterID());
 
 		} else {
 			retrievedReference = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(
-					createdReference.masterID(), testDataHelper.getTargetTypeID(), pageable);
+					createdReference.masterID(), testDataHelper.getTargetTypeID());
 		}
 		assertThat(retrievedReference, notNullValue());
 

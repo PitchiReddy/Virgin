@@ -1,9 +1,9 @@
 package com.virginvoyages.crossreference.references;
 
-import static org.mockito.Matchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -313,23 +313,13 @@ public class ReferencesControllerTest {
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
 
-		given(referencesAssembly.findReferenceByMasterId(any(String.class), any(String.class), any(PageRequest.class))).willReturn(referenceList);
-		 ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
-		mvc=MockMvcBuilders.standaloneSetup(referencesController)
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-	            .setViewResolvers(new ViewResolver() {
-	                @Override
-	                public View resolveViewName(String viewName, Locale locale) throws Exception {
-	                    return new MappingJackson2JsonView();
-	                }
-	            }).build();
+		given(referencesAssembly.findReferenceByMasterId(any(String.class), any(String.class))).willReturn(referenceList);
+		
 		mvc.perform(
 				 get("/references/search/findByMaster")
 				.param("masterID", "12345")
-				.param("targetTypeID", "12345")
-				.param("page", "0")
-				.param("size", "10"))
-		
+				.param("targetTypeID", "12345"))
+					
 		.andExpect(status().is(HttpStatus.OK.value()));
 			    
 	}

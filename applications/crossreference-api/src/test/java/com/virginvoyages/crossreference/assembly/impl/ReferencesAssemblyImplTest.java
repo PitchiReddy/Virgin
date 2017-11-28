@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -179,13 +178,14 @@ public class ReferencesAssemblyImplTest {
 	}
 	
 	@Test
-	public void given_Repository_Fetch_ReferenceData_With_TargetType_And_MasterId() {
-		Page<ReferenceData> pagedReferenceData= testDataHelper.getPagedReferenceDataEntity();
-		when(referenceRepository.findByMasterID(any(String.class), any(Pageable.class) ))
-		.thenReturn(pagedReferenceData);
-		List<Reference> references = referencesAssemblyImpl.findReferenceByMasterId(pagedReferenceData.getContent().get(0).masterID(), pagedReferenceData.getContent().get(0).referenceTypeData().referenceTypeID(), new PageRequest(0, 10));
-		assertThat(references.get(0).masterID() , equalTo(pagedReferenceData.getContent().get(0).masterID()));
-		assertThat(references.get(0).referenceTypeID() , equalTo(pagedReferenceData.getContent().get(0).referenceTypeData().referenceTypeID()));
+	public void givenRepositoryFetchReferenceDataWithTargetTypeAndMasterId() {
+		final List<ReferenceData> referenceDataList = new ArrayList<>();
+		referenceDataList.add(testDataHelper.getReferenceDataEntity());
+		when(referenceRepository.findByMasterID(any(String.class)))
+		.thenReturn(referenceDataList);
+		List<Reference> references = referencesAssemblyImpl.findReferenceByMasterId(referenceDataList.get(0).masterID(), referenceDataList.get(0).referenceTypeData().referenceTypeID());
+		assertThat(references.get(0).masterID() , equalTo(referenceDataList.get(0).masterID()));
+		assertThat(references.get(0).referenceTypeID() , equalTo(referenceDataList.get(0).referenceTypeData().referenceTypeID()));
 
 	}
 	
