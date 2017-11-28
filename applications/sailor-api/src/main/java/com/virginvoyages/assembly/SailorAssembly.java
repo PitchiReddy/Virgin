@@ -39,4 +39,11 @@ public interface SailorAssembly {
 	 * @return
 	 */
 	public Sailor createSailor(AccountData accountData);
+
+	/**
+	 * Getting ReferenceType by using referenceTypeName
+	 * @param referenceTypeName
+	 * @return
+	 */
+	public String getReferenceTypeIDForName(String referenceTypeName);
 }

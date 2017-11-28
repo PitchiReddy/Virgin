@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
+import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataAccessException;
@@ -44,6 +45,9 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	
 	@Autowired
 	private CrossReferenceEntityMapper entityMapper;
+	
+	@Autowired
+	private ReferenceTypeRepository  referenceTypeRepository;
 
 
 	/**
@@ -133,11 +137,29 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		}
 	}
 
+	/**
+	 * Find one or more references
+	 * @param masterId
+	 *            - input masterId.
+	 * @param targetTypeID
+	 *            - input targetTypeID.
+	 * @param pageable
+	 *            - input pageable.
+	 * @return List<Reference>
+	 */
 	@Override
-	public List<Reference> findReferenceByMasterId(String masterId, Pageable pageable) {
-		Page<ReferenceData> referenceDataPage =  referenceRepository.findByMasterID(masterId,pageable);
-	return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).
-	  stream().map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
+	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
+		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
+		Page<ReferenceData> referenceDataPage = null;
+		if (!referenceTypeRepository.exists(targetTypeID)) {
+			referenceDataPage = referenceRepository.findByMasterID(masterId, pageable);
+
+		} else {
+			referenceDataPage = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
+					targetTypeID, pageable);
+		}
+		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
+				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
 
 	/**
