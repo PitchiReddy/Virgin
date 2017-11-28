@@ -10,6 +10,7 @@ import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.client.QueryClient;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crossreference.model.Reference;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.OTAReadRQ;
@@ -152,4 +153,18 @@ public class TestDataHelper {
 		otaReadRQ.setReadRequests(readRequests);
 		return otaReadRQ;
 	}
+
+	public String getInvalidReferenceTypeByName() {
+		return "UT_data";
+	}
+
+	public ReferenceType getReferenceTypeData() {
+		ReferenceType referenceTypeData = new ReferenceType();
+		referenceTypeData.referenceType("UT_data_mSdpK");
+		referenceTypeData.referenceTypeID("8acdf5ff5fb95536015fb9554f080001");
+		referenceTypeData.referenceSourceID("8acdf5ff5fb95536015fb9554e9d0000");
+		System.out.println("referenceTypeData    " + referenceTypeData);
+		return referenceTypeData;
+	}
+
 }

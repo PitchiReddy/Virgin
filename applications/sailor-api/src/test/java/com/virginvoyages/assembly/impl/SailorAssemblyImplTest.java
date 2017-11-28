@@ -29,6 +29,7 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
+import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
 import com.virginvoyages.sailor.helper.SailorMapper;
@@ -193,9 +194,24 @@ public class SailorAssemblyImplTest {
 		
 	}
 	
+	/*@Test
 	public void givenSeawareDAOGetSeawareClientDataClientIDReturnsClientDataGetSeawareClientDataShouldReturnClientData() {
 		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData());
 		assertThat(sailorAssembly.getSeawareClientData(any(String.class)),notNullValue());
+	}*/
+	
+	//test for getReferenceTypeIDForName
+	@Test
+	public void givenCrossReferenceClientReturnsReferenceTypeGetReferenceTypeIDForNameShouldReturnReferenceTypeID() {
+		ReferenceType type = new ReferenceType().referenceTypeID("test_type");
+		when(xrefClient.getReferenceTypeByName(any(String.class))).thenReturn(type);
+		assertThat(sailorAssembly.getReferenceTypeIDForName("dummy"), equalTo(type.referenceTypeID()));
+	}
+	
+	@Test
+	public void givenCrossReferenceClientReturnsNullGetReferenceTypeIDForNameShouldReturnNull() {
+		when(xrefClient.getReferenceTypeByName(any(String.class))).thenReturn(null);
+		assertThat(sailorAssembly.getReferenceTypeIDForName("dummy"), nullValue());
 	}
 	
 }
