@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vx="http://www.versonix.com/ota" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="4.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:import schemaLocation="VX_Extensions.xsd" namespace="http://www.versonix.com/ota" />
+	<xs:element name="OTA_CruiseSailAvailRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The Sailing Availability Request message requests Sailing Availability for a geographical region on a specific date for a specific number and passengers. Optional request information can include: Cruise lines and Ship codes. The request can be narrowed to request availability for a specific cruise line or specific ship.</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Sailing Availability message pair provides a listing of available voyages for: a date range, a specific geographic region and/or a specific ship code. The VoyageID returned then can be used in OTA_FareAvailRQ to look for the available fares for the specific voyage.</p>
+				<p>Set CategoriesIncludedInd to true in TPA_Extensions/SearchOptions to get common information about available categories for BESTPRICE fare code.</p>
+            </xs:documentation>
+			<xs:appinfo xml:lang="en" source="Versonix">Performs availability search of sail packages. <br/> If ReservationID is passed in SearchQualifiers then the booking with that ReservationID is used in the availability search. Otherwise a new temporary booking will be created for the availability search and then discarded (unlocked) right away afterwards.</xs:appinfo>
+			<xs:appinfo xml:lang="en" source="Versonix">GetAvailPrimPackagesIN</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking which is used to search for availability.
+                            Agency ID is taken from RequestorID by ID and ID_Context, with Type as empty value or UIT CodeList Agency code.
+                            ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+                            Additionally agency is identified by PseudoCityCode.
+                            Agent ID is taken from AgentSine.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">OTADbSearch.Agency by PseudoCityCode, ID and ID_Context, OTADbSearch.Agent by AgentID=AgentSine.</xs:appinfo>
+                    </xs:annotation>
+				</xs:element>
+				<xs:element name="Guest" type="GuestType" minOccurs="0" maxOccurs="9">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies guest names and/or their transportation.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines reservation guests for the temporary booking that is used to perform availability search.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">ResShell.ResGuests</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="GuestCounts" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies guest quantity and guest types.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Defines reservation guests for the temporary booking that is used to perform availability search.</xs:documentation>
+                        <xs:appinfo xml:lang="en" source="Versonix">ResShell.ResGuests</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Specify guest numbers and types.</xs:documentation>
+						</xs:annotation>
+						<xs:sequence>
+							<xs:element name="GuestCount" maxOccurs="9">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Categorization of all guests in the request. The sum of the Quantity attribute will provide you with the total number of guests.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attributeGroup ref="TravelerCountGroup"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="GroupIndicator" type="xs:boolean" use="optional">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">When true, these counts are for a group.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SailingDateRange">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies sailing availability start and end dates as well as cruise duration.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Specifies sailing availability search criteria such as start and end dates as well as cruise duration.</xs:documentation>
+						<xs:appinfo xml:lang="en" source="Versonix">GetAvailPrimPackagesIN.SearchParams.PackageStartRange, GetAvailPrimPackagesIN.SearchParams.PackageEndRange</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="DateTimeSpanType">
+								<xs:attributeGroup ref="DurationGroup"/>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CruiseLinePrefs" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Collection of cruise line preferences.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">Can be used to specify ship, ports, reservation ID that will be used in the availability search.</xs:documentation>
+						<xs:appinfo xml:lang="en" source="Versonix">GetAvailPrimPackagesIN.SearchParams</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CruiseLinePref" maxOccurs="99">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Specifies sailing preferences such as cruise line and ship code.</xs:documentation>
+                                    <xs:documentation xml:lang="en" source="Versonix">Can be used to specify ship, ports, reservation ID that will be used in the availability search.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="InclusivePackageOption" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">Used to request package options that the cruise might offer with the sailing. It is quite common to request, at this stage, packages that are included in the cruise sailing offering (inclusive packages).</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attributeGroup ref="CruisePackageGroup"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SearchQualifiers" type="SailingSearchQualifierType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">Used to further qualify the sailing availability search.</xs:documentation>
+												<xs:documentation xml:lang="en" source="Versonix">If ReservationID is passed in SearchQuilifiers then the booking with that ReservationID is used in the availability search. If port is defined it will be used in the availability search.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:attributeGroup ref="ShipReferenceGroup"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RegionPref" minOccurs="0" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Specifies geographical region to include in the response.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">RegionCode is mapped and then used as Destination in primary package availability search. If no mapping then still used. Note: if Seaware Destination is longer than 8 characters which is the OTA limit to RegionCode then there must bo a mapping configured for those codes otherwise region logic will not properly work.</xs:documentation>
+						<xs:appinfo xml:lang="en" source="Versonix">RegionCode used in GetAvailPrimPackagesIN.SearchParams.Destinations</xs:appinfo>
+						<xs:appinfo xml:lang="en" source="Config">Mapping configured in RegionToDestination external table (and the reverse mapping in StinGeographicRegion table)</xs:appinfo>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attributeGroup ref="RegionGroup"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="MultimodalOffer" type="MultiModalOfferType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation source="Description" xml:lang="en">Multimodal offer influencers.</xs:documentation>
+                        <xs:documentation xml:lang="en" source="Versonix">NOT SUPPORTED</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TPA_Extensions" type="vx:CruiseSailAvailRQExtensionType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attributeGroup ref="ResponseGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Provides the echo token to be used to retrieve additional records.</xs:documentation>
+                    <xs:documentation xml:lang="en" source="Versonix">NOT SUPPORTED</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

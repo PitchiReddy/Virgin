@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05" elementFormDefault="qualified" version="3.000" id="VXOTA2015B">
+	<xs:annotation>
+		<xs:documentation source="Description" xml:lang="en">ALL SCHEMA FILES IN THE OPENTRAVEL ALLIANCE SPECIFICATION ARE MADE AVAILABLE ACCORDING TO THE TERMS DEFINED BY THE OPENTRAVEL LICENSE AGREEMENT AT http://www.opentravel.org/Specifications/Default.aspx.</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="OTA_CruiseCommonTypes.xsd"/>
+	<xs:element name="OTA_CruiseInfoRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to request miscellaneous structured cruise information (e.g., cruise ship characteristics, embark/debark time for cruise, cruise policy, cruise line contact).</xs:documentation>
+            <xs:documentation xml:lang="en" source="Versonix">
+                <p>Cruise Information message pair provides miscellaneous information on sailing, ship, reservation or agent/agency contacts.</p>
+            </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="POS_Type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Point of sale object.</xs:documentation>
+						<xs:documentation xml:lang="en" source="Versonix">Defines agency and agent used for the booking if no ReservationID is defined.
+							If ReservationID is defined then the agency in POS must be either primary or secondary booking agency.
+							<br/>Agency ID is taken from RequestorID by ID and ID_Context.
+							ID_Context values for agency identification supported: ABTA, IATA, CLIA.
+							Alternatively (or additionally) agency will be identified by PseudoCityCode.
+							Agent ID is taken from AgentSine.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="InformationType" maxOccurs="100">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Used to define an information request.</xs:documentation>
+						<xs:documentation source="Versonix" xml:lang="en">Contains the reservation and\or sailing information</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ReservationID" type="UniqueID_Type" minOccurs="0">
+								<xs:annotation>
+                                    <xs:documentation source="Versonix" xml:lang="en">Contains the Reservation ID of a booking.</xs:documentation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">LoadBookingIN.ResID</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SailingInfo" type="SailingCategoryInfoType" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:appinfo source="Versonix" xml:lang="en">ResShell.ResPackages, ResShell.ResShipRequests, ResShell.ResPromotions</xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+						</xs:sequence>
+						<xs:attributeGroup ref="OptionalCodeOptionalNameGroup">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Used to define your information request.</xs:documentation>
+                                <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+							</xs:annotation>
+						</xs:attributeGroup>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="OTA_PayloadStdAttributes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The standard attributes that appear on the root element for all OpenTravel Messages.</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+			<xs:attributeGroup ref="ResponseGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Provides the echo token to be used to retrieve additional records.</xs:documentation>
+                    <xs:documentation source="Versonix" xml:lang="en">NOT SUPPORTED</xs:documentation>
+				</xs:annotation>
+			</xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
