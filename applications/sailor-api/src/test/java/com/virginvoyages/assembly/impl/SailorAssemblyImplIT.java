@@ -1,9 +1,12 @@
 package com.virginvoyages.assembly.impl;
 
+import static com.virginvoyages.crossreference.constants.CrossReferenceConstants.REFERENCE_TYPE_CLIENT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
 
 /**
- * @author rpraveen
+ * @author rpraveen 
  * Test Class for SailorAssembly Implementation
  */
 
@@ -49,7 +52,7 @@ public class SailorAssemblyImplIT {
 
 		testDataHelper.deleteSailor(testSailor.id());
 	}
-
+	
 	@Test
 	public void givenValidSailorIDWithPreferecesGetSailorbyIdShouldReturnSailorWithPreferences() {
 
@@ -194,75 +197,75 @@ public class SailorAssemblyImplIT {
 		assertThat(testDataHelper.getRecordTypeIdForSailor(), equalTo(sailor.recordTypeId()));
 
 		testDataHelper.deleteSailor(sailor.id());
-
+		
 	}
-
+	
 	//Orchestration tests
-
+	
 	/* Tests for getOrchestratedSailorData
 	@Test
 	public void givenSeawareClientIDExistsForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSeaware() {
-
+		
 	}
-
+	
 	@Test
 	public void givenSeawareClientIDDoesNotExistForSailorGetSailorOrchestrationDataShouldReturnFirstAndLastNameInSalesforce() {
-
+		
 	} */
-
+	
 	/* Tests for getSeawareClientIDForSalesforceID
 	@Test
 	public void givenSeawareClientIDExistsForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnSeawareClientID() {
-
+		
 	}
-
+	
 	@Test
 	public void givenSeawareClientIDDoesNotExistForSailorIDGetSeawareClientIDForSalesforceIDShouldReturnNull() {
-
+		
 	} */
-
-	/*  Test for getReferenceTypeIDForName
+	
+	//  Test for getReferenceTypeIDForName
 	@Test
 	public void givenReferenceTypeExistsInDBGetReferenceTypeIDForNameShouldReturnID() {
-
+		assertThat(sailorAssembly.getReferenceTypeIDForName(REFERENCE_TYPE_CLIENT), notNullValue());
 	}
-
-	@Test
+	
+	@Test 
 	public void givenReferenceTypeDoesNotExistInDBGetReferenceTypeIDForNameShouldNull() {
-
-	} */
-
+		assertThat(sailorAssembly.getReferenceTypeIDForName("random"), nullValue());
+	}
+	
 	/* Tests for getTargetRecordID
 	@Test
 	public void givenReferenceExistsForParametersGetTargetRecordIDShouldReturnNativeSourceIDValueOfReference() {
-
+		
 	}
-
+	
 	@Test
 	public void givenReferenceDoesNotExistForParametersGetTargetRecordIDShouldReturnNull() {
-
+		
 	} */
-
+	
 	/* Tests for getSalesforceAccountData
 	@Test
 	public void givenValidSalesforceIDGetSalesforceAccountDataShouldReturnAccountData() {
-
+		
 	}
-
+	
 	@Test
 	public void givenInvalidSalesforceIDGetSalesforceAccountDataShouldReturnNull() {
-
+		
 	} */
-
+	
 	/* Tests for getSeawareClientData
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnClientData() {
-
+		
 	}
-
+	
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnNull() {
-
+		
 	}*/
 
 }
