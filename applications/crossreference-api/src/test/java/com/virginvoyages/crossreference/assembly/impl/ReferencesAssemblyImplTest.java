@@ -229,6 +229,23 @@ public class ReferencesAssemblyImplTest {
 		referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
 	}
 	
-	
+/*	@Test
+	public void givenRepositoryReturnsFetchReferencesTypeAndTargetTypeShouldReturnReferenceList() {
+		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
+		List<Reference> referencesList = referencesAssemblyImpl.findReferencesTypeAndTargetType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
+		assertThat(referencesList.get(0).referenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+		assertThat(referencesList.get(0).targetReferenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+	}
+*/	
+	@Test
+	public void givenRepositoryReturnsFetchReferenceByNativeSourceIDValueAndTypeShouldReturnReferences() {
+		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
+		Reference references = referencesAssemblyImpl.findReferenceByNativeSourceIDValueAndType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
+		assertThat(references.referenceID(), equalTo(mockReferenceData.referenceID()));
+		assertThat(references.referenceID(), is(notNullValue()));
+	}
+
 
 }

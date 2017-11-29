@@ -16,4 +16,6 @@ public interface ReferenceRepository extends PagingAndSortingRepository<Referenc
 	
 	List<ReferenceData> findByMasterIDAndReferenceTypeDataReferenceTypeID(@Param("masterID") String masterID, @Param("targetTypeID") String targetTypeID);
 	
+	ReferenceData findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(@Param("nativeSourceIDValue") String nativeSourceIDValue, @Param("referenceTypeID") String referenceTypeID);
+	
 } 

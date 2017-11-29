@@ -110,6 +110,7 @@ public class ReferencesControllerTest {
 			 		.content("{ \"masterID\" : \""+reference.masterID()+
 					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
 					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"targetReferenceTypeID\" : \""+reference.referenceTypeID()+
 					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
     }
@@ -323,4 +324,49 @@ public class ReferencesControllerTest {
 		.andExpect(status().is(HttpStatus.OK.value()));
 			    
 	}
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeShouldReturnReference() throws Exception {
+
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
+		given(referencesAssembly.addReference(reference)).willReturn(reference);
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferencesTypeAndTargetType(any(Reference.class))).willReturn(referenceList);
+
+		//Test
+		 mvc.perform(
+					post("/references/search/findByType")
+					.contentType("application/json")
+			 		.content("{ \"masterID\" : \""+reference.masterID()+
+					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
+					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"targetReferenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
+			 		.andExpect(status().isOk());
+    }
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeAndTargetTypeShouldReturnReference() throws Exception {
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
+		given(referencesAssembly.addReference(reference)).willReturn(reference);
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferencesTypeAndTargetType(any(Reference.class))).willReturn(referenceList);
+
+		 //Test
+		mvc.perform(
+				post("/references/search/findByTypeAndTargetType")
+				.contentType("application/json")
+				.content("{ \"masterID\" : \"" + reference.masterID() + 
+						"\",\"nativeSourceIDValue\" : \""+ reference.nativeSourceIDValue() + 
+						"\",\"referenceTypeID\" : \"" + reference.referenceTypeID() + 
+						"\",\"targetReferenceTypeID\" : \"" + reference.referenceTypeID() +
+						"\",\"referenceID\" : \"" + reference.referenceID() + "\"}"))
+				.andExpect(status().isOk());
+
+	}
+ 
 }

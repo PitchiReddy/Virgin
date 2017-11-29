@@ -186,19 +186,34 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 		}
 	}
 	
+	/**
+	 * Find one or more references
+	 * @param reference
+	 *            - input reference.
+	 * @return List<Reference>
+	 */
 	@Override
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
 		Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
 		return Optional.ofNullable(
-				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(),
-						reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
-		
+				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(), reference.targetReferenceTypeID()))
+				.orElseGet(Collections::emptyList);
+
 	}
 	
+	/**
+	 * Find one or more references
+	 * @param reference
+	 *            - input reference.
+	 * @return Reference
+	 */
 	@Override
 	public Reference findReferenceByNativeSourceIDValueAndType(Reference reference) {
 		Reference referenceFound = null;
-		//Add code here to call repository method to findbasedon nativesourceidvalue
+		ReferenceData retrieveNativeSourceIDValueAndType = referenceRepository
+				.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(reference.nativeSourceIDValue(),
+						reference.referenceTypeID());
+		referenceFound = entityMapper.convertToReferenceBusinessEntity(retrieveNativeSourceIDValueAndType);
 		return referenceFound;
 	}
 

@@ -204,4 +204,17 @@ public class ReferenceRepositoryTest {
 		
 	}
 	
+	@Test
+	public void testNativeSourceIDValueAndTypeID() {
+		ReferenceTypeData referenceTypeData = ((Page<ReferenceTypeData>)referenceTypeRepository.findAll(new PageRequest(1, 1))).getContent().get(0);
+		ReferenceData referenceData = testDataHelper.getReferenceDataEntity(referenceTypeData);
+		ReferenceData createdReference = referenceRepository.save(referenceData);
+		ReferenceData retrievedReference = referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(createdReference.nativeSourceIDValue(), createdReference.referenceTypeData().referenceTypeID());
+		assertThat(retrievedReference, notNullValue());
+		
+		// cleanup
+		referenceRepository.delete(createdReference.referenceID());
+		
+	}
+	
 }

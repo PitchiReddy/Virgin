@@ -308,6 +308,64 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 
 	}
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeShouldReturnOneorMoreReferences() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all();
+			
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+
+	}
+	
+	@Test
+	public void givenValidReferencefindReferencesTypeAndTargetTypeShouldReturnOneorMoreReferences() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all();
+			
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+
+	}
 	// Find References
 	@Test
 	public void givenValidReferencesExistFindReferencesShouldReturnListOfReferencesAsPerSizeParameter() {

@@ -205,6 +205,15 @@ public class ReferencesController {
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
+	/**
+	 * Gets one or more references
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @param  reference            
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -214,13 +223,21 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
 
-		//TODO mandatory check for nativesourceidval and referencetypeid
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
+	/**
+	 * Gets one or more references
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @param  reference            
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -230,9 +247,11 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 
-		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
-		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
+		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
+		if(StringUtils.isBlank(reference.nativeSourceIDValue()) && StringUtils.isBlank(reference.referenceTypeID()) && StringUtils.isBlank(reference.targetReferenceTypeID())) {
+			throw new MandatoryFieldsMissingException();
+		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);

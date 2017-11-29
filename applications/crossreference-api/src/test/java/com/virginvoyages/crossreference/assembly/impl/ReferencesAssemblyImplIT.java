@@ -190,4 +190,34 @@ public class ReferencesAssemblyImplIT {
 		referencesAssembly.deleteReferenceByID(createdReference2.referenceID());
 		referencesAssembly.deleteReferenceByID(createdReference3.referenceID());
 	}
+	
+	@Test
+	public void givenReferencesExistFindReferencesTypeAndTargetTypeShouldReturnListOfReferences() {
+		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
+		Reference createdReference = referencesAssembly.addReference(
+				testDataHelper.getReferenceBusinessEntity(referenceType));
+		assertThat(referencesAssembly.findReferencesTypeAndTargetType(createdReference), hasSize(equalTo(1)));
+		
+		//cleanup
+		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+		
+	}
+	
+	@Test
+	public void givenReferencesExistFindReferenceByNativeSourceIDValueAndTypeShoudReturnReference() {
+		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
+		Reference createdReference = referencesAssembly.addReference(
+				testDataHelper.getReferenceBusinessEntity(referenceType));
+		
+		Reference findNativeSourceIDValueAndType = referencesAssembly
+				.findReferenceByNativeSourceIDValueAndType(createdReference);
+		assertThat(findNativeSourceIDValueAndType.referenceTypeID(), equalTo(createdReference.referenceTypeID()));
+		assertThat(findNativeSourceIDValueAndType.nativeSourceIDValue(),
+				equalTo(createdReference.nativeSourceIDValue()));
+		assertThat(findNativeSourceIDValueAndType.masterID(), equalTo(createdReference.masterID()));
+
+		//cleanup
+		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+
+	}
 }
