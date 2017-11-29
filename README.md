@@ -20,9 +20,9 @@ Quick steps to setup the local project and contribution guidelines.
 4. Setup MySQL Instance (https://dev.mysql.com/doc/refman/5.7/en/installing.html)
 5. Create database with name "XREF" in MySQL
 6. Setup environment variables as below to access externalized config files: 
-    * APPLICATION_PROPERTIES_PATH=file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/integration-api.yml
-    * SAILOR_SERVICE_PROPERTIES_PATH=file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/sailor-api.yml
-    * CROSSREFERENCE_SERVICE_PROPERTIES_PATH=file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/crossreference-api.yml
+    * APPLICATION_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/integration-api.yml_
+    * SAILOR_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/sailor-api.yml_
+    * CROSSREFERENCE_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/crossreference-api.yml_
 7. Open a command prompt and run <code>./gradlew build</code> from the project root folder.  (This should download gradle AND build the project)
 8. Go to any of the application root folder run application
 	* Sailor API - cd /applications/sailor-api/
