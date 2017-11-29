@@ -6,11 +6,11 @@ Quick steps to setup the local project and contribution guidelines.
 
 Integration API is a parent project that includes 3 microservices 
   > Sailor API
-    >> Provides light weight orchestration services around Seaware,Salesforce and Customer-360.
+    > > Provides light weight orchestration services around Seaware,Salesforce and Customer-360.
   > Crossreference API
-    >> Provides light weight orchestration services around CrossReference Data between different SORs.
+    > > Provides light weight orchestration services around CrossReference Data between different SORs.
   > Recommendation API
-    >> Recommendations API provides light weight orchestration services around the Recommendations Engine.
+    > > Recommendations API provides light weight orchestration services around the Recommendations Engine.
 * Version 0.0.1
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
