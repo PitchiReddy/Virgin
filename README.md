@@ -23,12 +23,12 @@ Quick steps to setup the local project and contribution guidelines.
     * APPLICATION_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/integration-api.yml_
     * SAILOR_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/sailor-api.yml_
     * CROSSREFERENCE_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/crossreference-api.yml_
-7. Open a command prompt and run <code>./gradlew build</code> from the project root folder.  (This should download gradle AND build the project)
+7. Open a command prompt and run _./gradlew build_ from the project root folder.  (This should download gradle AND build the project)
 8. Go to any of the application root folder run application
-	* Sailor API - cd /applications/sailor-api/
-    * CrossReference API - cd /applications/crossreference-api/
-    * Recommendation API - cd /applications/recommendation-api/
-9. Run project with <code>./gradlew bootRun</code>
+	* Sailor API - _cd /applications/sailor-api/_
+    * CrossReference API - _cd /applications/crossreference-api/_
+    * Recommendation API - _cd /applications/recommendation-api/_
+9. Run project with _./gradlew bootRun_
 10. Test applications launching:
     * Sailor API - http://localhost:8432/sailor-api/v1
     * Crossreference API - http://localhost:8435/crossreference-api/v1
@@ -55,10 +55,10 @@ Quick steps to setup the local project and contribution guidelines.
     + Recommendation-API : HBase
 * Database configuration: (Refer "Local Setup" #4,#5)
 * How to run tests: 
-    + <code>./gradlew test</code>   (Default � only unit tests)
-    + <code>./gradlew integrationTests</code>  (Only integration tests)
-    + <code>./gradlew functionalTests</code> (Only functional tests)
-    + <code>./gradlew testAll</code> (All tests)
+    + _./gradlew test_   (Default- only unit tests)
+    + _./gradlew integrationTests_  (Only integration tests)
+    + _./gradlew functionalTests_ (Only functional tests)
+    + _./gradlew testAll_ (All tests)
 * Deployment instructions: CI/CD pipeline is setup in Jenkins+Spinnaker (Documentation TBD)
 
 ### Contribution guidelines ###
