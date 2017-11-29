@@ -192,7 +192,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		reference.referenceTypeID(sourceTypeID);
 		reference.targetReferenceTypeID(targetTypeID);
 		References references =referenceClient.findByTypeAndTargetType(reference);
-		return references.embedded().references().stream().findFirst().get().nativeSourceIDValue();
+		return references != null ? references.embedded().references().stream().findFirst().get().nativeSourceIDValue() :null;
 	
 	}
 	

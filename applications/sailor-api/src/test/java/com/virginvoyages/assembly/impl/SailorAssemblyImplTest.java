@@ -29,6 +29,7 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
+import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.sailor.exceptions.AccountCreationException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
@@ -222,8 +223,8 @@ public class SailorAssemblyImplTest {
 	
 	@Test
 	public void givenCrossReferenceClientreturnsNullfindByTypeAndTargetTypeShouldReturnNull() {
-		/*when(xrefClient.findByTypeAndTargetType(new Reference())).thenReturn(null);
-		assertThat(sailorAssembly.getTargetRecordID("sourceRecordID", "sourceTypeID", "targetTypeID"),nullValue());*/
+		when(xrefClient.findByTypeAndTargetType(new Reference())).thenReturn(null);
+		assertThat(sailorAssembly.getTargetRecordID("sourceRecordID", "sourceTypeID", "targetTypeID"),nullValue());
 	}
 	
 	
