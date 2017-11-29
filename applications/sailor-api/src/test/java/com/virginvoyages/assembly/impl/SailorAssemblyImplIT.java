@@ -2,6 +2,7 @@ package com.virginvoyages.assembly.impl;
 
 import static com.virginvoyages.crossreference.constants.CrossReferenceConstants.REFERENCE_TYPE_CLIENT;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
@@ -235,16 +237,18 @@ public class SailorAssemblyImplIT {
 		assertThat(sailorAssembly.getReferenceTypeIDForName("random"), nullValue());
 	}
 	
-	/* Tests for getTargetRecordID
+	// Tests for getTargetRecordID
 	@Test
 	public void givenReferenceExistsForParametersGetTargetRecordIDShouldReturnNativeSourceIDValueOfReference() {
-		
+		String nativeSourceID = sailorAssembly.getTargetRecordID("NSID1", "sourceTypeID", "TRTYPE1");
+		System.out.println("===TargetTypeID===="+nativeSourceID);
+		assertThat(nativeSourceID, is(notNullValue()));
 	}
 	
 	@Test
 	public void givenReferenceDoesNotExistForParametersGetTargetRecordIDShouldReturnNull() {
-		
-	} */
+		// TO DO
+	} 
 	
 	/* Tests for getSalesforceAccountData
 	@Test

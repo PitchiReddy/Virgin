@@ -21,7 +21,9 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.crm.data.RecordTypeData;
 import com.virginvoyages.crossreference.client.CrossreferenceClient;
+import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.crossreference.model.References;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.UnknownException;
 import com.virginvoyages.preference.model.PreferencesEmbedded;
@@ -186,8 +188,13 @@ public class SailorAssemblyImpl implements SailorAssembly {
 		*/
 		//return reference != null ? reference.nativeSourceIDValue() : null;
 		
-		//temporary
-		return null;
+		Reference reference= new Reference();
+		reference.nativeSourceIDValue(sourceRecordID);
+		reference.referenceTypeID(sourceTypeID);
+		reference.targetReferenceTypeID(targetTypeID);
+		References references =referenceClient.findByTypeAndTargetType(reference);
+		return references.embedded().references().stream().findFirst().get().nativeSourceIDValue();
+	
 	}
 	
 	public AccountData getSalesforceAccountData(String sailorID) {

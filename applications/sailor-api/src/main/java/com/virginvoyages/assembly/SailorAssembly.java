@@ -46,4 +46,13 @@ public interface SailorAssembly {
 	 * @return
 	 */
 	public String getReferenceTypeIDForName(String referenceTypeName);
+	
+	/**
+	 * Getting ReferenceType by using referenceTypeName
+	 * @param sourceRecordID
+	 * @param sourceTypeID
+	 * @param targetTypeID
+	 * @return
+	 */
+	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID);
 }
