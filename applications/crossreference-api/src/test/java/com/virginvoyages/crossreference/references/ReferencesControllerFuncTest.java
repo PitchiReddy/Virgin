@@ -339,7 +339,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	}
 	
 	@Test
-	public void givenValidReferencefindReferencesTypeAndTargetTypeShouldReturnOneorMoreReferences() {
+	public void givenValidReferenceFindReferencesTypeAndTargetTypeShouldReturnOneorMoreReferences() {
 		JsonPath referenceTypeJson = createTestReferenceType();
 
 		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);

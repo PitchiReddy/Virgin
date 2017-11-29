@@ -247,8 +247,8 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 
-		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
+		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
 		if(StringUtils.isBlank(reference.nativeSourceIDValue()) && StringUtils.isBlank(reference.referenceTypeID()) && StringUtils.isBlank(reference.targetReferenceTypeID())) {
 			throw new MandatoryFieldsMissingException();
 		}

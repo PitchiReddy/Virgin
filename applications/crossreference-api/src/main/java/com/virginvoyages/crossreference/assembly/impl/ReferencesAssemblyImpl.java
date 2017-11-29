@@ -194,10 +194,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 */
 	@Override
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
+		log.debug("Entering findReferencesTypeAndTargetType method in ReferencesAssemblyImpl");
 		Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
 		return Optional.ofNullable(
-				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(), reference.targetReferenceTypeID()))
-				.orElseGet(Collections::emptyList);
+				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(), 
+						reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
 
 	}
 	
@@ -209,6 +210,7 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 */
 	@Override
 	public Reference findReferenceByNativeSourceIDValueAndType(Reference reference) {
+		log.debug("Entering findReferenceByNativeSourceIDValueAndType method in ReferencesAssemblyImpl");
 		Reference referenceFound = null;
 		ReferenceData retrieveNativeSourceIDValueAndType = referenceRepository
 				.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(reference.nativeSourceIDValue(),

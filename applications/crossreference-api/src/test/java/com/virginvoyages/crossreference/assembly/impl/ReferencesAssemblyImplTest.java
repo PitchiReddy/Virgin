@@ -244,6 +244,8 @@ public class ReferencesAssemblyImplTest {
 		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
 		Reference references = referencesAssemblyImpl.findReferenceByNativeSourceIDValueAndType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(references.referenceID(), equalTo(mockReferenceData.referenceID()));
+		assertThat(references.referenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+		assertThat(references.nativeSourceIDValue(), equalTo(mockReferenceData.nativeSourceIDValue()));
 		assertThat(references.referenceID(), is(notNullValue()));
 	}
 
