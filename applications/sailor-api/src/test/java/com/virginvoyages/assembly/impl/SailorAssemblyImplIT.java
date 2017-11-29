@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.crm.data.AccountData;
-import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
@@ -247,7 +246,7 @@ public class SailorAssemblyImplIT {
 	
 	@Test
 	public void givenReferenceDoesNotExistForParametersGetTargetRecordIDShouldReturnNull() {
-		// TO DO
+		
 	} 
 	
 	/* Tests for getSalesforceAccountData

@@ -214,4 +214,17 @@ public class SailorAssemblyImplTest {
 		assertThat(sailorAssembly.getReferenceTypeIDForName("dummy"), nullValue());
 	}
 	
+	@Test
+	public void givenCrossReferenceClientreturnsReferenceExistsForParametersfindByTypeAndTargetTypeShouldReturnReferences() {
+		/*Reference reference= new Reference().nativeSourceIDValue("NSID1").targetReferenceTypeID("TRTID1").referenceTypeID("RTID");
+		when(xrefClient.findByTypeAndTargetType(any(Reference.class))).thenReturn(reference);*/
+	}
+	
+	@Test
+	public void givenCrossReferenceClientreturnsNullfindByTypeAndTargetTypeShouldReturnNull() {
+		/*when(xrefClient.findByTypeAndTargetType(new Reference())).thenReturn(null);
+		assertThat(sailorAssembly.getTargetRecordID("sourceRecordID", "sourceTypeID", "targetTypeID"),nullValue());*/
+	}
+	
+	
 }

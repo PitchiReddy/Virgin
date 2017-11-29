@@ -178,15 +178,14 @@ public class SailorAssemblyImpl implements SailorAssembly {
 			return null;
 		}
 	}
-	
+	/**
+	 * Consuming findByTypeAndTargetTypeID from CrossReference
+	 * @param sourceRecordID - nativeSourceID
+	 * @param sourceTypeID - referenceTypeID
+	 * @param targetTypeID - targetTypeID
+	 * @return nativeSourceIDValue
+	 */
 	public String getTargetRecordID(String sourceRecordID,String sourceTypeID, String targetTypeID) {
-		//Reference reference = null;
-		/*For reference Call CrossReference -> References - > findbytypeandtargetType - >
-		nativesourceid = sourcerecordid
-		typeid = sourcetypeid
-		targettypeid = targettypeid
-		*/
-		//return reference != null ? reference.nativeSourceIDValue() : null;
 		
 		Reference reference= new Reference();
 		reference.nativeSourceIDValue(sourceRecordID);
