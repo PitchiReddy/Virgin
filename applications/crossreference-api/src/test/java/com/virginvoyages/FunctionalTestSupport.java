@@ -25,14 +25,10 @@ public abstract class FunctionalTestSupport {
     @Before
     public void setUp() {
     	
-    	@SuppressWarnings("deprecation")
-		final JsonPath jsonResponse = given()
-    			.contentType("application/json")
-    		.parameters("client_id", "4f177c76-1b53-4ad3-89b5-6c75d1745526", 
-    				"client_secret", "tDJJSjWS2hAawZd3", "grant_type", "client_credentials")
+		final JsonPath jsonResponse = given().auth().basic("4f177c76-1b53-4ad3-89b5-6c75d1745526", "tDJJSjWS2hAawZd3")
     			.post("http://10.3.100.88:31362/svc/identityaccessmanagement-service/oauth/token").jsonPath();  	
     	final String accessToken = jsonResponse.get("access_token");
-    	    	
+    
     	port = LOCAL_PORT;
         RestAssured.given()
                 .headers("correlationID", UUID.randomUUID().toString(), "Authorization", "Bearer " + accessToken);
