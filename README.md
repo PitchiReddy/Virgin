@@ -4,7 +4,7 @@ Quick steps to setup the local project and contribution guidelines.
 
 ### What is this repository for? ###
 
-* Integration API is a parent project that includes 3 microservices 
+Integration API is a parent project that includes 3 microservices 
   1. Sailor API
      Provides light weight orchestration services around Seaware,Salesforce and Customer-360.
   2. Crossreference API
@@ -59,7 +59,7 @@ Quick steps to setup the local project and contribution guidelines.
 * Database configuration: (Refer "Local Setup" #4,#5)
 * How to run tests: 
   <code>
-  * ./gradlew test  (Default – only unit tests)
+  * ./gradlew test  (Default ï¿½ only unit tests)
   * ./gradlew integrationTests  (Only integration tests)
   * ./gradlew functionalTests (Only functional tests)
   * ./gradlew testAll (All tests)
