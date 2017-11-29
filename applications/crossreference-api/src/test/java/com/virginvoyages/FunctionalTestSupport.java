@@ -26,7 +26,7 @@ public abstract class FunctionalTestSupport {
     public void setUp() {
     	
 		final String response = given().auth().preemptive().basic("4f177c76-1b53-4ad3-89b5-6c75d1745526", "tDJJSjWS2hAawZd3")
-    			.post("http://10.3.100.88:31362/svc/identityaccessmanagement-service/oauth/token").asString();  	
+    			.post("http://10.3.100.88:31362/svc/identityaccessmanagement-service/oauth/token?grant_type=client_credentials").asString();  	
 		final JsonPath jsonResponse = new JsonPath(response);
     	final String accessToken = jsonResponse.get("access_token");
     	port = LOCAL_PORT;
