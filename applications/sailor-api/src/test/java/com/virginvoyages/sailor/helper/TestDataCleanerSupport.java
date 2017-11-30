@@ -34,15 +34,15 @@ public class TestDataCleanerSupport {
 	//TODO remove test annotation and plug in into test execution - before tests
 	@Test
 	public void cleanData() {
-		//String[] listToDelete = new String[] {"Sapi_TestFN","MatchFN","FN_Changed1"};
-		String[] listToDelete = new String[] {};
+		String[] listToDelete = new String[] {"Sapi_TestFN","MatchFN","FN_Changed1"};
+		//String[] listToDelete = new String[] {};
 		for (String toDelete : listToDelete) {
 			
 			String selectQuery = "SELECT Id FROM Account WHERE FirstName LIKE '%"+toDelete+"%'";
 			QueryResultsData<AccountData> queryResultsData = queryClient.findAccounts(selectQuery);
 			
 			List<String> listOfSailorIDs = sailorMapper.retrieveListOfSailorIDs(queryResultsData);
-			//System.out.println("Request to return list of sailor's with ID {}"+listOfSailorIDs);
+			System.out.println("Request to return list of sailor's with ID {}"+listOfSailorIDs);
 			
 			for (String sailorID : listOfSailorIDs) {
 				accountClient.deleteAccount(sailorID);

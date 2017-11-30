@@ -21,7 +21,7 @@ public class SeawareClientTest {
 	
 	@Test
     public void findSeawareData() throws Exception {
-    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
+    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findSeawareData(testDataHelper.genarateSeawaredataToCreate());
     	System.out.println("Data is ::::" + otaProfileReadRS.getProfiles());
     }
 }

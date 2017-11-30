@@ -1,6 +1,7 @@
 package com.virginvoyages.seaware.dao.impl;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,18 @@ import com.virginvoyages.seaware.client.SeawareClient;
 import com.virginvoyages.seaware.dao.SeawareDAO;
 import com.virginvoyages.seaware.data.ClientData;
 import com.virginvoyages.seaware.data.CompanyNameType;
+import com.virginvoyages.seaware.data.CustomerType;
 import com.virginvoyages.seaware.data.OTAProfileReadRS;
 import com.virginvoyages.seaware.data.OTAReadRQ;
 import com.virginvoyages.seaware.data.POSType;
+import com.virginvoyages.seaware.data.PersonNameType;
+import com.virginvoyages.seaware.data.ProfilesType.ProfileInfo;
 import com.virginvoyages.seaware.data.SourceType;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class SeawareDAOImpl implements SeawareDAO {
 
 	@Autowired
@@ -22,79 +29,115 @@ public class SeawareDAOImpl implements SeawareDAO {
 	
 	@Override
 	public ClientData getSeawareClientData(String clientID) {
-		OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(convertToSeawareProfileReadRequest(clientID));
+		OTAProfileReadRS otaProfileReadRS  = seawareClient.findSeawareData(createProfileReadRequest(clientID));
 		return convertResponseToSeawareClientDataObject(otaProfileReadRS);
 	}
-	
-	private OTAReadRQ convertToSeawareProfileReadRequest(String clientID) {
-		return createBaseSeawareReadRequest();
-		//set value specific to profile read - like client ID etc.
-	}
-	
+		
+	/**
+	 * Convert the JAXB response object into application model
+	 * @param profileResponse
+	 * @return
+	 */
 	private ClientData convertResponseToSeawareClientDataObject(OTAProfileReadRS profileResponse) {
-	
 		ClientData clientData = new ClientData();
-	//	clientData.setSurname(profileResponse.getProfiles().getProfileInfo().stream().filter(pType -> pType.getUniqueID()));
-		clientData.setSuccess(profileResponse.getSuccess());
-		clientData.setWarnings(profileResponse.getWarnings());
-		clientData.setProfiles(profileResponse.getProfiles());
-		clientData.setErrors(profileResponse.getErrors());
-		clientData.setEchoToken(profileResponse.getEchoToken());
-		clientData.setTimeStamp(profileResponse.getTimeStamp());
-		clientData.setTarget(profileResponse.getTarget());
-		clientData.setVersion(profileResponse.getVersion());
-		clientData.setTargetName(profileResponse.getTargetName());
-		clientData.setTransactionIdentifier(profileResponse.getTransactionIdentifier());
-		clientData.setSequenceNmbr(profileResponse.getSequenceNmbr());
-		clientData.setTransactionStatusCode(profileResponse.getTransactionStatusCode());
-		clientData.setCorrelationID(profileResponse.getCorrelationID());
-		clientData.setRetransmissionIndicator(profileResponse.isRetransmissionIndicator());
-		clientData.setAltLangID(profileResponse.getAltLangID());
-		clientData.setPrimaryLangID(profileResponse.getPrimaryLangID());
-		            
-		return clientData;
-		//	return new ClientData();
+		ProfileInfo profileInfo = profileResponse.getProfiles().getProfileInfo().get(0);
+		if(null == profileInfo) {
+			log.error("ProfileInfo in response is empty");
+			return clientData;
+			
+		}
+		clientData.id(profileInfo.getUniqueID().get(0).getID());
+		CustomerType customer = profileInfo.getProfile().getCustomer();
+		
+		
+		if(!customer.getPersonName().isEmpty()) {
+			PersonNameType personName = customer.getPersonName().get(0);
+			if(!personName.getGivenName().isEmpty()) {
+				clientData.firstName(personName.getGivenName().get(0));
+			}
+			if(!personName.getMiddleName().isEmpty()) {
+				clientData.middleName(personName.getMiddleName().get(0));
+			}
+			clientData.lastName(personName.getSurname());
+			if(!personName.getNameSuffix().isEmpty()) {
+				clientData.suffix(personName.getNameSuffix().get(0));
+			}
+			if(!personName.getNamePrefix().isEmpty()) {
+				clientData.prefix(personName.getNamePrefix().get(0));
+			}
+			if(!personName.getNameTitle().isEmpty()) {
+				clientData.salutation(personName.getNameTitle().get(0));
+			}
+						
+		}
+		if(!customer.getCitizenCountryName().isEmpty()) { 
+			clientData.citizenshipCountry(new Locale("",customer.getCitizenCountryName().get(0).getCode()).getDisplayCountry());
+		}
+		return clientData
+				.primaryEmail(customer.getEmail().get(0).getValue())
+				.gender(customer.getGender())
+				.preferredLanguage(customer.getLanguage())
+				.dateofBirth(customer.getBirthDate())
+				.martialStatus(customer.getMaritalStatus())
+				.numberofChildren(customer.getChildQuantity())
+				.vIP(String.valueOf(customer.isVIPIndicator().booleanValue()));
 	}
 	
-	private OTAReadRQ createBaseSeawareReadRequest() {
-		OTAReadRQ otaReadRQ = new OTAReadRQ();
-		POSType posType = new POSType();
-	    SourceType sourceType = new SourceType();
-	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
-	    OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
+	/**
+	 * Create Profile Read request for Seaware
+	 * @param clientID
+	 * @return
+	 */
+	private OTAReadRQ createProfileReadRequest(String clientID) {
+		
+		OTAReadRQ otaProfileReadRequest =  createBaseReadRequest();
+		
+		OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
 	    OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID uniqueID = new OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID();
-		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
-		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
-		CompanyNameType companyNameType = new CompanyNameType();
-		companyNameType.setValue("OPENTRAVEL");
-	    uniqueID.setID("405");
+		
+		uniqueID.setID(clientID);
 		uniqueID.setIDContext("SEAWARE");
 		uniqueID.setType("1");
 		profileReadRequest.getUniqueID().add(uniqueID);
-		readRequests.getProfileReadRequest().add(profileReadRequest);
+		otaProfileReadRequest.getReadRequests().getProfileReadRequest().add(profileReadRequest);
+		
+		return otaProfileReadRequest;
+
+	}
 	
+	/**
+	 * Create basic Read Request for Seaware
+	 * @return
+	 */
+	private OTAReadRQ createBaseReadRequest() {
+		
+		CompanyNameType companyNameType = new CompanyNameType();
+		companyNameType.setValue("OPENTRAVEL");
+		
+		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
+		bookingChannel.setCompanyName(companyNameType);
+		bookingChannel.setType("1");
+		
+		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
 		requestorID.setID("5");
 		requestorID.setType("5");
 		requestorID.setIDContext("SEAWARE");
 		
-		bookingChannel.setCompanyName(companyNameType);
-		bookingChannel.setType("1");
-		
-		
-		
+		SourceType sourceType = new SourceType();
+		sourceType.setBookingChannel(bookingChannel);
 		sourceType.setRequestorID(requestorID);
 		
-		sourceType.setBookingChannel(bookingChannel);
-		posType.getSource().add(sourceType);
+		POSType posType = new POSType();
+	 	posType.getSource().add(sourceType);
+	    
+	 	OTAReadRQ otaReadRQ = new OTAReadRQ();
 		otaReadRQ.setPOS(posType);
-		otaReadRQ.setReadRequests(readRequests);
-		otaReadRQ.setPrimaryLangID("ENG");
+		
+	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
+	    otaReadRQ.setReadRequests(readRequests);
+	    otaReadRQ.setPrimaryLangID("ENG");
 		otaReadRQ.setVersion(new BigDecimal(1));
-		//otaReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
-		otaReadRQ.setReadRequests(readRequests);
 		return otaReadRQ;
-	//	return new OTAReadRQ();
+	    	
 	}
-	
-
 }

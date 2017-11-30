@@ -120,8 +120,6 @@ public class AccountData {
     private String recordTypeId = null;
     
     public Sailor convertToSailorObject() {
-    	return SailorMapper.mapAccoundDataToSailor(this);
+    	return SailorMapper.mapAccountDataToSailor(this);
     }
-        
-
 }
