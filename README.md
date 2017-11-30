@@ -6,8 +6,8 @@ Quick steps to setup the local project and contribution guidelines.
 
 * Integration API is a parent project that includes 3 microservices: 
     + **Sailor API:** Provides light weight orchestration services around Seaware,Salesforce and Customer-360.
-    + **Crossreference API:** Provides light weight orchestration services around CrossReference Data between different SORs.
-    + **Recommendation API:** Recommendations API provides light weight orchestration services around the Recommendations Engine.
+    + **Crossreference API:** Provides light weight services around CrossReference Data between different SORs.
+    + **Recommendation API:** Recommendations API provides light weight services around the Recommendations Engine.
 * Version 0.0.1
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
@@ -23,12 +23,12 @@ Quick steps to setup the local project and contribution guidelines.
     * APPLICATION_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/integration-api.yml_
     * SAILOR_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/sailor-api.yml_
     * CROSSREFERENCE_SERVICE_PROPERTIES_PATH=_file:///<%project_root_dir%>/config/integration-api-config/src/main/resources/local/crossreference-api.yml_
-7. Open a command prompt and run _./gradlew build_ from the project root folder.  (This should download gradle AND build the project)
-8. Go to any of the application root folder run application
-	* Sailor API - _cd /applications/sailor-api/_
-    * CrossReference API - _cd /applications/crossreference-api/_
-    * Recommendation API - _cd /applications/recommendation-api/_
-9. Run project with _./gradlew bootRun_
+7. Open a command prompt and run _./gradlew build -xtest_ from the project root folder.  (This should download gradle AND build the project)
+8. Go to any of the application libs folder and run application
+	* Sailor API - _cd /applications/sailor-api/build/libs/_
+    * CrossReference API - _cd /applications/crossreference-api/build/libs/_
+    * Recommendation API - _cd /applications/recommendation-api/build/libs/_
+9.  Run application with _java -jar <%application_jar_name%>_
 10. Test applications launching:
     * Sailor API - http://localhost:8432/sailor-api/v1
     * Crossreference API - http://localhost:8435/crossreference-api/v1
@@ -69,4 +69,6 @@ Quick steps to setup the local project and contribution guidelines.
 
 ### Who do I talk to? ###
 
-* Repo owner: Murtaza Goga
+* Repo owners:
+    - Murtaza Goga
+    - Rashmi Praveen
