@@ -441,6 +441,45 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			.log()
 			.all();
 	}
+	
+	@Test  
+	public void givenEmptyReferenceInFindReferencesTypeAndTargetTypeShouldThrowMandatoryFieldsMissingException() {
 
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", "");
+		parameters.put("nativeSourceIDValue", "");
+		parameters.put("targetReferenceTypeID", "");
+
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+
+	}
+	
+	@Test  
+	public void givenEmptyReferenceInFindReferencesTypeShouldThrowMandatoryFieldsMissingException() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", "");
+		parameters.put("nativeSourceIDValue", "");
+	
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+
+	}
 
 }

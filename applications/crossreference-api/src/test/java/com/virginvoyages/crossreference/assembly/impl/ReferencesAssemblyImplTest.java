@@ -249,5 +249,15 @@ public class ReferencesAssemblyImplTest {
 		assertThat(references.referenceID(), is(notNullValue()));
 	}
 
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferencesTypeAndTargetTypeShouldThrowUnknownException() {
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferencesTypeAndTargetType(new Reference());
+	}
 
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferenceByNativeSourceIDValueAndTypeShouldThrowUnknownException() {
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferenceByNativeSourceIDValueAndType(new Reference());
+	}
 }

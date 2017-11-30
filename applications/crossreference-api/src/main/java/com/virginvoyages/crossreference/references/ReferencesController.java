@@ -224,6 +224,9 @@ public class ReferencesController {
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
 
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
+		if(StringUtils.isBlank(reference.nativeSourceIDValue()) && StringUtils.isBlank(reference.referenceTypeID())) {
+			throw new MandatoryFieldsMissingException();
+		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
