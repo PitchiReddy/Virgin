@@ -195,11 +195,15 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
 		log.debug("Entering findReferencesTypeAndTargetType method in ReferencesAssemblyImpl");
-		Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
-		return Optional.ofNullable(
-				findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(), 
-						reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
-
+		try {
+			Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
+			return null == referenceForNativeSourceIdValue ? null
+					: Optional.ofNullable(findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(),
+							reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferencesTypeAndTargetType ", ex);
+			throw new UnknownException();
+		}
 	}
 	
 	/**
@@ -211,12 +215,16 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Override
 	public Reference findReferenceByNativeSourceIDValueAndType(Reference reference) {
 		log.debug("Entering findReferenceByNativeSourceIDValueAndType method in ReferencesAssemblyImpl");
-		Reference referenceFound = null;
-		ReferenceData retrieveNativeSourceIDValueAndType = referenceRepository
-				.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(reference.nativeSourceIDValue(),
-						reference.referenceTypeID());
-		referenceFound = entityMapper.convertToReferenceBusinessEntity(retrieveNativeSourceIDValueAndType);
-		return referenceFound;
+		try {
+			ReferenceData retrieveNativeSourceIDValueAndType = referenceRepository
+					.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(reference.nativeSourceIDValue(),
+							reference.referenceTypeID());
+			return null == retrieveNativeSourceIDValueAndType ? null
+					: entityMapper.convertToReferenceBusinessEntity(retrieveNativeSourceIDValueAndType);
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferenceByNativeSourceIDValueAndType ", ex);
+			throw new UnknownException();
+		}
 	}
 
 }
