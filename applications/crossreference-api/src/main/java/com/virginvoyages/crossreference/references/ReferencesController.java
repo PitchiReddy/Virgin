@@ -79,7 +79,7 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
 		log.debug("Adding Reference");
-		if(StringUtils.isBlank(body.referenceTypeID())||StringUtils.isBlank(body.nativeSourceIDValue())) {
+		if(StringUtils.isBlank(body.referenceTypeID())||StringUtils.isBlank(body.nativeSourceIDValue())||StringUtils.isBlank(body.masterID())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		Reference reference = referencesAssembly.addReference(body);
@@ -283,7 +283,7 @@ public class ReferencesController {
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID) {
 
-		if(StringUtils.isBlank(body.referenceID()) || StringUtils.isBlank(body.referenceTypeID())
+		if(StringUtils.isBlank(body.referenceID()) || StringUtils.isBlank(body.referenceTypeID())||StringUtils.isBlank(body.masterID())
 				|| StringUtils.isBlank(body.nativeSourceIDValue())) {
 			throw new MandatoryFieldsMissingException();
 		}
