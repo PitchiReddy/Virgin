@@ -229,15 +229,18 @@ public class ReferencesAssemblyImplTest {
 		referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
 	}
 	
-/*	@Test
+	@Test
 	public void givenRepositoryReturnsFetchReferencesTypeAndTargetTypeShouldReturnReferenceList() {
+		final List<ReferenceData> referenceDataList = new ArrayList<>();
+		referenceDataList.add(testDataHelper.getReferenceDataEntity());
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(referenceDataList);
 		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
 		List<Reference> referencesList = referencesAssemblyImpl.findReferencesTypeAndTargetType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
 		assertThat(referencesList.get(0).referenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
 		assertThat(referencesList.get(0).targetReferenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
 	}
-*/	
+	
 	@Test
 	public void givenRepositoryReturnsFetchReferenceByNativeSourceIDValueAndTypeShouldReturnReferences() {
 		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
