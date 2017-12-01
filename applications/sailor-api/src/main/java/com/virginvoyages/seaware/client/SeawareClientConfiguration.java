@@ -1,12 +1,12 @@
 package com.virginvoyages.seaware.client;
 
-import java.net.InetSocketAddress;
+/*import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
 import feign.Client;
 import feign.okhttp.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-
+*/
 
 import org.springframework.context.annotation.Bean;
 
@@ -24,7 +24,7 @@ public class SeawareClientConfiguration {
 		return new feign.Contract.Default();
 	}
 
-	@Bean
+	/*@Bean
 	public Client feignClient() {
 		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -35,7 +35,7 @@ public class SeawareClientConfiguration {
 				 .writeTimeout(60, TimeUnit.SECONDS)
 				.addInterceptor(interceptor).build();
 		return new OkHttpClient(client);
-	}
+	}*/
 
 	@Bean
 	public Retryer retryer() {
