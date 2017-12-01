@@ -101,6 +101,12 @@ public class AccountData {
     @JsonProperty("VIP__c")
     private String vIP;
     
+    @JsonProperty("Average_Lifetime_Spend_Per_Night__c")
+    private String averageLifetimeSpendPerNight;
+    
+    @JsonProperty("Average_Spend_Per_Night_for_Last_Cruise__c")
+    private String averageOnboardSpendPerNight;
+        
     @JsonProperty("preferences")
     private List<Preference> preferences = new ArrayList<Preference>();
 

@@ -502,6 +502,10 @@ definitions:
         type: integer
       tribe:
         type: string
+      subTribe:
+        type: string
+      stateOfTheSailor:
+        type: string
       status:
         type: string
       vIP:
