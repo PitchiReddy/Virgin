@@ -289,17 +289,15 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	}
 
 
-/*	@Test
+	@Test
 	public void givenValidReferenceFindReferencesMasterShouldReturnOneorMoreReferences() {
 		
 		JsonPath referenceTypeJson = createTestReferenceType();
 
 		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
-
 		given().contentType("application/json")
-				.get("/xref-api/v1/references/search/findByMaster?masterID= "
-						+ createdReferenceJson.getString("masterID") + "&targetTypeID="
-						+ createdReferenceJson.getString("targetReferenceTypeID"))
+				.get("/xref-api/v1/references/search/findByMaster?masterID="
+						+ createdReferenceJson.getString("masterID"))
 				.then().assertThat().statusCode(200).log().all();
 
 		//cleanup
@@ -308,7 +306,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 
 	}
-*/	
+	
 	@Test
 	public void givenValidReferenceFindReferencesTypeShouldReturnOneorMoreReferences() {
 		JsonPath referenceTypeJson = createTestReferenceType();
