@@ -10,3 +10,5 @@ api:
 swagger:
   oauth2:
     url: http://10.3.100.88:31362/identityaccessmanagement-service/oauth/token
+    clientId: 4f177c76-1b53-4ad3-89b5-6c75d1745526
+    clientSecret: tDJJSjWS2hAawZd3

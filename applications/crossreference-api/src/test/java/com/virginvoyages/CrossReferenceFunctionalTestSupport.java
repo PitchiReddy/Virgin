@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -25,6 +26,17 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 	public Map<String, Object> referenceParam = new HashMap<String, Object>();
 
 
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@Test
     public void contextLoads() {
     }
@@ -40,6 +52,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		JsonPath jsonResponse = given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.body(parameters)
 			.post("/xref-api/v1/sources").
 
@@ -53,6 +66,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.delete("/xref-api/v1/sources/" + referenceSourceID).
 
 		then()
@@ -68,6 +82,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		// create reference type
 		Response response = given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.body(parameters)
 			.post("/xref-api/v1/types/").
 
@@ -87,6 +102,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.delete("/xref-api/v1/types/" + referenceTypeID).
 
 		then()
@@ -109,6 +125,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		// create references 
 		Response response = given()
 		     .contentType("application/json") 
+		     .header("Authorization", "Bearer " + getToken())
 		     .body(parameters)
 		     .post("/xref-api/v1/references/").
 
@@ -133,6 +150,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.delete("/xref-api/v1/references/" + referenceID).
 
 		then()
@@ -144,6 +162,7 @@ public class CrossReferenceFunctionalTestSupport extends FunctionalTestSupport {
 		Response response = 
 				given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.param("page", 0)
 				.param("size", 1)
 				.get("/xref-api/v1/types/")
