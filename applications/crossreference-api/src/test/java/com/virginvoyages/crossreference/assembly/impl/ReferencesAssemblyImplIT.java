@@ -134,23 +134,6 @@ public class ReferencesAssemblyImplIT {
 		
 	}
 
-	@Test(expected = DataAccessException.class)
-	public void givenValidReferenceDataAndDeleteReferenceShouldDataAccessExceptionIfTypeIDisPresentInReferenceType() {
-
-		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
-
-	    Reference createdReference = referencesAssembly.addReference(
-				testDataHelper.getReferenceBusinessEntity(referenceType));
-
-	    try {
-	    referenceTypesAssembly.deleteReferenceTypeByID(referenceType.referenceTypeID());
-	    }finally {
-	    	//cleanup
-			referencesAssembly.deleteReferenceByID(createdReference.referenceID());
-	    }
-	}
-	
-
 	@Test
 	public void givenValidReferenceIDGetReferenceByIDShouldReturnReference() throws Exception {
 
