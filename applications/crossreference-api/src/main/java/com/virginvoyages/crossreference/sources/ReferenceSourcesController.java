@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.virginvoyages.crossreference.assembly.ReferenceSourcesAssembly;
 import com.virginvoyages.crossreference.constants.CrossReferenceConstants;
-import com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException;
+import com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
@@ -123,8 +122,8 @@ public class ReferenceSourcesController {
 			throw new MandatoryFieldsMissingException();
 		}
 		
-		if (size > CrossReferenceConstants.MAX_SIZE) {
-			throw new ReferencePaginationMaxSizeException();
+		if (size > CrossReferenceConstants.MAX_PAGE_SIZE) {
+			throw new CrossreferenceMaxPageSizeException();
 		}
 		return new ResponseEntity<List<ReferenceSource>>(referenceSourcesAssembly.findSources(pageable),HttpStatus.OK);
 	}

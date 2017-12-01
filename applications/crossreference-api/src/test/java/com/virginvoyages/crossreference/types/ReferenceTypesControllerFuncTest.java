@@ -432,7 +432,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	}
 	
 	@Test
-	public void givenSizeIsMaxSizeFindTypesShouldThrowReferencePaginationMaxSizeException() {
+	public void givenPageSizeIsMorethanMaxSizeFindTypesShouldThrowCrossreferenceMaxPageSizeException() {
 		given()
 			.contentType("application/json")
 			.param("page", 0)
@@ -442,7 +442,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 		.then()
 			.assertThat()
 			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-			.body("exception",equalTo("com.virginvoyages.crossreference.exception.ReferencePaginationMaxSizeException"))
+			.body("exception",equalTo("com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException"))
 			.log()
 			.all();
 

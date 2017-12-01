@@ -260,7 +260,7 @@ public class ReferencesControllerTest {
 	}
 
 	@Test
-	public void givenMaxSizeForSizeInRequestParamsFindReferencesShouldSetMethodNotAllowedInResponse() throws Exception {
+	public void givenPageSizeIsMorethanMaxSizeFindReferencesShouldSetMethodNotAllowedInResponse() throws Exception {
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
 

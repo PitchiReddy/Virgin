@@ -381,7 +381,7 @@ public class ReferenceTypesControllerTest {
 	}
 
 	@Test
-	public void givenMaxSizeForSizeInRequestParamsFindTypesShouldSetMethodNotAllowedInResponse() throws Exception {
+	public void givenPageSizeIsMorethanMaxSizeFindTypesShouldSetMethodNotAllowedInResponse() throws Exception {
 		List<ReferenceType> referenceTypesList = new ArrayList<ReferenceType>();
 		referenceTypesList.add(testDataHelper.getReferenceTypeBusinessEntity());
 

@@ -193,7 +193,7 @@ public class ReferenceSourcesControllerTest {
 	}
 
 	@Test
-	public void givenMaxSizeForSizeInRequestParamsFindSourcesShouldSetMethodNotAllowedInResponse() throws Exception {
+	public void givenPageSizeIsMorethanMaxSizeFindSourcesShouldSetMethodNotAllowedInResponse() throws Exception {
 		List<ReferenceSource> referenceSourceList = new ArrayList<ReferenceSource>();
 		referenceSourceList.add(testDataHelper.getReferenceSourceBusinessEntity());
 
