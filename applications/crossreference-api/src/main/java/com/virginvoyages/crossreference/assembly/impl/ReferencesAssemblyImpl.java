@@ -135,13 +135,11 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 *            - input masterId.
 	 * @param targetTypeID
 	 *            - input targetTypeID.
-	 * @param pageable
-	 *            - input pageable.
 	 * @return List<Reference>
 	 */
 	@Override
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID) {
-		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
+		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> " + masterId);
 		List<ReferenceData> referenceDataList = null;
 		try {
 			if (StringUtils.isEmpty(targetTypeID)) {

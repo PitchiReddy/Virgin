@@ -225,7 +225,7 @@ public class ReferencesController {
 			throw new MandatoryFieldsMissingException();
 		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
-		if (null == referenceList || referenceList.isEmpty())  {
+		if (null == referenceList || referenceList.isEmpty()) {
 			throw new DataNotFoundException();
 		}
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
@@ -252,15 +252,16 @@ public class ReferencesController {
 
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
-		if(StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID()) || StringUtils.isBlank(reference.targetReferenceTypeID())) {
+		if (StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID())
+				|| StringUtils.isBlank(reference.targetReferenceTypeID())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
-		if (null == referenceList || referenceList.isEmpty())  {
+		if (null == referenceList || referenceList.isEmpty()) {
 			throw new DataNotFoundException();
 		}
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
-		return new ResponseEntity<References>(references,HttpStatus.OK);
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {
