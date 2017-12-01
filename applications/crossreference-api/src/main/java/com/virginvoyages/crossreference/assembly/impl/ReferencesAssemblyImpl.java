@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
-import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataAccessException;
@@ -42,9 +41,6 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	
 	@Autowired
 	private CrossReferenceEntityMapper entityMapper;
-	
-	@Autowired
-	private ReferenceTypeRepository referenceTypeRepository;
 	
 	/**
 	 * Create reference based on reference.
