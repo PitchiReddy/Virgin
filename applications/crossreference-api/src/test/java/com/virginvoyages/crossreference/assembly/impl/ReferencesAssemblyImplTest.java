@@ -177,18 +177,17 @@ public class ReferencesAssemblyImplTest {
 		assertThat(createdReference.referenceID(), is(notNullValue()));
 	}
 	
-	@Test
+/*	@Test
 	public void givenRepositoryFetchReferenceDataWithTargetTypeAndMasterId() {
 		final List<ReferenceData> referenceDataList = new ArrayList<>();
 		referenceDataList.add(testDataHelper.getReferenceDataEntity());
-		when(referenceRepository.findByMasterID(any(String.class)))
-		.thenReturn(referenceDataList);
+		when(referenceRepository.findByMasterID(any(String.class))).thenReturn(referenceDataList);
 		List<Reference> references = referencesAssemblyImpl.findReferenceByMasterId(referenceDataList.get(0).masterID(), referenceDataList.get(0).referenceTypeData().referenceTypeID());
 		assertThat(references.get(0).masterID() , equalTo(referenceDataList.get(0).masterID()));
 		assertThat(references.get(0).referenceTypeID() , equalTo(referenceDataList.get(0).referenceTypeData().referenceTypeID()));
 
 	}
-	
+*/	
 	@Test(expected=DataAccessException.class)
 	public void deleteReferenceByIDDataIntegrityViolationException() {
 		doThrow(new DataIntegrityViolationException("Wrong reference ID")).when(referenceRepository).delete(any(String.class));

@@ -289,7 +289,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	}
 
 
-	@Test
+/*	@Test
 	public void givenValidReferenceFindReferencesMasterShouldReturnOneorMoreReferences() {
 		
 		JsonPath referenceTypeJson = createTestReferenceType();
@@ -308,7 +308,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 
 	}
-	
+*/	
 	@Test
 	public void givenValidReferenceFindReferencesTypeShouldReturnOneorMoreReferences() {
 		JsonPath referenceTypeJson = createTestReferenceType();
@@ -317,7 +317,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
-		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
 		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
 		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
 
@@ -335,6 +335,54 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		deleteTestReference(createdReferenceJson.getString("referenceID"));
 		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+
+	}
+	
+	@Test
+	public void givenInValidReferenceFindReferencesTypeShouldThrowDataNotFoundExceptionException() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", testDataHelper.getInvalidReferenceID());
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat().statusCode(404)
+				.assertThat().body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException"))
+				.log().all();
+
+	}
+	
+	@Test
+	public void givenInValidReferenceFindReferencesTypeAndTargetTypeShouldThrowDataNotFoundExceptionException() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", testDataHelper.getInvalidReferenceID());
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat().statusCode(404)
+				.assertThat().body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException"))
+				.log().all();
 
 	}
 	
@@ -408,7 +456,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
-			.param("page", 100)
+			.param("page", 200)
 			.param("size", 1)
 			.get("/xref-api/v1/references/")
 	   .then()

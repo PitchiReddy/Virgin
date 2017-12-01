@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.exception.ReferenceIDMaxRequestSizeException;
 import com.virginvoyages.crossreference.model.Reference;
@@ -28,7 +26,6 @@ import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,10 +50,6 @@ public class ReferencesController {
 
 	@Autowired
 	private ReferencesAssembly referencesAssembly;
-
-
-	@Autowired
-	private MockCrossReferenceAPI mockAPI;
 
 
 	/**
@@ -199,9 +192,12 @@ public class ReferencesController {
 			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID
 		    ) {
 
-		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID);
-		log.debug("Returns one or more references ====>{}",listOfReference);
-		References references = new References().embedded(new ReferencesEmbedded().references(listOfReference));
+		List<Reference> referenceList = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID);
+		if (null == referenceList || referenceList.isEmpty())  {
+			throw new DataNotFoundException();
+		}
+		log.debug("Returns one or more references ====>{}",referenceList);
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
@@ -223,13 +219,17 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
 
-		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		if(StringUtils.isBlank(reference.nativeSourceIDValue()) && StringUtils.isBlank(reference.referenceTypeID())) {
+		log.debug("Search params ===> " + reference.masterID() + "  " + reference.nativeSourceIDValue() + "  "
+				+ reference.referenceTypeID() + " " + reference.targetReferenceTypeID());
+		if (StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
+		if (null == referenceList || referenceList.isEmpty())  {
+			throw new DataNotFoundException();
+		}
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
-		return new ResponseEntity<References>(references,HttpStatus.OK);
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 
 	/**
@@ -252,10 +252,13 @@ public class ReferencesController {
 
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
 		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
-		if(StringUtils.isBlank(reference.nativeSourceIDValue()) && StringUtils.isBlank(reference.referenceTypeID()) && StringUtils.isBlank(reference.targetReferenceTypeID())) {
+		if(StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID()) || StringUtils.isBlank(reference.targetReferenceTypeID())) {
 			throw new MandatoryFieldsMissingException();
 		}
 		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
+		if (null == referenceList || referenceList.isEmpty())  {
+			throw new DataNotFoundException();
+		}
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}

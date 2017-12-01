@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +15,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
@@ -28,7 +26,6 @@ import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,9 +44,8 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	private CrossReferenceEntityMapper entityMapper;
 	
 	@Autowired
-	private ReferenceTypeRepository  referenceTypeRepository;
-
-
+	private ReferenceTypeRepository referenceTypeRepository;
+	
 	/**
 	 * Create reference based on reference.
 	 * @param reference
@@ -151,15 +147,21 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID) {
 		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
 		List<ReferenceData> referenceDataList = null;
-		if (!referenceTypeRepository.exists(targetTypeID)) {
-			referenceDataList = referenceRepository.findByMasterID(masterId);
+		try {
+			if (StringUtils.isEmpty(targetTypeID)) {
+				referenceDataList = referenceRepository.findByMasterID(masterId);
 
-		} else {
-			referenceDataList = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
-					targetTypeID);
+			} else {
+				referenceDataList = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
+						targetTypeID);
+			}
+			return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).stream()
+					.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData))
+					.collect(Collectors.toList());
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferenceByMasterId ", ex);
+			throw new UnknownException();
 		}
-		return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).stream()
-				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
 
 	/**

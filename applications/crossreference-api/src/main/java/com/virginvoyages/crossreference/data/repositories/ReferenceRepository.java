@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 
+/**
+ * {@code Interface} for ReferenceRepository operations for References
+ * @author pbovilla
+ *
+ */
 @Repository
 public interface ReferenceRepository extends PagingAndSortingRepository<ReferenceData, Serializable>{
 
