@@ -67,6 +67,11 @@ public class SailorMapper {
 		log.debug("Mapping Seaware Client Data to Sailor");
 		Sailor sailor = new Sailor();
 		sailor.seawareClientID(clientData.id());
+		sailor.firstName(clientData.firstName());
+		sailor.middleName(clientData.middleName());
+		sailor.lastName(clientData.lastName());
+		sailor.prefix(clientData.salutation());
+		sailor.suffix(clientData.suffix());
 		return null;
 	}
 		

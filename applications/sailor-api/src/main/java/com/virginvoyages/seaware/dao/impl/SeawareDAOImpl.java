@@ -1,6 +1,7 @@
 package com.virginvoyages.seaware.dao.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.virginvoyages.seaware.dao.SeawareDAO;
 import com.virginvoyages.seaware.data.ClientData;
 import com.virginvoyages.seaware.data.CompanyNameType;
 import com.virginvoyages.seaware.data.CustomerType;
+import com.virginvoyages.seaware.data.ErrorType;
 import com.virginvoyages.seaware.data.OTAProfileReadRS;
 import com.virginvoyages.seaware.data.OTAReadRQ;
 import com.virginvoyages.seaware.data.POSType;
@@ -29,27 +31,46 @@ public class SeawareDAOImpl implements SeawareDAO {
 	
 	@Override
 	public ClientData getSeawareClientData(String clientID) {
-		OTAProfileReadRS otaProfileReadRS  = seawareClient.findSeawareData(createProfileReadRequest(clientID));
-		return convertResponseToSeawareClientDataObject(otaProfileReadRS);
+		log.debug("Invoking Seaware service for profile Read. Client ID ==> {} ",clientID);
+		try {
+			OTAProfileReadRS otaProfileReadRS  = seawareClient.findSeawareData(createProfileReadRequest(clientID));
+			return convertResponseToSeawareClientDataObject(otaProfileReadRS);
+		}catch(Exception ex ) {
+			log.error("Exception while reading profile data from Seaware ==> {} ",clientID,ex);
+			return null;
+		}
+		
 	}
 		
 	/**
-	 * Convert the JAXB response object into application model
+	 * Convert  JAXB response object into application model
 	 * @param profileResponse
 	 * @return
 	 */
 	private ClientData convertResponseToSeawareClientDataObject(OTAProfileReadRS profileResponse) {
-		ClientData clientData = new ClientData();
+		
+		if(!profileResponse.getErrors().getError().isEmpty()) {
+			log.error("Errors in OTAProfileReadRS");
+			List<ErrorType> errors = profileResponse.getErrors().getError();
+			errors.forEach(
+					error -> 
+					log.error("Code ==> {} , Message ==> {}",error.getCode(),error.getValue()));
+			log.error("Returning null Client Data");
+			return null;
+			
+		}
+		
 		ProfileInfo profileInfo = profileResponse.getProfiles().getProfileInfo().get(0);
 		if(null == profileInfo) {
 			log.error("ProfileInfo in response is empty");
-			return clientData;
+			return null;
 			
 		}
+		ClientData clientData = new ClientData();
 		clientData.id(profileInfo.getUniqueID().get(0).getID());
 		CustomerType customer = profileInfo.getProfile().getCustomer();
 		
-		
+		//TODO use Optional if possible
 		if(!customer.getPersonName().isEmpty()) {
 			PersonNameType personName = customer.getPersonName().get(0);
 			if(!personName.getGivenName().isEmpty()) {
@@ -81,6 +102,7 @@ public class SeawareDAOImpl implements SeawareDAO {
 				.martialStatus(customer.getMaritalStatus())
 				.numberofChildren(customer.getChildQuantity())
 				.vIP(String.valueOf(customer.isVIPIndicator().booleanValue()));
+		
 	}
 	
 	/**
