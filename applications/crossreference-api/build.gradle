@@ -79,6 +79,7 @@ test {
 	exclude '**/*IT*', '**/*FuncTest*', '**/*RepositoryTest*', '**/*TestSupport*'
 }
 
+
 task integrationTests(type: Test){
 	include '**/*IT*', '**/*RepositoryTest*'
 }
@@ -91,6 +92,13 @@ task functionalTestsLocal(type: Test){
  def local_profile = ["spring.profiles.active":"local"]
  environment local_profile
 	include '**/*FuncTest*'
+}
+
+
+task testLocal(type: Test){
+ def local_profile = ["spring.profiles.active":"local"]
+ environment local_profile
+	exclude '**/*IT*', '**/*FuncTest*', '**/*RepositoryTest*', '**/*TestSupport*'
 }
 task testAll(type: Test){
 	exclude '**/*TestSupport*'
