@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/sailors**", "/references**"
-                		, "/sources**","/types**" )
+                		, "/sources**","/types**", "/sailors/**" )
                .authenticated();
     }
 	@Override
