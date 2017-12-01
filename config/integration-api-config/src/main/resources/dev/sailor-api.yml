@@ -6,19 +6,15 @@ crm:
   password: 9VmlyZ2luNDU2
   client-id: 3MVG99E3Ry5mh4zobSw34jlYQ4PMrCJIRM1qJSjiUkfO1orEbi9U.0mFX2XHOHt8goNgpW.MPqei3dgK7YrC8
   client-secret: 3603309126782682404
-  
 crossreference:
   service:
     url: http://10.3.100.251:31435/xref-api/v1
-
 seaware:
   service:
     url: http://10.3.0.14:8280
-
 api:
   security:
     enabled: true
-    
 swagger:
   oauth2:
     url: http://10.3.100.88:31362/identityaccessmanagement-service/oauth/token

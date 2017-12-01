@@ -34,8 +34,8 @@ public class TestDataCleanerSupport {
 	//TODO remove test annotation and plug in into test execution - before tests
 	@Test
 	public void cleanData() {
-		String[] listToDelete = new String[] {"Sapi_TestFN","MatchFN","FN_Changed1"};
-		//String[] listToDelete = new String[] {};
+		//String[] listToDelete = new String[] {"Sapi_TestFN","MatchFN","FN_Changed1"};
+		String[] listToDelete = new String[] {};
 		for (String toDelete : listToDelete) {
 			
 			String selectQuery = "SELECT Id FROM Account WHERE FirstName LIKE '%"+toDelete+"%'";
