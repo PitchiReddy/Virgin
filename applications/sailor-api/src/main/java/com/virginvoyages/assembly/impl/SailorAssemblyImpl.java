@@ -96,9 +96,9 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	}
 
 	@Override
-	public List<Sailor> findSailors(AccountData accountData) {
+	public List<Sailor> findSailors(Sailor sailor) {
 		
-		String findQueryString = sailorQueryHelper.generateFindQueryString(accountData);
+		String findQueryString = sailorQueryHelper.generateFindQueryString(SailorMapper.mapSailorToAccountData(sailor));
 		QueryResultsData<AccountData> queryResultsData = queryClient.findAccounts(findQueryString);
 		
 		List<String> listOfSailorIDs = sailorMapper.retrieveListOfSailorIDs(queryResultsData);
@@ -111,9 +111,12 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	}
 
 	@Override
-	public Sailor createSailor(AccountData accountData) {
-	
+	public Sailor createSailor(Sailor sailor) {
+	   
+		AccountData accountData = SailorMapper.mapSailorToAccountData(sailor);
 		String sailorID = null;
+		
+		//TODO - move this to SailorMapper
 		RecordTypeData recordTypeData = queryClient.findSailorAccountRecordTypeID().first();
 		String recordTypeId = null != recordTypeData ? recordTypeData.id() : null;
 		if(StringUtils.isNotEmpty(recordTypeId)) {

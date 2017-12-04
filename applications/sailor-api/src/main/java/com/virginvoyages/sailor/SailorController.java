@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virginvoyages.assembly.SailorAssembly;
-import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.sailor.api.MockSailorAPI;
@@ -69,12 +68,15 @@ public class SailorController {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<Void> addSailor(
+    ResponseEntity<Resource<Sailor>> addSailor(
             @ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
             @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
             @ApiParam(value = "Sailor object that needs to be added to the SORs") @RequestBody Sailor body) {
-        mock.addSailor(body);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    	
+    	//PSS-3187
+    	//Mandatory check for firstname, lastname, dob and email from body
+        return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(
+        		sailorAssembly.createSailor(body), entityLinks), HttpStatus.OK);
     }
 
 
@@ -167,9 +169,8 @@ public class SailorController {
 			throw new MandatoryFieldsMissingException();
 		}
 
-    	AccountData accountData = setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber);
-
-    	List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+    	List<Sailor> listOfSailors = sailorAssembly.findSailors(
+    			constructSailorObj(firstName, lastName, dateofBirth, email, mobileNumber));
 
 		if(listOfSailors.size() == 0) {
 			throw new DataNotFoundException();
@@ -207,10 +208,10 @@ public class SailorController {
 			throw new MandatoryFieldsMissingException();
 		}
 
-		AccountData accountData = setRequestParamsInAccountData(firstName, lastName, dateofBirth, email, mobileNumber);
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorCriteria = constructSailorObj(firstName, lastName, dateofBirth, email, mobileNumber);
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorCriteria);
 
-		Sailor sailor = listOfSailors.isEmpty() ? sailorAssembly.createSailor(accountData):listOfSailors.get(0);
+		Sailor sailor = listOfSailors.isEmpty() ? sailorAssembly.createSailor(sailorCriteria):listOfSailors.get(0);
 
 		return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(sailor, entityLinks), HttpStatus.OK);
 
@@ -244,26 +245,23 @@ public class SailorController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-
+   
     /**
-     * Creates account data object with given values.
+     * Constructs Sailor object from requestParams.
      * @param firstName
      * @param lastName
      * @param dob
      * @param email
      * @param mobileNumber
-     * @return
+     * @return Sailor
      */
-    private AccountData setRequestParamsInAccountData(String firstName,String lastName, LocalDate dob, String email,String mobileNumber) {
-
-    	// TODO optimize with fluent, dynamic
-    	AccountData accountData = new AccountData();
-    	accountData.firstName(firstName);
-    	accountData.lastName(lastName);
-    	accountData.dateofBirth(dob);
-    	accountData.primaryEmail(email);
-    	accountData.mobileNumber(mobileNumber);
-    	return accountData;
+    private Sailor constructSailorObj(String firstName,String lastName, LocalDate dob, String email,String mobileNumber) {
+    	return new Sailor()
+    			.firstName(firstName)
+    			.lastName(lastName)
+    			.dateofBirth(dob)
+    			.primaryEmail(email)
+    			.mobileNumber(mobileNumber);
 
     }
 

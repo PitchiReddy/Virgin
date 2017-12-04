@@ -63,6 +63,17 @@ public class SailorMapper {
 	
 		return sailor;
 	}
+	
+	/**
+	* Map sailor to AccountData
+	* @Param Sailor - Sailor object that contains data from requestparams/body.
+	* @return accountData - values from sailro object are mapped to account data object
+	* 
+	*/
+	public static AccountData mapSailorToAccountData(Sailor sailor) {
+		//TODO PSS-3187
+		return new AccountData();
+	}
 		
 	/**
 	 * Retrieves a list of sailorIDs from list of accountData objects

@@ -2,7 +2,6 @@ package com.virginvoyages.assembly;
 
 import java.util.List;
 
-import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.sailor.model.Sailor;
 
 /**
@@ -31,14 +30,14 @@ public interface SailorAssembly {
 	 * @param accountData - search for sailors is done based on values in accountData
 	 * @return 
 	 */
-	public List<Sailor> findSailors(AccountData accountData);
+	public List<Sailor> findSailors(Sailor sailor);
 	
 	/**
 	 * Create Sailor account with details as available in {@code accountData}
 	 * @param accountData - Sailor is created with values present in accountData object
 	 * @return
 	 */
-	public Sailor createSailor(AccountData accountData);
+	public Sailor createSailor(Sailor sailor);
 
 	/**
 	 * Getting ReferenceType by using referenceTypeName
