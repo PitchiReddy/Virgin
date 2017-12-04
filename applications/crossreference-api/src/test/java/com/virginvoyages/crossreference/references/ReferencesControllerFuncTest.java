@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
 
 import io.restassured.path.json.JsonPath;
 
@@ -25,6 +26,18 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	@Autowired
 	private TestDataHelper testDataHelper;
 
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
+		
 	@Test
 	public void givenValidReferenceAndAddReferenceShouldCreateReference() {
 
@@ -39,6 +52,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		JsonPath createdReferenceJson=given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/")
 
@@ -75,7 +89,9 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test invalid ReferenceTypeId Delete
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				delete("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
+				
 		then().
 				assertThat().
 				statusCode(404).
@@ -96,8 +112,9 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		//Test successfuly created
 		given().
-			contentType("application/json").
-			get("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
+			contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
+			.get("/xref-api/v1/references/" + createdReferenceJson.getString("referenceID")).
 		then().
 			assertThat().statusCode(200).
 			assertThat().body("referenceID", equalTo(createdReferenceJson.getString("referenceID")));
@@ -129,6 +146,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test invalid ReferenceTypeId Delete
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 		when().
 				delete("/xref-api/v1/references/"+" ").
 		then().
@@ -207,7 +225,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		//Test
 		given().
-				contentType("application/json").
+				contentType("application/json")
+				.header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
@@ -249,6 +268,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	public void givenEmptyReferenceIDInFindReferenceByIDShouldThrowBadRequestException() {
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" +" ").
 		then().
 				assertThat().statusCode(400).
@@ -261,6 +281,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	public void givenMaxReferenceIDInFindReferenceByIDShouldThrowMaximumRequestIDException() {
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" + testDataHelper.getInvalidReferenceID()).
 		then().
 				assertThat().statusCode(404).
@@ -275,9 +296,11 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("referenceID", "");
 		parameters.put("nativeSourceIDValue", "update");
-		given()
+		
+   		given()
 				.contentType("application/json")
 				.body(parameters)
+				.header("Authorization", "Bearer " + getToken())
 				.put("/xref-api/v1/references")
 
 		.then()
@@ -288,6 +311,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 	}
 
+	
+
 
 	@Test
 	public void givenValidReferenceFindReferencesMasterShouldReturnOneorMoreReferences() {
@@ -296,8 +321,11 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
 		given().contentType("application/json")
-				.get("/xref-api/v1/references/search/findByMaster?masterID="
-						+ createdReferenceJson.getString("masterID"))
+
+		.header("Authorization", "Bearer " + getToken())
+				.get("/xref-api/v1/references/search/findByMaster?masterID= "
+						+ createdReferenceJson.getString("masterID") + "&targetTypeID="
+						+ createdReferenceJson.getString("targetReferenceTypeID"))
 				.then().assertThat().statusCode(200).log().all();
 
 		//cleanup
@@ -321,6 +349,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByType")
 
@@ -350,6 +379,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByType")
 
@@ -374,6 +404,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
 
@@ -398,6 +429,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
 
@@ -425,6 +457,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 0)
 			.param("size", 2)
 			.get("/xref-api/v1/references/")
@@ -454,6 +487,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 200)
 			.param("size", 1)
 			.get("/xref-api/v1/references/")
@@ -476,6 +510,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 0)
 			.param("size", 0)
 			.get("/xref-api/v1/references/")
@@ -498,6 +533,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
 
@@ -517,6 +553,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.post("/xref-api/v1/references/search/findByType")
 
@@ -525,6 +562,23 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
 				.log()
 				.all();
+	}
+	
+	@Test
+	public void givenPageSizeIsMorethanMaxSizeFindReferencesShouldThrowCrossreferenceMaxPageSizeException() {
+		given()
+			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
+			.param("page", 0)
+			.param("size", 21)
+			.get("/xref-api/v1/references/")
+
+		.then()
+			.assertThat()
+			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+			.body("exception",equalTo("com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException"))
+			.log()
+			.all();
 
 	}
 

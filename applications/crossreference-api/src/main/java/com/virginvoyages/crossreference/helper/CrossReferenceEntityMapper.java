@@ -54,6 +54,7 @@ public class CrossReferenceEntityMapper {
 
 	public ReferenceData convertToReferenceDataEntity(Reference reference) {
 		return new ReferenceData()
+				.referenceID(reference.referenceID())
 				.nativeSourceIDValue(reference.nativeSourceIDValue())
 				.masterID(reference.masterID())
 				.referenceTypeData(new ReferenceTypeData()

@@ -115,3 +115,13 @@ tasks.withType(Test) {
  , "sailor_service_properties_path":"$rootDir/config/integration-api-config/src/main/resources/test/sailor-api.yml"]
  environment test_vars
     }
+ task functionalTestsLocal(type: Test){
+ def local_profile = ["spring.profiles.active":"local"]
+ environment local_profile
+	include '**/*FuncTest*'
+}   
+
+task testLocal(type: Test){
+ def local_profile = ["spring.profiles.active":"local"]
+ environment local_profile
+exclude '**/*IT*', '**/*FuncTest*', '**/*ClientTest*', '**/*Support*'}   
