@@ -20,14 +20,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.SailorFunctionalTestSupport;
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.sailor.helper.Oauth2TokenFeignClient;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 
 
 @RunWith(SpringRunner.class)
 public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
-
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@Autowired
 	private TestDataHelper testDataHelper;
 
@@ -40,7 +52,8 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		//Test
         given().
-        		contentType("application/json").
+        		contentType("application/json")
+        		.header("Authorization", "Bearer " + getToken()).
         		get("/sailor-api/v1/sailors/"+sailorId).
 	    then().
 	       		assertThat().statusCode(200).
@@ -68,6 +81,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		String sailorId = testDataHelper.getSailorIDWithPreferences();
 		given().
         		contentType("application/json").
+        		header("Authorization", "Bearer " + getToken()).
         		get("/sailor-api/v1/sailors/"+sailorId).
 	    then().
 	       		assertThat().statusCode(200).
@@ -83,8 +97,9 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		String invalidID = testDataHelper.getInvalidSailorID();
 
 		given().
-			contentType("application/json").
-			get("/sailor-api/v1/sailors/"+invalidID).
+			contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
+			.get("/sailor-api/v1/sailors/"+invalidID).
 
 	    then().
 			statusCode(404).
@@ -107,8 +122,9 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		String sailorId =
 		given().
-		   		contentType("application/json").
-		   		params(parameters).
+		   		contentType("application/json")
+		   		.header("Authorization", "Bearer " + getToken())
+		   		.params(parameters).
 		   		get("/sailor-api/v1/sailors/findOrCreate").
 
 		then().
@@ -120,6 +136,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		given().
    				contentType("application/json").
+   				header("Authorization", "Bearer " + getToken()).
    				delete("/sailor-api/v1/sailors/"+sailorId).
 
    		then().
@@ -133,8 +150,9 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		String invalidID = testDataHelper.getInvalidSailorID();
 
 		given().
-			contentType("application/json").
-			delete("/sailor-api/v1/sailors/"+invalidID).
+			contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
+			.delete("/sailor-api/v1/sailors/"+invalidID).
 
 	    then().
 			statusCode(404).
@@ -152,6 +170,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		//Test
         given().
         		contentType("application/json").
+        		header("Authorization", "Bearer " + getToken()).
         		body("{ \"id\" : \""+sailorId+"\"}").
         when().
         		delete("/sailor-api/v1/sailors/").
@@ -170,6 +189,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		//Test
         given().
         		contentType("application/json").
+        		header("Authorization", "Bearer " + getToken()).
         		body("{ \"id\" : \""+invalidID+"\"}").
         when().
         		delete("/sailor-api/v1/sailors/").
@@ -186,6 +206,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		//Test
         given().
         		contentType("application/json").
+        		header("Authorization", "Bearer " + getToken()).
         		body("{ \"firstName\" : \"firstname\"}").
         when().
         		delete("/sailor-api/v1/sailors/").
@@ -207,6 +228,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		ValidatableResponse response =
 		given().
  			contentType("application/json").
+ 			header("Authorization", "Bearer " + getToken()).
  			param("firstName", accountData.firstName()).
  			get("/sailor-api/v1/sailors/find").
  		then().
@@ -216,8 +238,9 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 
 		given().
-			contentType("application/json").
-			param("email", accountData.primaryEmail()).
+			contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
+			.param("email", accountData.primaryEmail()).
 			get("/sailor-api/v1/sailors/find").
 		then().
 		    assertThat().body("email", hasItems(accountData.primaryEmail()));
@@ -242,6 +265,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		ValidatableResponse response =
 		given().
  			contentType("application/json").
+ 			header("Authorization", "Bearer " + getToken()).
  			param("lastName", accountData.lastName()).
  			param("email",accountData.primaryEmail()).
  			param("mobileNumber",accountData.mobileNumber()).
@@ -264,6 +288,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		given().
    				contentType("application/json").
+   				header("Authorization", "Bearer " + getToken()).
    		   		get("/sailor-api/v1/sailors/find").
 
    		then().
@@ -292,6 +317,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		given().
    				contentType("application/json").
+   				header("Authorization", "Bearer " + getToken()).
    				params(parameters).
    				get("/sailor-api/v1/sailors/findOrCreate").
 
@@ -324,6 +350,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 		String sailorId =
 		given().
 		   		contentType("application/json").
+		   		header("Authorization", "Bearer " + getToken()).
 		   		params(parameters).
 		   		get("/sailor-api/v1/sailors/findOrCreate").
 
@@ -356,6 +383,7 @@ public class SailorControllerFuncTest extends SailorFunctionalTestSupport {
 
 		given().
 		   		contentType("application/json").
+		   		header("Authorization", "Bearer " + getToken()).
 		   		params(parameters).
 		   		get("/sailor-api/v1/sailors/findOrCreate").
 

@@ -13,7 +13,10 @@ import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.SailorFunctionalTestSupport;
+import com.virginvoyages.sailor.helper.Oauth2TokenFeignClient;
 import com.virginvoyages.sailor.helper.TestDataHelper;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 @ImportAutoConfiguration({ FeignAutoConfiguration.class })
@@ -22,12 +25,25 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 	@Autowired
 	private TestDataHelper testDataHelper;
 
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+	}
+	
 	@Test
 	public void givenValidSailorIdWithPreferencesFindSailorPreferencesShouldReturnPreferences() throws Exception {
 		
 		String sailorID = testDataHelper.getSailorIDWithPreferences();
 		
-		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
+		given()
+		.header("Authorization", "Bearer " + getToken())
+		.get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.preferences", not(hasSize(0)))
@@ -43,7 +59,9 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 		
         String sailorID = testDataHelper.getSailorIDWithoutPreferences();
 		
-		given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
+		given()
+		.header("Authorization", "Bearer " + getToken())
+		.get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.preferences",hasSize(0))
@@ -57,7 +75,9 @@ public class PreferenceControllerFuncTest extends SailorFunctionalTestSupport {
 		
         String sailorID = testDataHelper.getInvalidSailorID();
 		
-        given().get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
+        given()
+        .header("Authorization", "Bearer " + getToken())
+        .get("/sailor-api/v1/sailors/" + sailorID + "/preferences")
 	       .then()
 	       .assertThat().statusCode(200)
 	       .assertThat().body("_embedded.preferences",hasSize(0))

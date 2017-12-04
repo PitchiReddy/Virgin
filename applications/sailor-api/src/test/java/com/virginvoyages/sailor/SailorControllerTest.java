@@ -17,6 +17,8 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
+import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,11 +26,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.virginvoyages.assembly.SailorAssembly;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.Oauth2TokenFeignClient;
 import com.virginvoyages.sailor.model.Sailor;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SailorController.class)
-@ImportAutoConfiguration({ FeignAutoConfiguration.class })
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 public class SailorControllerTest {
 
 	@Autowired
@@ -40,6 +45,17 @@ public class SailorControllerTest {
 	@Autowired
 	private MockDataHelper mockDataHelper;
 
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@Test
 	public void givenValidSailorIdDeleteSailorByIdShouldDeleteSailor() throws Exception{
 
@@ -48,6 +64,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				delete("/sailors/"+sailorID)
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json"))
 				.andExpect(status().isOk());
 	}
@@ -61,6 +78,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				delete("/sailors/"+sailorID)
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
     }
@@ -76,6 +94,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				get("/sailors/"+mockSailor.id())
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("firstName",equalTo(mockSailor.firstName())))
@@ -94,6 +113,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				get("/sailors/"+mockSailor.id())
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("preferences",not(hasSize(0))));
@@ -109,6 +129,7 @@ public class SailorControllerTest {
 
 		mvc.perform(
 				get("/sailors/"+sailorID)
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json"))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 
@@ -119,6 +140,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				delete("/sailors/")
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json")
 				.content("{ \"id\" : \""+mockDataHelper.getSailorId()+"\"}"))
 		        .andExpect(status().isOk());
@@ -133,6 +155,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 				delete("/sailors/"+sailorID)
+				.header("Authorization", "Bearer " + getToken())
 				.contentType("application/json")
 				.content("{ \"id\" : \""+sailorID+"\"}"))
 		 		.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
@@ -144,6 +167,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 		 	delete("/sailors/")
+		 	.header("Authorization", "Bearer " + getToken())
 			.contentType("application/json")
 			.content("{ \"firstName\" : \"firstname\"}"))
 	 		.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
@@ -222,6 +246,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 			get("/sailors/find")
+			.header("Authorization", "Bearer " + getToken())
 			.contentType("application/json"))
 			.andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 	}
@@ -285,6 +310,7 @@ public class SailorControllerTest {
 		//Test
 		mvc.perform(
 			get("/sailors/findOrCreate")
+			.header("Authorization", "Bearer " + getToken())
 			.param("firstName", "firstname")
 			.param("email","email")
 			.param("lastName", "lastName")
