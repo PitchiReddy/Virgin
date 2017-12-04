@@ -35,13 +35,13 @@ public class TestDataHelper {
 	}
 
 	public Sailor createTestSailor(String firstName, String lastName, LocalDate dob) {
-		AccountData accountData = new AccountData();
-		accountData.firstName(firstName);
-		accountData.lastName(lastName);
-		accountData.dateofBirth(dob);
-		accountData.primaryEmail("sapi@test.com");
-		accountData.mobileNumber("1234567890");
-		return sailorAssembly.createSailor(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(firstName);
+		sailorData.lastName(lastName);
+		sailorData.dateofBirth(dob);
+		sailorData.primaryEmail("sapi@test.com");
+		sailorData.mobileNumber("1234567890");
+		return sailorAssembly.createSailor(sailorData);
 	}
 
 	public void deleteSailor(String sailorID) {

@@ -89,21 +89,21 @@ public class SailorAssemblyImplIT {
 		// creating three test users with same firstname
 		testDataHelper.createTestSailor(firstName, "One_LN");
 		testDataHelper.createTestSailor(firstName, "Two_LN");
-		AccountData accountData = new AccountData();
-		accountData.firstName(firstName);
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(firstName);
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 		assertThat(listOfSailors, hasSize(2));
 		for (Sailor sailor : listOfSailors) {
-			assertThat(sailor.firstName(), equalTo(accountData.firstName()));
+			assertThat(sailor.firstName(), equalTo(sailorData.firstName()));
 			testDataHelper.deleteSailor(sailor.id());
 		}
 	}
 
 	@Test
 	public void givenUserNotExistsWithFirstnameMatchingFindReturnsEmptyList() {
-		AccountData accountData = new AccountData();
-		accountData.firstName(testDataHelper.getInvalidSailorFirstName());
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(testDataHelper.getInvalidSailorFirstName());
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 		assertThat(listOfSailors, hasSize(0));
 	}
 
@@ -118,12 +118,12 @@ public class SailorAssemblyImplIT {
 		testDataHelper.createTestSailor(firstName, "MatchLN_3", dob);
 		testDataHelper.createTestSailor(firstName, "MatchLN_4", dob);
 
-		AccountData accountData = new AccountData();
-		accountData.dateofBirth(dob);
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.dateofBirth(dob);
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 		assertThat(listOfSailors, hasSize(4));
 		for (Sailor sailor : listOfSailors) {
-			assertThat(sailor.dateofBirth(), equalTo(accountData.dateofBirth()));
+			assertThat(sailor.dateofBirth(), equalTo(sailorData.dateofBirth()));
 			testDataHelper.deleteSailor(sailor.id());
 		}
 
@@ -138,14 +138,14 @@ public class SailorAssemblyImplIT {
 		testDataHelper.createTestSailor(firstName, lastName, new LocalDate("2017-08-20"));
 		testDataHelper.createTestSailor(firstName, lastName, new LocalDate("2017-08-21"));
 
-		AccountData accountData = new AccountData();
-		accountData.firstName(firstName);
-		accountData.lastName(lastName);
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(firstName);
+		sailorData.lastName(lastName);
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 		assertThat(listOfSailors, hasSize(2));
 		for (Sailor sailor : listOfSailors) {
-			assertThat(sailor.firstName(), equalTo(accountData.firstName()));
-			assertThat(sailor.lastName(), equalTo(accountData.lastName()));
+			assertThat(sailor.firstName(), equalTo(sailorData.firstName()));
+			assertThat(sailor.lastName(), equalTo(sailorData.lastName()));
 			testDataHelper.deleteSailor(sailor.id());
 		}
 
@@ -153,10 +153,10 @@ public class SailorAssemblyImplIT {
 
 	@Test
 	public void givenUserNotExistsWithFirstnameAndLastNameMatchingFindReturnsEmptyList() {
-		AccountData accountData = new AccountData();
-		accountData.firstName(testDataHelper.getInvalidSailorFirstName());
-		accountData.lastName(testDataHelper.getInvalidSailorLastName());
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(testDataHelper.getInvalidSailorFirstName());
+		sailorData.lastName(testDataHelper.getInvalidSailorLastName());
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 		assertThat(listOfSailors, hasSize(0));
 	}
 
@@ -165,23 +165,23 @@ public class SailorAssemblyImplIT {
 
 		Sailor testSailor = testDataHelper.createTestSailor();
 
-		AccountData accountData = new AccountData();
-		accountData.firstName(testSailor.firstName());
-		accountData.lastName(testSailor.lastName());
-		accountData.dateofBirth(testSailor.dateofBirth());
-		accountData.primaryEmail(testSailor.primaryEmail());
-		accountData.mobileNumber(testSailor.mobileNumber());
+		Sailor sailorData = new Sailor();
+		sailorData.firstName(testSailor.firstName());
+		sailorData.lastName(testSailor.lastName());
+		sailorData.dateofBirth(testSailor.dateofBirth());
+		sailorData.primaryEmail(testSailor.primaryEmail());
+		sailorData.mobileNumber(testSailor.mobileNumber());
 
-		List<Sailor> listOfSailors = sailorAssembly.findSailors(accountData);
+		List<Sailor> listOfSailors = sailorAssembly.findSailors(sailorData);
 
 		assertThat(listOfSailors, hasSize(1));
 
 		for (Sailor sailor : listOfSailors) {
-			assertThat(sailor.firstName(), equalTo(accountData.firstName()));
-			assertThat(sailor.lastName(), equalTo(accountData.lastName()));
-			assertThat(sailor.dateofBirth(), equalTo(accountData.dateofBirth()));
-			assertThat(sailor.primaryEmail(), equalTo(accountData.primaryEmail()));
-			assertThat(sailor.mobileNumber(), equalTo(accountData.mobileNumber()));
+			assertThat(sailor.firstName(), equalTo(sailorData.firstName()));
+			assertThat(sailor.lastName(), equalTo(sailorData.lastName()));
+			assertThat(sailor.dateofBirth(), equalTo(sailorData.dateofBirth()));
+			assertThat(sailor.primaryEmail(), equalTo(sailorData.primaryEmail()));
+			assertThat(sailor.mobileNumber(), equalTo(sailorData.mobileNumber()));
 			testDataHelper.deleteSailor(sailor.id());
 		}
 	}
@@ -189,15 +189,15 @@ public class SailorAssemblyImplIT {
 	@Test
 	public void createSailorShouldCreateSailorAndReturnSailor() {
 
-		AccountData accountData = testDataHelper.generateAccountDataToCreate();
+		Sailor testSailor = testDataHelper.createTestSailor();
 
-		Sailor sailor = sailorAssembly.createSailor(accountData);
+		Sailor sailor = sailorAssembly.createSailor(testSailor);
 
-		assertThat(accountData.firstName(), equalTo(sailor.firstName()));
-		assertThat(accountData.lastName(), equalTo(sailor.lastName()));
-		assertThat(accountData.dateofBirth(), equalTo(sailor.dateofBirth()));
-		assertThat(accountData.primaryEmail(), equalTo(sailor.primaryEmail()));
-		assertThat(accountData.mobileNumber(), equalTo(sailor.mobileNumber()));
+		assertThat(testSailor.firstName(), equalTo(sailor.firstName()));
+		assertThat(testSailor.lastName(), equalTo(sailor.lastName()));
+		assertThat(testSailor.dateofBirth(), equalTo(sailor.dateofBirth()));
+		assertThat(testSailor.primaryEmail(), equalTo(sailor.primaryEmail()));
+		assertThat(testSailor.mobileNumber(), equalTo(sailor.mobileNumber()));
 		assertThat(testDataHelper.getRecordTypeIdForSailor(), equalTo(sailor.recordTypeId()));
 
 		testDataHelper.deleteSailor(sailor.id());
