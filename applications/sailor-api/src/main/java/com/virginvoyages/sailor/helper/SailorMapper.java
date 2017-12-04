@@ -55,6 +55,8 @@ public class SailorMapper {
 		sailor.subTribe(accountData.subTribe());
 		sailor.stateOfTheSailor(accountData.stateOfTheSailor());
 		sailor.vIP(accountData.vIP());
+		sailor.averageNTRAmount(accountData.averageLifetimeSpendPerNight());
+		sailor.averageOBSAmount(accountData.averageOnboardSpendPerNight());
 		sailor.mobileNumber(accountData.mobileNumber());
 		sailor.primaryEmail(accountData.primaryEmail());
 		sailor.salutation(accountData.salutation());

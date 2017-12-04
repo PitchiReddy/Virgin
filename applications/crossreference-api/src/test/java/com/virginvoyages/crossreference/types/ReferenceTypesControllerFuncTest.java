@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
 
 import io.restassured.path.json.JsonPath;
 
@@ -25,7 +26,17 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 	@Autowired
 	private TestDataHelper testDataHelper;
 
-	//Add
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 
 	@Test
 	public void givenAllRequiredDataInRequestBodyAddReferenceTypeShouldAddReferenceType() {
@@ -259,6 +270,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/types")
 
@@ -305,6 +317,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 		JsonPath updatedReferenceTypeJson = given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/types")
 
@@ -347,6 +360,7 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/types")
 
@@ -429,6 +443,23 @@ public class ReferenceTypesControllerFuncTest extends CrossReferenceFunctionalTe
 			.body("exception", equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
 			.log()
 			.all();
+	}
+	
+	@Test
+	public void givenPageSizeIsMorethanMaxSizeFindTypesShouldThrowCrossreferenceMaxPageSizeException() {
+		given()
+			.contentType("application/json")
+			.param("page", 0)
+			.param("size", 21)
+			.get("/xref-api/v1/types/")
+
+		.then()
+			.assertThat()
+			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+			.body("exception",equalTo("com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException"))
+			.log()
+			.all();
+
 	}
 
 }

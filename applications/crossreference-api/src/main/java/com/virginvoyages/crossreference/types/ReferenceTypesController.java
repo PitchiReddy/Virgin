@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.virginvoyages.crossreference.assembly.ReferenceTypesAssembly;
+import com.virginvoyages.crossreference.constants.CrossReferenceConstants;
+import com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException;
 import com.virginvoyages.crossreference.model.ReferenceSource;
 import com.virginvoyages.crossreference.model.ReferenceType;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.MandatoryFieldsMissingException;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -183,6 +183,10 @@ public class ReferenceTypesController {
 
 		if(size == 0) {
 			throw new MandatoryFieldsMissingException();
+		}
+		
+		if (size > CrossReferenceConstants.MAX_PAGE_SIZE) {
+			throw new CrossreferenceMaxPageSizeException();
 		}
 		return new ResponseEntity<List<ReferenceType>>(referenceTypesAssembly.findTypes(pageable), HttpStatus.OK);
 	}

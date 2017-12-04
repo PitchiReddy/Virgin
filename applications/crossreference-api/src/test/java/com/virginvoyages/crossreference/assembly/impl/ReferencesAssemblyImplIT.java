@@ -20,6 +20,7 @@ import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.crossreference.model.ReferenceType;
+import com.virginvoyages.exception.DataAccessException;
 import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 
@@ -110,15 +111,14 @@ public class ReferencesAssemblyImplIT {
 	}
 
 
-	/*@Test
+	@Test
 	public void givenValidReferenceUpdateReferenceShouldUpdateReferenceMasterID() {
-		ReferenceSource referenceSource = testDataHelper.getReferenceSourceBusinessEntity();
-		ReferenceSource createdReferenceSource = referenceSourcesAssembly.addReferenceSource(referenceSource);
+		
+		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
 
-		ReferenceType referenceType = testDataHelper.getReferenceTypeBusinessEntity(createdReferenceSource);
-		ReferenceType createdReferenceType = referenceTypesAssembly.addReferenceType(referenceType);
+	    Reference reference = testDataHelper.getReferenceBusinessEntity(referenceType);
 
-	    Reference reference = testDataHelper.getReferenceBusinessEntity(createdReferenceType);
+	    
 		Reference createdReference = referencesAssembly.addReference(reference);
 
 		assertThat(reference.referenceTypeID(), equalTo(createdReference.referenceTypeID()));
@@ -131,27 +131,8 @@ public class ReferencesAssemblyImplIT {
 
 		//cleanup
 		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
-		referenceTypesAssembly.deleteReferenceTypeByID(createdReferenceType.referenceTypeID());
-		referenceSourcesAssembly.deleteReferenceSourceByID(createdReferenceSource.referenceSourceID());
-	}*/
-
-	/*@Test(expected = DataAccessException.class)
-	public void givenValidReferenceDataAndDeleteReferenceShouldDataAccessExceptionIfTypeIDisPresentInReferenceType() {
-
-		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
-
-	    Reference createdReference = referencesAssembly.addReference(
-				testDataHelper.getReferenceBusinessEntity(referenceType));
-
-		String referenceTypeToUpdate = testDataHelper.getRandomAlphabeticString();
-		createdReference.masterID(referenceTypeToUpdate);
-		Reference updatedReference = referencesAssembly.updateReference(createdReference);
-		assertThat(updatedReference.masterID(), equalTo(referenceTypeToUpdate));
-
-		//cleanup
-		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+		
 	}
-	*/
 
 	@Test
 	public void givenValidReferenceIDGetReferenceByIDShouldReturnReference() throws Exception {
@@ -189,5 +170,35 @@ public class ReferencesAssemblyImplIT {
 		referencesAssembly.deleteReferenceByID(createdReference1.referenceID());
 		referencesAssembly.deleteReferenceByID(createdReference2.referenceID());
 		referencesAssembly.deleteReferenceByID(createdReference3.referenceID());
+	}
+	
+	@Test
+	public void givenReferencesExistFindReferencesTypeAndTargetTypeShouldReturnListOfReferences() {
+		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
+		Reference createdReference = referencesAssembly.addReference(
+				testDataHelper.getReferenceBusinessEntity(referenceType));
+		assertThat(referencesAssembly.findReferencesTypeAndTargetType(createdReference), hasSize(equalTo(1)));
+		
+		//cleanup
+		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+		
+	}
+	
+	@Test
+	public void givenReferencesExistFindReferenceByNativeSourceIDValueAndTypeShoudReturnReference() {
+		ReferenceType referenceType = referenceTypesAssembly.findTypes(new PageRequest(1, 1)).get(0);
+		Reference createdReference = referencesAssembly.addReference(
+				testDataHelper.getReferenceBusinessEntity(referenceType));
+		
+		Reference findNativeSourceIDValueAndType = referencesAssembly
+				.findReferenceByNativeSourceIDValueAndType(createdReference);
+		assertThat(findNativeSourceIDValueAndType.referenceTypeID(), equalTo(createdReference.referenceTypeID()));
+		assertThat(findNativeSourceIDValueAndType.nativeSourceIDValue(),
+				equalTo(createdReference.nativeSourceIDValue()));
+		assertThat(findNativeSourceIDValueAndType.masterID(), equalTo(createdReference.masterID()));
+
+		//cleanup
+		referencesAssembly.deleteReferenceByID(createdReference.referenceID());
+
 	}
 }

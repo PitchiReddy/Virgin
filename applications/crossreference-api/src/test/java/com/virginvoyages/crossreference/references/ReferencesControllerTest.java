@@ -1,9 +1,9 @@
 package com.virginvoyages.crossreference.references;
 
-import static org.mockito.Matchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,8 +19,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
+import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
@@ -40,9 +44,13 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferencesController.class)
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 public class ReferencesControllerTest {
 
 	@Autowired
@@ -50,7 +58,18 @@ public class ReferencesControllerTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@MockBean(name="referencesAssembly")
 	ReferencesAssembly referencesAssembly;
 
@@ -66,6 +85,7 @@ public class ReferencesControllerTest {
 	@InjectMocks
 	private ReferencesController referencesController;
 
+	
 	@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() throws Exception {
 
@@ -106,10 +126,12 @@ public class ReferencesControllerTest {
 			 //Test
 		     mvc.perform(
 					post("/references")
+					.header("Authorization", "Bearer " + getToken())
 					.contentType("application/json")
 			 		.content("{ \"masterID\" : \""+reference.masterID()+
 					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
 					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"targetReferenceTypeID\" : \""+reference.referenceTypeID()+
 					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
 			 		.andExpect(status().isOk());
     }
@@ -167,9 +189,11 @@ public class ReferencesControllerTest {
 
 		mvc.perform(
 				put("/references")
+				.header("Authorization", "Bearer " + getToken())
 				.param("masterID", "Updated masterID")
 				.param("nativeSourceIDValue", "nativeSourceIDValue")
 				.contentType("application/json"))
+			   
 				.andExpect(status().isBadRequest());
 
 	}
@@ -260,6 +284,29 @@ public class ReferencesControllerTest {
 	}
 
 	@Test
+	public void givenPageSizeIsMorethanMaxSizeFindReferencesShouldSetMethodNotAllowedInResponse() throws Exception {
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+
+		given(referencesAssembly.findReferences(new PageRequest(0, 10))).willReturn(referenceList);
+
+		ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
+		mvc = MockMvcBuilders.standaloneSetup(referencesController)
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setViewResolvers(new ViewResolver() {
+					public View resolveViewName(String viewName, Locale locale) throws Exception {
+						return new MappingJackson2JsonView();
+					}
+				}).build();
+
+		//Test
+		mvc.perform(
+				 get("/references/?page=1&size=21")
+				.contentType("application/json"))
+			    .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+
+	}
+	@Test
 	public void givenAssemblyMethodReturnsListOfReferencesFindReferencesShouldSetReferencesInResponse() throws Exception {
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
@@ -313,24 +360,59 @@ public class ReferencesControllerTest {
 		List<Reference> referenceList = new ArrayList<Reference>();
 		referenceList.add(testDataHelper.getReferenceBusinessEntity());
 
-		given(referencesAssembly.findReferenceByMasterId(any(String.class), any(String.class), any(PageRequest.class))).willReturn(referenceList);
-		 ReflectionTestUtils.setField(referencesController, "referencesAssembly", referencesAssembly);
-		mvc=MockMvcBuilders.standaloneSetup(referencesController)
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-	            .setViewResolvers(new ViewResolver() {
-	                @Override
-	                public View resolveViewName(String viewName, Locale locale) throws Exception {
-	                    return new MappingJackson2JsonView();
-	                }
-	            }).build();
+		given(referencesAssembly.findReferenceByMasterId(any(String.class), any(String.class))).willReturn(referenceList);
+		
 		mvc.perform(
 				 get("/references/search/findByMaster")
 				.param("masterID", "12345")
-				.param("targetTypeID", "12345")
-				.param("page", "0")
-				.param("size", "10"))
-		
+				.param("targetTypeID", "12345"))
+					
 		.andExpect(status().is(HttpStatus.OK.value()));
 			    
 	}
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeShouldReturnReference() throws Exception {
+
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
+		given(referencesAssembly.addReference(reference)).willReturn(reference);
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferencesTypeAndTargetType(any(Reference.class))).willReturn(referenceList);
+
+		//Test
+		 mvc.perform(
+					post("/references/search/findByType")
+					.contentType("application/json")
+			 		.content("{ \"masterID\" : \""+reference.masterID()+
+					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
+					  		"\",\"referenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"targetReferenceTypeID\" : \""+reference.referenceTypeID()+
+					  		"\",\"referenceID\" : \""+reference.referenceID()+"\"}"))
+			 		.andExpect(status().isOk());
+    }
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeAndTargetTypeShouldReturnReference() throws Exception {
+		Reference reference = testDataHelper.getReferenceBusinessEntity();
+		given(referencesAssembly.addReference(reference)).willReturn(reference);
+		List<Reference> referenceList = new ArrayList<Reference>();
+		referenceList.add(testDataHelper.getReferenceBusinessEntity());
+		
+		given(referencesAssembly.findReferencesTypeAndTargetType(any(Reference.class))).willReturn(referenceList);
+
+		 //Test
+		mvc.perform(
+				post("/references/search/findByTypeAndTargetType")
+				.contentType("application/json")
+				.content("{ \"masterID\" : \"" + reference.masterID() + 
+						"\",\"nativeSourceIDValue\" : \""+ reference.nativeSourceIDValue() + 
+						"\",\"referenceTypeID\" : \"" + reference.referenceTypeID() + 
+						"\",\"targetReferenceTypeID\" : \"" + reference.referenceTypeID() +
+						"\",\"referenceID\" : \"" + reference.referenceID() + "\"}"))
+				.andExpect(status().isOk());
+
+	}
+ 
 }
