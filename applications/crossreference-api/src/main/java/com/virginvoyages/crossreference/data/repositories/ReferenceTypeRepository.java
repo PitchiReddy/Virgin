@@ -13,6 +13,11 @@ import com.virginvoyages.crossreference.data.entities.ReferenceTypeData;
 @Repository
 public interface ReferenceTypeRepository extends PagingAndSortingRepository<ReferenceTypeData, Serializable> {
 
+	/**
+	 * Name based query to get ReferenceType based on name
+	 * @param referenceTypeName
+	 * @return
+	 */
 	ReferenceTypeData findByReferenceType(String referenceTypeName);
 	
 }

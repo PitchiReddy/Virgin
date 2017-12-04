@@ -58,7 +58,7 @@ public class SeawareTestController {
 			otaReadRQ.setVersion(new BigDecimal(1));
 			//otaReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
 			otaReadRQ.setReadRequests(readRequests);
-	    	return seawareClient.findseawareData(otaReadRQ);
+	    	return seawareClient.findSeawareData(otaReadRQ);
 	    }
 	    
 }

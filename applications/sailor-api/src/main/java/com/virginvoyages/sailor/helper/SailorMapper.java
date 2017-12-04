@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.crm.data.QueryResultsData;
 import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.seaware.data.ClientData;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,10 +28,10 @@ public class SailorMapper {
 	* @Param accountData - values from accountData object are mapped to sailor object 
 	* @return Sailor - Sailor object that contains data from accountData.
 	*/
-	public static Sailor mapAccoundDataToSailor(AccountData accountData) {
+	public static Sailor mapAccountDataToSailor(AccountData accountData) {
 		Sailor sailor = new Sailor();
 
-		log.debug("Mapping Account CRM to Sailor Mapper");
+		log.debug("Mapping CRM Account Data to Sailor");
 		sailor.id(accountData.id());
 		sailor.firstName(accountData.firstName());
 		sailor.middleName(accountData.middleName());
@@ -63,16 +64,28 @@ public class SailorMapper {
 	
 		return sailor;
 	}
-	
 	/**
 	* Map sailor to AccountData
-	* @Param Sailor - Sailor object that contains data from requestparams/body.
-	* @return accountData - values from sailro object are mapped to account data object
+	* @Param Sailor - Sailor object that contains data from request params/body.
+	* @return accountData - values from sailor object are mapped to account data object
 	* 
 	*/
 	public static AccountData mapSailorToAccountData(Sailor sailor) {
 		//TODO PSS-3187
 		return new AccountData();
+	}	
+	
+	
+	public static Sailor mapClientDataToSailor(ClientData clientData) {
+		log.debug("Mapping Seaware Client Data to Sailor");
+		Sailor sailor = new Sailor();
+		sailor.seawareClientID(clientData.id());
+		sailor.firstName(clientData.firstName());
+		sailor.middleName(clientData.middleName());
+		sailor.lastName(clientData.lastName());
+		sailor.prefix(clientData.salutation());
+		sailor.suffix(clientData.suffix());
+		return null;
 	}
 		
 	/**

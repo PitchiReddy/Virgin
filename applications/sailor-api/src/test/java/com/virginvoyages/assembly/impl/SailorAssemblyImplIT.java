@@ -22,6 +22,7 @@ import com.virginvoyages.crm.data.AccountData;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.TestDataHelper;
 import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.seaware.data.ClientData;
 
 /**
  * @author rpraveen 
@@ -34,6 +35,9 @@ public class SailorAssemblyImplIT {
 
 	@Autowired
 	private SailorAssembly sailorAssembly;
+	
+	@Autowired
+	private SailorAssemblyImpl sailorAssemblyImpl;
 
 	@Autowired
 	private TestDataHelper testDataHelper;
@@ -257,15 +261,17 @@ public class SailorAssemblyImplIT {
 		
 	} */
 	
-	/* Tests for getSeawareClientData
+	//Tests for getSeawareClientData
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnClientData() {
-		
+		String clientID = testDataHelper.getValidSeawareClientID();
+		ClientData clientData = sailorAssemblyImpl.getSeawareClientData(clientID);
+		assertThat(clientID, equalTo(clientData.id()));
 	}
 	
 	@Test
 	public void givenValidSeawareClientIDGetSeawareClientDataShouldReturnNull() {
-		
-	}*/
+		assertThat(sailorAssemblyImpl.getSeawareClientData("dummy"), nullValue());
+	}
 
 }

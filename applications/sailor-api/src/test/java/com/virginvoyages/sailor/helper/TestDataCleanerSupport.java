@@ -42,7 +42,7 @@ public class TestDataCleanerSupport {
 			QueryResultsData<AccountData> queryResultsData = queryClient.findAccounts(selectQuery);
 			
 			List<String> listOfSailorIDs = sailorMapper.retrieveListOfSailorIDs(queryResultsData);
-			//System.out.println("Request to return list of sailor's with ID {}"+listOfSailorIDs);
+			System.out.println("Request to return list of sailor's with ID {}"+listOfSailorIDs);
 			
 			for (String sailorID : listOfSailorIDs) {
 				accountClient.deleteAccount(sailorID);

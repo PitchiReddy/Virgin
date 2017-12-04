@@ -112,45 +112,52 @@ public class TestDataHelper {
 		referenceData.referenceTypeID("8acdcfb55f9185fa015f918615c20004");
 		System.out.println("ReferenceData    " + referenceData);
 		return referenceData;
-}
+	}
 
-	public OTAReadRQ genarateSeawaredataToCreate() {
+	public OTAReadRQ generateSeawareProfileReadRequest(String profileID) {
 		
-		final OTAReadRQ otaReadRQ = new OTAReadRQ();
-		POSType posType = new POSType();
-	    SourceType sourceType = new SourceType();
-	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
-	    OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
+		OTAReadRQ otaProfileReadRequest =  createBaseSeawareReadRequest();
+		
+		OTAReadRQ.ReadRequests.ProfileReadRequest profileReadRequest =  new OTAReadRQ.ReadRequests.ProfileReadRequest();
 	    OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID uniqueID = new OTAReadRQ.ReadRequests.ProfileReadRequest.UniqueID();
-		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
-		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
-		CompanyNameType companyNameType = new CompanyNameType();
-		companyNameType.setValue("OPENTRAVEL");
-	    uniqueID.setID("405");
+		
+		uniqueID.setID(profileID);
 		uniqueID.setIDContext("SEAWARE");
 		uniqueID.setType("1");
 		profileReadRequest.getUniqueID().add(uniqueID);
-		readRequests.getProfileReadRequest().add(profileReadRequest);
+		otaProfileReadRequest.getReadRequests().getProfileReadRequest().add(profileReadRequest);
+		
+		return otaProfileReadRequest;
+	}
 	
+	public OTAReadRQ createBaseSeawareReadRequest() {
+
+		CompanyNameType companyNameType = new CompanyNameType();
+		companyNameType.setValue("OPENTRAVEL");
+		
+		SourceType.BookingChannel bookingChannel = new SourceType.BookingChannel();
+		bookingChannel.setCompanyName(companyNameType);
+		bookingChannel.setType("1");
+		
+		SourceType.RequestorID  requestorID = new SourceType.RequestorID();
 		requestorID.setID("5");
 		requestorID.setType("5");
 		requestorID.setIDContext("SEAWARE");
 		
-		bookingChannel.setCompanyName(companyNameType);
-		bookingChannel.setType("1");
-		
-		
-		
+		SourceType sourceType = new SourceType();
+		sourceType.setBookingChannel(bookingChannel);
 		sourceType.setRequestorID(requestorID);
 		
-		sourceType.setBookingChannel(bookingChannel);
-		posType.getSource().add(sourceType);
+		POSType posType = new POSType();
+	 	posType.getSource().add(sourceType);
+	    
+	 	OTAReadRQ otaReadRQ = new OTAReadRQ();
 		otaReadRQ.setPOS(posType);
-		otaReadRQ.setReadRequests(readRequests);
-		otaReadRQ.setPrimaryLangID("ENG");
+		
+	    OTAReadRQ.ReadRequests readRequests = new OTAReadRQ.ReadRequests();
+	    otaReadRQ.setReadRequests(readRequests);
+	    otaReadRQ.setPrimaryLangID("ENG");
 		otaReadRQ.setVersion(new BigDecimal(1));
-		//otaReadRQ.setXmlns("http://www.opentravel.org/OTA/2003/05");
-		otaReadRQ.setReadRequests(readRequests);
 		return otaReadRQ;
 	}
 
@@ -165,6 +172,10 @@ public class TestDataHelper {
 		referenceTypeData.referenceSourceID("8acdf5ff5fb95536015fb9554e9d0000");
 		System.out.println("referenceTypeData    " + referenceTypeData);
 		return referenceTypeData;
+	}
+	
+	public String getValidSeawareClientID() {
+		return "405";
 	}
 
 }

@@ -15,5 +15,10 @@ import com.virginvoyages.crossreference.data.entities.ReferenceSourceData;
 @Repository
 public interface ReferenceSourceRepository extends PagingAndSortingRepository<ReferenceSourceData, Serializable> {
 
+	/**
+	 * Name based query to get ReferenceType based on name
+	 * @param referenceTypeName
+	 * @return
+	 */
 	ReferenceSourceData findByReferenceSource(String referenceSourceName);
 } 

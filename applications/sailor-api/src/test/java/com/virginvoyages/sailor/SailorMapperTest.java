@@ -2,15 +2,23 @@ package com.virginvoyages.sailor;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.crm.data.QueryResultsData;
+import com.virginvoyages.sailor.helper.MockDataHelper;
 import com.virginvoyages.sailor.helper.SailorMapper;
 import com.virginvoyages.sailor.model.Sailor;
+import com.virginvoyages.seaware.data.ClientData;
 
 /**
  * Test class for SailorMapper
@@ -21,8 +29,14 @@ import com.virginvoyages.sailor.model.Sailor;
 @SpringBootTest
 public class SailorMapperTest {
 	
+	@Autowired
+	private MockDataHelper mockDataHelper;
+	
+	@Autowired
+	private SailorMapper sailorMapper;
+	
 	@Test
-	public void mapAccoundDataToSailorShouldMapAccountDataToSailorAttributes() {
+	public void mapAccountDataToSailorShouldMapAccountDataToSailorAttributes() {
 		String firstName = "John";
 		String lastName = "Mike";
 		String salutation = "Mr.";
@@ -31,18 +45,50 @@ public class SailorMapperTest {
 		accountData.firstName(firstName);
 		accountData.lastName(lastName);
 		accountData.salutation(salutation);
-		Sailor sailor = SailorMapper.mapAccoundDataToSailor(accountData);
+		Sailor sailor = SailorMapper.mapAccountDataToSailor(accountData);
 		
 		assertThat(sailor.firstName(), is(firstName));
 		assertThat(sailor.lastName(), is(lastName));
 		assertThat(sailor.salutation(), is(salutation));
 	}
 	
-	//TODO implement test
-	/*@Test
-	public void retrieveListOfSailorIDsShouldReturnAllSailorIDsInQueryResultsData() {
-		assert(true);
-	}*/
+	@Test
+	public void mapClientDataToSailorShouldMapClientDataToSailorAttributes() {
+		String firstName = "John";
+		String lastName = "Mike";
+		String salutation = "Mr.";
+
+		ClientData clientData = new ClientData();
+		clientData.firstName(firstName);
+		clientData.lastName(lastName);
+		clientData.salutation(salutation);
+		Sailor sailor = SailorMapper.mapClientDataToSailor(clientData);
+		
+		assertThat(sailor.firstName(), is(firstName));
+		assertThat(sailor.lastName(), is(lastName));
+		assertThat(sailor.salutation(), is(salutation));
+	}
+	
+	@Test
+	public void givenQueryResultsHasRecordsRetrieveListOfSailorIDsShouldReturnAllSailorIDsInQueryResults() {
+		List<AccountData> accountList = new ArrayList<AccountData>();
+		ArrayList<String> sailorIdsList = new ArrayList<String>();
+		sailorIdsList.add("S1");
+		sailorIdsList.add("S2");
+		sailorIdsList.add("S3");
+		accountList.add(mockDataHelper.generateAccountDataToCreate().id(sailorIdsList.get(0)));
+		accountList.add(mockDataHelper.generateAccountDataToCreate().id(sailorIdsList.get(1)));
+		accountList.add(mockDataHelper.generateAccountDataToCreate().id(sailorIdsList.get(2)));
+		QueryResultsData<AccountData> queryResults = new QueryResultsData<AccountData>().records(accountList);
+		List<String> sailorIds = sailorMapper.retrieveListOfSailorIDs(queryResults);
+		assertThat(sailorIds,hasSize(3));
+		assertThat(sailorIds.containsAll(sailorIdsList), is(true));
+	}
+	
+	@Test
+	public void givenQueryResultsHasNoRecordsRetrieveListOfSailorIDsShouldReturnEmptyList() {
+		assertThat(sailorMapper.retrieveListOfSailorIDs(new QueryResultsData<AccountData>()),hasSize(0));
+	}
 	
 	
 }
