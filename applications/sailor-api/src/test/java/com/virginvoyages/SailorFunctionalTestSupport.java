@@ -6,12 +6,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.virginvoyages.crm.data.AccountData;
+import com.virginvoyages.sailor.helper.Oauth2TokenFeignClient;
+
+import io.restassured.path.json.JsonPath;
+
 import com.virginvoyages.FunctionalTestSupport;
 
 public class SailorFunctionalTestSupport extends FunctionalTestSupport {
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
 	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@Test
     public void contextLoads() {
     }
@@ -28,6 +43,7 @@ public class SailorFunctionalTestSupport extends FunctionalTestSupport {
 		String sailorId = 
 				given()
 					.contentType("application/json")
+					.header("Authorization", "Bearer " + getToken())
 					.params(parameters)
 					.get("/sailor-api/v1/sailors/findOrCreate").
 				then()
@@ -42,6 +58,7 @@ public class SailorFunctionalTestSupport extends FunctionalTestSupport {
 		// Cleanup
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.delete("/sailor-api/v1/sailors/" + sailorId).
 
 		then()

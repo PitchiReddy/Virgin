@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.virginvoyages.CrossReferenceFunctionalTestSupport;
 import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.ReferenceSource;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
 
 import io.restassured.path.json.JsonPath;
 
@@ -25,7 +26,17 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	//Add Reference
 	@Test
 	public void givenValidReferenceSourceInRequestBodyAddReferenceSourceShouldCreateReferenceSourceAndSetInResponse() {
@@ -235,6 +246,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/sources")
 
@@ -245,7 +257,8 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		//Test that updated resource name is reflecting
 		given().
-				contentType("application/json").
+				contentType("application/json")
+				.header("Authorization", "Bearer " + getToken()).
 		        get("/xref-api/v1/sources/" + createdReferenceJson.getString("referenceSourceID")).
         then().
 				assertThat().statusCode(200).
@@ -270,6 +283,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/sources")
 
@@ -294,6 +308,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/sources")
 
@@ -319,7 +334,9 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
+				
 				.put("/xref-api/v1/sources")
 
 		.then()
@@ -345,6 +362,7 @@ public class ReferenceSourcesControllerFuncTest extends CrossReferenceFunctional
 
 		given()
 				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
 				.body(parameters)
 				.put("/xref-api/v1/sources")
 

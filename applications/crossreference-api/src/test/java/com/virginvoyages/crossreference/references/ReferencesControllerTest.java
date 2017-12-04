@@ -19,8 +19,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
+import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
@@ -40,9 +44,13 @@ import com.virginvoyages.crossreference.helper.TestDataHelper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
+import com.virginvoyages.helper.Oauth2TokenFeignClient;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=ReferencesController.class)
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 public class ReferencesControllerTest {
 
 	@Autowired
@@ -50,7 +58,18 @@ public class ReferencesControllerTest {
 
 	@Autowired
 	private TestDataHelper testDataHelper;
-
+	
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@MockBean(name="referencesAssembly")
 	ReferencesAssembly referencesAssembly;
 
@@ -66,6 +85,7 @@ public class ReferencesControllerTest {
 	@InjectMocks
 	private ReferencesController referencesController;
 
+	
 	@Test
 	public void givenValidReferenceIDGetReferenceByIdShouldReturnReference() throws Exception {
 
@@ -106,6 +126,7 @@ public class ReferencesControllerTest {
 			 //Test
 		     mvc.perform(
 					post("/references")
+					.header("Authorization", "Bearer " + getToken())
 					.contentType("application/json")
 			 		.content("{ \"masterID\" : \""+reference.masterID()+
 					  		 "\",\"nativeSourceIDValue\" : \""+reference.nativeSourceIDValue()+
@@ -167,9 +188,11 @@ public class ReferencesControllerTest {
 
 		mvc.perform(
 				put("/references")
+				.header("Authorization", "Bearer " + getToken())
 				.param("masterID", "Updated masterID")
 				.param("nativeSourceIDValue", "nativeSourceIDValue")
 				.contentType("application/json"))
+			   
 				.andExpect(status().isBadRequest());
 
 	}
