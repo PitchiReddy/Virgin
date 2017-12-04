@@ -37,7 +37,7 @@ public class SailorMapper {
 		sailor.lastName(accountData.lastName());
 		sailor.prefix(accountData.salutation());
 		sailor.suffix(accountData.suffix());
-		sailor.nickname(accountData.preferredName());
+		sailor.nickName(accountData.preferredName());
 		sailor.gender(accountData.gender());
 		sailor.occupation(accountData.occupation());
 		sailor.citizenshipCountry(accountData.citizenshipCountry());

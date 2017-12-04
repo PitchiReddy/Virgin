@@ -43,8 +43,8 @@ public class Sailor implements Identifiable<String> {
     @JsonProperty("preferredName")
     private String preferredName;
 
-    @JsonProperty("nickname")
-    private String nickname;
+    @JsonProperty("nickName")
+    private String nickName;
 
     @JsonProperty("gender")
     private String gender;

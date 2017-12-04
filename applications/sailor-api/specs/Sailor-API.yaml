@@ -389,7 +389,7 @@ definitions:
         type: string
       preferredName:
         type: string
-      nickname:
+      nickName:
         type: string
       gender:
         type: string
