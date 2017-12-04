@@ -14,16 +14,21 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
+import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import com.virginvoyages.assembly.BookingAssembly;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.sailor.helper.MockDataHelper;
+import com.virginvoyages.sailor.helper.Oauth2TokenFeignClient;
+
+import io.restassured.path.json.JsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookingController.class)
-@ImportAutoConfiguration({ FeignAutoConfiguration.class })
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 public class BookingControllerTest {
 
 	@Autowired
@@ -35,7 +40,17 @@ public class BookingControllerTest {
 	@Autowired
 	private MockDataHelper mockDataHelper;
 
-
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
     @Test
     public void givenSailorWithSailorIDHasSailorBookingsFindSailorBookingsShouldReturnSailorBookings() throws Exception {
         // Mock Setup
@@ -45,7 +60,9 @@ public class BookingControllerTest {
 				.willReturn(mockDataHelper.createSailingHistory(true));
 
 		// Test
-		mvc.perform(get("/sailors/" + sailorID + "/sailingHistory").contentType("application/json"))
+		mvc.perform(get("/sailors/" + sailorID + "/sailingHistory")
+				.header("Authorization", "Bearer " + getToken())
+				.contentType("application/json"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$._embedded.bookings", hasSize(greaterThan(0))))
 				.andExpect(jsonPath("$._embedded.bookings[*].status", hasItems("BOOK")));
@@ -61,7 +78,10 @@ public class BookingControllerTest {
 				.willReturn(mockDataHelper.createSailingHistory(false));
 
 		// Test
-		mvc.perform(get("/sailors/" + sailorID + "/sailingHistory").contentType("application/json"))
+		mvc.perform(
+				get("/sailors/" + sailorID + "/sailingHistory")
+				.header("Authorization", "Bearer " + getToken())
+				.contentType("application/json"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$._embedded.bookings", hasSize(0)));
 
@@ -76,7 +96,10 @@ public class BookingControllerTest {
 		.willThrow(new DataNotFoundException());
 
     	// Test
-    	mvc.perform(get("/sailors/"+inValidSailorID +"/sailingHistory").contentType("application/json"))
+    	mvc.perform(
+    			get("/sailors/"+inValidSailorID +"/sailingHistory")
+    			.header("Authorization", "Bearer " + getToken())
+    			.contentType("application/json"))
 			.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
 
