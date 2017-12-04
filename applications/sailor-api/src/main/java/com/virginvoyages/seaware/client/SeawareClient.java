@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.virginvoyages.seaware.data.OTAProfileReadRS;
 import com.virginvoyages.seaware.data.OTAReadRQ;
 
-@FeignClient(value = "seawareClient", url = "http://10.3.0.14:8280", configuration = SeawareClientConfiguration.class)
+@FeignClient(value = "seawareClient", url = "${seaware.service.url}", configuration = SeawareClientConfiguration.class)
 public interface SeawareClient {
 
 	@RequestMapping(value = "/ota/rest/OTA_ReadRQ", consumes = MediaType.APPLICATION_XML_VALUE, method = RequestMethod.POST)
-	OTAProfileReadRS findseawareData(OTAReadRQ otaReadRQ);
+	OTAProfileReadRS findSeawareData(OTAReadRQ otaReadRQ);
 }

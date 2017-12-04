@@ -1,5 +1,8 @@
 package com.virginvoyages.seaware.client;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,9 @@ public class SeawareClientTest {
 	
 	@Test
     public void findSeawareData() throws Exception {
-    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findseawareData(testDataHelper.genarateSeawaredataToCreate());
-    	System.out.println("Data is ::::" + otaProfileReadRS.getProfiles());
+    	OTAProfileReadRS otaProfileReadRS  = seawareClient.findSeawareData(
+    			testDataHelper.generateSeawareProfileReadRequest(
+    					testDataHelper.getValidSeawareClientID()));
+    	assertThat(otaProfileReadRS, notNullValue());
     }
 }

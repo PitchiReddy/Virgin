@@ -194,12 +194,23 @@ public class SailorAssemblyImplTest {
 		
 	}
 	
-	/*@Test
-	public void givenSeawareDAOGetSeawareClientDataClientIDReturnsClientDataGetSeawareClientDataShouldReturnClientData() {
-		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData());
-		assertThat(sailorAssembly.getSeawareClientData(any(String.class)),notNullValue());
-	}*/
+	@Test
+	public void givenSeawareDAOGetSeawareClientDataReturnsNullGetSeawareClientDataShouldReturnNull() {
+		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(null);
+		assertThat(sailorAssembly.getSeawareClientData("123"),nullValue());
+		
+	}
 	
+	@Test
+	public void givenSeawareDAOGetSeawareClientDataReturnsNotNullGetSeawareClientDataShouldReturnClientData() {
+		when(seawareDAO.getSeawareClientData(any(String.class))).thenReturn(new ClientData().id("cid1").firstName("cFirstName1"));
+		ClientData clientData = sailorAssembly.getSeawareClientData("123");
+		assertThat(clientData,notNullValue());
+		assertThat(clientData.id(), equalTo("cid1"));
+		assertThat(clientData.firstName(), equalTo("cFirstName1"));
+		
+	}
+		
 	//test for getReferenceTypeIDForName
 	@Test
 	public void givenCrossReferenceClientReturnsReferenceTypeGetReferenceTypeIDForNameShouldReturnReferenceTypeID() {

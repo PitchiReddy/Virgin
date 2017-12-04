@@ -1,5 +1,13 @@
 package com.virginvoyages.seaware.client;
 
+/*import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.util.concurrent.TimeUnit;
+import feign.Client;
+import feign.okhttp.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+*/
+
 import org.springframework.context.annotation.Bean;
 
 import feign.Contract;
