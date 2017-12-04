@@ -155,6 +155,16 @@ public class MockDataHelper {
 		return accountData;
 	}
 	
+	public Sailor generateSailorObjectToCreate() {
+		Sailor sailorData = new Sailor();
+		sailorData.firstName("Sapi_TestFN");
+		sailorData.lastName("Sapi_TestLN");
+		sailorData.primaryEmail("sapi@test.com");
+		sailorData.dateofBirth(LocalDate.now());
+		sailorData.mobileNumber("1234567890");
+		return sailorData;
+	}
+	
 	public String getSailorId() {
 		return "mockid";
 		//return mockSailorAPI.sailorsFindGet(null, null, null, "Sailor", null).get(0).id();

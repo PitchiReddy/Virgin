@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * SailorMapper class to map account data to sailor
+ * 
  * @author snarthu
  *
  */
@@ -24,10 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SailorMapper {
 
 	/**
-	* Map account data to sailor 
-	* @Param accountData - values from accountData object are mapped to sailor object 
-	* @return Sailor - Sailor object that contains data from accountData.
-	*/
+	 * Map account data to sailor
+	 * 
+	 * @Param accountData - values from accountData object are mapped to sailor
+	 *        object
+	 * @return Sailor - Sailor object that contains data from accountData.
+	 */
 	public Sailor mapAccountDataToSailor(AccountData accountData) {
 		Sailor sailor = new Sailor();
 
@@ -61,23 +64,58 @@ public class SailorMapper {
 		sailor.primaryEmail(accountData.primaryEmail());
 		sailor.salutation(accountData.salutation());
 		sailor.recordTypeId(accountData.recordTypeId());
-	
+
 		return sailor;
 	}
+
 	/**
-	* Map sailor to AccountData
-	* @Param Sailor - Sailor object that contains data from request params/body.
-	* @return accountData - values from sailor object are mapped to account data object
-	* 
-	*/
+	 * Map sailor to AccountData
+	 * 
+	 * @Param Sailor - Sailor object that contains data from request params/body.
+	 * @return accountData - values from sailor object are mapped to account data
+	 *         object
+	 * 
+	 */
 	public static AccountData mapSailorToAccountData(Sailor sailor) {
-		//TODO PSS-3187
-		return new AccountData();
-	}	
-	
-	
+		AccountData accountData = new AccountData();
+
+		log.debug("Mapping Sailor CRM to AccountData Mapper");
+		accountData.id(accountData.id());
+		accountData.firstName(sailor.firstName());
+		accountData.middleName(sailor.middleName());
+		accountData.lastName(sailor.lastName());
+		accountData.salutation(sailor.prefix());
+		accountData.suffix(sailor.suffix());
+		accountData.preferredName(sailor.nickName());
+		accountData.gender(sailor.gender());
+		accountData.occupation(sailor.occupation());
+		accountData.citizenshipCountry(sailor.citizenshipCountry());
+		accountData.preferredLanguage(sailor.preferredLanguage());
+		accountData.dateofBirth(sailor.dateofBirth());
+		accountData.birthCountry(sailor.birthCountry());
+		accountData.ageGroup(sailor.ageGroup());
+		accountData.retirementDate(sailor.retirementDate());
+		accountData.martialStatus(sailor.martialStatus());
+		accountData.numberofChildren(sailor.numberofChildren());
+		accountData.totalLifetimeCruiseNights(sailor.totalLifetimeCruiseNights());
+		accountData.tribe(sailor.tribe());
+		accountData.status(sailor.status());
+		accountData.subTribe(sailor.subTribe());
+		accountData.stateOfTheSailor(sailor.stateOfTheSailor());
+		accountData.vIP(sailor.vIP());
+		accountData.averageLifetimeSpendPerNight(sailor.averageNTRAmount());
+		accountData.averageOnboardSpendPerNight(sailor.averageOBSAmount());
+		accountData.mobileNumber(sailor.mobileNumber());
+		accountData.primaryEmail(sailor.primaryEmail());
+		accountData.salutation(sailor.salutation());
+		accountData.recordTypeId(sailor.recordTypeId());
+
+		return accountData;
+	}
+
 	/**
 	 * Map Seaware Client Data to Sailor
+	 * 
 	 * @param clientData
 	 * @return
 	 */
@@ -92,10 +130,12 @@ public class SailorMapper {
 		sailor.suffix(clientData.suffix());
 		return sailor;
 	}
-		
+
 	/**
 	 * Retrieves a list of sailorIDs from list of accountData objects
-	 * @param queryResultsData- contains the list of accountData objects.
+	 * 
+	 * @param queryResultsData-
+	 *            contains the list of accountData objects.
 	 * @return listSailorIds
 	 */
 	public List<String> retrieveListOfSailorIDs(QueryResultsData<AccountData> queryResultsData) {

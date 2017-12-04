@@ -90,5 +90,24 @@ public class SailorMapperTest {
 		assertThat(sailorMapper.retrieveListOfSailorIDs(new QueryResultsData<AccountData>()),hasSize(0));
 	}
 	
+	@Test
+	public void mapSailorToAccountDataShouldMapSailorToAccountDataAttributes() {
+		String firstName = "siva";
+		String lastName = "Narthu";
+		String salutation = "Mr.";
+		String email = "shanku91.java@gmail.com";
+		
+		Sailor sailor = new Sailor();
+		sailor.firstName(firstName);
+		sailor.lastName(lastName);
+		sailor.salutation(salutation);
+		sailor.primaryEmail(email);
+		
+		AccountData accountdata = SailorMapper.mapSailorToAccountData(sailor);
+		assertThat(accountdata.firstName(), is(firstName));
+		assertThat(accountdata.lastName(), is(lastName));
+		assertThat(accountdata.salutation(), is(salutation));
+		assertThat(accountdata.primaryEmail(), is(email));
+	}
 	
 }

@@ -73,8 +73,10 @@ public class SailorController {
             @ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
             @ApiParam(value = "Sailor object that needs to be added to the SORs") @RequestBody Sailor body) {
     	
-    	//PSS-3187
-    	//Mandatory check for firstname, lastname, dob and email from body
+    	if (StringUtils.isEmpty(body.firstName()) || StringUtils.isEmpty(body.lastName()) || StringUtils.isEmpty(body.primaryEmail())
+				|| body.dateofBirth()== null) {
+			throw new MandatoryFieldsMissingException();
+		}
         return new ResponseEntity<Resource<Sailor>>(SailorResourceAssembler.createSailorResource(
         		sailorAssembly.createSailor(body), entityLinks), HttpStatus.OK);
     }
