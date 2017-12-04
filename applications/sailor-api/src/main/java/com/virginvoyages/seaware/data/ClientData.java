@@ -8,8 +8,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.joda.time.LocalDate;
 
 import com.virginvoyages.booking.model.Booking;
-import com.virginvoyages.sailor.helper.SailorMapper;
-import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.sailor.model.SailorLinks;
 
 import lombok.Data;
@@ -48,9 +46,5 @@ public class ClientData {
     private String primaryEmail;
     private String mobileNumber;
     private SailorLinks links = null;
-    
-    public Sailor convertToSailorObject() {
-    	return SailorMapper.mapClientDataToSailor(this);
-    }
-
+   
 }

@@ -143,7 +143,7 @@ public class SailorAssemblyImpl implements SailorAssembly {
 	}
 	
 	private Sailor convertAccountDataToSailor(AccountData accountData, PreferencesEmbedded preferencesEmbedded, BookingsEmbedded bookingsEmbedded) {
-		return accountData.convertToSailorObject()
+		return sailorMapper.mapAccountDataToSailor(accountData)
 				.associatePreferences(preferencesEmbedded)
 				.associateSailingHistory(bookingsEmbedded);
 	}
