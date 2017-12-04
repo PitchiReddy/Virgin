@@ -407,5 +407,21 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			.all();
 	}
 
+	@Test
+	public void givenPageSizeIsMorethanMaxSizeFindReferencesShouldThrowCrossreferenceMaxPageSizeException() {
+		given()
+			.contentType("application/json")
+			.param("page", 0)
+			.param("size", 21)
+			.get("/xref-api/v1/references/")
+
+		.then()
+			.assertThat()
+			.statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+			.body("exception",equalTo("com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException"))
+			.log()
+			.all();
+
+	}
 
 }
