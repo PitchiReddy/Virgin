@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -179,13 +178,14 @@ public class ReferencesAssemblyImplTest {
 	}
 	
 	@Test
-	public void given_Repository_Fetch_ReferenceData_With_TargetType_And_MasterId() {
-		Page<ReferenceData> pagedReferenceData= testDataHelper.getPagedReferenceDataEntity();
-		when(referenceRepository.findByMasterID(any(String.class), any(Pageable.class) ))
-		.thenReturn(pagedReferenceData);
-		List<Reference> references = referencesAssemblyImpl.findReferenceByMasterId(pagedReferenceData.getContent().get(0).masterID(), pagedReferenceData.getContent().get(0).referenceTypeData().referenceTypeID(), new PageRequest(0, 10));
-		assertThat(references.get(0).masterID() , equalTo(pagedReferenceData.getContent().get(0).masterID()));
-		assertThat(references.get(0).referenceTypeID() , equalTo(pagedReferenceData.getContent().get(0).referenceTypeData().referenceTypeID()));
+	public void givenRepositoryFetchReferenceDataWithTargetTypeAndMasterId() {
+		final List<ReferenceData> referenceDataList = new ArrayList<>();
+		referenceDataList.add(testDataHelper.getReferenceDataEntity());
+		when(referenceRepository.findByMasterID(any(String.class))).thenReturn(referenceDataList);
+		when(referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(referenceDataList);
+		List<Reference> references = referencesAssemblyImpl.findReferenceByMasterId(referenceDataList.get(0).masterID(), referenceDataList.get(0).referenceTypeData().referenceTypeID());
+		assertThat(references.get(0).masterID() , equalTo(referenceDataList.get(0).masterID()));
+		assertThat(references.get(0).referenceTypeID() , equalTo(referenceDataList.get(0).referenceTypeData().referenceTypeID()));
 
 	}
 	
@@ -229,6 +229,38 @@ public class ReferencesAssemblyImplTest {
 		referencesAssemblyImpl.findReferences(new PageRequest(0, 5));
 	}
 	
+	@Test
+	public void givenRepositoryReturnsFetchReferencesTypeAndTargetTypeShouldReturnReferenceList() {
+		final List<ReferenceData> referenceDataList = new ArrayList<>();
+		referenceDataList.add(testDataHelper.getReferenceDataEntity());
+		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(referenceDataList);
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
+		List<Reference> referencesList = referencesAssemblyImpl.findReferencesTypeAndTargetType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
+		assertThat(referencesList.get(0).referenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+		assertThat(referencesList.get(0).targetReferenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+	}
 	
+	@Test
+	public void givenRepositoryReturnsFetchReferenceByNativeSourceIDValueAndTypeShouldReturnReferences() {
+		ReferenceData mockReferenceData = testDataHelper.getReferenceDataEntity();
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenReturn(mockReferenceData);
+		Reference references = referencesAssemblyImpl.findReferenceByNativeSourceIDValueAndType(entityMapper.convertToReferenceBusinessEntity(mockReferenceData));
+		assertThat(references.referenceID(), equalTo(mockReferenceData.referenceID()));
+		assertThat(references.referenceTypeID(), equalTo(mockReferenceData.referenceTypeData().referenceTypeID()));
+		assertThat(references.nativeSourceIDValue(), equalTo(mockReferenceData.nativeSourceIDValue()));
+		assertThat(references.referenceID(), is(notNullValue()));
+	}
 
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferencesTypeAndTargetTypeShouldThrowUnknownException() {
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferencesTypeAndTargetType(new Reference());
+	}
+
+	@Test(expected = UnknownException.class)
+	public void givenRepositoryThrowsAnyExceptionFindReferenceByNativeSourceIDValueAndTypeShouldThrowUnknownException() {
+		when(referenceRepository.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(any(String.class),any(String.class))).thenThrow(new RuntimeException());
+		referencesAssemblyImpl.findReferenceByNativeSourceIDValueAndType(new Reference());
+	}
 }

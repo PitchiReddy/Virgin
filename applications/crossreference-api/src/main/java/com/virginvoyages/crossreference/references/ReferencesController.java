@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.virginvoyages.crossreference.api.MockCrossReferenceAPI;
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.constants.CrossReferenceConstants;
 import com.virginvoyages.crossreference.exception.CrossreferenceMaxPageSizeException;
@@ -30,7 +28,6 @@ import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.MandatoryFieldsMissingException;
 import com.virginvoyages.model.Page;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,10 +52,6 @@ public class ReferencesController {
 
 	@Autowired
 	private ReferencesAssembly referencesAssembly;
-
-
-	@Autowired
-	private MockCrossReferenceAPI mockAPI;
 
 
 	/**
@@ -201,15 +194,27 @@ public class ReferencesController {
 			@ApiParam(value = "The master ID to search with.", required = true) @RequestParam(value = "masterID", required = true) String masterID,
 			@ApiParam(value = "Correlation ID across the enterprise application components.") @RequestHeader(value = "X-Correlation-ID", required = false) String xCorrelationID,
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
-			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID,
-		    final Pageable pageable ) {
+			@ApiParam(value = "The optional target type identifier.  Supplying this narrows the results to return only the matching target type.") @RequestParam(value = "targetTypeID", required = false) String targetTypeID
+		    ) {
 
-		List<Reference> listOfReference = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID,pageable);
-		log.debug("Returns one or more references ====>{}",listOfReference);
-		References references = new References().embedded(new ReferencesEmbedded().references(listOfReference));
+		List<Reference> referenceList = referencesAssembly.findReferenceByMasterId(masterID,targetTypeID);
+		if (null == referenceList || referenceList.isEmpty())  {
+			throw new DataNotFoundException();
+		}
+		log.debug("Returns one or more references ====>{}",referenceList);
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
 		return new ResponseEntity<References>(references,HttpStatus.OK);
 	}
 
+	/**
+	 * Gets one or more references
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @param  reference            
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -219,13 +224,28 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by source.") @RequestBody Reference reference ) {
 
-		//TODO mandatory check for nativesourceidval and referencetypeid
-		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		List<Reference> referenceList = mockAPI.findReferencesByType(reference.nativeSourceIDValue(), reference.referenceTypeID(), reference.targetReferenceTypeID());
+		log.debug("Search params ===> " + reference.masterID() + "  " + reference.nativeSourceIDValue() + "  "
+				+ reference.referenceTypeID() + " " + reference.targetReferenceTypeID());
+		if (StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID())) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
+		if (null == referenceList || referenceList.isEmpty()) {
+			throw new DataNotFoundException();
+		}
 		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
-		return new ResponseEntity<References>(references,HttpStatus.OK);
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 
+	/**
+	 * Gets one or more references
+	 * @param xCorrelationID
+	 *            - Correlation ID across the enterprise application components.
+	 * @param xVVClientID
+	 *            - Application identifier of client.
+	 * @param  reference            
+	 * @return References
+	 */
 	@ApiOperation(value = "", notes = "Returns one or more references", response = Reference.class, responseContainer = "List", tags = {
 			"Reference", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful response", response = Reference.class) })
@@ -235,10 +255,18 @@ public class ReferencesController {
 			@ApiParam(value = "Application identifier of client.") @RequestHeader(value = "X-VV-Client-ID", required = false) String xVVClientID,
 			@ApiParam(value = "Parameters to find reference by type.") @RequestBody Reference reference) {
 
-		//TODO mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
-		//List<Reference> referenceData =mockAPI.findReferencesSourceAndTargetSource(reference);
 		log.debug("Search params ===> "+reference.masterID()+"  "+reference.nativeSourceIDValue()+"  "+reference.referenceTypeID()+" "+reference.targetReferenceTypeID());
-		return new ResponseEntity<References>(HttpStatus.OK);
+		// Mandatory check for nativesourceidval and referencetypeid and targetReferenceTypeID
+		if (StringUtils.isBlank(reference.nativeSourceIDValue()) || StringUtils.isBlank(reference.referenceTypeID())
+				|| StringUtils.isBlank(reference.targetReferenceTypeID())) {
+			throw new MandatoryFieldsMissingException();
+		}
+		List<Reference> referenceList = referencesAssembly.findReferencesTypeAndTargetType(reference);
+		if (null == referenceList || referenceList.isEmpty()) {
+			throw new DataNotFoundException();
+		}
+		References references = new References().embedded(new ReferencesEmbedded().references(referenceList));
+		return new ResponseEntity<References>(references, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "", notes = "Merge references.  SOR specific logic of deleting the duplicate record is callers responsibility.", response = Reference.class, responseContainer = "List", tags = {

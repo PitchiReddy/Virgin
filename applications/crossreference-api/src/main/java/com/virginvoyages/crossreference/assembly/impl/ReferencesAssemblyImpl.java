@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,11 +15,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.virginvoyages.crossreference.assembly.ReferencesAssembly;
 import com.virginvoyages.crossreference.data.entities.ReferenceData;
 import com.virginvoyages.crossreference.data.repositories.ReferenceRepository;
-import com.virginvoyages.crossreference.data.repositories.ReferenceTypeRepository;
 import com.virginvoyages.crossreference.helper.CrossReferenceEntityMapper;
 import com.virginvoyages.crossreference.model.Reference;
 import com.virginvoyages.exception.DataAccessException;
@@ -28,7 +25,6 @@ import com.virginvoyages.exception.DataInsertionException;
 import com.virginvoyages.exception.DataNotFoundException;
 import com.virginvoyages.exception.DataUpdationException;
 import com.virginvoyages.exception.UnknownException;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,10 +42,6 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	@Autowired
 	private CrossReferenceEntityMapper entityMapper;
 	
-	@Autowired
-	private ReferenceTypeRepository  referenceTypeRepository;
-
-
 	/**
 	 * Create reference based on reference.
 	 * @param reference
@@ -143,23 +135,27 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 	 *            - input masterId.
 	 * @param targetTypeID
 	 *            - input targetTypeID.
-	 * @param pageable
-	 *            - input pageable.
 	 * @return List<Reference>
 	 */
 	@Override
-	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID, Pageable pageable) {
-		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> "+masterId);
-		Page<ReferenceData> referenceDataPage = null;
-		if (!referenceTypeRepository.exists(targetTypeID)) {
-			referenceDataPage = referenceRepository.findByMasterID(masterId, pageable);
+	public List<Reference> findReferenceByMasterId(String masterId, String targetTypeID) {
+		log.debug("Entering findReferenceByMasterId method in ReferencesAssemblyImpl for masterId ==> " + masterId);
+		List<ReferenceData> referenceDataList = null;
+		try {
+			if (StringUtils.isEmpty(targetTypeID)) {
+				referenceDataList = referenceRepository.findByMasterID(masterId);
 
-		} else {
-			referenceDataPage = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
-					targetTypeID, pageable);
+			} else {
+				referenceDataList = referenceRepository.findByMasterIDAndReferenceTypeDataReferenceTypeID(masterId,
+						targetTypeID);
+			}
+			return Optional.ofNullable(referenceDataList).orElseGet(Collections::emptyList).stream()
+					.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData))
+					.collect(Collectors.toList());
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferenceByMasterId ", ex);
+			throw new UnknownException();
 		}
-		return Optional.ofNullable(referenceDataPage.getContent()).orElseGet(Collections::emptyList).stream()
-				.map(referenceData -> entityMapper.convertToReferenceBusinessEntity(referenceData)).collect(Collectors.toList());
 	}
 
 	/**
@@ -185,17 +181,46 @@ public class ReferencesAssemblyImpl implements ReferencesAssembly {
 			throw new UnknownException();
 		}
 	}
-
-	@Override
-	public List<Reference> findReferencesByType(Reference reference) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	/**
+	 * Find one or more references
+	 * @param reference
+	 *            - input reference.
+	 * @return List<Reference>
+	 */
 	@Override
 	public List<Reference> findReferencesTypeAndTargetType(Reference reference) {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("Entering findReferencesTypeAndTargetType method in ReferencesAssemblyImpl");
+		try {
+			Reference referenceForNativeSourceIdValue = findReferenceByNativeSourceIDValueAndType(reference);
+			return null == referenceForNativeSourceIdValue ? null
+					: Optional.ofNullable(findReferenceByMasterId(referenceForNativeSourceIdValue.masterID(),
+							reference.targetReferenceTypeID())).orElseGet(Collections::emptyList);
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferencesTypeAndTargetType ", ex);
+			throw new UnknownException();
+		}
+	}
+	
+	/**
+	 * Find one or more references
+	 * @param reference
+	 *            - input reference.
+	 * @return Reference
+	 */
+	@Override
+	public Reference findReferenceByNativeSourceIDValueAndType(Reference reference) {
+		log.debug("Entering findReferenceByNativeSourceIDValueAndType method in ReferencesAssemblyImpl");
+		try {
+			ReferenceData retrieveNativeSourceIDValueAndType = referenceRepository
+					.findByNativeSourceIDValueAndReferenceTypeDataReferenceTypeID(reference.nativeSourceIDValue(),
+							reference.referenceTypeID());
+			return null == retrieveNativeSourceIDValueAndType ? null
+					: entityMapper.convertToReferenceBusinessEntity(retrieveNativeSourceIDValueAndType);
+		} catch (Exception ex) {
+			log.error("Exception encountered in findReferenceByNativeSourceIDValueAndType ", ex);
+			throw new UnknownException();
+		}
 	}
 
 }

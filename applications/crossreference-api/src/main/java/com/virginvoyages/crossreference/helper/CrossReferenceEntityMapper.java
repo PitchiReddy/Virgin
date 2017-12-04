@@ -47,6 +47,7 @@ public class CrossReferenceEntityMapper {
 		return new Reference()
 				.referenceID(String.valueOf(reference.referenceID()))
 				.nativeSourceIDValue(String.valueOf(reference.nativeSourceIDValue()))
+				.targetReferenceTypeID(String.valueOf(reference.referenceTypeData().referenceTypeID()))
 				.masterID(String.valueOf(reference.masterID()))
 				.referenceTypeID(String.valueOf(reference.referenceTypeData().referenceTypeID()));
 	}

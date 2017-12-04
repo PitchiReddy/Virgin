@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +37,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
     	return accessToken;
     	
 	}
-	
-	
+		
 	@Test
 	public void givenValidReferenceAndAddReferenceShouldCreateReference() {
 
@@ -92,7 +89,9 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test invalid ReferenceTypeId Delete
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				delete("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
+				
 		then().
 				assertThat().
 				statusCode(404).
@@ -147,6 +146,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//Test invalid ReferenceTypeId Delete
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 		when().
 				delete("/xref-api/v1/references/"+" ").
 		then().
@@ -225,7 +225,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		//Test
 		given().
-				contentType("application/json").
+				contentType("application/json")
+				.header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" + testDataHelper.getRandomAlphanumericString()).
 		then().
 				assertThat().statusCode(404).
@@ -267,6 +268,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	public void givenEmptyReferenceIDInFindReferenceByIDShouldThrowBadRequestException() {
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" +" ").
 		then().
 				assertThat().statusCode(400).
@@ -279,6 +281,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 	public void givenMaxReferenceIDInFindReferenceByIDShouldThrowMaximumRequestIDException() {
 		given().
 				contentType("application/json").
+				header("Authorization", "Bearer " + getToken()).
 				get("/xref-api/v1/references/" + testDataHelper.getInvalidReferenceID()).
 		then().
 				assertThat().statusCode(404).
@@ -317,8 +320,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		JsonPath referenceTypeJson = createTestReferenceType();
 
 		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
-
 		given().contentType("application/json")
+
 		.header("Authorization", "Bearer " + getToken())
 				.get("/xref-api/v1/references/search/findByMaster?masterID= "
 						+ createdReferenceJson.getString("masterID") + "&targetTypeID="
@@ -328,6 +331,116 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 		//cleanup
 		deleteTestReference(createdReferenceJson.getString("referenceID"));
 		deleteTestReferenceType(createdReferenceJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+
+	}
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeShouldReturnOneorMoreReferences() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
+		parameters.put("masterID", testDataHelper.getRandomAlphanumericString());
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all();
+			
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
+		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
+
+	}
+	
+	@Test
+	public void givenInValidReferenceFindReferencesTypeShouldThrowDataNotFoundExceptionException() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", testDataHelper.getInvalidReferenceID());
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat().statusCode(404)
+				.assertThat().body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException"))
+				.log().all();
+
+	}
+	
+	@Test
+	public void givenInValidReferenceFindReferencesTypeAndTargetTypeShouldThrowDataNotFoundExceptionException() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", testDataHelper.getInvalidReferenceID());
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat().statusCode(404)
+				.assertThat().body("exception", equalTo("com.virginvoyages.exception.DataNotFoundException"))
+				.log().all();
+
+	}
+	
+	@Test
+	public void givenValidReferenceFindReferencesTypeAndTargetTypeShouldReturnOneorMoreReferences() {
+		JsonPath referenceTypeJson = createTestReferenceType();
+
+		JsonPath createdReferenceJson = createTestReference(referenceTypeJson);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", referenceTypeJson.getString("referenceTypeID"));
+		parameters.put("masterID", createdReferenceJson.getString("masterID"));
+		parameters.put("nativeSourceIDValue", createdReferenceJson.getString("nativeSourceIDValue"));
+		parameters.put("targetReferenceTypeID", createdReferenceJson.getString("referenceTypeID"));
+
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat()
+				.statusCode(200)
+				.log()
+				.all();
+			
+		deleteTestReference(createdReferenceJson.getString("referenceID"));
+		deleteTestReferenceType(referenceTypeJson.getString("referenceTypeID"));
 		deleteTestReferenceSource(referenceTypeJson.getString("referenceSourceID"));
 
 	}
@@ -344,6 +457,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 0)
 			.param("size", 2)
 			.get("/xref-api/v1/references/")
@@ -373,7 +487,8 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
-			.param("page", 100)
+			.header("Authorization", "Bearer " + getToken())
+			.param("page", 200)
 			.param("size", 1)
 			.get("/xref-api/v1/references/")
 	   .then()
@@ -395,6 +510,7 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 0)
 			.param("size", 0)
 			.get("/xref-api/v1/references/")
@@ -406,11 +522,53 @@ public class ReferencesControllerFuncTest extends CrossReferenceFunctionalTestSu
 			.log()
 			.all();
 	}
+	
+	@Test  
+	public void givenEmptyReferenceInFindReferencesTypeAndTargetTypeShouldThrowMandatoryFieldsMissingException() {
 
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", "");
+		parameters.put("nativeSourceIDValue", "");
+		parameters.put("targetReferenceTypeID", "");
+
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByTypeAndTargetType")
+
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+
+	}
+	
+	@Test  
+	public void givenEmptyReferenceInFindReferencesTypeShouldThrowMandatoryFieldsMissingException() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("referenceTypeID", "");
+		parameters.put("nativeSourceIDValue", "");
+	
+		given()
+				.contentType("application/json")
+				.header("Authorization", "Bearer " + getToken())
+				.body(parameters)
+				.post("/xref-api/v1/references/search/findByType")
+
+		.then()
+				.assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+				.body("exception",equalTo("com.virginvoyages.exception.MandatoryFieldsMissingException"))
+				.log()
+				.all();
+	}
+	
 	@Test
 	public void givenPageSizeIsMorethanMaxSizeFindReferencesShouldThrowCrossreferenceMaxPageSizeException() {
 		given()
 			.contentType("application/json")
+			.header("Authorization", "Bearer " + getToken())
 			.param("page", 0)
 			.param("size", 21)
 			.get("/xref-api/v1/references/")
