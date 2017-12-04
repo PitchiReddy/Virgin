@@ -28,7 +28,7 @@ public class SailorMapper {
 	* @Param accountData - values from accountData object are mapped to sailor object 
 	* @return Sailor - Sailor object that contains data from accountData.
 	*/
-	public static Sailor mapAccountDataToSailor(AccountData accountData) {
+	public Sailor mapAccountDataToSailor(AccountData accountData) {
 		Sailor sailor = new Sailor();
 
 		log.debug("Mapping CRM Account Data to Sailor");
@@ -65,7 +65,12 @@ public class SailorMapper {
 		return sailor;
 	}
 	
-	public static Sailor mapClientDataToSailor(ClientData clientData) {
+	/**
+	 * Map Seaware Client Data to Sailor
+	 * @param clientData
+	 * @return
+	 */
+	public Sailor mapClientDataToSailor(ClientData clientData) {
 		log.debug("Mapping Seaware Client Data to Sailor");
 		Sailor sailor = new Sailor();
 		sailor.seawareClientID(clientData.id());
@@ -74,7 +79,7 @@ public class SailorMapper {
 		sailor.lastName(clientData.lastName());
 		sailor.prefix(clientData.salutation());
 		sailor.suffix(clientData.suffix());
-		return null;
+		return sailor;
 	}
 		
 	/**

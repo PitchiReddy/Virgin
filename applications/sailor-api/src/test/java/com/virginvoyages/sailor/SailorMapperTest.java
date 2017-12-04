@@ -45,7 +45,7 @@ public class SailorMapperTest {
 		accountData.firstName(firstName);
 		accountData.lastName(lastName);
 		accountData.salutation(salutation);
-		Sailor sailor = SailorMapper.mapAccountDataToSailor(accountData);
+		Sailor sailor = sailorMapper.mapAccountDataToSailor(accountData);
 		
 		assertThat(sailor.firstName(), is(firstName));
 		assertThat(sailor.lastName(), is(lastName));
@@ -62,7 +62,7 @@ public class SailorMapperTest {
 		clientData.firstName(firstName);
 		clientData.lastName(lastName);
 		clientData.salutation(salutation);
-		Sailor sailor = SailorMapper.mapClientDataToSailor(clientData);
+		Sailor sailor = sailorMapper.mapClientDataToSailor(clientData);
 		
 		assertThat(sailor.firstName(), is(firstName));
 		assertThat(sailor.lastName(), is(lastName));

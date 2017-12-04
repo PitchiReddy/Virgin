@@ -8,8 +8,6 @@ import org.joda.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.virginvoyages.booking.model.Booking;
 import com.virginvoyages.preference.model.Preference;
-import com.virginvoyages.sailor.helper.SailorMapper;
-import com.virginvoyages.sailor.model.Sailor;
 import com.virginvoyages.sailor.model.SailorLinks;
 
 import lombok.Data;
@@ -124,8 +122,5 @@ public class AccountData {
     
     @JsonProperty("RecordTypeId")
     private String recordTypeId = null;
-    
-    public Sailor convertToSailorObject() {
-    	return SailorMapper.mapAccountDataToSailor(this);
-    }
+        
 }
