@@ -74,7 +74,7 @@ public class SailorMapper {
 		sailor.lastName(clientData.lastName());
 		sailor.prefix(clientData.salutation());
 		sailor.suffix(clientData.suffix());
-		return null;
+		return sailor;
 	}
 		
 	/**
