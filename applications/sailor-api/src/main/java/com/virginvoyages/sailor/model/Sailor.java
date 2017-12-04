@@ -85,7 +85,7 @@ public class Sailor implements Identifiable<String> {
     @JsonProperty("subTribe")
     public String subTribe;
     
-    @JsonProperty("stateofTheSailor")
+    @JsonProperty("stateOfTheSailor")
     public String stateOfTheSailor;
 
     @JsonProperty("status")
