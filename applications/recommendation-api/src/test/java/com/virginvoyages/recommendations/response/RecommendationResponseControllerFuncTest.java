@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.RecommendationFunctionalTestSupport;
+import com.virginvoyages.recommendations.helper.Oauth2TokenFeignClient;
 import com.virginvoyages.recommendations.helper.TestDataHelper;
 
 import io.restassured.path.json.JsonPath;
@@ -22,6 +23,16 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	
 	@Autowired
 	private TestDataHelper testDataHelper;
+	
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+		
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    
+    	return accessToken;
+    }
 	
 	@Test
 	public void givenValidRecommendationIdRecommendationResponsePutShouldAddRecommendationResponse() {
@@ -36,6 +47,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	
 		given().
 			params(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			put("/recommendation-api/v1/recommendationResponse").
 			
 		then().
@@ -55,6 +67,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 		
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			put("/recommendation-api/v1/recommendationResponse").
 			
 		then().
@@ -77,6 +90,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			put("/recommendation-api/v1/recommendationResponse").
 			
 		then().
@@ -99,6 +113,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			put("/recommendation-api/v1/recommendationResponse").
 			
 		then().
@@ -114,6 +129,7 @@ public class RecommendationResponseControllerFuncTest extends RecommendationFunc
 	    final String response = 
 	    
 	    given().params(parameters)
+	    .header("Authorization", "Bearer " + getToken())
 		    .get("/recommendation-api/v1/tribe").
 		then().statusCode(200).extract().response().asString();
 		final JsonPath responseJsonPath = new JsonPath(response);

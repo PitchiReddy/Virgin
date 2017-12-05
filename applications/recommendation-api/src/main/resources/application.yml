@@ -12,6 +12,9 @@ spring:
     date-format: com.virginvoyages.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  data:
+    hbase:
+      quorum: ${hbase.quorum}      
 
 management:
   security:

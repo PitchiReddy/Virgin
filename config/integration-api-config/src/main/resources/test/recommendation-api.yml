@@ -1,0 +1,14 @@
+crossreference:
+  service:
+    url: http://10.3.100.251:31435/xref-api/v1
+
+api:
+  security:
+    enabled: true
+swagger:
+  oauth2:
+    url: http://10.3.100.88:31362/identityaccessmanagement-service/oauth/token
+    clientId: 4f177c76-1b53-4ad3-89b5-6c75d1745526
+    clientSecret: tDJJSjWS2hAawZd3
+hbase:
+  quorum: ip-10-3-100-150.ec2.internal    

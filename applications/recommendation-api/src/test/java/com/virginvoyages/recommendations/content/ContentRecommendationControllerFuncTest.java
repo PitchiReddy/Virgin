@@ -15,12 +15,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.virginvoyages.RecommendationFunctionalTestSupport;
+import com.virginvoyages.recommendations.helper.Oauth2TokenFeignClient;
 import com.virginvoyages.recommendations.helper.TestDataHelper;
+
+import io.restassured.path.json.JsonPath;
 
 
 @RunWith(SpringRunner.class)
 public class ContentRecommendationControllerFuncTest extends RecommendationFunctionalTestSupport {
 	
+	@Autowired
+	private Oauth2TokenFeignClient oauth2TokenFeignClient;
+	
+	
+	private String  getToken() {
+		final JsonPath jsonResponse = new JsonPath(oauth2TokenFeignClient.getTokenResponse("client_credentials"));
+    	final String accessToken = jsonResponse.getString("access_token");
+    	
+    	return accessToken;
+    	
+	}
 	@Autowired
 	private TestDataHelper testDataHelper;
 	
@@ -37,6 +51,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			params(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			post("/recommendation-api/v1/contentRecommendation").
 			
 			
@@ -64,6 +79,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
@@ -86,6 +102,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
@@ -108,6 +125,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 	
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
@@ -129,6 +147,7 @@ public class ContentRecommendationControllerFuncTest extends RecommendationFunct
 			
 		given().
 			body(parameters).
+			header("Authorization", "Bearer " + getToken()).
 			post("/recommendation-api/v1/contentRecommendation").
 			
 		then().
