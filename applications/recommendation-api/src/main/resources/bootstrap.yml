@@ -1,6 +1,8 @@
 spring:
   application:
     name: recommendation-api
+  config:
+      location: ${application_properties_path},${recommendation_service_properties_path}
   
 server:
   port: 8438
